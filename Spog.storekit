@@ -1,0 +1,88 @@
+{
+  "identifier": "A1F0C2D4-5E67-4B89-9C01-2D3E4F5A6B7C",
+  "nonRenewingSubscriptions": [],
+  "products": [],
+  "settings": {
+    "_locale": "fr_FR",
+    "_storefront": "FRA"
+  },
+  "subscriptionGroups": [
+    {
+      "id": "C7D8E9F0-1A2B-4C3D-8E4F-5A6B7C8D9E0F",
+      "localizations": [],
+      "name": "Spog Premium",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "6.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "B2C3D4E5-6F70-4819-A2B3-C4D5E6F708A9",
+          "introductoryOffer": {
+            "displayPrice": "0.00",
+            "internalID": "D4E5F607-8A9B-4C0D-9E1F-2A3B4C5D6E7F",
+            "numberOfPeriods": 1,
+            "paymentMode": "free",
+            "subscriptionPeriod": "P3D"
+          },
+          "localizations": [
+            {
+              "description": "Scans illimités, toutes les quêtes et le garage sans limite.",
+              "displayName": "Spog Premium",
+              "locale": "fr_FR"
+            },
+            {
+              "description": "Unlimited scans, every quest and an unlimited garage.",
+              "displayName": "Spog Premium",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "com.mandaloregroup.spog.premium.monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "Premium mensuel",
+          "subscriptionGroupID": "C7D8E9F0-1A2B-4C3D-8E4F-5A6B7C8D9E0F",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "49.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "E5F60718-9A0B-4C1D-8E2F-3A4B5C6D7E80",
+          "introductoryOffer": {
+            "displayPrice": "0.00",
+            "internalID": "F6071829-AB0C-4D1E-9F20-3B4C5D6E7F81",
+            "numberOfPeriods": 1,
+            "paymentMode": "free",
+            "subscriptionPeriod": "P3D"
+          },
+          "localizations": [
+            {
+              "description": "Scans illimités toute l'année, au meilleur tarif.",
+              "displayName": "Spog Premium — Annuel",
+              "locale": "fr_FR"
+            },
+            {
+              "description": "Unlimited scans all year, at the best rate.",
+              "displayName": "Spog Premium — Yearly",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "com.mandaloregroup.spog.premium.yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Premium annuel",
+          "subscriptionGroupID": "C7D8E9F0-1A2B-4C3D-8E4F-5A6B7C8D9E0F",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 3,
+    "minor": 0
+  }
+}

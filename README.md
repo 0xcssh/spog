@@ -1,0 +1,54 @@
+# Spog
+
+*App iOS — nom arrêté le 24/08/2026.*
+
+App iOS de collection de voitures repérées dans la vraie vie : tu photographies une voiture,
+l'IA l'identifie, elle devient une carte unique dans ton garage.
+
+Plan complet : `~/.claude/plans/spog-plan.md`
+
+## Contrainte fondatrice
+
+**Rien n'est codé en dur, et rien ne suppose un seul pays ni une seule langue.**
+Identifiants et données en anglais, affichage traduit. Ajouter un marché doit être
+ajouter une donnée, jamais modifier du code.
+
+## Contenu actuel
+
+| Fichier | Rôle |
+|---|---|
+| `Spog/Catalog/markets.json` | Regroupement des pays en régions. Ajouter un pays = ajouter son code. |
+| `Spog/Catalog/rarity.json` | Les 6 paliers de rareté, leurs points, leurs clés de traduction, le seuil de confiance. |
+| `Spog/Catalog/vehicles.json` | Le catalogue : 510 véhicules, rareté par région. **Source de vérité, éditable à la main.** |
+| `tools/validate_catalog.py` | Vérifie l'intégrité du catalogue. À relancer après chaque ajout. |
+| `tools/lookup_demo.py` | Démonstration du rapprochement et de la rareté. Sert de référence pour le futur code Swift. |
+| `supabase/functions/identify/index.ts` | Le relais vers l'IA : reçoit une photo, renvoie marque, modèle, couleur et confiance. Aucune règle de jeu, aucun pays. |
+
+## Commandes
+
+Vérifier le catalogue :
+
+    python3 tools/validate_catalog.py
+
+Tester une identification :
+
+    python3 tools/lookup_demo.py "Renault Clio IV" US
+
+Sans argument, `lookup_demo.py` déroule une série d'exemples commentés.
+
+## Le backend
+
+Une seule fonction, `identify`, hébergée sur le projet Supabase partagé avec l'autre app
+de l'éditeur. **La clé OpenAI n'existe que là**, jamais dans l'app.
+
+    SUPABASE_ACCESS_TOKEN=$(cat ~/.supabase/access-token) \
+      npx -y supabase@latest functions deploy identify --project-ref pymrhossbzvhsertjhtc
+
+Elle ne renvoie que des données brutes. La rareté, les points et les paliers restent dans
+le catalogue embarqué : changer l'équilibre du jeu ne demande jamais de redéployer le
+serveur, et ne suppose aucun pays.
+
+## Comment la rareté est résolue
+
+Cascade, du plus précis au plus général : **pays exact → région → `default`**.
+Un pays jamais calibré fonctionne donc quand même, sur la valeur `default` du véhicule.

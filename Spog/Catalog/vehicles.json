@@ -1,0 +1,6193 @@
+{
+  "_comment": "Catalogue vehicules, lot 1. Rarete par region de marche; 'default' sert de repli pour toute region non renseignee. Marque et modele sont des noms propres, non traduits. Les alias servent au rapprochement du texte renvoye par l'IA (toujours en anglais).",
+  "version": 1,
+  "count": 510,
+  "vehicles": [
+    {
+      "id": "abarth-595",
+      "make": "Abarth",
+      "model": "595",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "abarth 500"
+      ]
+    },
+    {
+      "id": "alfa-4c",
+      "make": "Alfa Romeo",
+      "model": "4C",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-8c",
+      "make": "Alfa Romeo",
+      "model": "8C Competizione",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-giulia",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-giulia-quadrifoglio",
+      "make": "Alfa Romeo",
+      "model": "Giulia Quadrifoglio",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-giulietta",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-gtv",
+      "make": "Alfa Romeo",
+      "model": "GTV",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-mito",
+      "make": "Alfa Romeo",
+      "model": "MiTo",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-spider-duetto",
+      "make": "Alfa Romeo",
+      "model": "Spider Duetto",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-stelvio",
+      "make": "Alfa Romeo",
+      "model": "Stelvio",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alfa-tonale",
+      "make": "Alfa Romeo",
+      "model": "Tonale",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "alpine-a110",
+      "make": "Alpine",
+      "model": "A110",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "berlinette",
+        "a110"
+      ]
+    },
+    {
+      "id": "alpine-a310",
+      "make": "Alpine",
+      "model": "A310",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-db11",
+      "make": "Aston Martin",
+      "model": "DB11",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-db5",
+      "make": "Aston Martin",
+      "model": "DB5",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-db9",
+      "make": "Aston Martin",
+      "model": "DB9",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-dbs",
+      "make": "Aston Martin",
+      "model": "DBS",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-dbx",
+      "make": "Aston Martin",
+      "model": "DBX",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-one-77",
+      "make": "Aston Martin",
+      "model": "One-77",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-valkyrie",
+      "make": "Aston Martin",
+      "model": "Valkyrie",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-vantage",
+      "make": "Aston Martin",
+      "model": "Vantage",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "aston-vulcan",
+      "make": "Aston Martin",
+      "model": "Vulcan",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a1",
+      "make": "Audi",
+      "model": "A1",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a3",
+      "make": "Audi",
+      "model": "A3",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a4",
+      "make": "Audi",
+      "model": "A4",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a5",
+      "make": "Audi",
+      "model": "A5",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a6",
+      "make": "Audi",
+      "model": "A6",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a7",
+      "make": "Audi",
+      "model": "A7",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-a8",
+      "make": "Audi",
+      "model": "A8",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-e-tron-gt",
+      "make": "Audi",
+      "model": "e-tron GT",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-q2",
+      "make": "Audi",
+      "model": "Q2",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-q3",
+      "make": "Audi",
+      "model": "Q3",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-q5",
+      "make": "Audi",
+      "model": "Q5",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-q7",
+      "make": "Audi",
+      "model": "Q7",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-q8",
+      "make": "Audi",
+      "model": "Q8",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-quattro-ur",
+      "make": "Audi",
+      "model": "Quattro (Ur)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "ur quattro"
+      ]
+    },
+    {
+      "id": "audi-r8",
+      "make": "Audi",
+      "model": "R8",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-rs3",
+      "make": "Audi",
+      "model": "RS3",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-rs4",
+      "make": "Audi",
+      "model": "RS4",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-rs6",
+      "make": "Audi",
+      "model": "RS6",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-sport-quattro-s1",
+      "make": "Audi",
+      "model": "Sport Quattro S1",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "audi-tt",
+      "make": "Audi",
+      "model": "TT",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bentley-bentayga",
+      "make": "Bentley",
+      "model": "Bentayga",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bentley-continental-gt",
+      "make": "Bentley",
+      "model": "Continental GT",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bentley-flying-spur",
+      "make": "Bentley",
+      "model": "Flying Spur",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bentley-mulsanne",
+      "make": "Bentley",
+      "model": "Mulsanne",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-serie-1",
+      "make": "BMW",
+      "model": "1 Series",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": [
+        "serie 1"
+      ]
+    },
+    {
+      "id": "bmw-serie-2",
+      "make": "BMW",
+      "model": "2 Series",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-2002-turbo",
+      "make": "BMW",
+      "model": "2002 Turbo",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-serie-3",
+      "make": "BMW",
+      "model": "3 Series",
+      "body": "sedan",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-e30",
+      "make": "BMW",
+      "model": "3 Series (E30)",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "e30"
+      ]
+    },
+    {
+      "id": "bmw-serie-4",
+      "make": "BMW",
+      "model": "4 Series",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-serie-5",
+      "make": "BMW",
+      "model": "5 Series",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-507",
+      "make": "BMW",
+      "model": "507",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-serie-7",
+      "make": "BMW",
+      "model": "7 Series",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-i3",
+      "make": "BMW",
+      "model": "i3",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-i4",
+      "make": "BMW",
+      "model": "i4",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-i8",
+      "make": "BMW",
+      "model": "i8",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-ix",
+      "make": "BMW",
+      "model": "iX",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-m2",
+      "make": "BMW",
+      "model": "M2",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-m3",
+      "make": "BMW",
+      "model": "M3",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-e30-m3",
+      "make": "BMW",
+      "model": "M3 (E30)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "e30 m3"
+      ]
+    },
+    {
+      "id": "bmw-e46-m3",
+      "make": "BMW",
+      "model": "M3 (E46)",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "e46 m3"
+      ]
+    },
+    {
+      "id": "bmw-m4",
+      "make": "BMW",
+      "model": "M4",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-m5",
+      "make": "BMW",
+      "model": "M5",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-m8",
+      "make": "BMW",
+      "model": "M8",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-x1",
+      "make": "BMW",
+      "model": "X1",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-x3",
+      "make": "BMW",
+      "model": "X3",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-x5",
+      "make": "BMW",
+      "model": "X5",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bmw-z4",
+      "make": "BMW",
+      "model": "Z4",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bugatti-chiron",
+      "make": "Bugatti",
+      "model": "Chiron",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bugatti-divo",
+      "make": "Bugatti",
+      "model": "Divo",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bugatti-eb110",
+      "make": "Bugatti",
+      "model": "EB110",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bugatti-tourbillon",
+      "make": "Bugatti",
+      "model": "Tourbillon",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bugatti-type-57",
+      "make": "Bugatti",
+      "model": "Type 57",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "bugatti-veyron",
+      "make": "Bugatti",
+      "model": "Veyron",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "byd-atto-3",
+      "make": "BYD",
+      "model": "Atto 3",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "byd-dolphin",
+      "make": "BYD",
+      "model": "Dolphin",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "byd-seal",
+      "make": "BYD",
+      "model": "Seal",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "cadillac-ct5",
+      "make": "Cadillac",
+      "model": "CT5",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "cadillac-cts-v",
+      "make": "Cadillac",
+      "model": "CTS-V",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "cadillac-escalade",
+      "make": "Cadillac",
+      "model": "Escalade",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-bel-air-57",
+      "make": "Chevrolet",
+      "model": "Bel Air (1957)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-bolt",
+      "make": "Chevrolet",
+      "model": "Bolt",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-camaro",
+      "make": "Chevrolet",
+      "model": "Camaro",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-corvette-c3",
+      "make": "Chevrolet",
+      "model": "Corvette C3",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": [
+        "c3 corvette",
+        "stingray"
+      ]
+    },
+    {
+      "id": "chevrolet-corvette-c5",
+      "make": "Chevrolet",
+      "model": "Corvette C5",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "regular"
+      },
+      "aliases": [
+        "c5 corvette"
+      ]
+    },
+    {
+      "id": "chevrolet-corvette-c7",
+      "make": "Chevrolet",
+      "model": "Corvette C7",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": [
+        "c7 corvette"
+      ]
+    },
+    {
+      "id": "chevrolet-corvette-c8",
+      "make": "Chevrolet",
+      "model": "Corvette C8",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": [
+        "c8 corvette"
+      ]
+    },
+    {
+      "id": "chevrolet-corvette-zr1",
+      "make": "Chevrolet",
+      "model": "Corvette ZR1",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-el-camino",
+      "make": "Chevrolet",
+      "model": "El Camino",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-impala",
+      "make": "Chevrolet",
+      "model": "Impala",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-silverado",
+      "make": "Chevrolet",
+      "model": "Silverado",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-suburban",
+      "make": "Chevrolet",
+      "model": "Suburban",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-tahoe",
+      "make": "Chevrolet",
+      "model": "Tahoe",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chrysler-300",
+      "make": "Chrysler",
+      "model": "300",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chrysler-pacifica",
+      "make": "Chrysler",
+      "model": "Pacifica",
+      "body": "van",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-2cv",
+      "make": "Citroen",
+      "model": "2CV",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "deux chevaux",
+        "2 cv"
+      ]
+    },
+    {
+      "id": "citroen-ami",
+      "make": "Citroen",
+      "model": "Ami",
+      "body": "van",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "notable",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-berlingo",
+      "make": "Citroen",
+      "model": "Berlingo",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-bx",
+      "make": "Citroen",
+      "model": "BX",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c1",
+      "make": "Citroen",
+      "model": "C1",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c2",
+      "make": "Citroen",
+      "model": "C2",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c3",
+      "make": "Citroen",
+      "model": "C3",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c3-aircross",
+      "make": "Citroen",
+      "model": "C3 Aircross",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c4",
+      "make": "Citroen",
+      "model": "C4",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c5",
+      "make": "Citroen",
+      "model": "C5",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-c5-aircross",
+      "make": "Citroen",
+      "model": "C5 Aircross",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-ds-classic",
+      "make": "Citroen",
+      "model": "DS",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "ds19",
+        "ds21",
+        "goddess",
+        "citroen ds"
+      ]
+    },
+    {
+      "id": "citroen-jumper",
+      "make": "Citroen",
+      "model": "Jumper",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-jumpy",
+      "make": "Citroen",
+      "model": "Jumpy",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-saxo",
+      "make": "Citroen",
+      "model": "Saxo",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-sm",
+      "make": "Citroen",
+      "model": "SM",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-xm",
+      "make": "Citroen",
+      "model": "XM",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "citroen-xsara",
+      "make": "Citroen",
+      "model": "Xsara",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "cupra-born",
+      "make": "Cupra",
+      "model": "Born",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "cupra-formentor",
+      "make": "Cupra",
+      "model": "Formentor",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dacia-duster",
+      "make": "Dacia",
+      "model": "Duster",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dacia-jogger",
+      "make": "Dacia",
+      "model": "Jogger",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dacia-logan",
+      "make": "Dacia",
+      "model": "Logan",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dacia-sandero",
+      "make": "Dacia",
+      "model": "Sandero",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dacia-spring",
+      "make": "Dacia",
+      "model": "Spring",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "delorean-dmc-12",
+      "make": "DeLorean",
+      "model": "DMC-12",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-challenger",
+      "make": "Dodge",
+      "model": "Challenger",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-demon",
+      "make": "Dodge",
+      "model": "Challenger SRT Demon",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-charger",
+      "make": "Dodge",
+      "model": "Charger",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-charger-69",
+      "make": "Dodge",
+      "model": "Charger (1969)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-durango",
+      "make": "Dodge",
+      "model": "Durango",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-viper",
+      "make": "Dodge",
+      "model": "Viper",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ds-3",
+      "make": "DS",
+      "model": "3",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "ds3 crossback"
+      ]
+    },
+    {
+      "id": "ds-4",
+      "make": "DS",
+      "model": "4",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ds-7",
+      "make": "DS",
+      "model": "7",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-250-gto",
+      "make": "Ferrari",
+      "model": "250 GTO",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-296-gtb",
+      "make": "Ferrari",
+      "model": "296 GTB",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-360-modena",
+      "make": "Ferrari",
+      "model": "360 Modena",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-430-scuderia",
+      "make": "Ferrari",
+      "model": "430 Scuderia",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-458-italia",
+      "make": "Ferrari",
+      "model": "458 Italia",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-488-gtb",
+      "make": "Ferrari",
+      "model": "488 GTB",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-812-superfast",
+      "make": "Ferrari",
+      "model": "812 Superfast",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-daytona-sp3",
+      "make": "Ferrari",
+      "model": "Daytona SP3",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-dino-246",
+      "make": "Ferrari",
+      "model": "Dino 246",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-enzo",
+      "make": "Ferrari",
+      "model": "Enzo",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-f355",
+      "make": "Ferrari",
+      "model": "F355",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-f40",
+      "make": "Ferrari",
+      "model": "F40",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-f50",
+      "make": "Ferrari",
+      "model": "F50",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-f8-tributo",
+      "make": "Ferrari",
+      "model": "F8 Tributo",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-laferrari",
+      "make": "Ferrari",
+      "model": "LaFerrari",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-portofino",
+      "make": "Ferrari",
+      "model": "Portofino",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-purosangue",
+      "make": "Ferrari",
+      "model": "Purosangue",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-roma",
+      "make": "Ferrari",
+      "model": "Roma",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-sf90",
+      "make": "Ferrari",
+      "model": "SF90 Stradale",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ferrari-testarossa",
+      "make": "Ferrari",
+      "model": "Testarossa",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-124-spider",
+      "make": "Fiat",
+      "model": "124 Spider",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-500",
+      "make": "Fiat",
+      "model": "500",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-500-classic",
+      "make": "Fiat",
+      "model": "500 (Classic)",
+      "body": "hatch",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "cinquecento",
+        "nuova 500"
+      ]
+    },
+    {
+      "id": "fiat-barchetta",
+      "make": "Fiat",
+      "model": "Barchetta",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-doblo",
+      "make": "Fiat",
+      "model": "Doblo",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-ducato",
+      "make": "Fiat",
+      "model": "Ducato",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-multipla",
+      "make": "Fiat",
+      "model": "Multipla",
+      "body": "van",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-panda",
+      "make": "Fiat",
+      "model": "Panda",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-punto",
+      "make": "Fiat",
+      "model": "Punto",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-tipo",
+      "make": "Fiat",
+      "model": "Tipo",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-uno",
+      "make": "Fiat",
+      "model": "Uno",
+      "body": "hatch",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-bronco",
+      "make": "Ford",
+      "model": "Bronco",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-escape",
+      "make": "Ford",
+      "model": "Escape",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": [
+        "ford kuga us"
+      ]
+    },
+    {
+      "id": "ford-escort-rs",
+      "make": "Ford",
+      "model": "Escort RS",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "escort cosworth"
+      ]
+    },
+    {
+      "id": "ford-explorer",
+      "make": "Ford",
+      "model": "Explorer",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-f150",
+      "make": "Ford",
+      "model": "F-150",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": [
+        "f150",
+        "ford f 150"
+      ]
+    },
+    {
+      "id": "ford-f150-raptor",
+      "make": "Ford",
+      "model": "F-150 Raptor",
+      "body": "pickup",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-fiesta",
+      "make": "Ford",
+      "model": "Fiesta",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-focus",
+      "make": "Ford",
+      "model": "Focus",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-gt",
+      "make": "Ford",
+      "model": "GT",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-gt40",
+      "make": "Ford",
+      "model": "GT40",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-ka",
+      "make": "Ford",
+      "model": "Ka",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-kuga",
+      "make": "Ford",
+      "model": "Kuga",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-model-t",
+      "make": "Ford",
+      "model": "Model T",
+      "body": "pickup",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-mondeo",
+      "make": "Ford",
+      "model": "Mondeo",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-mustang",
+      "make": "Ford",
+      "model": "Mustang",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-mustang-gt",
+      "make": "Ford",
+      "model": "Mustang GT",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-mustang-mach-e",
+      "make": "Ford",
+      "model": "Mustang Mach-E",
+      "body": "sport",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-puma",
+      "make": "Ford",
+      "model": "Puma",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-ranger",
+      "make": "Ford",
+      "model": "Ranger",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-s-max",
+      "make": "Ford",
+      "model": "S-Max",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-shelby-gt500",
+      "make": "Ford",
+      "model": "Shelby GT500",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-sierra-cosworth",
+      "make": "Ford",
+      "model": "Sierra Cosworth",
+      "body": "pickup",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "sierra rs500"
+      ]
+    },
+    {
+      "id": "ford-transit",
+      "make": "Ford",
+      "model": "Transit",
+      "body": "van",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "genesis-g70",
+      "make": "Genesis",
+      "model": "G70",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "genesis-gv80",
+      "make": "Genesis",
+      "model": "GV80",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "gmc-hummer-ev",
+      "make": "GMC",
+      "model": "Hummer EV",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "gmc-sierra",
+      "make": "GMC",
+      "model": "Sierra",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "gmc-yukon",
+      "make": "GMC",
+      "model": "Yukon",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "gordon-murray-t50",
+      "make": "Gordon Murray",
+      "model": "T.50",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-accord",
+      "make": "Honda",
+      "model": "Accord",
+      "body": "sedan",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-civic",
+      "make": "Honda",
+      "model": "Civic",
+      "body": "hatch",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-civic-type-r",
+      "make": "Honda",
+      "model": "Civic Type R",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-cr-v",
+      "make": "Honda",
+      "model": "CR-V",
+      "body": "suv",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-hr-v",
+      "make": "Honda",
+      "model": "HR-V",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-integra-type-r",
+      "make": "Honda",
+      "model": "Integra Type R",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": [
+        "acura integra type r"
+      ]
+    },
+    {
+      "id": "honda-jazz",
+      "make": "Honda",
+      "model": "Jazz",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": [
+        "fit",
+        "honda fit"
+      ]
+    },
+    {
+      "id": "honda-nsx",
+      "make": "Honda",
+      "model": "NSX",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": [
+        "acura nsx"
+      ]
+    },
+    {
+      "id": "honda-odyssey",
+      "make": "Honda",
+      "model": "Odyssey",
+      "body": "van",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-pilot",
+      "make": "Honda",
+      "model": "Pilot",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-s2000",
+      "make": "Honda",
+      "model": "S2000",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hummer-h1",
+      "make": "Hummer",
+      "model": "H1",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hummer-h2",
+      "make": "Hummer",
+      "model": "H2",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-i10",
+      "make": "Hyundai",
+      "model": "i10",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-i20",
+      "make": "Hyundai",
+      "model": "i20",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-i30",
+      "make": "Hyundai",
+      "model": "i30",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "elantra gt"
+      ]
+    },
+    {
+      "id": "hyundai-i30-n",
+      "make": "Hyundai",
+      "model": "i30 N",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "elantra n"
+      ]
+    },
+    {
+      "id": "hyundai-ioniq-5",
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-kona",
+      "make": "Hyundai",
+      "model": "Kona",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-santa-fe",
+      "make": "Hyundai",
+      "model": "Santa Fe",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-tucson",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "body": "suv",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "isuzu-d-max",
+      "make": "Isuzu",
+      "model": "D-Max",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "iveco-daily",
+      "make": "Iveco",
+      "model": "Daily",
+      "body": "van",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jaguar-e-type",
+      "make": "Jaguar",
+      "model": "E-Type",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "xke"
+      ]
+    },
+    {
+      "id": "jaguar-f-pace",
+      "make": "Jaguar",
+      "model": "F-Pace",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jaguar-f-type",
+      "make": "Jaguar",
+      "model": "F-Type",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jaguar-xe",
+      "make": "Jaguar",
+      "model": "XE",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jaguar-xf",
+      "make": "Jaguar",
+      "model": "XF",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jaguar-xj220",
+      "make": "Jaguar",
+      "model": "XJ220",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jaguar-xk",
+      "make": "Jaguar",
+      "model": "XK",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-cherokee",
+      "make": "Jeep",
+      "model": "Cherokee",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-compass",
+      "make": "Jeep",
+      "model": "Compass",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-gladiator",
+      "make": "Jeep",
+      "model": "Gladiator",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-grand-cherokee",
+      "make": "Jeep",
+      "model": "Grand Cherokee",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-renegade",
+      "make": "Jeep",
+      "model": "Renegade",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-wrangler",
+      "make": "Jeep",
+      "model": "Wrangler",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-ceed",
+      "make": "Kia",
+      "model": "Ceed",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-ev6",
+      "make": "Kia",
+      "model": "EV6",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-niro",
+      "make": "Kia",
+      "model": "Niro",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-picanto",
+      "make": "Kia",
+      "model": "Picanto",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-sorento",
+      "make": "Kia",
+      "model": "Sorento",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-sportage",
+      "make": "Kia",
+      "model": "Sportage",
+      "body": "suv",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-stinger",
+      "make": "Kia",
+      "model": "Stinger",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-telluride",
+      "make": "Kia",
+      "model": "Telluride",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "koenigsegg-agera",
+      "make": "Koenigsegg",
+      "model": "Agera",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "koenigsegg-jesko",
+      "make": "Koenigsegg",
+      "model": "Jesko",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "koenigsegg-regera",
+      "make": "Koenigsegg",
+      "model": "Regera",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-aventador",
+      "make": "Lamborghini",
+      "model": "Aventador",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-countach",
+      "make": "Lamborghini",
+      "model": "Countach",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-diablo",
+      "make": "Lamborghini",
+      "model": "Diablo",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-gallardo",
+      "make": "Lamborghini",
+      "model": "Gallardo",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-huracan",
+      "make": "Lamborghini",
+      "model": "Huracan",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-lm002",
+      "make": "Lamborghini",
+      "model": "LM002",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-miura",
+      "make": "Lamborghini",
+      "model": "Miura",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-murcielago",
+      "make": "Lamborghini",
+      "model": "Murcielago",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-revuelto",
+      "make": "Lamborghini",
+      "model": "Revuelto",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lamborghini-urus",
+      "make": "Lamborghini",
+      "model": "Urus",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lancia-delta-integrale",
+      "make": "Lancia",
+      "model": "Delta Integrale",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "delta integrale",
+        "delta hf"
+      ]
+    },
+    {
+      "id": "lancia-stratos",
+      "make": "Lancia",
+      "model": "Stratos",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lancia-ypsilon",
+      "make": "Lancia",
+      "model": "Ypsilon",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-defender",
+      "make": "Land Rover",
+      "model": "Defender",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-defender-classic",
+      "make": "Land Rover",
+      "model": "Defender (Classic)",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-discovery",
+      "make": "Land Rover",
+      "model": "Discovery",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-freelander",
+      "make": "Land Rover",
+      "model": "Freelander",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-range-rover",
+      "make": "Land Rover",
+      "model": "Range Rover",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-range-rover-classic",
+      "make": "Land Rover",
+      "model": "Range Rover (Classic)",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-evoque",
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "land-rover-range-rover-sport",
+      "make": "Land Rover",
+      "model": "Range Rover Sport",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lexus-is",
+      "make": "Lexus",
+      "model": "IS",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lexus-lc500",
+      "make": "Lexus",
+      "model": "LC 500",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lexus-lfa",
+      "make": "Lexus",
+      "model": "LFA",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lexus-nx",
+      "make": "Lexus",
+      "model": "NX",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lexus-rx",
+      "make": "Lexus",
+      "model": "RX",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lincoln-navigator",
+      "make": "Lincoln",
+      "model": "Navigator",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lotus-elise",
+      "make": "Lotus",
+      "model": "Elise",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lotus-emira",
+      "make": "Lotus",
+      "model": "Emira",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lotus-esprit",
+      "make": "Lotus",
+      "model": "Esprit",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lotus-evija",
+      "make": "Lotus",
+      "model": "Evija",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lotus-exige",
+      "make": "Lotus",
+      "model": "Exige",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "lucid-air",
+      "make": "Lucid",
+      "model": "Air",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "maserati-ghibli",
+      "make": "Maserati",
+      "model": "Ghibli",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "maserati-granturismo",
+      "make": "Maserati",
+      "model": "GranTurismo",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "maserati-grecale",
+      "make": "Maserati",
+      "model": "Grecale",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "maserati-levante",
+      "make": "Maserati",
+      "model": "Levante",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "maserati-mc20",
+      "make": "Maserati",
+      "model": "MC20",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "maserati-quattroporte",
+      "make": "Maserati",
+      "model": "Quattroporte",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-2",
+      "make": "Mazda",
+      "model": "2",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-3",
+      "make": "Mazda",
+      "model": "3",
+      "body": "hatch",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-6",
+      "make": "Mazda",
+      "model": "6",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-cx-30",
+      "make": "Mazda",
+      "model": "CX-30",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-cx-5",
+      "make": "Mazda",
+      "model": "CX-5",
+      "body": "suv",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-cx-60",
+      "make": "Mazda",
+      "model": "CX-60",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-mx-5",
+      "make": "Mazda",
+      "model": "MX-5",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "miata",
+        "mx5",
+        "mazda miata"
+      ]
+    },
+    {
+      "id": "mazda-rx-7",
+      "make": "Mazda",
+      "model": "RX-7",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": [
+        "fd rx7",
+        "rx7"
+      ]
+    },
+    {
+      "id": "mazda-rx-8",
+      "make": "Mazda",
+      "model": "RX-8",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-570s",
+      "make": "McLaren",
+      "model": "570S",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-720s",
+      "make": "McLaren",
+      "model": "720S",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-750s",
+      "make": "McLaren",
+      "model": "750S",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-artura",
+      "make": "McLaren",
+      "model": "Artura",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-f1",
+      "make": "McLaren",
+      "model": "F1",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-mp4-12c",
+      "make": "McLaren",
+      "model": "MP4-12C",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-p1",
+      "make": "McLaren",
+      "model": "P1",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mclaren-senna",
+      "make": "McLaren",
+      "model": "Senna",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-amg-gt",
+      "make": "Mercedes-AMG",
+      "model": "GT",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-190e",
+      "make": "Mercedes-Benz",
+      "model": "190E",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-300sl",
+      "make": "Mercedes-Benz",
+      "model": "300SL Gullwing",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-a-class",
+      "make": "Mercedes-Benz",
+      "model": "A-Class",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": [
+        "classe a"
+      ]
+    },
+    {
+      "id": "mercedes-c-class",
+      "make": "Mercedes-Benz",
+      "model": "C-Class",
+      "body": "sedan",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-c63-amg",
+      "make": "Mercedes-Benz",
+      "model": "C63 AMG",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-cla",
+      "make": "Mercedes-Benz",
+      "model": "CLA",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-clk-gtr",
+      "make": "Mercedes-Benz",
+      "model": "CLK GTR",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-e-class",
+      "make": "Mercedes-Benz",
+      "model": "E-Class",
+      "body": "sedan",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-eqs",
+      "make": "Mercedes-Benz",
+      "model": "EQS",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-g-class",
+      "make": "Mercedes-Benz",
+      "model": "G-Class",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "g wagon",
+        "gelandewagen",
+        "g63",
+        "g class"
+      ]
+    },
+    {
+      "id": "mercedes-gla",
+      "make": "Mercedes-Benz",
+      "model": "GLA",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-glc",
+      "make": "Mercedes-Benz",
+      "model": "GLC",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-gle",
+      "make": "Mercedes-Benz",
+      "model": "GLE",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-s-class",
+      "make": "Mercedes-Benz",
+      "model": "S-Class",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-sl",
+      "make": "Mercedes-Benz",
+      "model": "SL",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-sls-amg",
+      "make": "Mercedes-Benz",
+      "model": "SLS AMG",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-sprinter",
+      "make": "Mercedes-Benz",
+      "model": "Sprinter",
+      "body": "van",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mercedes-vito",
+      "make": "Mercedes-Benz",
+      "model": "Vito",
+      "body": "van",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "metris"
+      ]
+    },
+    {
+      "id": "mercedes-maybach-s",
+      "make": "Mercedes-Maybach",
+      "model": "S-Class",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mg-4",
+      "make": "MG",
+      "model": "MG4",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mg-b",
+      "make": "MG",
+      "model": "MGB",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mg-zs",
+      "make": "MG",
+      "model": "ZS",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mini-classic",
+      "make": "Mini",
+      "model": "Classic Mini",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "classic mini",
+        "austin mini"
+      ]
+    },
+    {
+      "id": "mini-clubman",
+      "make": "Mini",
+      "model": "Clubman",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mini-cooper",
+      "make": "Mini",
+      "model": "Cooper",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mini-countryman",
+      "make": "Mini",
+      "model": "Countryman",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mini-jcw",
+      "make": "Mini",
+      "model": "John Cooper Works",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "jcw"
+      ]
+    },
+    {
+      "id": "mitsubishi-3000gt",
+      "make": "Mitsubishi",
+      "model": "3000GT",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": [
+        "gto"
+      ]
+    },
+    {
+      "id": "mitsubishi-asx",
+      "make": "Mitsubishi",
+      "model": "ASX",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": [
+        "outlander sport"
+      ]
+    },
+    {
+      "id": "mitsubishi-eclipse",
+      "make": "Mitsubishi",
+      "model": "Eclipse",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mitsubishi-lancer-evo",
+      "make": "Mitsubishi",
+      "model": "Lancer Evolution",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": [
+        "evo",
+        "lancer evolution",
+        "evo x",
+        "evo ix"
+      ]
+    },
+    {
+      "id": "mitsubishi-outlander",
+      "make": "Mitsubishi",
+      "model": "Outlander",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mitsubishi-pajero",
+      "make": "Mitsubishi",
+      "model": "Pajero",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "montero",
+        "shogun"
+      ]
+    },
+    {
+      "id": "nissan-350z",
+      "make": "Nissan",
+      "model": "350Z",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-370z",
+      "make": "Nissan",
+      "model": "370Z",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-gt-r",
+      "make": "Nissan",
+      "model": "GT-R",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": [
+        "r35"
+      ]
+    },
+    {
+      "id": "nissan-juke",
+      "make": "Nissan",
+      "model": "Juke",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-leaf",
+      "make": "Nissan",
+      "model": "Leaf",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-micra",
+      "make": "Nissan",
+      "model": "Micra",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-navara",
+      "make": "Nissan",
+      "model": "Navara",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "frontier"
+      ]
+    },
+    {
+      "id": "nissan-note",
+      "make": "Nissan",
+      "model": "Note",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-patrol",
+      "make": "Nissan",
+      "model": "Patrol",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "armada"
+      ]
+    },
+    {
+      "id": "nissan-qashqai",
+      "make": "Nissan",
+      "model": "Qashqai",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-silvia-s15",
+      "make": "Nissan",
+      "model": "Silvia S15",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "200sx",
+        "silvia",
+        "s15"
+      ]
+    },
+    {
+      "id": "nissan-skyline-r32",
+      "make": "Nissan",
+      "model": "Skyline GT-R (R32)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "r32",
+        "skyline r32",
+        "godzilla"
+      ]
+    },
+    {
+      "id": "nissan-skyline-r34",
+      "make": "Nissan",
+      "model": "Skyline GT-R (R34)",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "r34",
+        "skyline",
+        "skyline gtr",
+        "skyline r34"
+      ]
+    },
+    {
+      "id": "nissan-titan",
+      "make": "Nissan",
+      "model": "Titan",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-x-trail",
+      "make": "Nissan",
+      "model": "X-Trail",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": [
+        "rogue",
+        "nissan rogue"
+      ]
+    },
+    {
+      "id": "opel-astra",
+      "make": "Opel",
+      "model": "Astra",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall astra"
+      ]
+    },
+    {
+      "id": "opel-corsa",
+      "make": "Opel",
+      "model": "Corsa",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall corsa"
+      ]
+    },
+    {
+      "id": "opel-grandland",
+      "make": "Opel",
+      "model": "Grandland",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall grandland"
+      ]
+    },
+    {
+      "id": "opel-insignia",
+      "make": "Opel",
+      "model": "Insignia",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall insignia"
+      ]
+    },
+    {
+      "id": "opel-manta",
+      "make": "Opel",
+      "model": "Manta",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "opel-mokka",
+      "make": "Opel",
+      "model": "Mokka",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall mokka"
+      ]
+    },
+    {
+      "id": "opel-speedster",
+      "make": "Opel",
+      "model": "Speedster",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "vx220"
+      ]
+    },
+    {
+      "id": "opel-vivaro",
+      "make": "Opel",
+      "model": "Vivaro",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall vivaro"
+      ]
+    },
+    {
+      "id": "opel-zafira",
+      "make": "Opel",
+      "model": "Zafira",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "vauxhall zafira"
+      ]
+    },
+    {
+      "id": "pagani-huayra",
+      "make": "Pagani",
+      "model": "Huayra",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "pagani-utopia",
+      "make": "Pagani",
+      "model": "Utopia",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "pagani-zonda",
+      "make": "Pagani",
+      "model": "Zonda",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-108",
+      "make": "Peugeot",
+      "model": "108",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-2008",
+      "make": "Peugeot",
+      "model": "2008",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-205",
+      "make": "Peugeot",
+      "model": "205",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-205-gti",
+      "make": "Peugeot",
+      "model": "205 GTI",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "205 gti"
+      ]
+    },
+    {
+      "id": "peugeot-206",
+      "make": "Peugeot",
+      "model": "206",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-207",
+      "make": "Peugeot",
+      "model": "207",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-208",
+      "make": "Peugeot",
+      "model": "208",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-3008",
+      "make": "Peugeot",
+      "model": "3008",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-307",
+      "make": "Peugeot",
+      "model": "307",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-308",
+      "make": "Peugeot",
+      "model": "308",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-405",
+      "make": "Peugeot",
+      "model": "405",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-406",
+      "make": "Peugeot",
+      "model": "406",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-5008",
+      "make": "Peugeot",
+      "model": "5008",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-504",
+      "make": "Peugeot",
+      "model": "504",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-508",
+      "make": "Peugeot",
+      "model": "508",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-boxer",
+      "make": "Peugeot",
+      "model": "Boxer",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-expert",
+      "make": "Peugeot",
+      "model": "Expert",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-partner",
+      "make": "Peugeot",
+      "model": "Partner",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-rcz",
+      "make": "Peugeot",
+      "model": "RCZ",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "peugeot-rifter",
+      "make": "Peugeot",
+      "model": "Rifter",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "plymouth-barracuda",
+      "make": "Plymouth",
+      "model": "Barracuda",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "plymouth-road-runner",
+      "make": "Plymouth",
+      "model": "Road Runner",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "polestar-2",
+      "make": "Polestar",
+      "model": "2",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "polestar-3",
+      "make": "Polestar",
+      "model": "3",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "pontiac-firebird-trans-am",
+      "make": "Pontiac",
+      "model": "Firebird Trans Am",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "pontiac-gto",
+      "make": "Pontiac",
+      "model": "GTO",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-356",
+      "make": "Porsche",
+      "model": "356",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-718-boxster",
+      "make": "Porsche",
+      "model": "718 Boxster",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "boxster",
+        "porsche boxster"
+      ]
+    },
+    {
+      "id": "porsche-718-cayman",
+      "make": "Porsche",
+      "model": "718 Cayman",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": [
+        "cayman",
+        "porsche cayman"
+      ]
+    },
+    {
+      "id": "porsche-911",
+      "make": "Porsche",
+      "model": "911",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": [
+        "carrera",
+        "992",
+        "991"
+      ]
+    },
+    {
+      "id": "porsche-911-964",
+      "make": "Porsche",
+      "model": "911 (964)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": [
+        "964"
+      ]
+    },
+    {
+      "id": "porsche-911-993",
+      "make": "Porsche",
+      "model": "911 (993)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": [
+        "993"
+      ]
+    },
+    {
+      "id": "porsche-911-gt2-rs",
+      "make": "Porsche",
+      "model": "911 GT2 RS",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-911-gt3",
+      "make": "Porsche",
+      "model": "911 GT3",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-911-gt3-rs",
+      "make": "Porsche",
+      "model": "911 GT3 RS",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-911-turbo",
+      "make": "Porsche",
+      "model": "911 Turbo",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-918-spyder",
+      "make": "Porsche",
+      "model": "918 Spyder",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-928",
+      "make": "Porsche",
+      "model": "928",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-944",
+      "make": "Porsche",
+      "model": "944",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-959",
+      "make": "Porsche",
+      "model": "959",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-carrera-gt",
+      "make": "Porsche",
+      "model": "Carrera GT",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-cayenne",
+      "make": "Porsche",
+      "model": "Cayenne",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-macan",
+      "make": "Porsche",
+      "model": "Macan",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-panamera",
+      "make": "Porsche",
+      "model": "Panamera",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "porsche-taycan",
+      "make": "Porsche",
+      "model": "Taycan",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-ram-1500",
+      "make": "Ram",
+      "model": "1500",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": [
+        "dodge ram",
+        "ram 1500",
+        "ram pickup"
+      ]
+    },
+    {
+      "id": "renault-5-etech",
+      "make": "Renault",
+      "model": "5 E-Tech",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "notable",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "renault 5"
+      ]
+    },
+    {
+      "id": "renault-5-turbo",
+      "make": "Renault",
+      "model": "5 Turbo",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "legendary"
+      },
+      "aliases": [
+        "r5 turbo",
+        "5 turbo"
+      ]
+    },
+    {
+      "id": "renault-arkana",
+      "make": "Renault",
+      "model": "Arkana",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-austral",
+      "make": "Renault",
+      "model": "Austral",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-captur",
+      "make": "Renault",
+      "model": "Captur",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-clio",
+      "make": "Renault",
+      "model": "Clio",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-clio-williams",
+      "make": "Renault",
+      "model": "Clio Williams",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-espace",
+      "make": "Renault",
+      "model": "Espace",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-kadjar",
+      "make": "Renault",
+      "model": "Kadjar",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-kangoo",
+      "make": "Renault",
+      "model": "Kangoo",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-laguna",
+      "make": "Renault",
+      "model": "Laguna",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-master",
+      "make": "Renault",
+      "model": "Master",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-megane",
+      "make": "Renault",
+      "model": "Megane",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-megane-rs",
+      "make": "Renault",
+      "model": "Megane RS",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-scenic",
+      "make": "Renault",
+      "model": "Scenic",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-talisman",
+      "make": "Renault",
+      "model": "Talisman",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-trafic",
+      "make": "Renault",
+      "model": "Trafic",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-twingo",
+      "make": "Renault",
+      "model": "Twingo",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "renault-zoe",
+      "make": "Renault",
+      "model": "Zoe",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rimac-nevera",
+      "make": "Rimac",
+      "model": "Nevera",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rivian-r1s",
+      "make": "Rivian",
+      "model": "R1S",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rivian-r1t",
+      "make": "Rivian",
+      "model": "R1T",
+      "body": "pickup",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rolls-cullinan",
+      "make": "Rolls-Royce",
+      "model": "Cullinan",
+      "body": "suv",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rolls-ghost",
+      "make": "Rolls-Royce",
+      "model": "Ghost",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rolls-phantom",
+      "make": "Rolls-Royce",
+      "model": "Phantom",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rolls-spectre",
+      "make": "Rolls-Royce",
+      "model": "Spectre",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "rolls-wraith",
+      "make": "Rolls-Royce",
+      "model": "Wraith",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "seat-arona",
+      "make": "Seat",
+      "model": "Arona",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "seat-ateca",
+      "make": "Seat",
+      "model": "Ateca",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "seat-ibiza",
+      "make": "Seat",
+      "model": "Ibiza",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "seat-leon",
+      "make": "Seat",
+      "model": "Leon",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "shelby-cobra-427",
+      "make": "Shelby",
+      "model": "Cobra 427",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-enyaq",
+      "make": "Skoda",
+      "model": "Enyaq",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-fabia",
+      "make": "Skoda",
+      "model": "Fabia",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-karoq",
+      "make": "Skoda",
+      "model": "Karoq",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-kodiaq",
+      "make": "Skoda",
+      "model": "Kodiaq",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-octavia",
+      "make": "Skoda",
+      "model": "Octavia",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-superb",
+      "make": "Skoda",
+      "model": "Superb",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "smart-forfour",
+      "make": "Smart",
+      "model": "Forfour",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "smart-fortwo",
+      "make": "Smart",
+      "model": "Fortwo",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-brz",
+      "make": "Subaru",
+      "model": "BRZ",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-forester",
+      "make": "Subaru",
+      "model": "Forester",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-22b",
+      "make": "Subaru",
+      "model": "Impreza 22B STI",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-impreza-wrx-sti",
+      "make": "Subaru",
+      "model": "Impreza WRX STI",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "wrx sti",
+        "impreza",
+        "wrx",
+        "sti"
+      ]
+    },
+    {
+      "id": "subaru-legacy",
+      "make": "Subaru",
+      "model": "Legacy",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-outback",
+      "make": "Subaru",
+      "model": "Outback",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "suzuki-ignis",
+      "make": "Suzuki",
+      "model": "Ignis",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "suzuki-jimny",
+      "make": "Suzuki",
+      "model": "Jimny",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "suzuki-swift",
+      "make": "Suzuki",
+      "model": "Swift",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "suzuki-vitara",
+      "make": "Suzuki",
+      "model": "Vitara",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "tesla-cybertruck",
+      "make": "Tesla",
+      "model": "Cybertruck",
+      "body": "pickup",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "tesla-model-3",
+      "make": "Tesla",
+      "model": "Model 3",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "tesla-model-s",
+      "make": "Tesla",
+      "model": "Model S",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "tesla-model-x",
+      "make": "Tesla",
+      "model": "Model X",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "tesla-model-y",
+      "make": "Tesla",
+      "model": "Model Y",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "tesla-roadster-og",
+      "make": "Tesla",
+      "model": "Roadster (2008)",
+      "body": "sedan",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-2000gt",
+      "make": "Toyota",
+      "model": "2000GT",
+      "body": "sport",
+      "rarity": {
+        "default": "legendary",
+        "EU_WEST": "legendary",
+        "NA": "legendary"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-auris",
+      "make": "Toyota",
+      "model": "Auris",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-aygo",
+      "make": "Toyota",
+      "model": "Aygo",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-c-hr",
+      "make": "Toyota",
+      "model": "C-HR",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-camry",
+      "make": "Toyota",
+      "model": "Camry",
+      "body": "sedan",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-celica",
+      "make": "Toyota",
+      "model": "Celica",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-corolla",
+      "make": "Toyota",
+      "model": "Corolla",
+      "body": "sedan",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-gr-yaris",
+      "make": "Toyota",
+      "model": "GR Yaris",
+      "body": "hatch",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-gt86",
+      "make": "Toyota",
+      "model": "GT86",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": [
+        "gr86",
+        "scion frs",
+        "86",
+        "scion fr s"
+      ]
+    },
+    {
+      "id": "toyota-highlander",
+      "make": "Toyota",
+      "model": "Highlander",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-hilux",
+      "make": "Toyota",
+      "model": "Hilux",
+      "body": "pickup",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-land-cruiser",
+      "make": "Toyota",
+      "model": "Land Cruiser",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-mr2",
+      "make": "Toyota",
+      "model": "MR2",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-prius",
+      "make": "Toyota",
+      "model": "Prius",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-proace",
+      "make": "Toyota",
+      "model": "Proace",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-rav4",
+      "make": "Toyota",
+      "model": "RAV4",
+      "body": "suv",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-supra-mk4",
+      "make": "Toyota",
+      "model": "Supra (A80)",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "rare"
+      },
+      "aliases": [
+        "supra mk4",
+        "a80"
+      ]
+    },
+    {
+      "id": "toyota-supra-mk5",
+      "make": "Toyota",
+      "model": "Supra (A90)",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "notable"
+      },
+      "aliases": [
+        "supra mk5",
+        "a90"
+      ]
+    },
+    {
+      "id": "toyota-tacoma",
+      "make": "Toyota",
+      "model": "Tacoma",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-tundra",
+      "make": "Toyota",
+      "model": "Tundra",
+      "body": "pickup",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "exotic",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-yaris",
+      "make": "Toyota",
+      "model": "Yaris",
+      "body": "hatch",
+      "rarity": {
+        "default": "common",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": [
+        "vitz"
+      ]
+    },
+    {
+      "id": "vw-arteon",
+      "make": "Volkswagen",
+      "model": "Arteon",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-atlas",
+      "make": "Volkswagen",
+      "model": "Atlas",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-beetle",
+      "make": "Volkswagen",
+      "model": "Beetle",
+      "body": "hatch",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-beetle-classic",
+      "make": "Volkswagen",
+      "model": "Beetle (Classic)",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": [
+        "kafer",
+        "type 1",
+        "vw bug"
+      ]
+    },
+    {
+      "id": "vw-bus-t1",
+      "make": "Volkswagen",
+      "model": "Bus T1",
+      "body": "van",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "exotic",
+        "NA": "exotic"
+      },
+      "aliases": [
+        "combi",
+        "microbus",
+        "split screen",
+        "kombi"
+      ]
+    },
+    {
+      "id": "vw-bus-t2",
+      "make": "Volkswagen",
+      "model": "Bus T2",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": [
+        "bay window"
+      ]
+    },
+    {
+      "id": "vw-caddy",
+      "make": "Volkswagen",
+      "model": "Caddy",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-corrado",
+      "make": "Volkswagen",
+      "model": "Corrado",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-golf",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": [
+        "rabbit",
+        "vw rabbit"
+      ]
+    },
+    {
+      "id": "vw-golf-gti",
+      "make": "Volkswagen",
+      "model": "Golf GTI",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-golf-r",
+      "make": "Volkswagen",
+      "model": "Golf R",
+      "body": "sport",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-id3",
+      "make": "Volkswagen",
+      "model": "ID.3",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-id4",
+      "make": "Volkswagen",
+      "model": "ID.4",
+      "body": "hatch",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-jetta",
+      "make": "Volkswagen",
+      "model": "Jetta",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-passat",
+      "make": "Volkswagen",
+      "model": "Passat",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-polo",
+      "make": "Volkswagen",
+      "model": "Polo",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-scirocco",
+      "make": "Volkswagen",
+      "model": "Scirocco",
+      "body": "sport",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-t-cross",
+      "make": "Volkswagen",
+      "model": "T-Cross",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-t-roc",
+      "make": "Volkswagen",
+      "model": "T-Roc",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-tiguan",
+      "make": "Volkswagen",
+      "model": "Tiguan",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-touran",
+      "make": "Volkswagen",
+      "model": "Touran",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-transporter",
+      "make": "Volkswagen",
+      "model": "Transporter",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "common",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vw-up",
+      "make": "Volkswagen",
+      "model": "Up",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "NA": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-240",
+      "make": "Volvo",
+      "model": "240",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-p1800",
+      "make": "Volvo",
+      "model": "P1800",
+      "body": "sport",
+      "rarity": {
+        "default": "exotic",
+        "EU_WEST": "rare",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-s60",
+      "make": "Volvo",
+      "model": "S60",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "notable",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-v60",
+      "make": "Volvo",
+      "model": "V60",
+      "body": "sedan",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-v90",
+      "make": "Volvo",
+      "model": "V90",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "notable",
+        "NA": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-xc40",
+      "make": "Volvo",
+      "model": "XC40",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-xc60",
+      "make": "Volvo",
+      "model": "XC60",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "common",
+        "NA": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "volvo-xc90",
+      "make": "Volvo",
+      "model": "XC90",
+      "body": "suv",
+      "rarity": {
+        "default": "regular",
+        "EU_WEST": "regular",
+        "NA": "regular"
+      },
+      "aliases": []
+    }
+  ]
+}

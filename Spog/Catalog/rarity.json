@@ -1,0 +1,14 @@
+{
+  "_comment": "Paliers de rarete. Identifiants techniques stables en anglais, libelles traduits via le catalogue de localisation (cle 'key'). Ne jamais afficher l'identifiant brut.",
+  "tiers": [
+    { "id": "common",    "rank": 0, "points": 5,    "key": "rarity.common" },
+    { "id": "regular",   "rank": 1, "points": 15,   "key": "rarity.regular" },
+    { "id": "notable",   "rank": 2, "points": 50,   "key": "rarity.notable" },
+    { "id": "rare",      "rank": 3, "points": 150,  "key": "rarity.rare" },
+    { "id": "exotic",    "rank": 4, "points": 500,  "key": "rarity.exotic" },
+    { "id": "legendary", "rank": 5, "points": 2000, "key": "rarity.legendary" }
+  ],
+  "unknown": { "id": "unknown", "points": 10, "key": "rarity.unknown" },
+  "confidence_threshold": 0.80,
+  "_threshold_comment": "Au-dessus, la carte se cree seule. En dessous, ecran de confirmation."
+}

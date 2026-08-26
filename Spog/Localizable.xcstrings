@@ -1,0 +1,3488 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "card.caught": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caught"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attrapée"
+          }
+        }
+      }
+    },
+    "card.declared": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Declared capture"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise déclarée"
+          }
+        }
+      }
+    },
+    "card.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the card to turn it"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fais glisser la carte pour la faire tourner"
+          }
+        }
+      }
+    },
+    "card.noPhoto": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No shot on file"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun cliché"
+          }
+        }
+      }
+    },
+    "card.remove": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer du garage"
+          }
+        }
+      }
+    },
+    "card.removeConfirm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove this card for good?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer cette carte définitivement ?"
+          }
+        }
+      }
+    },
+    "card.share": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share this card"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager la carte"
+          }
+        }
+      }
+    },
+    "card.tapForShot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap for your shot"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche pour ton cliché"
+          }
+        }
+      }
+    },
+    "card.verified": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verified capture"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise vérifiée"
+          }
+        }
+      }
+    },
+    "card.yourShot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your shot"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton cliché"
+          }
+        }
+      }
+    },
+    "catalog.search": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search a make or model"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chercher une marque ou un modèle"
+          }
+        }
+      }
+    },
+    "catalog.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Embedded catalog"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catalogue embarqué"
+          }
+        }
+      }
+    },
+    "catalog.vehicles": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vehicles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "véhicules"
+          }
+        }
+      }
+    },
+    "common.cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        }
+      }
+    },
+    "common.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        }
+      }
+    },
+    "common.ok": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "confirm.noResult": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No vehicle matches that search."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun véhicule ne correspond."
+          }
+        }
+      }
+    },
+    "confirm.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None of these"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune de celles-ci"
+          }
+        }
+      }
+    },
+    "confirm.reading %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read on the photo: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lu sur la photo : %@"
+          }
+        }
+      }
+    },
+    "confirm.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identification"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identification"
+          }
+        }
+      }
+    },
+    "confirm.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which car is it?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est laquelle ?"
+          }
+        }
+      }
+    },
+    "garage.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cars collected"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voitures attrapées"
+          }
+        }
+      }
+    },
+    "legal.privacy.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy policy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        }
+      }
+    },
+    "legal.terms.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of use"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d'utilisation"
+          }
+        }
+      }
+    },
+    "legal.updated": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last updated 25 August 2026"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière mise à jour le 25 août 2026"
+          }
+        }
+      }
+    },
+    "market.search": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search a country"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chercher un pays"
+          }
+        }
+      }
+    },
+    "market.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotting country"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pays de repérage"
+          }
+        }
+      }
+    },
+    "onboarding.auto.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location sets the country and follows you when you travel. Your catches are marked verified."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta position détermine le pays et te suit en voyage. Tes prises sont marquées vérifiées."
+          }
+        }
+      }
+    },
+    "onboarding.auto.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatique"
+          }
+        }
+      }
+    },
+    "onboarding.collect.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each car becomes a one-of-a-kind card in your garage."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque voiture devient une carte unique dans ton garage."
+          }
+        }
+      }
+    },
+    "onboarding.collect.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collectionne"
+          }
+        }
+      }
+    },
+    "onboarding.how.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How it works"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment ça marche"
+          }
+        }
+      }
+    },
+    "onboarding.manual.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No permission needed. You can change it at any time."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune autorisation demandée. Modifiable à tout moment."
+          }
+        }
+      }
+    },
+    "onboarding.manual.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I choose"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je choisis"
+          }
+        }
+      }
+    },
+    "onboarding.market.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where do you spot?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Où repères-tu tes voitures ?"
+          }
+        }
+      }
+    },
+    "onboarding.market.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rarity depends on the country. A Mustang is ordinary in the United States and remarkable in France."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La rareté dépend du pays. Une Mustang est banale aux États-Unis et remarquable en France."
+          }
+        }
+      }
+    },
+    "onboarding.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer"
+          }
+        }
+      }
+    },
+    "onboarding.nickname.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your nickname"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton pseudo"
+          }
+        }
+      }
+    },
+    "onboarding.nickname.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What should we call you?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On t'appelle comment ?"
+          }
+        }
+      }
+    },
+    "onboarding.nickname.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is the name that shows in the leaderboard when you add friends."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est le nom qui apparaîtra au classement quand tu ajouteras des amis."
+          }
+        }
+      }
+    },
+    "onboarding.preparing.catalog": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading 510 vehicles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement des 510 véhicules"
+          }
+        }
+      }
+    },
+    "onboarding.preparing.garage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening your garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouverture de ton garage"
+          }
+        }
+      }
+    },
+    "onboarding.preparing.market": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setting rarity for your country"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrage des raretés pour ton pays"
+          }
+        }
+      }
+    },
+    "onboarding.preparing.quest": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Picking today's quest"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choix de la quête du jour"
+          }
+        }
+      }
+    },
+    "onboarding.preparing.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setting up your garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On prépare ton garage"
+          }
+        }
+      }
+    },
+    "onboarding.recap.editable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything here can be changed later in Settings."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout cela se modifie plus tard dans les Réglages."
+          }
+        }
+      }
+    },
+    "onboarding.recap.free": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free scans"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scans offerts"
+          }
+        }
+      }
+    },
+    "onboarding.recap.mode": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotting mode"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de repérage"
+          }
+        }
+      }
+    },
+    "onboarding.recap.taste": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favourite"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préférence"
+          }
+        }
+      }
+    },
+    "onboarding.recap.title %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All set, %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout est prêt, %@"
+          }
+        }
+      }
+    },
+    "onboarding.snap.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live camera only. That is what makes a catch worth something."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra en direct uniquement. C'est ce qui donne sa valeur à une prise."
+          }
+        }
+      }
+    },
+    "onboarding.snap.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snap"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photographie"
+          }
+        }
+      }
+    },
+    "onboarding.spot.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A car in the street, on a car park, anywhere in real life."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une voiture dans la rue, sur un parking, n'importe où dans la vraie vie."
+          }
+        }
+      }
+    },
+    "onboarding.spot.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repère"
+          }
+        }
+      }
+    },
+    "onboarding.start": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open my garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir mon garage"
+          }
+        }
+      }
+    },
+    "onboarding.tagline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot it. Snap it. Collect it."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repère-la. Photographie-la. Collectionne-la."
+          }
+        }
+      }
+    },
+    "onboarding.taste.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What turns your head?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qu'est-ce qui te fait tourner la tête ?"
+          }
+        }
+      }
+    },
+    "onboarding.taste.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your daily quest will lean towards it. You can still catch anything."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta quête du jour penchera de ce côté. Tu peux attraper tout le reste quand même."
+          }
+        }
+      }
+    },
+    "paywall.cards": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rare cards and their gold neon"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les cartes rares et leur néon doré"
+          }
+        }
+      }
+    },
+    "paywall.error.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchase failed. Please try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'achat a échoué. Réessaie."
+          }
+        }
+      }
+    },
+    "paywall.error.unverified": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchase could not be verified."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'achat n'a pas pu être vérifié."
+          }
+        }
+      }
+    },
+    "paywall.perMonth %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "that is %@ per month"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "soit %@ par mois"
+          }
+        }
+      }
+    },
+    "paywall.period.month": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "month"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mois"
+          }
+        }
+      }
+    },
+    "paywall.period.year": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "year"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "an"
+          }
+        }
+      }
+    },
+    "paywall.plan.monthly": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensuel"
+          }
+        }
+      }
+    },
+    "paywall.plan.yearly": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yearly"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuel"
+          }
+        }
+      }
+    },
+    "paywall.price.plain %@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ per %2$@. Renews automatically, cancel any time."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ par %2$@. Renouvellement automatique, résiliable à tout moment."
+          }
+        }
+      }
+    },
+    "paywall.price.trial %lld %@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld days free, then %2$@ per %3$@. Renews automatically, cancel any time."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld jours offerts, puis %2$@ par %3$@. Renouvellement automatique, résiliable à tout moment."
+          }
+        }
+      }
+    },
+    "paywall.quests": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every daily quest and its bonus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les quêtes du jour et leurs bonus"
+          }
+        }
+      }
+    },
+    "paywall.startTrial": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start my free trial"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer mon essai gratuit"
+          }
+        }
+      }
+    },
+    "paywall.subscribe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscribe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S'abonner"
+          }
+        }
+      }
+    },
+    "paywall.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have seen what a card looks like. Here is what comes next."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as vu à quoi ressemble une carte. Voici la suite."
+          }
+        }
+      }
+    },
+    "paywall.support": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You keep an independent app alive"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu fais vivre une app indépendante"
+          }
+        }
+      }
+    },
+    "paywall.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect without limits"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collectionne sans limite"
+          }
+        }
+      }
+    },
+    "paywall.unlimited": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlimited scans, every day"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scans illimités, tous les jours"
+          }
+        }
+      }
+    },
+    "paywall.working": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please wait…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un instant…"
+          }
+        }
+      }
+    },
+    "privacy.account.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog requires no account, no email address and no password. Your garage lives on your device. If you delete the app, everything it contains is deleted with it."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog ne demande ni compte, ni adresse e-mail, ni mot de passe. Ton garage vit sur ton appareil. Si tu supprimes l'app, tout ce qu'elle contient est supprimé avec elle."
+          }
+        }
+      }
+    },
+    "privacy.account.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No account"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de compte"
+          }
+        }
+      }
+    },
+    "privacy.collect.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name when you enable location. Nothing else. No advertising identifier, no behavioural tracking, no third-party analytics."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog collecte les photos que tu prends dans l'app, le pays où tu repères tes voitures, et le nom de la ville si tu actives la localisation. Rien d'autre. Aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
+          }
+        }
+      }
+    },
+    "privacy.collect.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What Spog collects"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que Spog collecte"
+          }
+        }
+      }
+    },
+    "privacy.contact.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mandalore LLC — app@mandalore-group.com"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mandalore LLC — app@mandalore-group.com"
+          }
+        }
+      }
+    },
+    "privacy.contact.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
+        }
+      }
+    },
+    "privacy.keep.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your cards and photos stay on your device for as long as you keep them. Removing a card from the garage deletes its photos immediately and permanently."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immédiatement et définitivement."
+          }
+        }
+      }
+    },
+    "privacy.keep.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How long data is kept"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée de conservation"
+          }
+        }
+      }
+    },
+    "privacy.photos.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. Before any transmission, licence plates detected in the image are blurred on your device. Transmitted photos are not used to train any model and are not kept once the answer is returned."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Les photos transmises ne servent à entraîner aucun modèle et ne sont pas conservées une fois la réponse rendue."
+          }
+        }
+      }
+    },
+    "privacy.photos.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your photos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes photos"
+          }
+        }
+      }
+    },
+    "privacy.place.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location is optional and the app works fully without it. When enabled, your position is converted immediately into a country code and a city name, then discarded. No coordinates are stored or transmitted, and no movement history is built. Permission requested is \"while using the app\" only."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La localisation est facultative et l'app fonctionne entièrement sans elle. Quand elle est active, ta position est convertie immédiatement en code pays et nom de ville, puis abandonnée. Aucune coordonnée n'est conservée ni transmise, et aucun historique de déplacements n'est constitué. L'autorisation demandée est « pendant l'utilisation » uniquement."
+          }
+        }
+      }
+    },
+    "privacy.place.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Country and location"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pays et localisation"
+          }
+        }
+      }
+    },
+    "privacy.rights.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Since no data is linked to an identity on our side, we hold nothing to give you access to or to delete on request. Everything is in your hands, on your device. You may withdraw location permission at any time in the iOS Settings app."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune donnée n'étant rattachée à une identité de notre côté, nous ne détenons rien à te communiquer ni à effacer sur demande. Tout est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation à tout moment dans les Réglages d'iOS."
+          }
+        }
+      }
+    },
+    "privacy.rights.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your rights"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes droits"
+          }
+        }
+      }
+    },
+    "privacy.share.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only vehicle identification involves a third party, and only for the photo being analysed. Nothing is sold, rented or shared for advertising purposes. Apple handles subscription payments; we never see your payment details."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seule l'identification des véhicules fait intervenir un tiers, et uniquement pour la photo analysée. Rien n'est vendu, loué ni partagé à des fins publicitaires. Apple gère les paiements d'abonnement ; nous ne voyons jamais tes coordonnées bancaires."
+          }
+        }
+      }
+    },
+    "privacy.share.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Third parties"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiers"
+          }
+        }
+      }
+    },
+    "profile.badges": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Badges"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Badges"
+          }
+        }
+      }
+    },
+    "profile.level": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau"
+          }
+        }
+      }
+    },
+    "profile.level %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %lld"
+          }
+        }
+      }
+    },
+    "profile.rarities": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rarity breakdown"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répartition des raretés"
+          }
+        }
+      }
+    },
+    "profile.toNext %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pts to next level"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "encore %lld pts"
+          }
+        }
+      }
+    },
+    "quest.body.hatch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any hatchback"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une citadine"
+          }
+        }
+      }
+    },
+    "quest.body.pickup": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any pickup"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un pick-up"
+          }
+        }
+      }
+    },
+    "quest.body.sedan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any sedan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une berline"
+          }
+        }
+      }
+    },
+    "quest.body.sport": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any sports car"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une sportive"
+          }
+        }
+      }
+    },
+    "quest.body.suv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any SUV"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un SUV"
+          }
+        }
+      }
+    },
+    "quest.body.van": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any van"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un utilitaire"
+          }
+        }
+      }
+    },
+    "quest.brand %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une %@"
+          }
+        }
+      }
+    },
+    "quest.count %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catch %lld cars today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attrape %lld voitures aujourd'hui"
+          }
+        }
+      }
+    },
+    "quest.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accomplie"
+          }
+        }
+      }
+    },
+    "quest.fresh": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A model you don't have yet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un modèle que tu n'as pas encore"
+          }
+        }
+      }
+    },
+    "quest.rarity %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A %@ car or better"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une voiture %@ ou mieux"
+          }
+        }
+      }
+    },
+    "quest.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's quest"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quête du jour"
+          }
+        }
+      }
+    },
+    "rarity.common": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Common"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commune"
+          }
+        }
+      }
+    },
+    "rarity.exotic": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exotic"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exotique"
+          }
+        }
+      }
+    },
+    "rarity.legendary": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legendary"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Légendaire"
+          }
+        }
+      }
+    },
+    "rarity.notable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notable"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remarquable"
+          }
+        }
+      }
+    },
+    "rarity.rare": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rare"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rare"
+          }
+        }
+      }
+    },
+    "rarity.regular": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regular"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Courante"
+          }
+        }
+      }
+    },
+    "rarity.unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unidentified"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non identifiée"
+          }
+        }
+      }
+    },
+    "reveal.again": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catch another one"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attraper une autre"
+          }
+        }
+      }
+    },
+    "reveal.caught": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caught"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attrapée"
+          }
+        }
+      }
+    },
+    "reveal.developing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developing…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Développement…"
+          }
+        }
+      }
+    },
+    "reveal.newModel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New model"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau modèle"
+          }
+        }
+      }
+    },
+    "reveal.questDone %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quest complete · +%lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quête accomplie · +%lld"
+          }
+        }
+      }
+    },
+    "reveal.toGarage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to my garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour au garage"
+          }
+        }
+      }
+    },
+    "scan.cameraOnly": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live camera only"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra en direct uniquement"
+          }
+        }
+      }
+    },
+    "scan.denied": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera access is off. Spog cannot work without it."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'accès à la caméra est refusé. Spog ne peut pas fonctionner sans."
+          }
+        }
+      }
+    },
+    "scan.failedTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catch failed"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise ratée"
+          }
+        }
+      }
+    },
+    "scan.freeLeft %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld free scan left"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld free scans left"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld scan offert restant"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld scans offerts restants"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scan.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame the car, then shoot"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cadre la voiture, puis déclenche"
+          }
+        }
+      }
+    },
+    "scan.noCamera": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No camera on this device"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune caméra sur cet appareil"
+          }
+        }
+      }
+    },
+    "scan.openSettings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les Réglages"
+          }
+        }
+      }
+    },
+    "scan.plateMasked": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licence plate masked"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plaque masquée"
+          }
+        }
+      }
+    },
+    "scan.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra"
+          }
+        }
+      }
+    },
+    "scan.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot a car"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repère une voiture"
+          }
+        }
+      }
+    },
+    "scan.working": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifying…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identification en cours…"
+          }
+        }
+      }
+    },
+    "scanError.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identification failed. Try again in a moment."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'identification a échoué. Réessaie dans un instant."
+          }
+        }
+      }
+    },
+    "scanError.imageTooLarge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That photo is too heavy. Shoot again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette photo est trop lourde. Reprends la voiture."
+          }
+        }
+      }
+    },
+    "scanError.network": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No connection. Check your network and try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connexion impossible. Vérifie ton réseau et réessaie."
+          }
+        }
+      }
+    },
+    "scanError.noVehicle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No car in sight. Frame the whole vehicle and shoot again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune voiture repérée. Cadre la voiture entière et réessaie."
+          }
+        }
+      }
+    },
+    "scanError.notLive": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A screen, a poster or a model car does not count. Only a real car, live."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un écran, une affiche ou une miniature ne compte pas. Une vraie voiture, en direct."
+          }
+        }
+      }
+    },
+    "scanError.rateLimited": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many scans in a row. Try again a bit later."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop de scans d'affilée. Réessaie un peu plus tard."
+          }
+        }
+      }
+    },
+    "scanError.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The service is unavailable right now. Try again later."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le service est momentanément indisponible. Réessaie plus tard."
+          }
+        }
+      }
+    },
+    "scanError.unreadableImage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That photo could not be read. Shoot again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo illisible. Reprends la voiture."
+          }
+        }
+      }
+    },
+    "settings.legal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentions légales"
+          }
+        }
+      }
+    },
+    "settings.manage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage subscription"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer l'abonnement"
+          }
+        }
+      }
+    },
+    "settings.mode.auto": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location sets the country and follows you when you travel. Catches made this way are marked verified."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta position détermine le pays et te suit en voyage. Les prises faites ainsi sont marquées vérifiées."
+          }
+        }
+      }
+    },
+    "settings.mode.manual": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No permission requested. The country you choose applies to every catch."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune autorisation demandée. Le pays choisi s'applique à toutes tes prises."
+          }
+        }
+      }
+    },
+    "settings.plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current plan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formule"
+          }
+        }
+      }
+    },
+    "settings.plan.free": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratuite"
+          }
+        }
+      }
+    },
+    "settings.plan.premium": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
+          }
+        }
+      }
+    },
+    "settings.publisher": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Published by Mandalore LLC"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Édité par Mandalore LLC"
+          }
+        }
+      }
+    },
+    "settings.restore": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore purchases"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer mes achats"
+          }
+        }
+      }
+    },
+    "settings.restore.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore failed. Please try again later."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La restauration a échoué. Réessaie plus tard."
+          }
+        }
+      }
+    },
+    "settings.restore.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No purchase found for this Apple Account."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun achat trouvé pour ce compte Apple."
+          }
+        }
+      }
+    },
+    "settings.restoring": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérification…"
+          }
+        }
+      }
+    },
+    "settings.spotting": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotting"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repérage"
+          }
+        }
+      }
+    },
+    "settings.subscribe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscribe to Premium"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S'abonner à Premium"
+          }
+        }
+      }
+    },
+    "settings.subscription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abonnement"
+          }
+        }
+      }
+    },
+    "settings.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages"
+          }
+        }
+      }
+    },
+    "social.createCrew": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer"
+          }
+        }
+      }
+    },
+    "social.crew": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crew"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crew"
+          }
+        }
+      }
+    },
+    "social.crewEmpty": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No crew yet. A crew pools its catches and climbs the rankings together."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de crew. Un crew met ses prises en commun et grimpe au classement ensemble."
+          }
+        }
+      }
+    },
+    "social.friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amis"
+          }
+        }
+      }
+    },
+    "social.friendsEmpty": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No friends yet. Compare your garages and see who spots the rarest cars."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun ami pour l'instant. Comparez vos garages et voyez qui repère les plus belles voitures."
+          }
+        }
+      }
+    },
+    "social.invite": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite a friend"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inviter un ami"
+          }
+        }
+      }
+    },
+    "social.joinCrew": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rejoindre"
+          }
+        }
+      }
+    },
+    "social.leaderboard": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leaderboard"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classement"
+          }
+        }
+      }
+    },
+    "social.leaderboardEmpty": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add friends and their garages show up here, ranked by points."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoute des amis : leurs garages apparaîtront ici, classés aux points."
+          }
+        }
+      }
+    },
+    "social.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends and crews need user accounts and a server. Nothing is sent anywhere yet — your garage stays on this device."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les amis et les crews demandent des comptes utilisateurs et un serveur. Rien n'est encore envoyé nulle part : ton garage reste sur cet appareil."
+          }
+        }
+      }
+    },
+    "social.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
+          }
+        }
+      }
+    },
+    "social.soon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soon"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bientôt"
+          }
+        }
+      }
+    },
+    "social.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends & crews"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amis et crews"
+          }
+        }
+      }
+    },
+    "social.you": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toi"
+          }
+        }
+      }
+    },
+    "stat.best": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best catch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meilleure prise"
+          }
+        }
+      }
+    },
+    "stat.bestStreak": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best streak"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record"
+          }
+        }
+      }
+    },
+    "stat.bonus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quest bonus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonus de quête"
+          }
+        }
+      }
+    },
+    "stat.brands": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brands"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marques"
+          }
+        }
+      }
+    },
+    "stat.catches": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catches"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prises"
+          }
+        }
+      }
+    },
+    "stat.models": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Models"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modèles"
+          }
+        }
+      }
+    },
+    "stat.points": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        }
+      }
+    },
+    "stat.streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streak"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série"
+          }
+        }
+      }
+    },
+    "stat.verified": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verified"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifiées"
+          }
+        }
+      }
+    },
+    "streak.days %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day in a row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld days in a row"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld jour d'affilée"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld jours d'affilée"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "streak.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not started"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas commencée"
+          }
+        }
+      }
+    },
+    "tab.garage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garage"
+          }
+        }
+      }
+    },
+    "tab.quests": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quests"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quêtes"
+          }
+        }
+      }
+    },
+    "tab.scan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan"
+          }
+        }
+      }
+    },
+    "tab.social": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
+          }
+        }
+      }
+    },
+    "terms.access.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog is open to anyone aged 13 or over. Using the app requires a compatible device and, for identification, an internet connection."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog est ouvert à toute personne âgée de 13 ans ou plus. L'utilisation nécessite un appareil compatible et, pour l'identification, une connexion internet."
+          }
+        }
+      }
+    },
+    "terms.access.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Access"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accès"
+          }
+        }
+      }
+    },
+    "terms.accuracy.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vehicle identification relies on automated analysis and can be wrong. Rarity depends on the country you spot in and reflects an editorial judgement, not an official ranking. Neither is guaranteed."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'identification des véhicules repose sur une analyse automatisée et peut se tromper. La rareté dépend du pays de repérage et relève d'un choix éditorial, non d'un classement officiel. Ni l'une ni l'autre ne sont garanties."
+          }
+        }
+      }
+    },
+    "terms.accuracy.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identification accuracy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exactitude de l'identification"
+          }
+        }
+      }
+    },
+    "terms.contact.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mandalore LLC — app@mandalore-group.com"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mandalore LLC — app@mandalore-group.com"
+          }
+        }
+      }
+    },
+    "terms.contact.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
+        }
+      }
+    },
+    "terms.fairplay.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catches must come from the live camera, aimed at a real vehicle. Photographing a screen, a magazine, a poster or a scale model is against the rules. We may remove cards obtained this way."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une prise doit venir de la caméra en direct, pointée sur un véhicule réel. Photographier un écran, un magazine, une affiche ou une maquette est contraire aux règles. Nous pouvons retirer les cartes obtenues de cette façon."
+          }
+        }
+      }
+    },
+    "terms.fairplay.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair play"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair-play"
+          }
+        }
+      }
+    },
+    "terms.object.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog is a game. You photograph cars you come across in real life; each one becomes a collectible card in your garage. Rarity, points and levels are game mechanics with no monetary value and cannot be exchanged or resold."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog est un jeu. Tu photographies les voitures que tu croises dans la vraie vie ; chacune devient une carte à collectionner dans ton garage. La rareté, les points et les niveaux sont des mécaniques de jeu sans valeur monétaire, non échangeables et non revendables."
+          }
+        }
+      }
+    },
+    "terms.object.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purpose"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objet"
+          }
+        }
+      }
+    },
+    "terms.property.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The name Spog, its logo, its interface and its vehicle catalogue are the property of Mandalore LLC. Brand names and models are cited for descriptive purposes only; the brands mentioned are the property of their respective owners and are in no way associated with Spog. The photos you take remain yours."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nom Spog, son logo, son interface et son catalogue de véhicules sont la propriété de Mandalore LLC. Les noms de marques et de modèles sont cités à titre descriptif uniquement ; les marques mentionnées appartiennent à leurs détenteurs respectifs et ne sont en aucun cas associées à Spog. Les photos que tu prends restent les tiennes."
+          }
+        }
+      }
+    },
+    "terms.property.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intellectual property"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Propriété intellectuelle"
+          }
+        }
+      }
+    },
+    "terms.safety.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never use Spog while driving. Do not photograph from a moving vehicle, do not step onto a roadway, and respect the privacy of others: photograph cars, not people. You alone are responsible for the circumstances in which you take a photo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "N'utilise jamais Spog en conduisant. Ne photographie pas depuis un véhicule en mouvement, ne descends pas sur la chaussée, et respecte la vie privée d'autrui : photographie des voitures, pas des personnes. Tu es seul responsable des circonstances dans lesquelles tu prends une photo."
+          }
+        }
+      }
+    },
+    "terms.safety.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Road safety"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sécurité routière"
+          }
+        }
+      }
+    },
+    "terms.subscription.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some features require a paid subscription, billed through your Apple Account. It renews automatically unless cancelled at least 24 hours before the end of the current period. Manage or cancel it at any time from Settings, or from your Apple Account. Any unused portion of a free trial is forfeited when a subscription is purchased."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Certaines fonctions nécessitent un abonnement payant, facturé via ton compte Apple. Il se renouvelle automatiquement sauf résiliation au moins 24 heures avant la fin de la période en cours. Tu peux le gérer ou le résilier à tout moment depuis les Réglages, ou depuis ton compte Apple. Toute période d'essai gratuite non utilisée est perdue en cas de souscription."
+          }
+        }
+      }
+    },
+    "terms.subscription.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abonnement"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

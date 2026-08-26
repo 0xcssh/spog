@@ -1,0 +1,18 @@
+{
+  "_comment": "Regroupement des pays en regions de marche. Ajouter un pays = ajouter son code ici. Aucun code applicatif a modifier.",
+  "regions": {
+    "EU_WEST":    ["FR","DE","IT","ES","PT","BE","NL","LU","AT","CH","GB","IE","MC","AD","MT"],
+    "EU_NORTH":   ["SE","NO","DK","FI","IS"],
+    "EU_EAST":    ["PL","CZ","SK","HU","RO","BG","HR","SI","GR","EE","LV","LT","RS","UA","BA","AL","MK","MD"],
+    "NA":         ["US","CA"],
+    "LATAM":      ["MX","BR","AR","CL","CO","PE","UY","EC","BO","PY","CR","PA","DO","GT"],
+    "ASIA_EAST":  ["JP","KR","CN","TW","HK","MO","MN"],
+    "ASIA_SE":    ["TH","MY","SG","ID","PH","VN","KH","LA","MM","BN"],
+    "ASIA_SOUTH": ["IN","PK","BD","LK","NP"],
+    "OCEANIA":    ["AU","NZ","FJ","PG"],
+    "MIDEAST":    ["AE","SA","QA","KW","BH","OM","IL","TR","JO","LB"],
+    "AFRICA":     ["MA","DZ","TN","EG","ZA","NG","KE","SN","CI","GH","CM","TZ","UG","ET"]
+  },
+  "populated": ["EU_WEST", "NA"],
+  "_populated_comment": "Regions dont la rarete a ete calibree finement. Les autres retombent sur la valeur 'default' de chaque vehicule, ce qui reste jouable."
+}

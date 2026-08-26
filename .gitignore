@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Secrets — ne jamais committer de clés API
+*.env
+Secrets.*
+
+# Fichiers temporaires CLI Supabase
+supabase/.temp/
+
+# Images et vidéos de référence déposées à la racine
+/IMG_*.png
+/IMG_*.jpg
+/IMG_*.jpeg
+/IMG_*.HEIC
+*.MOV
+*.mov
+*.mp4
