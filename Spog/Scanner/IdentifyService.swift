@@ -7,6 +7,10 @@ struct Identification {
     let make: String
     let model: String
     let generation: String
+    /// Carrosserie, dans la liste fermee des six geometries que l'app sait dessiner.
+    /// Sert aux voitures que le catalogue ne connait pas encore : sans elle, impossible
+    /// de mettre en scene une carte apprise.
+    let body: String
     /// Teinte en anglais, prise dans une liste fermee. Rapprochee de la palette par CarPaint.
     let color: String
     let confidence: Double
@@ -108,6 +112,7 @@ enum IdentifyService {
 
         struct SuccessPayload: Decodable {
             let make: String, model: String, generation: String, color: String
+            let body: String?
             let confidence: Double
             let is_screen: Bool, vehicle_present: Bool
         }
@@ -122,6 +127,9 @@ enum IdentifyService {
         return Identification(make: payload.make,
                               model: payload.model,
                               generation: payload.generation,
+                              // Optionnel a la lecture : une app installee avant que le
+                              // serveur renvoie la carrosserie ne doit pas cesser de marcher.
+                              body: payload.body ?? "sedan",
                               color: payload.color,
                               confidence: payload.confidence)
     }

@@ -115,6 +115,9 @@ final class GarageStore {
     // MARK: Progression
 
     /// Nombre de modeles distincts du catalogue deja attrapes, et total possible.
+    /// Le total inclut les vehicules appris de l'IA : ils font partie du monde du
+    /// joueur au meme titre que les autres, et le denominateur grandit avec ses
+    /// decouvertes — ce qui raconte quelque chose plutot que de le cacher.
     var dexCaught: Int { uniqueModels }
     var dexTotal: Int { catalog.vehicles.count }
 

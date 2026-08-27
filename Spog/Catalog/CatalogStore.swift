@@ -5,7 +5,12 @@ import Foundation
 @Observable
 final class CatalogStore {
 
+    /// Le catalogue complet : les vehicules embarques **et** ceux appris de l'IA.
     private(set) var vehicles: [Vehicle] = []
+    /// Nombre de vehicules livres avec l'app. Sert a distinguer l'acquis de l'appris.
+    private(set) var embeddedCount = 0
+    /// Identifiants des vehicules appris, pour les signaler dans le Spogdex.
+    private(set) var learnedIDs: Set<String> = []
     private(set) var tiers: [RarityTier] = []
     private(set) var unknownTier: RarityTier = RarityTier(id: "unknown", rank: -1, points: 10, key: "rarity.unknown")
     private(set) var confidenceThreshold: Double = 0.8
@@ -38,6 +43,13 @@ final class CatalogStore {
 
         let catalog: VehicleFileBox = decode("vehicles")
         vehicles = catalog.vehicles
+        embeddedCount = vehicles.count
+
+        // Les vehicules appris rejoignent le catalogue au chargement : a partir de la,
+        // rien ne les distingue des autres pour le rapprochement ou l'affichage.
+        let learned = Self.loadLearned()
+        learnedIDs = Set(learned.map(\.id))
+        vehicles.append(contentsOf: learned)
 
         knownCountries = regionOfCountry.keys.sorted {
             countryName($0).localizedCaseInsensitiveCompare(countryName($1)) == .orderedAscending
@@ -52,6 +64,71 @@ final class CatalogStore {
               let value = try? JSONDecoder().decode(T.self, from: data)
         else { fatalError("Catalogue introuvable ou illisible: \(name).json") }
         return value
+    }
+
+    // MARK: Apprentissage
+
+    /// Fichier des vehicules appris. Il vit a cote du garage, dans les documents de
+    /// l'utilisateur : c'est **sa** collection de decouvertes, pas une ressource de l'app.
+    private static var learnedURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("learned_vehicles.json")
+    }
+
+    private static func loadLearned() -> [Vehicle] {
+        guard let data = try? Data(contentsOf: learnedURL),
+              let stored = try? JSONDecoder().decode([Vehicle].self, from: data)
+        else { return [] }
+        return stored
+    }
+
+    private func saveLearned() {
+        let learned = vehicles.filter { learnedIDs.contains($0.id) }
+        guard let data = try? JSONEncoder().encode(learned) else { return }
+        try? data.write(to: Self.learnedURL, options: .atomic)
+    }
+
+    /// Enregistre une voiture que l'IA a su nommer et que le catalogue ignorait.
+    ///
+    /// C'est ce qui permet a l'app de **grandir avec son joueur** : la premiere Vios
+    /// croisee a Hanoi entre au catalogue, et toutes les suivantes sont reconnues d'emblee,
+    /// sans ecran de confirmation. Le catalogue embarque ne pourra jamais contenir toutes
+    /// les voitures de tous les marches — celui-la si, un scan a la fois.
+    ///
+    /// La rarete reste **inconnue** : personne n'a calibre ce modele, et inventer un palier
+    /// fausserait les points. Le palier `unknown` existe pour ca depuis le premier jour.
+    @discardableResult
+    func learn(make: String, model: String, body: String) -> Vehicle? {
+        let make = make.trimmingCharacters(in: .whitespacesAndNewlines)
+        let model = model.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !make.isEmpty, !model.isEmpty else { return nil }
+
+        // Deja connu sous un nom ou un autre : on ne cree pas de doublon.
+        if let existing = match("\(make) \(model)") { return existing }
+
+        let id = Self.slug("\(make) \(model)")
+        guard !id.isEmpty, !vehicles.contains(where: { $0.id == id }) else {
+            return vehicles.first { $0.id == id }
+        }
+
+        let vehicle = Vehicle(id: id, make: make, model: model,
+                              body: CarBody(body).rawValue,
+                              rarity: ["default": unknownTier.id],
+                              aliases: [])
+        vehicles.append(vehicle)
+        learnedIDs.insert(id)
+        addToIndex(vehicle)
+        saveLearned()
+        return vehicle
+    }
+
+    func isLearned(_ vehicleID: String) -> Bool { learnedIDs.contains(vehicleID) }
+
+    /// Identifiant technique tire du nom : minuscules, tirets, sans accent.
+    /// Meme forme que les identifiants ecrits a la main dans le catalogue.
+    private static func slug(_ text: String) -> String {
+        let normalized = normalize(text)
+        return normalized.split(separator: " ").joined(separator: "-")
     }
 
     // MARK: Rarete
@@ -70,6 +147,18 @@ final class CatalogStore {
     }
 
     // MARK: Rapprochement du texte libre renvoye par l'IA
+
+    private func addToIndex(_ vehicle: Vehicle) {
+        var keys = [Self.normalize(vehicle.fullName), Self.normalize(vehicle.model)]
+        for alias in vehicle.aliases {
+            keys.append(Self.normalize("\(vehicle.make) \(alias)"))
+            keys.append(Self.normalize(alias))
+        }
+        keys.append(Self.stripNoise(Self.normalize(vehicle.fullName)))
+        for key in keys where !key.isEmpty {
+            if matchIndex[key] == nil { matchIndex[key] = vehicle }
+        }
+    }
 
     private func buildMatchIndex() {
         for vehicle in vehicles {

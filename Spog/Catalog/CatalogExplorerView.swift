@@ -181,6 +181,15 @@ struct CatalogExplorerView: View {
                             .font(.system(size: 11))
                             .foregroundStyle(Theme.accent)
                     }
+                    // Appris d'un scan, pas livré avec l'app : le joueur a agrandi
+                    // son propre catalogue, autant que ça se voie.
+                    if store.isLearned(vehicle.id) {
+                        Text("dex.learned")
+                            .font(Theme.label(8)).tracking(0.8).textCase(.uppercase)
+                            .foregroundStyle(Theme.accentBright)
+                            .padding(.horizontal, 6).padding(.vertical, 2)
+                            .background(Theme.accent.opacity(0.18), in: Capsule())
+                    }
                 }
             }
             Spacer()

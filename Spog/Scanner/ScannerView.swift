@@ -42,6 +42,11 @@ struct ScannerView: View {
         let reading: String
         let candidates: [Vehicle]
         let paint: UInt32?
+        /// Ce que l'IA a lu, en pieces detachees : de quoi ajouter le modele au
+        /// catalogue si le joueur confirme qu'elle avait raison.
+        let make: String
+        let model: String
+        let body: String
     }
 
     var body: some View {
@@ -83,6 +88,16 @@ struct ScannerView: View {
                                reading: item.reading,
                                candidates: item.candidates,
                                onPick: { vehicle in
+                                   let photo = item.photo, paint = item.paint
+                                   pending = nil
+                                   Task { await complete(vehicle, photo: photo, paint: paint) }
+                               },
+                               onLearn: {
+                                   // Le joueur confirme que l'IA avait bien lu : le modèle
+                                   // entre au catalogue et sera reconnu d'emblée ensuite.
+                                   guard let vehicle = CatalogStore.shared.learn(
+                                       make: item.make, model: item.model, body: item.body)
+                                   else { return }
                                    let photo = item.photo, paint = item.paint
                                    pending = nil
                                    Task { await complete(vehicle, photo: photo, paint: paint) }
@@ -270,17 +285,32 @@ struct ScannerView: View {
         let paint = CarPaint.fromServer(identification.color)
         let catalog = CatalogStore.shared
 
-        // Au-dessus du seuil ET reconnu dans le catalogue : la carte se crée seule.
-        // Sinon c'est le joueur qui tranche — une mauvaise carte est pire qu'une question.
-        if identification.confidence >= catalog.confidenceThreshold,
-           let vehicle = catalog.match(identification.fullText) {
-            await complete(vehicle, photo: photo, paint: paint)
-        } else {
-            let candidates = catalog.candidates(for: identification.fullText)
-            await MainActor.run {
-                pending = Pending(photo: photo, reading: identification.fullText,
-                                  candidates: candidates, paint: paint)
+        // Au-dessus du seuil, la carte se crée seule : soit le catalogue connaît la
+        // voiture, soit il **l'apprend**. Un modèle absent du catalogue n'est pas une
+        // faute du joueur, et lui poser une question à laquelle aucune réponse ne
+        // convient serait une impasse — c'est le cas de la moitié des voitures qui
+        // roulent hors d'Europe.
+        if identification.confidence >= catalog.confidenceThreshold {
+            let vehicle = await MainActor.run {
+                catalog.match(identification.fullText)
+                    ?? catalog.learn(make: identification.make,
+                                     model: identification.model,
+                                     body: identification.body)
             }
+            if let vehicle {
+                await complete(vehicle, photo: photo, paint: paint)
+                return
+            }
+        }
+
+        // En dessous du seuil, c'est le joueur qui tranche : une mauvaise carte est pire
+        // qu'une question.
+        let candidates = catalog.candidates(for: identification.fullText)
+        await MainActor.run {
+            pending = Pending(photo: photo, reading: identification.fullText,
+                              candidates: candidates, paint: paint,
+                              make: identification.make, model: identification.model,
+                              body: identification.body)
         }
     }
 

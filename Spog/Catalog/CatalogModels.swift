@@ -42,7 +42,9 @@ struct RarityTier: Decodable, Identifiable, Hashable {
 
 // MARK: - Vehicules
 
-struct Vehicle: Decodable, Identifiable, Hashable {
+/// `Encodable` autant que `Decodable` : les vehicules appris de l'IA sont reecrits
+/// sur le disque, dans exactement le meme format que le catalogue embarque.
+struct Vehicle: Codable, Identifiable, Hashable {
     let id: String
     let make: String
     let model: String

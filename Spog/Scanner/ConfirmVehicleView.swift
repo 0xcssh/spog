@@ -10,6 +10,9 @@ struct ConfirmVehicleView: View {
     let reading: String
     let candidates: [Vehicle]
     let onPick: (Vehicle) -> Void
+    /// Ajoute au catalogue ce que l'IA a lu. Propose seulement quand elle a lu
+    /// quelque chose d'exploitable.
+    let onLearn: () -> Void
     let onCancel: () -> Void
 
     @Environment(AppState.self) private var app
@@ -34,6 +37,12 @@ struct ConfirmVehicleView: View {
                     readingBanner
                         .padding(.horizontal, 20)
                         .padding(.top, 14)
+                }
+
+                if !reading.isEmpty {
+                    learnButton
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
                 }
 
                 searchField
@@ -88,6 +97,35 @@ struct ConfirmVehicleView: View {
         .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
             .stroke(Theme.accent.opacity(0.25), lineWidth: 1))
+    }
+
+    /// Aucune des propositions ne convient parce que la voiture n'est pas au catalogue :
+    /// c'est frequent hors d'Europe. Plutot qu'une impasse, on l'y ajoute.
+    private var learnButton: some View {
+        Button(action: onLearn) {
+            HStack(spacing: 9) {
+                Image(systemName: "plus.circle.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Theme.background)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("confirm.learn \(reading)")
+                        .font(Theme.display(14, .semibold))
+                        .foregroundStyle(Theme.background)
+                        .multilineTextAlignment(.leading)
+                    Text("confirm.learn.why")
+                        .font(Theme.mono(9))
+                        .foregroundStyle(Theme.background.opacity(0.75))
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 14).padding(.vertical, 12)
+            .frame(maxWidth: .infinity)
+            .background(
+                LinearGradient(colors: [Theme.accentBright, Theme.accent],
+                               startPoint: .topLeading, endPoint: .bottomTrailing),
+                in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+        .buttonStyle(.plain)
     }
 
     private var searchField: some View {

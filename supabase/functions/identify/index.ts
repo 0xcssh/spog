@@ -55,6 +55,12 @@ const COLORS = [
   "green", "yellow", "orange", "purple", "teal", "brown", "beige",
 ];
 
+/// Carrosseries que le modèle a le droit de renvoyer. Liste fermée, alignée sur les six
+/// géométries que l'app sait dessiner : une valeur hors liste ne pourrait rien afficher.
+/// Elle sert aux voitures que le catalogue embarqué ne connaît pas encore et qu'il faut
+/// pourtant savoir mettre en scène.
+const BODIES = ["hatch", "sedan", "suv", "sport", "pickup", "van"];
+
 /// Empreinte SHA-256 de l'identifiant d'appareil : on ne stocke jamais l'ID brut.
 /// Le préfixe "spog:" sépare les compteurs de ceux de l'autre app du même projet.
 async function hashDevice(deviceId: string): Promise<string> {
@@ -137,6 +143,7 @@ const SYSTEM_PROMPT = `You identify a car from a photograph taken in the street.
   "make": string,
   "model": string,
   "generation": string,
+  "body": string,
   "color": string,
   "confidence": number
 }
@@ -147,6 +154,7 @@ Rules:
 - "make": the manufacturer in its usual English spelling, e.g. "Volkswagen", "Mercedes-Benz", "Renault". Never an abbreviation, never translated.
 - "model": the model name only, without the manufacturer, e.g. "Golf GTI", "Clio", "911". Include the sub-model when you are sure of it.
 - "generation": the generation when you are sure of it, e.g. "IV", "Mk7", "992". Empty string otherwise. Never guess.
+- "body": exactly one of ${BODIES.map((b) => `"${b}"`).join(", ")}. "hatch" covers superminis and hatchbacks, "van" covers minivans, MPVs and panel vans, "sport" is for coupés and sports cars.
 - "color": exactly one of ${COLORS.map((c) => `"${c}"`).join(", ")}. Pick the closest one for the body paint, ignoring wraps of shadow and reflections.
 - "confidence": how sure you are of make AND model, from 0 to 1. Be honest: a distant, dark or partial photo deserves a low value. Never inflate it — a wrong card is worse than a confirmation screen.
 - When vehicle_present is false or is_screen is true, still return every field, with empty strings and confidence 0.
@@ -225,11 +233,15 @@ Deno.serve(async (req) => {
     const parsed = JSON.parse(completion.choices[0].message.content);
     const text = (value: unknown) => (typeof value === "string" ? value.trim().slice(0, 60) : "");
     const color = text(parsed.color).toLowerCase();
+    const bodyType = text(parsed.body).toLowerCase();
 
     return json({
       make: text(parsed.make),
       model: text(parsed.model),
       generation: text(parsed.generation),
+      // Repli sur "sedan" : c'est la silhouette la plus neutre, et une carrosserie
+      // absente empêcherait de dessiner la carte.
+      body: BODIES.includes(bodyType) ? bodyType : "sedan",
       color: COLORS.includes(color) ? color : "",
       confidence: Math.max(0, Math.min(1, Number(parsed.confidence) || 0)),
       is_screen: parsed.is_screen === true,

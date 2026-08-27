@@ -273,6 +273,40 @@
         }
       }
     },
+    "confirm.learn %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add “%@” to my catalogue"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter « %@ » à mon catalogue"
+          }
+        }
+      }
+    },
+    "confirm.learn.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It will be recognised straight away next time."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elle sera reconnue d'emblée la prochaine fois."
+          }
+        }
+      }
+    },
     "confirm.noResult": {
       "extractionState": "manual",
       "localizations": {
@@ -422,6 +456,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Manquantes"
+          }
+        }
+      }
+    },
+    "dex.learned": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "learned"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "appris"
           }
         }
       }
