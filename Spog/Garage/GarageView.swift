@@ -121,8 +121,15 @@ struct MiniCard: View {
     let card: CardData
 
     var body: some View {
-        NeonFrame(color: card.tier.frameColor ?? Theme.stroke, radius: 16,
-                  intensity: card.tier.frameIntensity, neon: card.tier.isTrophy) {
+        // Chaque carte porte **son** contour. Deux réglages distincts :
+        // — un trophée reçoit le néon doré, mais avec un halo resserré, sinon deux
+        //   cartes voisines fusionnent en un seul cadre autour de la rangée ;
+        // — une carte ordinaire reçoit un filet à la couleur de son palier, franchement
+        //   visible. Le filet neutre d'origine était à 7 % de blanc : invisible, la
+        //   carte flottait sans contour.
+        NeonFrame(color: card.tier.frameColor ?? card.tier.color, radius: 16,
+                  intensity: card.tier.isTrophy ? card.tier.frameIntensity : 0.7,
+                  neon: card.tier.isTrophy, spread: 0.4) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Text(String(format: "%03d", card.serial))

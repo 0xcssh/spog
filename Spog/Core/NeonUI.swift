@@ -33,6 +33,10 @@ struct NeonFrame<Content: View>: View {
     var intensity: Double = 1
     /// Vrai tube lumineux, avec debordement de lumiere.
     var neon: Bool = false
+    /// Etalement du halo, de 0 a 1. A reduire dans une grille : deux halos larges
+    /// posés cote a cote se rejoignent et donnent l'illusion d'un seul cadre autour
+    /// de la rangee, au lieu d'un cadre par carte.
+    var spread: CGFloat = 1
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -42,7 +46,8 @@ struct NeonFrame<Content: View>: View {
                     .fill(Theme.surface)
                     .overlay(DotGrid().clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous)))
             }
-            .modifier(FrameEdge(color: color, radius: radius, intensity: intensity, neon: neon))
+            .modifier(FrameEdge(color: color, radius: radius, intensity: intensity,
+                                neon: neon, spread: spread))
     }
 }
 
@@ -51,6 +56,7 @@ private struct FrameEdge: ViewModifier {
     let radius: CGFloat
     let intensity: Double
     let neon: Bool
+    var spread: CGFloat = 1
 
     func body(content: Content) -> some View {
         if intensity <= 0 {
@@ -60,14 +66,14 @@ private struct FrameEdge: ViewModifier {
                     .stroke(Theme.stroke, lineWidth: 1)
             }
         } else if neon {
-            content.neonBorder(color: color, radius: radius, intensity: intensity)
+            content.neonBorder(color: color, radius: radius, intensity: intensity, spread: spread)
         } else {
             content
                 .overlay {
                     RoundedRectangle(cornerRadius: radius, style: .continuous)
                         .stroke(color.opacity(0.55 * intensity), lineWidth: 1)
                 }
-                .shadow(color: color.opacity(0.26 * intensity), radius: 12)
+                .shadow(color: color.opacity(0.26 * intensity), radius: 12 * spread)
         }
     }
 }
@@ -207,6 +213,9 @@ struct NeonBorder: ViewModifier {
     var intensity: Double = 1
     /// Respiration lente. À réserver aux écrans où une seule carte est visible.
     var breathing: Bool = false
+    /// Étalement du halo, de 0 à 1. Le tube lui-même ne bouge pas — seule la
+    /// diffusion se resserre, pour qu'une carte en grille garde **son** cadre.
+    var spread: CGFloat = 1
 
     @State private var breath: Double = 0.82
 
@@ -221,15 +230,18 @@ struct NeonBorder: ViewModifier {
         return content
             .overlay {
                 ZStack {
-                    shape.stroke(color.opacity(0.42 * level), lineWidth: 7).blur(radius: 11)
+                    shape.stroke(color.opacity(0.42 * level), lineWidth: 7).blur(radius: 11 * spread)
                     shape.stroke(color.opacity(0.85 * level), lineWidth: 2.6).blur(radius: 3)
+                    // Le coeur du tube garde sa pleine intensité quel que soit
+                    // l'étalement : c'est lui qui dessine le contour, et il doit
+                    // faire le tour complet de la carte.
                     shape.stroke(core.opacity(0.95 * level), lineWidth: 1.1)
                 }
                 .allowsHitTesting(false)
             }
             // Débordement de lumière au-delà de la carte
-            .shadow(color: color.opacity(0.50 * level), radius: 16)
-            .shadow(color: color.opacity(0.26 * level), radius: 34)
+            .shadow(color: color.opacity(0.50 * level), radius: 16 * spread)
+            .shadow(color: color.opacity(0.26 * level), radius: 34 * spread)
             .onAppear {
                 guard breathing else { return }
                 withAnimation(.easeInOut(duration: 2.8).repeatForever(autoreverses: true)) {
@@ -244,9 +256,10 @@ extension View {
     func neonBorder(color: Color = RarityTier.trophyGold,
                     radius: CGFloat = 22,
                     intensity: Double = 1,
-                    breathing: Bool = false) -> some View {
-        modifier(NeonBorder(color: color, radius: radius,
-                            intensity: intensity, breathing: breathing))
+                    breathing: Bool = false,
+                    spread: CGFloat = 1) -> some View {
+        modifier(NeonBorder(color: color, radius: radius, intensity: intensity,
+                            breathing: breathing, spread: spread))
     }
 }
 
