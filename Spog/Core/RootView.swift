@@ -78,7 +78,7 @@ struct RootView: View {
             VStack(spacing: 0) {
                 Group {
                     switch tab {
-                    case .garage:  GarageView()
+                    case .garage:  GarageView(onScan: { tab = .scan })
                     case .scan:    ScannerView()
                     case .social:   SocialView()
                     case .quests:   QuestsView()

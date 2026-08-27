@@ -2,6 +2,10 @@ import SwiftUI
 
 /// Le garage : la collection, en grille. Ecran d'accueil de l'app.
 struct GarageView: View {
+    /// Emmene le joueur vers le scan depuis le garage vide. Le garage ne connait
+    /// pas les onglets : c'est la vue racine qui sait ou aller.
+    var onScan: (() -> Void)?
+
     @Environment(AppState.self) private var app
     @Environment(GarageStore.self) private var garage
     @State private var selected: CardData?
@@ -56,13 +60,59 @@ struct GarageView: View {
         .buttonStyle(.plain)
     }
 
-    private var grid: some View {
-        LazyVGrid(columns: columns, spacing: 12) {
-            ForEach(garage.cards) { card in
-                Button { selected = card } label: { MiniCard(card: card) }
-                    .buttonStyle(.plain)
+    @ViewBuilder private var grid: some View {
+        if garage.cards.isEmpty {
+            emptyState
+        } else {
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(garage.cards) { card in
+                    Button { selected = card } label: { MiniCard(card: card) }
+                        .buttonStyle(.plain)
+                }
             }
         }
+    }
+
+    /// Premier lancement : la grille est vide pour de vrai. Plutot qu'un ecran mort,
+    /// on dit ce qui manque et on donne le geste qui le remplit.
+    private var emptyState: some View {
+        NeonFrame(radius: 20) {
+            VStack(spacing: 14) {
+                Image(systemName: "car.2.fill")
+                    .font(.system(size: 34, weight: .light))
+                    .foregroundStyle(Theme.accent.opacity(0.7))
+                    .padding(.top, 8)
+
+                Text("garage.empty.title")
+                    .font(Theme.display(19, .semibold))
+                    .foregroundStyle(Theme.textPrimary)
+
+                Text("garage.empty.body")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 10)
+
+                if let onScan {
+                    Button(action: onScan) {
+                        Text("garage.empty.action")
+                            .font(Theme.label(12)).tracking(1.2)
+                            .foregroundStyle(Theme.background)
+                            .padding(.horizontal, 22).padding(.vertical, 14)
+                            .background(
+                                LinearGradient(colors: [Theme.accentBright, Theme.accent],
+                                               startPoint: .topLeading, endPoint: .bottomTrailing),
+                                in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, 6)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(18)
+        }
+        .padding(.top, 20)
     }
 }
 

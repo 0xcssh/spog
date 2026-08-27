@@ -28,12 +28,18 @@ final class GarageStore {
 
     init(demoCountry: String) {
         load()
-        // Garage de demonstration au tout premier lancement seulement.
+#if DEBUG
+        // Garage de demonstration, **en build de developpement seulement**.
+        // Il servait a montrer l'app avant que le scanner existe ; maintenant qu'il
+        // existe, de fausses prises dans les points, le niveau et le Spogdex d'un
+        // vrai joueur seraient un mensonge. Il reste ici pour les captures d'ecran
+        // et les essais, et ne peut pas partir sur l'App Store.
         if catches.isEmpty && !UserDefaults.standard.bool(forKey: Self.seededKey) {
             seedDemo(in: demoCountry)
             UserDefaults.standard.set(true, forKey: Self.seededKey)
             save()
         }
+#endif
     }
 
     // MARK: Persistance
@@ -171,7 +177,8 @@ final class GarageStore {
         return UIColor(catalog.resolve(vehicle, in: country).tier.color)
     }
 
-    /// Garage de demonstration, en attendant le scanner. A retirer avec le scanner.
+#if DEBUG
+    /// Garage de demonstration. Reserve au developpement : voir `init`.
     private func seedDemo(in country: String) {
         // En tete, les modeles qui ont deja leur rendu : le garage de demonstration
         // doit montrer l'app telle qu'elle sera, pas des silhouettes de repli.
@@ -190,4 +197,5 @@ final class GarageStore {
                                  paint: CarPaint.palette[index % CarPaint.palette.count]))
         }
     }
+#endif
 }

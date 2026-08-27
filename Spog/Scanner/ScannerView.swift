@@ -10,6 +10,11 @@ struct ScannerView: View {
     @Environment(PlayerProfile.self) private var profile
     @Environment(LocationProvider.self) private var location
 
+    /// Au-dessus de cette vitesse, le scan se bloque. 30 km/h laisse passer l'arrêt,
+    /// la marche et le pas d'un embouteillage, jamais la conduite. C'est la parade au
+    /// risque le plus grave de l'app : pousser quelqu'un à photographier en roulant.
+    static let maxScanSpeedKmh = 30.0
+
     @State private var camera = CameraController()
     @State private var working = false
     @State private var pulse = false
@@ -56,8 +61,12 @@ struct ScannerView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
         }
+        .onDisappear { location.stopWatchingSpeed() }
         .task {
             await camera.start()
+            // La vitesse n'est suivie que sur cet écran : ailleurs, ce serait
+            // de la batterie brûlée pour rien.
+            location.startWatchingSpeed()
             // « Ta position te suit en voyage » est promis à l'onboarding : sans ce
             // rafraîchissement, le pays restait celui du jour de l'installation.
             refreshCountryIfAutomatic()
@@ -89,7 +98,16 @@ struct ScannerView: View {
         }
     }
 
+    /// Vrai quand l'appareil bouge trop vite pour qu'un scan soit raisonnable.
+    /// Une vitesse **inconnue** ne bloque jamais : on ne punit pas un joueur
+    /// parce que son GPS ne capte pas.
+    private var tooFast: Bool {
+        guard let speed = location.speedKmh else { return false }
+        return speed > Self.maxScanSpeedKmh
+    }
+
     private var hint: LocalizedStringKey {
+        if tooFast { return "scan.tooFast" }
         if working { return "scan.working" }
         if maskedPlates > 0 { return "scan.plateMasked" }
         switch camera.state {
@@ -128,7 +146,8 @@ struct ScannerView: View {
                     .offset(y: pulse ? 120 : -120)
             }
 
-            CornerBrackets(color: working ? Theme.accentBright : Theme.accent)
+            CornerBrackets(color: tooFast ? RarityTier.trophyGold
+                                 : (working ? Theme.accentBright : Theme.accent))
                 .padding(18)
         }
         .aspectRatio(0.82, contentMode: .fit)
@@ -166,10 +185,10 @@ struct ScannerView: View {
                             .font(.system(size: 25, weight: .semibold))
                             .foregroundStyle(Theme.background)
                     }
-                    .opacity(working ? 0.5 : 1)
+                    .opacity(working || tooFast ? 0.5 : 1)
                 }
                 .buttonStyle(.plain)
-                .disabled(working)
+                .disabled(working || tooFast)
             }
 
             if let left = freeScansLeft {
@@ -207,6 +226,10 @@ struct ScannerView: View {
     }
 
     private func shoot() async {
+        // Garde-fou : le declencheur est deja desactive, mais une prise lancee
+        // juste avant l'acceleration ne doit pas passer non plus.
+        guard !tooFast else { return }
+
         // Le paywall se presente ici, pas a l'ouverture de l'app :
         // il arrive quand le joueur a deja vu ce qu'il achete.
         if let left = freeScansLeft, left == 0 {

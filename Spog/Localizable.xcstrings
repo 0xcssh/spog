@@ -358,6 +358,57 @@
         }
       }
     },
+    "garage.empty.action": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot my first car"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repérer ma première voiture"
+          }
+        }
+      }
+    },
+    "garage.empty.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot a car in the street, shoot it, and it becomes your first card."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repère une voiture dans la rue, photographie-la, et elle devient ta première carte."
+          }
+        }
+      }
+    },
+    "garage.empty.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your garage is empty"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton garage est vide"
+          }
+        }
+      }
+    },
     "garage.section": {
       "extractionState": "manual",
       "localizations": {
@@ -983,6 +1034,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entre le code du lien qu'il t'a envoyé. Il reste attaché à ton compte pour le jour où les récompenses arriveront."
+          }
+        }
+      }
+    },
+    "onboarding.safety %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never behind the wheel. With location on, scanning locks itself above %lld km/h."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jamais au volant. Quand ta position est active, le scan se bloque au-delà de %lld km/h."
           }
         }
       }
@@ -2537,6 +2605,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repère une voiture"
+          }
+        }
+      }
+    },
+    "scan.tooFast": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too fast to shoot. Stop, then try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop rapide pour scanner. Arrête-toi, puis réessaie."
           }
         }
       }

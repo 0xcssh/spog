@@ -228,6 +228,20 @@ struct OnboardingView: View {
             principle(icon: "viewfinder", title: "onboarding.snap.title", body: "onboarding.snap.body")
             principle(icon: "square.grid.2x2.fill", title: "onboarding.collect.title",
                       body: "onboarding.collect.body")
+
+            // Sécurité routière : dit une fois, clairement, et tenu par le code —
+            // le scan se bloque vraiment au-delà du seuil.
+            HStack(alignment: .top, spacing: 9) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(RarityTier.trophyGold)
+                Text("onboarding.safety \(Int(ScannerView.maxScanSpeedKmh))")
+                    .font(Theme.mono(10))
+                    .foregroundStyle(Theme.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+            }
+            .padding(.top, 2)
         }
     }
 
