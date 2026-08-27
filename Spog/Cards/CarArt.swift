@@ -20,10 +20,14 @@ enum CarArt {
         lock.lock(); defer { lock.unlock() }
         for name in candidates {
             if let hit = cache[name] { return hit }
-            if let url = Bundle.main.url(forResource: name, withExtension: "png"),
-               let image = UIImage(contentsOfFile: url.path) {
-                cache[name] = image
-                return image
+            // JPEG d'abord : c'est le format des illustrations produites en lot, six cents
+            // PNG pesant trois fois plus lourd dans le bundle pour une photo.
+            for ext in ["jpg", "png"] {
+                if let url = Bundle.main.url(forResource: name, withExtension: ext),
+                   let image = UIImage(contentsOfFile: url.path) {
+                    cache[name] = image
+                    return image
+                }
             }
         }
         return nil
