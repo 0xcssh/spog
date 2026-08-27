@@ -1,16 +1,41 @@
 import SwiftUI
 
-/// Parcours du catalogue embarque. Montre que la rarete change avec le pays de reperage.
+/// Le Spogdex : le catalogue embarque, et surtout **ce qu'il reste a attraper**.
+/// Montre aussi que la rarete change avec le pays de reperage.
+///
+/// C'est le moteur de completion de l'app : sans lui, rien ne donne envie de
+/// photographier une Clio. Encore fallait-il pouvoir voir ce qui manque.
 struct CatalogExplorerView: View {
     @Environment(AppState.self) private var app
+    @Environment(GarageStore.self) private var garage
     @State private var query = ""
+    @State private var filter: Filter = .all
     private let store = CatalogStore.shared
 
+    enum Filter: CaseIterable {
+        case all, caught, missing
+
+        var key: LocalizedStringKey {
+            switch self {
+            case .all:     "dex.filter.all"
+            case .caught:  "dex.filter.caught"
+            case .missing: "dex.filter.missing"
+            }
+        }
+    }
+
     private var results: [(Vehicle, RarityResolution)] {
-        let base = query.isEmpty
-            ? store.vehicles
-            : store.vehicles.filter { $0.fullName.localizedCaseInsensitiveContains(query) }
+        // La recherche passe par le catalogue : elle connait les alias de marche,
+        // donc « Cerato » trouve la K3 et « Solaris » trouve l'Accent.
+        let base = query.isEmpty ? store.vehicles : store.search(query)
         return base
+            .filter { vehicle in
+                switch filter {
+                case .all:     true
+                case .caught:  garage.hasModel(vehicle.id)
+                case .missing: !garage.hasModel(vehicle.id)
+                }
+            }
             .map { ($0, store.resolve($0, in: app.country)) }
             .sorted {
                 $0.1.tier.rank != $1.1.tier.rank
@@ -28,23 +53,63 @@ struct CatalogExplorerView: View {
     }
 
     private var header: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                Overline(text: "catalog.section")
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text("\(store.vehicles.count)")
-                        .font(Theme.display(26))
-                        .foregroundStyle(Theme.textPrimary)
-                    Text("catalog.vehicles")
-                        .font(Theme.label(12)).tracking(1.4).textCase(.uppercase)
-                        .foregroundStyle(Theme.textSecondary)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                VStack(alignment: .leading, spacing: 3) {
+                    Overline(text: "catalog.section")
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        // Ce qu'on a sur ce qu'il y a : le chiffre qui compte pour
+                        // un collectionneur n'est pas la taille du catalogue.
+                        Text("\(garage.dexCaught)")
+                            .font(Theme.display(26))
+                            .foregroundStyle(Theme.textPrimary)
+                        Text("dex.outOf \(store.vehicles.count)")
+                            .font(Theme.label(12)).tracking(1.4).textCase(.uppercase)
+                            .foregroundStyle(Theme.textSecondary)
+                    }
                 }
+                Spacer()
+                MarketChip()
             }
-            Spacer()
-            MarketChip()
+
+            SegmentedBar(progress: store.vehicles.isEmpty ? 0
+                         : Double(garage.dexCaught) / Double(store.vehicles.count),
+                         segments: 30, height: 7)
+
+            filterBar
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 12)
+    }
+
+    private var filterBar: some View {
+        HStack(spacing: 7) {
+            ForEach(Filter.allCases, id: \.self) { item in
+                let selected = filter == item
+                Button {
+                    withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                        filter = item
+                    }
+                } label: {
+                    Text(item.key)
+                        .font(Theme.label(10)).tracking(0.8)
+                        .foregroundStyle(selected ? Theme.background : Theme.textSecondary)
+                        .padding(.horizontal, 13).padding(.vertical, 8)
+                        .background {
+                            if selected {
+                                Capsule().fill(LinearGradient(
+                                    colors: [Theme.accentBright, Theme.accent],
+                                    startPoint: .topLeading, endPoint: .bottomTrailing))
+                            } else {
+                                Capsule().fill(Theme.surface)
+                                    .overlay(Capsule().stroke(Theme.stroke, lineWidth: 1))
+                            }
+                        }
+                }
+                .buttonStyle(.plain)
+            }
+            Spacer(minLength: 0)
+        }
     }
 
     private var searchField: some View {
@@ -74,6 +139,15 @@ struct CatalogExplorerView: View {
     private var list: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
+                if results.isEmpty {
+                    Text(filter == .caught && query.isEmpty
+                         ? "dex.emptyCaught" : "confirm.noResult")
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.textMuted)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 30).padding(.horizontal, 20)
+                }
                 ForEach(results, id: \.0.id) { vehicle, resolution in
                     row(vehicle, resolution)
                 }
@@ -85,18 +159,29 @@ struct CatalogExplorerView: View {
     }
 
     private func row(_ vehicle: Vehicle, _ resolution: RarityResolution) -> some View {
-        HStack(spacing: 12) {
+        let caught = garage.hasModel(vehicle.id)
+        return HStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 3)
                 .fill(resolution.tier.color)
                 .frame(width: 3, height: 30)
+                .opacity(caught ? 1 : 0.35)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(vehicle.make.uppercased())
                     .font(Theme.label(9)).tracking(1.4)
                     .foregroundStyle(Theme.textMuted)
-                Text(vehicle.model)
-                    .font(Theme.display(15, .semibold))
-                    .foregroundStyle(Theme.textPrimary)
+                HStack(spacing: 6) {
+                    Text(vehicle.model)
+                        .font(Theme.display(15, .semibold))
+                        .foregroundStyle(caught ? Theme.textPrimary : Theme.textSecondary)
+                    // La coche marque ce qui est acquis. Le reste n'est pas caché :
+                    // c'est précisément ce qui donne envie de sortir.
+                    if caught {
+                        Image(systemName: "checkmark.seal.fill")
+                            .font(.system(size: 11))
+                            .foregroundStyle(Theme.accent)
+                    }
+                }
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 3) {
@@ -109,10 +194,11 @@ struct CatalogExplorerView: View {
             }
         }
         .padding(.horizontal, 14).padding(.vertical, 11)
-        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .background(caught ? resolution.tier.color.opacity(0.07) : Theme.surface,
+                    in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(resolution.tier.color.opacity(0.18), lineWidth: 1)
+                .stroke(resolution.tier.color.opacity(caught ? 0.35 : 0.14), lineWidth: 1)
         )
     }
 }
