@@ -7,6 +7,11 @@ struct SocialView: View {
     @Environment(GarageStore.self) private var garage
     @Environment(ProgressStore.self) private var progress
     @Environment(PlayerProfile.self) private var profile
+    @Environment(ReferralStore.self) private var referral
+
+    @State private var enteringCode = false
+    /// Code copie a l'instant : la coche remplace l'icone une seconde.
+    @State private var justCopied = false
 
     private var totalPoints: Int { garage.totalPoints + progress.bonusPoints }
 
@@ -16,6 +21,7 @@ struct SocialView: View {
                 SectionHeader(overline: "social.section",
                               title: String(localized: "social.title"))
                 friendsBlock
+                referralBlock
                 crewBlock
                 leaderboard
                 note
@@ -23,6 +29,7 @@ struct SocialView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 16)
         }
+        .sheet(isPresented: $enteringCode) { ReferralEntrySheet() }
     }
 
     // MARK: Classement
@@ -141,6 +148,111 @@ struct SocialView: View {
         }
     }
 
+    // MARK: Parrainage
+
+    /// Le parrainage est la seule partie « sociale » qui marche vraiment aujourd'hui :
+    /// partager un code et en saisir un ne demandent ni compte ni serveur. La recompense,
+    /// elle, en demande un — elle est donc annoncee comme attendue, pas comme acquise.
+    private var referralBlock: some View {
+        NeonFrame(radius: 16) {
+            VStack(alignment: .leading, spacing: 13) {
+                Overline(text: "social.referral")
+
+                HStack(spacing: 10) {
+                    Text(referral.myCode)
+                        .font(Theme.mono(21, .bold)).tracking(5)
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1).minimumScaleFactor(0.6)
+                    Spacer(minLength: 4)
+                    Button { copyCode() } label: {
+                        Image(systemName: justCopied ? "checkmark" : "doc.on.doc")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(justCopied ? Theme.accent : Theme.textSecondary)
+                            .frame(width: 36, height: 36)
+                            .background(Theme.surfaceRaised, in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    ShareLink(item: referral.shareText) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Theme.textSecondary)
+                            .frame(width: 36, height: 36)
+                            .background(Theme.surfaceRaised, in: Circle())
+                    }
+                }
+                .padding(.horizontal, 13).padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Theme.accent.opacity(0.25), lineWidth: 1))
+
+                Text("social.referral.how")
+                    .font(Theme.mono(10))
+                    .foregroundStyle(Theme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                sponsorRow
+            }
+            .padding(14)
+        }
+    }
+
+    /// Le code de celui qui t'a parraine : deja utilise, propose par un lien, ou a saisir.
+    @ViewBuilder private var sponsorRow: some View {
+        if let code = referral.enteredCode {
+            HStack(spacing: 9) {
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.accent)
+                Text("social.referral.used \(code)")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.textSecondary)
+                Spacer(minLength: 6)
+                Text("social.soon")
+                    .font(Theme.label(8)).tracking(1).textCase(.uppercase)
+                    .lineLimit(1).fixedSize()
+                    .foregroundStyle(Theme.textMuted)
+                    .padding(.horizontal, 7).padding(.vertical, 3)
+                    .background(Theme.textMuted.opacity(0.14), in: Capsule())
+            }
+            .padding(.horizontal, 11).padding(.vertical, 12)
+            .frame(maxWidth: .infinity)
+            .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        } else {
+            Button { enteringCode = true } label: {
+                HStack(spacing: 7) {
+                    Image(systemName: "person.badge.plus")
+                        .font(.system(size: 11, weight: .semibold))
+                    // Un lien deja ouvert a rempli le code : on le dit, plutot que de
+                    // laisser le joueur le retaper de memoire.
+                    Text(referral.pendingFromLink == nil
+                         ? "social.referral.enter"
+                         : "social.referral.fromLink")
+                        .font(Theme.label(11)).tracking(0.8)
+                    Spacer(minLength: 6)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .semibold))
+                }
+                .foregroundStyle(Theme.textSecondary)
+                .padding(.horizontal, 11).padding(.vertical, 12)
+                .frame(maxWidth: .infinity)
+                .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Theme.stroke, lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func copyCode() {
+        UIPasteboard.general.string = referral.myCode
+        withAnimation { justCopied = true }
+        Task {
+            try? await Task.sleep(for: .seconds(1.6))
+            withAnimation { justCopied = false }
+        }
+    }
+
     private var note: some View {
         Text("social.note")
             .font(Theme.mono(10))
@@ -149,6 +261,112 @@ struct SocialView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 4)
+    }
+}
+
+
+/// Saisie d'un code de parrainage depuis l'onglet Social, pour qui ne l'avait pas
+/// sous la main a l'inscription. Meme regles que dans l'onboarding : un seul endroit
+/// decide de ce qu'est un code valable, `ReferralStore`.
+private struct ReferralEntrySheet: View {
+    @Environment(ReferralStore.self) private var referral
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var code = ""
+    @FocusState private var typing: Bool
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("social.referral.enterWhy")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                TextField(text: $code) { Text("referral.placeholder") }
+                    .focused($typing)
+                    .textInputAutocapitalization(.characters)
+                    .autocorrectionDisabled()
+                    .submitLabel(.done)
+                    .onSubmit { save() }
+                    .font(Theme.mono(22, .bold)).tracking(6)
+                    .foregroundStyle(Theme.textPrimary)
+                    .padding(.horizontal, 16).padding(.vertical, 16)
+                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(typing ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
+                    .onChange(of: code) { _, typed in
+                        let cleaned = ReferralStore.normalize(typed)
+                        if cleaned != typed { code = cleaned }
+                    }
+
+                feedback
+                Spacer()
+
+                Button { save() } label: {
+                    Text("social.referral.save")
+                        .font(Theme.label(13)).tracking(1.2)
+                        .foregroundStyle(Theme.background)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(
+                            LinearGradient(colors: [Theme.accentBright, Theme.accent],
+                                           startPoint: .topLeading, endPoint: .bottomTrailing),
+                            in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .disabled(referral.check(code) != .ready)
+                .opacity(referral.check(code) == .ready ? 1 : 0.45)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+            .padding(.bottom, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.background)
+            .navigationTitle(Text("social.referral"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { dismiss() } label: { Text("common.close") }
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+        .onAppear {
+            code = referral.pendingFromLink ?? ""
+            typing = true
+        }
+    }
+
+    @ViewBuilder private var feedback: some View {
+        switch referral.check(code) {
+        case .ready:
+            line("checkmark.circle.fill", "referral.valid", Theme.accent)
+        case .ownCode:
+            line("exclamationmark.triangle.fill", "referral.ownCode", RarityTier.trophyGold)
+        case .tooShort:
+            line("ellipsis.circle", "referral.tooShort", Theme.textMuted)
+        case .empty:
+            EmptyView()
+        }
+    }
+
+    private func line(_ icon: String, _ text: LocalizedStringKey, _ color: Color) -> some View {
+        HStack(spacing: 9) {
+            Image(systemName: icon)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(color)
+            Text(text)
+                .font(Theme.mono(11))
+                .foregroundStyle(Theme.textSecondary)
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func save() {
+        guard referral.apply(code) else { return }
+        referral.pendingFromLink = nil
+        dismiss()
     }
 }
 

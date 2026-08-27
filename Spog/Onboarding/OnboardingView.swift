@@ -8,11 +8,14 @@ struct OnboardingView: View {
     @Environment(PlayerProfile.self) private var profile
 
     @Environment(LocationProvider.self) private var location
+    @Environment(ReferralStore.self) private var referral
 
     @State private var step: Step = .welcome
     @State private var pickingCountry = false
     /// Position refusée : il faut le dire, sinon le repli en mode manuel est inexplicable.
     @State private var locationRefused = false
+    /// Code d'invitation en cours de saisie. Vide = le joueur n'en a pas, c'est permis.
+    @State private var referralCode = ""
     @FocusState private var typing: Bool
 
     private let store = CatalogStore.shared
@@ -20,7 +23,7 @@ struct OnboardingView: View {
     @State private var contentHeight: CGFloat = 0
 
     enum Step: Int, CaseIterable {
-        case welcome, nickname, taste, how, market, preparing, recap
+        case welcome, nickname, taste, how, market, referral, preparing, recap
     }
 
     var body: some View {
@@ -45,6 +48,7 @@ struct OnboardingView: View {
                         case .taste:     tasteStep
                         case .how:       howItWorks
                         case .market:    market
+                        case .referral:  referralStep
                         case .preparing: preparing
                         case .recap:     recap
                         }
@@ -123,7 +127,7 @@ struct OnboardingView: View {
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .submitLabel(.next)
-            .onSubmit { typing = false; advance() }
+            .onSubmit { next() }
             .font(Theme.display(19, .semibold))
             .foregroundStyle(Theme.textPrimary)
             .padding(.horizontal, 16).padding(.vertical, 16)
@@ -139,10 +143,7 @@ struct OnboardingView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button {
-                    typing = false
-                    advance()
-                } label: {
+                Button { next() } label: {
                     Text("onboarding.next")
                         .font(Theme.label(13)).tracking(1)
                         .foregroundStyle(Theme.accentBright)
@@ -377,7 +378,84 @@ struct OnboardingView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: 6 — Préparation
+    // MARK: 6 — Code d'invitation
+
+    /// Derniere question, et la seule qu'on peut laisser vide sans rien perdre.
+    /// Elle est posee ici plutot qu'au premier ecran : demander un code a quelqu'un
+    /// qui ne sait pas encore ce qu'est l'app n'a aucun sens.
+    private var referralStep: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("onboarding.referral.title")
+                .font(Theme.display(26))
+                .foregroundStyle(Theme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("onboarding.referral.why")
+                .font(Theme.mono(11))
+                .foregroundStyle(Theme.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("onboarding.referral.optional")
+                .font(Theme.label(10)).tracking(0.8)
+                .foregroundStyle(Theme.accent)
+
+            TextField(text: $referralCode) {
+                Text("referral.placeholder")
+            }
+            .focused($typing)
+            .textInputAutocapitalization(.characters)
+            .autocorrectionDisabled()
+            .submitLabel(.done)
+            .onSubmit { next() }
+            .font(Theme.mono(22, .bold))
+            .tracking(6)
+            .foregroundStyle(Theme.textPrimary)
+            .padding(.horizontal, 16).padding(.vertical, 16)
+            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(typing ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
+            // Le code est remis en forme pendant la frappe : minuscules, tirets et
+            // confusions O/0 ou I/1 corriges a la volee plutot que refuses a l'envoi.
+            .onChange(of: referralCode) { _, typed in
+                let cleaned = ReferralStore.normalize(typed)
+                if cleaned != typed { referralCode = cleaned }
+            }
+
+            referralFeedback
+        }
+        .onAppear {
+            // Code recu par un lien : on le propose deja rempli, jamais applique en douce.
+            if referralCode.isEmpty, let pending = referral.pendingFromLink {
+                referralCode = pending
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button { next() } label: {
+                    Text("onboarding.next")
+                        .font(Theme.label(13)).tracking(1)
+                        .foregroundStyle(Theme.accentBright)
+                }
+            }
+        }
+    }
+
+    /// Reponse pendant la frappe. Un message d'erreur decouvert apres coup arrive trop tard.
+    @ViewBuilder private var referralFeedback: some View {
+        switch referral.check(referralCode) {
+        case .ready:
+            statusLine("checkmark.circle.fill", "referral.valid", color: Theme.accent)
+        case .ownCode:
+            statusLine("exclamationmark.triangle.fill", "referral.ownCode",
+                       color: RarityTier.trophyGold)
+        case .tooShort:
+            statusLine("ellipsis.circle", "referral.tooShort", color: Theme.textMuted)
+        case .empty:
+            EmptyView()
+        }
+    }
+
+    // MARK: 7 — Preparation
 
     @State private var readySteps = 0
 
@@ -445,6 +523,10 @@ struct OnboardingView: View {
                     if !profile.favouriteBodies.isEmpty {
                         Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
                         recapRow("heart.fill", "onboarding.recap.taste", favouritesText)
+                    }
+                    if let code = referral.enteredCode {
+                        Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
+                        recapRow("person.2.fill", "onboarding.recap.referral", code)
                     }
                     Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
                     recapRow("gift.fill", "onboarding.recap.free",
@@ -531,10 +613,7 @@ struct OnboardingView: View {
     }
 
     private var action: some View {
-        Button {
-            typing = false
-            if step == .recap { finish() } else { advance() }
-        } label: {
+        Button { next() } label: {
             Text(step == .recap ? "onboarding.start" : "onboarding.next")
                 .font(Theme.label(13)).tracking(1.4)
                 .foregroundStyle(Theme.background)
@@ -546,6 +625,14 @@ struct OnboardingView: View {
                     in: Capsule())
         }
         .buttonStyle(.plain)
+    }
+
+    /// Quitte l'etape courante. Le code d'invitation est enregistre ici, au moment de
+    /// passer a la suite : un champ laisse vide ou incomplet n'empeche jamais d'avancer.
+    private func next() {
+        typing = false
+        if step == .referral { referral.apply(referralCode) }
+        if step == .recap { finish() } else { advance() }
     }
 
     private func advance() {

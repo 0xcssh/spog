@@ -257,6 +257,7 @@
 				DEVELOPMENT_TEAM = 82C2LNA792;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Spog-Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Spog utilise ta position pour savoir dans quel pays tu rep\U00e8res tes voitures. Seuls le pays et la ville sont conserv\U00e9s, jamais tes coordonn\U00e9es.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Spog utilise l'appareil photo pour capturer les voitures que tu croises dans la rue.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -288,6 +289,7 @@
 				DEVELOPMENT_TEAM = 82C2LNA792;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Spog-Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Spog utilise ta position pour savoir dans quel pays tu rep\U00e8res tes voitures. Seuls le pays et la ville sont conserv\U00e9s, jamais tes coordonn\U00e9es.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Spog utilise l'appareil photo pour capturer les voitures que tu croises dans la rue.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

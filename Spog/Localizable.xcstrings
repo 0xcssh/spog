@@ -885,6 +885,23 @@
         }
       }
     },
+    "onboarding.recap.referral": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invited by"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parrainé par"
+          }
+        }
+      }
+    },
     "onboarding.recap.taste": {
       "extractionState": "manual",
       "localizations": {
@@ -915,6 +932,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tout est prêt, %@"
+          }
+        }
+      }
+    },
+    "onboarding.referral.optional": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facultatif"
+          }
+        }
+      }
+    },
+    "onboarding.referral.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invited by a friend?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un ami t'a invité ?"
+          }
+        }
+      }
+    },
+    "onboarding.referral.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the code from the link they sent you. It stays attached to your account for when rewards arrive."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entre le code du lien qu'il t'a envoyé. Il reste attaché à ton compte pour le jour où les récompenses arriveront."
           }
         }
       }
@@ -2092,6 +2160,91 @@
         }
       }
     },
+    "referral.ownCode": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That's your own code — you can't invite yourself."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est ton propre code : tu ne peux pas te parrainer toi-même."
+          }
+        }
+      }
+    },
+    "referral.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "INVITE CODE"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CODE"
+          }
+        }
+      }
+    },
+    "referral.shareText %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I collect the cars I spot in the street on Spog. Use my code %@ when you sign up."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je collectionne les voitures que je croise dans la rue sur Spog. Utilise mon code %@ à ton inscription."
+          }
+        }
+      }
+    },
+    "referral.tooShort": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A code is 6 characters long."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un code fait 6 caractères."
+          }
+        }
+      }
+    },
+    "referral.valid": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code saved."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code enregistré."
+          }
+        }
+      }
+    },
     "reveal.again": {
       "extractionState": "manual",
       "localizations": {
@@ -2979,6 +3132,125 @@
           "stringUnit": {
             "state": "translated",
             "value": "Les amis et les crews demandent des comptes utilisateurs et un serveur. Rien n'est encore envoyé nulle part : ton garage reste sur cet appareil."
+          }
+        }
+      }
+    },
+    "social.referral": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Referrals"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parrainage"
+          }
+        }
+      }
+    },
+    "social.referral.enter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have a code"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J'ai un code"
+          }
+        }
+      }
+    },
+    "social.referral.enterWhy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the code of the person who brought you here. It can only be set once."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entre le code de la personne qui t'a fait connaître Spog. Il ne se choisit qu'une fois."
+          }
+        }
+      }
+    },
+    "social.referral.fromLink": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A code is waiting for you"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un code t'attend"
+          }
+        }
+      }
+    },
+    "social.referral.how": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share your code. Rewards for you and the people you bring in arrive with accounts — nothing is credited yet."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage ton code. Les récompenses, pour toi comme pour tes filleuls, arriveront avec les comptes — rien n'est encore crédité."
+          }
+        }
+      }
+    },
+    "social.referral.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save this code"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer ce code"
+          }
+        }
+      }
+    },
+    "social.referral.used %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invited by %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parrainé par %@"
           }
         }
       }
