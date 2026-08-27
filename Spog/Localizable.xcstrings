@@ -1157,6 +1157,23 @@
         }
       }
     },
+    "paywall.pricesUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prices unavailable right now."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prix indisponibles pour le moment."
+          }
+        }
+      }
+    },
     "paywall.quests": {
       "extractionState": "manual",
       "localizations": {
@@ -1170,6 +1187,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toutes les quêtes du jour et leurs bonus"
+          }
+        }
+      }
+    },
+    "paywall.retry": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
           }
         }
       }

@@ -11,7 +11,6 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var document: LegalDocument?
-    var onSkip: (() -> Void)?          // TEMP — voir la note en bas de fichier
 
     var body: some View {
         ZStack {
@@ -100,22 +99,35 @@ struct PaywallView: View {
         }
     }
 
-    /// Les deux formules, l'annuelle mise en avant.
+    /// Les deux formules, l'annuelle mise en avant. Elles s'affichent **toujours**,
+    /// meme quand StoreKit n'a pas rendu les produits : un paywall vide ne dit rien
+    /// au joueur, et le cas arrive pour de vrai (reseau coupe, Store injoignable).
+    /// Seul le prix manque alors, et il n'est jamais inventé.
     private var plans: some View {
-        @Bindable var store = subscriptions
-        return VStack(spacing: 9) {
-            if let yearly = subscriptions.yearly {
-                planCard(yearly, plan: .yearly,
-                         badge: subscriptions.yearlySaving.map { "-\($0) %" })
-            }
-            if let monthly = subscriptions.monthly {
-                planCard(monthly, plan: .monthly, badge: nil)
+        VStack(spacing: 9) {
+            planCard(subscriptions.yearly, plan: .yearly,
+                     badge: subscriptions.yearlySaving.map { "-\($0) %" })
+            planCard(subscriptions.monthly, plan: .monthly, badge: nil)
+
+            if subscriptions.monthly == nil && subscriptions.yearly == nil {
+                HStack(spacing: 8) {
+                    Text("paywall.pricesUnavailable")
+                        .font(Theme.mono(10))
+                        .foregroundStyle(Theme.textMuted)
+                    Button { Task { await subscriptions.load() } } label: {
+                        Text("paywall.retry")
+                            .font(Theme.label(10)).tracking(0.6)
+                            .foregroundStyle(Theme.accent)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.top, 2)
             }
         }
         .padding(.bottom, 14)
     }
 
-    private func planCard(_ product: Product, plan: SubscriptionStore.Plan,
+    private func planCard(_ product: Product?, plan: SubscriptionStore.Plan,
                           badge: String?) -> some View {
         let selected = subscriptions.selected == plan
         let gold = RarityTier.trophyGold
@@ -145,14 +157,14 @@ struct PaywallView: View {
                     }
                     // Pour l'annuel, on affiche l'equivalent mensuel :
                     // c'est la seule comparaison honnete entre deux durees.
-                    if let perMonth = subscriptions.monthlyEquivalent(for: product) {
+                    if let product, let perMonth = subscriptions.monthlyEquivalent(for: product) {
                         Text("paywall.perMonth \(perMonth)")
                             .font(Theme.mono(10))
                             .foregroundStyle(Theme.textMuted)
                     }
                 }
                 Spacer(minLength: 6)
-                Text(product.displayPrice)
+                Text(product?.displayPrice ?? "—")
                     .font(Theme.mono(15, .bold))
                     .foregroundStyle(selected ? gold : Theme.textSecondary)
             }
@@ -212,17 +224,21 @@ struct PaywallView: View {
             .foregroundStyle(Theme.textMuted)
             .padding(.top, 2)
 
-            // TEMP — à retirer avant soumission, et surtout pas avant que
-            // l'abonnement existe dans App Store Connect : sinon l'app est inutilisable.
-            if let onSkip {
-                Button { onSkip(); dismiss() } label: {
-                    Text(verbatim: "Passer (test)")
-                        .font(Theme.label(10))
-                        .foregroundStyle(Theme.textMuted.opacity(0.6))
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 4)
+#if DEBUG
+            // Contournement de test. Volontairement enfermé dans #if DEBUG plutôt que
+            // laissé à retirer à la main avant soumission : un oubli donnerait l'app
+            // entière gratuitement. Ici, la version App Store ne peut pas le contenir.
+            Button {
+                subscriptions.enableDebugBypass()
+                dismiss()
+            } label: {
+                Text(verbatim: "Passer — test, pas d'abonnement")
+                    .font(Theme.label(10))
+                    .foregroundStyle(Theme.textMuted.opacity(0.6))
             }
+            .buttonStyle(.plain)
+            .padding(.top, 6)
+#endif
         }
     }
 

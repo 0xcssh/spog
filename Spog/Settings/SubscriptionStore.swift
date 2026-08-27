@@ -26,9 +26,41 @@ final class SubscriptionStore {
     private(set) var isWorking = false
     private(set) var lastError: String?
 
+    /// Droit aux prises illimitees. C'est cette propriete que l'app interroge,
+    /// jamais `isSubscribed` directement : elle seule connait le contournement de test.
+    var hasAccess: Bool {
+#if DEBUG
+        isSubscribed || debugBypass
+#else
+        isSubscribed
+#endif
+    }
+
+#if DEBUG
+    /// TEMP — contournement du paywall, **uniquement en build de developpement**.
+    /// Il ne peut pas partir sur l'App Store par megarde : ce code n'existe pas
+    /// en Release, contrairement a un simple drapeau qu'on oublierait d'enlever.
+    /// Persiste, sinon il faudrait le reactiver a chaque lancement.
+    private static let bypassKey = "debug.paywallBypass"
+    private(set) var debugBypass = false
+
+    func enableDebugBypass() {
+        debugBypass = true
+        UserDefaults.standard.set(true, forKey: Self.bypassKey)
+    }
+
+    func clearDebugBypass() {
+        debugBypass = false
+        UserDefaults.standard.set(false, forKey: Self.bypassKey)
+    }
+#endif
+
     private var updatesTask: Task<Void, Never>?
 
     init() {
+#if DEBUG
+        debugBypass = UserDefaults.standard.bool(forKey: Self.bypassKey)
+#endif
         // Les transactions peuvent arriver hors achat : renouvellement, remboursement,
         // achat fait sur un autre appareil. Il faut écouter en permanence.
         updatesTask = Task { [weak self] in

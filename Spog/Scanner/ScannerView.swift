@@ -184,7 +184,7 @@ struct ScannerView: View {
 
     /// Prises restantes avant le paywall. Nil si l'utilisateur est abonne.
     private var freeScansLeft: Int? {
-        guard !subscriptions.isSubscribed else { return nil }
+        guard !subscriptions.hasAccess else { return nil }
         return max(0, SubscriptionStore.freeScans - app.scansPerformed)
     }
 
