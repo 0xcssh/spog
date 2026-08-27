@@ -200,7 +200,7 @@ struct OnboardingView: View {
                             .offset(x: 16, y: -4)
                     }
                 }
-                Text(LocalizedStringKey("quest.body." + body))
+                Text(LocalizedStringKey("taste." + body))
                     .font(Theme.display(13, .semibold))
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1).minimumScaleFactor(0.7)
@@ -235,7 +235,7 @@ struct OnboardingView: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(RarityTier.trophyGold)
-                Text("onboarding.safety \(Int(ScannerView.maxScanSpeedKmh))")
+                Text("onboarding.safety \(ScannerView.maxScanSpeedText)")
                     .font(Theme.mono(10))
                     .foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -571,7 +571,7 @@ struct OnboardingView: View {
 
     private var favouritesText: String {
         profile.favouriteList
-            .map { String(localized: String.LocalizationValue("quest.body." + $0)) }
+            .map { String(localized: String.LocalizationValue("taste." + $0)) }
             .joined(separator: ", ")
     }
 

@@ -10,10 +10,29 @@ struct ScannerView: View {
     @Environment(PlayerProfile.self) private var profile
     @Environment(LocationProvider.self) private var location
 
-    /// Au-dessus de cette vitesse, le scan se bloque. 30 km/h laisse passer l'arrêt,
-    /// la marche et le pas d'un embouteillage, jamais la conduite. C'est la parade au
-    /// risque le plus grave de l'app : pousser quelqu'un à photographier en roulant.
-    static let maxScanSpeedKmh = 30.0
+    /// Seuil de blocage du scan, **exprimé dans le système du pays** : 30 km/h là où on
+    /// compte en kilomètres, 20 mph là où on compte en miles. Ce sont deux façons de dire
+    /// la même règle pratique — annoncer un chiffre rond et bloquer sur un autre serait
+    /// une promesse fausse, et « 30 km/h » ne dit rien à un Américain.
+    ///
+    /// Le seuil laisse passer l'arrêt, la marche et le pas d'un embouteillage, jamais la
+    /// conduite. C'est la parade au risque le plus grave de l'app : pousser quelqu'un à
+    /// photographier en roulant.
+    static var maxScanSpeed: Measurement<UnitSpeed> {
+        Locale.current.measurementSystem == .metric
+            ? Measurement(value: 30, unit: .kilometersPerHour)
+            : Measurement(value: 20, unit: .milesPerHour)
+    }
+
+    /// Le même seuil en km/h, unité dans laquelle la position est mesurée.
+    static var maxScanSpeedKmh: Double {
+        maxScanSpeed.converted(to: .kilometersPerHour).value
+    }
+
+    static var maxScanSpeedText: String {
+        maxScanSpeed.formatted(.measurement(width: .abbreviated,
+                                            numberFormatStyle: .number.precision(.fractionLength(0))))
+    }
 
     @State private var camera = CameraController()
     @State private var working = false

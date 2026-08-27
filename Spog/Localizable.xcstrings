@@ -279,7 +279,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add “%@” to my catalogue"
+            "value": "Add “%@” to my catalog"
           }
         },
         "fr": {
@@ -296,7 +296,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It will be recognised straight away next time."
+            "value": "It will be recognized straight away next time."
           }
         },
         "fr": {
@@ -1095,7 +1095,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Favourite"
+            "value": "Favorite"
           }
         },
         "fr": {
@@ -1174,19 +1174,19 @@
         }
       }
     },
-    "onboarding.safety %lld": {
+    "onboarding.safety %@": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Never behind the wheel. With location on, scanning locks itself above %lld km/h."
+            "value": "Never behind the wheel. With location on, scanning locks itself above %@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jamais au volant. Quand ta position est active, le scan se bloque au-delà de %lld km/h."
+            "value": "Jamais au volant. Quand ta position est active, le scan se bloque au-delà de %@."
           }
         }
       }
@@ -1231,7 +1231,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A car in the street, on a car park, anywhere in real life."
+            "value": "A car in the street, in a parking lot, anywhere in real life."
           }
         },
         "fr": {
@@ -1724,7 +1724,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name when you enable location. Nothing else. No advertising identifier, no behavioural tracking, no third-party analytics."
+            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name when you enable location. Nothing else. No advertising identifier, no behavioral tracking, no third-party analytics."
           }
         },
         "fr": {
@@ -1826,7 +1826,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. Before any transmission, licence plates detected in the image are blurred on your device. Transmitted photos are not used to train any model and are not kept once the answer is returned."
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. Before any transmission, license plates detected in the image are blurred on your device. Transmitted photos are not used to train any model and are not kept once the answer is returned."
           }
         },
         "fr": {
@@ -1928,7 +1928,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only vehicle identification involves a third party, and only for the photo being analysed. Nothing is sold, rented or shared for advertising purposes. Apple handles subscription payments; we never see your payment details."
+            "value": "Only vehicle identification involves a third party, and only for the photo being analyzed. Nothing is sold, rented or shared for advertising purposes. Apple handles subscription payments; we never see your payment details."
           }
         },
         "fr": {
@@ -3840,6 +3840,108 @@
         }
       }
     },
+    "taste.hatch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hatchbacks"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les citadines"
+          }
+        }
+      }
+    },
+    "taste.pickup": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pickups"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les pick-up"
+          }
+        }
+      }
+    },
+    "taste.sedan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sedans"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les berlines"
+          }
+        }
+      }
+    },
+    "taste.sport": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sports cars"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les sportives"
+          }
+        }
+      }
+    },
+    "taste.suv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUVs"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les SUV"
+          }
+        }
+      }
+    },
+    "taste.van": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vans"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les utilitaires"
+          }
+        }
+      }
+    },
     "terms.access.body": {
       "extractionState": "manual",
       "localizations": {
@@ -4016,7 +4118,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The name Spog, its logo, its interface and its vehicle catalogue are the property of Mandalore LLC. Brand names and models are cited for descriptive purposes only; the brands mentioned are the property of their respective owners and are in no way associated with Spog. The photos you take remain yours."
+            "value": "The name Spog, its logo, its interface and its vehicle catalog are the property of Mandalore LLC. Brand names and models are cited for descriptive purposes only; the brands mentioned are the property of their respective owners and are in no way associated with Spog. The photos you take remain yours."
           }
         },
         "fr": {
