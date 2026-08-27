@@ -131,7 +131,9 @@
   "populated": [
     "EU_WEST",
     "NA",
-    "ASIA_SE"
+    "ASIA_SE",
+    "EU_NORTH",
+    "EU_EAST"
   ],
   "_populated_comment": "Regions dont la rarete a ete calibree finement. Les autres retombent sur la valeur 'default' de chaque vehicule, ce qui reste jouable."
 }

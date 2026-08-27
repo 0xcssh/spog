@@ -1,7 +1,7 @@
 {
   "_comment": "Catalogue vehicules, lot 1. Rarete par region de marche; 'default' sert de repli pour toute region non renseignee. Marque et modele sont des noms propres, non traduits. Les alias servent au rapprochement du texte renvoye par l'IA (toujours en anglais).",
   "version": 1,
-  "count": 551,
+  "count": 593,
   "vehicles": [
     {
       "id": "abarth-595",
@@ -11,6 +11,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -26,6 +28,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -39,6 +43,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -52,6 +58,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -65,6 +73,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -78,6 +88,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -91,6 +103,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -104,6 +118,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -117,6 +133,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -130,6 +148,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -143,6 +163,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -156,6 +178,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -172,6 +196,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -184,6 +210,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -195,6 +223,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -206,6 +236,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -218,6 +250,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -230,6 +264,8 @@
       "body": "suv",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -241,6 +277,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -252,6 +290,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -263,6 +303,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -274,6 +316,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -286,6 +330,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -299,6 +345,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -312,6 +360,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -325,6 +375,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -338,6 +390,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -351,6 +405,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -364,6 +420,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -377,6 +435,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -390,6 +450,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -403,6 +465,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -416,6 +480,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -429,6 +495,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -442,6 +510,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -455,6 +525,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -470,6 +542,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -483,6 +557,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -496,6 +572,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -509,6 +587,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -522,6 +602,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -535,6 +617,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -547,6 +631,8 @@
       "body": "suv",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -558,6 +644,8 @@
       "body": "sedan",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -569,6 +657,8 @@
       "body": "sedan",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -581,6 +671,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -594,6 +686,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -609,6 +703,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -622,6 +718,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -635,6 +733,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -648,6 +748,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -663,6 +765,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -676,6 +780,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -689,6 +795,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -702,6 +810,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -715,6 +825,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -728,6 +840,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -741,6 +855,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -754,6 +870,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -767,6 +885,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -780,6 +900,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -793,6 +915,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -808,6 +932,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -823,6 +949,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -836,6 +964,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -849,6 +979,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -862,6 +994,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -875,6 +1009,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -888,6 +1024,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -901,6 +1039,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -913,6 +1053,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -924,6 +1066,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -935,6 +1079,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -946,6 +1092,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -957,6 +1105,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -968,6 +1118,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -980,6 +1132,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -993,6 +1147,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -1006,6 +1162,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -1019,6 +1177,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1032,6 +1192,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -1045,6 +1207,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1058,6 +1222,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -1071,6 +1237,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1084,6 +1252,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1097,6 +1267,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -1113,6 +1285,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1128,6 +1302,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -1143,6 +1319,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -1158,6 +1336,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1171,6 +1351,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -1184,6 +1366,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1197,6 +1381,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -1210,6 +1396,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -1223,6 +1411,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -1236,6 +1426,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1249,6 +1441,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1262,6 +1456,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1278,6 +1474,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -1291,6 +1489,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -1304,6 +1504,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1317,6 +1519,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1330,6 +1534,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1343,6 +1549,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -1356,6 +1564,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1369,6 +1579,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -1382,6 +1594,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1395,6 +1609,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1408,6 +1624,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1426,6 +1644,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1439,6 +1659,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1452,6 +1674,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1465,6 +1689,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -1478,6 +1704,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1491,6 +1719,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1504,6 +1734,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1517,6 +1749,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1530,6 +1764,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -1543,6 +1779,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1556,6 +1794,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1569,6 +1809,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -1582,6 +1824,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1595,6 +1839,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1608,6 +1854,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1621,6 +1869,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "exotic",
         "ASIA_SE": "legendary"
       },
@@ -1634,6 +1884,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1647,6 +1899,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -1660,6 +1914,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -1673,6 +1929,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -1686,6 +1944,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -1701,6 +1961,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1714,6 +1976,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1726,6 +1990,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -1737,6 +2003,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1748,6 +2016,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1759,6 +2029,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1770,6 +2042,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1781,6 +2055,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1792,6 +2068,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1803,6 +2081,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -1815,6 +2095,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1827,6 +2109,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -1838,6 +2122,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1849,6 +2135,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -1860,6 +2148,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -1871,6 +2161,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1882,6 +2174,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -1893,6 +2187,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1905,6 +2201,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1917,6 +2215,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -1929,6 +2229,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1942,6 +2244,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -1955,6 +2259,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -1968,6 +2274,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -1981,6 +2289,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -1997,6 +2307,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -2010,6 +2322,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -2023,6 +2337,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -2036,6 +2352,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -2049,6 +2367,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -2062,6 +2382,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -2075,6 +2397,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -2088,6 +2412,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -2101,6 +2427,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -2114,6 +2442,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -2129,6 +2459,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -2144,6 +2476,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "notable"
       },
@@ -2157,6 +2491,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -2173,6 +2509,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -2186,6 +2524,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "common"
       },
@@ -2199,6 +2539,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -2212,6 +2554,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "exotic",
         "ASIA_SE": "legendary"
       },
@@ -2225,6 +2569,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -2238,6 +2584,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -2251,6 +2599,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2264,6 +2614,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -2277,6 +2629,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -2290,6 +2644,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -2303,6 +2659,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -2316,6 +2674,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -2329,6 +2689,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2342,6 +2704,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "common",
         "ASIA_SE": "common"
       },
@@ -2355,6 +2719,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -2368,6 +2734,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -2381,6 +2749,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "legendary",
         "ASIA_SE": "rare"
       },
@@ -2396,6 +2766,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -2409,6 +2781,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -2422,6 +2796,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -2435,6 +2811,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -2448,6 +2826,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -2461,6 +2841,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -2473,6 +2855,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -2485,6 +2869,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -2498,6 +2884,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -2511,6 +2899,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "regular"
       },
@@ -2524,6 +2914,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -2537,6 +2929,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -2550,6 +2944,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -2565,6 +2961,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "common"
       },
@@ -2581,6 +2979,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -2596,6 +2996,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -2609,6 +3011,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -2622,6 +3026,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -2635,6 +3041,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -2648,6 +3056,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -2661,6 +3071,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2674,6 +3086,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2687,6 +3101,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2702,6 +3118,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "regular"
       },
@@ -2717,6 +3135,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -2730,6 +3150,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -2743,6 +3165,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -2756,6 +3180,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "common",
         "ASIA_SE": "common"
       },
@@ -2769,6 +3195,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2782,6 +3210,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -2795,6 +3225,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -2810,6 +3242,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -2823,6 +3257,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -2836,6 +3272,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -2849,6 +3287,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -2862,6 +3302,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -2875,6 +3317,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -2888,6 +3332,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -2901,6 +3347,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -2914,6 +3362,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -2927,6 +3377,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -2940,6 +3392,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -2953,6 +3407,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -2966,6 +3422,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -2979,6 +3437,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -2992,6 +3452,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -3005,10 +3467,14 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
-      "aliases": []
+      "aliases": [
+        "morning"
+      ]
     },
     {
       "id": "kia-sorento",
@@ -3018,6 +3484,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -3031,6 +3499,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "common",
         "ASIA_SE": "common"
       },
@@ -3044,6 +3514,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -3057,6 +3529,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -3069,6 +3543,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3080,6 +3556,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3091,6 +3569,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3102,6 +3582,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3113,6 +3595,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3124,6 +3608,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3135,6 +3621,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3146,6 +3634,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3157,6 +3647,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3168,6 +3660,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3179,6 +3673,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3190,6 +3686,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3201,6 +3699,8 @@
       "body": "suv",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3213,6 +3713,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -3229,6 +3731,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -3242,6 +3746,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -3255,6 +3761,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -3268,6 +3776,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -3281,6 +3791,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -3294,6 +3806,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -3307,6 +3821,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -3320,6 +3836,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3333,6 +3851,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -3346,6 +3866,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -3359,6 +3881,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -3372,6 +3896,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3385,6 +3911,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -3398,6 +3926,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -3411,6 +3941,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -3424,6 +3956,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -3437,6 +3971,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -3450,6 +3986,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -3463,6 +4001,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -3476,6 +4016,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -3489,6 +4031,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -3502,6 +4046,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3515,6 +4061,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3528,6 +4076,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3541,6 +4091,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3554,6 +4106,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3567,6 +4121,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -3580,6 +4136,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3593,6 +4151,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "common"
       },
@@ -3606,6 +4166,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -3619,6 +4181,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -3632,6 +4196,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -3645,6 +4211,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -3658,6 +4226,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -3671,6 +4241,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -3688,6 +4260,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -3704,6 +4278,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -3716,6 +4292,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3727,6 +4305,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3739,6 +4319,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -3751,6 +4333,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3762,6 +4346,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3773,6 +4359,8 @@
       "body": "sport",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -3784,6 +4372,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3795,6 +4385,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -3807,6 +4399,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -3820,6 +4414,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -3833,6 +4429,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -3846,6 +4444,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -3861,6 +4461,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -3874,6 +4476,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -3887,6 +4491,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -3900,6 +4506,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -3913,6 +4521,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -3926,6 +4536,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -3939,6 +4551,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -3957,6 +4571,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -3970,6 +4586,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -3983,6 +4601,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -3996,6 +4616,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -4009,6 +4631,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -4022,6 +4646,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4035,6 +4661,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -4048,6 +4676,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -4063,6 +4693,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -4076,6 +4708,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -4089,6 +4723,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "notable"
       },
@@ -4102,6 +4738,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -4115,6 +4753,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -4131,6 +4771,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -4144,6 +4786,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -4157,6 +4801,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -4170,6 +4816,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -4185,6 +4833,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -4200,6 +4850,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -4215,6 +4867,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -4228,6 +4882,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "notable"
       },
@@ -4246,6 +4902,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -4259,6 +4917,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -4275,6 +4935,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -4288,6 +4950,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -4301,6 +4965,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -4316,6 +4982,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -4329,6 +4997,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -4342,6 +5012,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -4355,7 +5027,9 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
+        "NA": "regular",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -4370,6 +5044,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -4383,6 +5059,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "regular"
       },
@@ -4398,6 +5076,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -4411,6 +5091,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4428,6 +5110,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4445,6 +5129,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4463,6 +5149,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -4476,7 +5164,9 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
+        "NA": "common",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -4492,6 +5182,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4507,6 +5199,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4522,6 +5216,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4537,6 +5233,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4552,6 +5250,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4565,6 +5265,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4580,6 +5282,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -4595,6 +5299,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4610,6 +5316,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4624,6 +5332,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -4635,6 +5345,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -4646,6 +5358,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -4658,6 +5372,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4671,6 +5387,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4684,6 +5402,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4697,6 +5417,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -4712,6 +5434,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4725,6 +5449,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4738,6 +5464,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4751,6 +5479,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4764,6 +5494,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4777,6 +5509,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4790,6 +5524,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4803,6 +5539,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4816,6 +5554,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4829,6 +5569,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4842,6 +5584,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4855,6 +5599,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4868,6 +5614,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4881,6 +5629,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -4894,6 +5644,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -4907,6 +5659,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -4920,6 +5674,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "exotic",
         "ASIA_SE": "legendary"
       },
@@ -4933,6 +5689,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -4946,6 +5704,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "common",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -4959,6 +5719,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "regular",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -4972,6 +5734,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -4985,6 +5749,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -4998,6 +5764,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5011,6 +5779,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -5027,6 +5797,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -5043,6 +5815,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -5060,6 +5834,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -5075,6 +5851,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -5090,6 +5868,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5103,6 +5883,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5116,6 +5898,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5129,6 +5913,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -5142,6 +5928,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -5155,6 +5943,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -5168,6 +5958,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -5181,6 +5973,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -5194,6 +5988,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -5207,6 +6003,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -5220,6 +6018,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -5233,6 +6033,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -5246,6 +6048,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -5259,6 +6063,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -5276,6 +6082,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -5291,6 +6099,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -5307,6 +6117,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5320,6 +6132,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5333,6 +6147,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5346,6 +6162,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5359,6 +6177,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "rare",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -5372,6 +6192,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5385,6 +6207,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5398,6 +6222,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5411,6 +6237,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5424,6 +6252,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5437,6 +6267,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5450,6 +6282,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5463,6 +6297,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5476,6 +6312,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "rare",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5489,6 +6327,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5502,6 +6342,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5515,6 +6357,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5527,6 +6371,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -5539,6 +6385,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -5552,6 +6400,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -5564,6 +6414,8 @@
       "body": "suv",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -5575,6 +6427,8 @@
       "body": "sedan",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -5587,6 +6441,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5600,6 +6456,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5612,6 +6470,8 @@
       "body": "sedan",
       "rarity": {
         "default": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "ASIA_SE": "exotic"
       },
       "aliases": []
@@ -5624,6 +6484,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5637,6 +6499,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5650,6 +6514,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5663,6 +6529,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5675,6 +6543,8 @@
       "body": "sport",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "legendary"
       },
       "aliases": []
@@ -5687,6 +6557,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5700,6 +6572,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5713,6 +6587,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5726,6 +6602,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5739,6 +6617,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -5752,6 +6632,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -5765,6 +6647,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -5778,6 +6662,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -5791,6 +6677,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -5804,6 +6692,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -5817,6 +6707,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "legendary"
       },
@@ -5830,6 +6722,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -5848,6 +6742,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -5861,6 +6757,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -5874,6 +6772,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -5887,6 +6787,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -5900,6 +6802,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -5913,6 +6817,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -5926,6 +6832,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -5939,6 +6847,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -5952,6 +6862,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "rare",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -5965,6 +6877,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "rare",
         "NA": "regular",
         "ASIA_SE": "exotic"
       },
@@ -5978,6 +6892,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -5991,6 +6907,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6004,6 +6922,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "legendary",
         "NA": "legendary",
         "ASIA_SE": "exotic"
       },
@@ -6017,6 +6937,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "exotic",
         "ASIA_SE": "regular"
       },
@@ -6030,6 +6952,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -6043,6 +6967,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -6056,6 +6982,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "regular"
       },
@@ -6069,6 +6997,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -6082,10 +7012,15 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "common",
         "ASIA_SE": "common"
       },
-      "aliases": []
+      "aliases": [
+        "corolla touring sports",
+        "corolla hatchback"
+      ]
     },
     {
       "id": "toyota-gr-yaris",
@@ -6095,6 +7030,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -6108,6 +7045,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "regular"
       },
@@ -6126,6 +7065,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -6139,6 +7080,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -6152,6 +7095,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -6165,6 +7110,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "notable"
       },
@@ -6178,6 +7125,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "common",
         "ASIA_SE": "common"
       },
@@ -6191,6 +7140,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "common"
       },
@@ -6204,6 +7155,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "common",
         "ASIA_SE": "common"
       },
@@ -6217,6 +7170,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -6233,6 +7188,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -6249,6 +7206,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "rare"
       },
@@ -6262,6 +7221,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -6275,6 +7236,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "common"
       },
@@ -6290,6 +7253,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6303,6 +7268,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -6316,6 +7283,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "exotic"
       },
@@ -6329,6 +7298,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6346,6 +7317,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
         "NA": "exotic",
         "ASIA_SE": "exotic"
       },
@@ -6364,6 +7337,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6379,6 +7354,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -6392,6 +7369,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6405,6 +7384,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -6421,6 +7402,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -6434,6 +7417,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6447,6 +7432,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -6460,6 +7447,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -6473,6 +7462,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "common",
         "ASIA_SE": "exotic"
       },
@@ -6486,6 +7477,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -6499,6 +7492,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -6512,6 +7507,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6525,6 +7522,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -6538,6 +7537,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "exotic",
         "ASIA_SE": "notable"
       },
@@ -6551,6 +7552,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -6564,6 +7567,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -6577,6 +7582,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -6590,6 +7597,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "regular",
         "NA": "exotic",
         "ASIA_SE": "rare"
       },
@@ -6603,6 +7612,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
+        "EU_NORTH": "common",
+        "EU_EAST": "rare",
         "NA": "notable",
         "ASIA_SE": "rare"
       },
@@ -6616,6 +7627,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
+        "EU_NORTH": "regular",
+        "EU_EAST": "exotic",
         "NA": "rare",
         "ASIA_SE": "exotic"
       },
@@ -6629,6 +7642,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
+        "EU_NORTH": "common",
+        "EU_EAST": "rare",
         "NA": "regular",
         "ASIA_SE": "rare"
       },
@@ -6642,6 +7657,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "notable",
         "NA": "notable",
         "ASIA_SE": "notable"
       },
@@ -6655,6 +7672,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
+        "EU_NORTH": "common",
+        "EU_EAST": "rare",
         "NA": "rare",
         "ASIA_SE": "rare"
       },
@@ -6668,6 +7687,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -6681,6 +7702,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
         "NA": "regular",
         "ASIA_SE": "regular"
       },
@@ -6694,6 +7717,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "notable",
         "NA": "regular",
         "ASIA_SE": "notable"
       },
@@ -6706,6 +7731,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -6719,6 +7746,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6733,6 +7762,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -6746,6 +7777,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -6759,6 +7792,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -6772,6 +7807,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -6785,6 +7822,8 @@
       "body": "hatch",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "regular"
       },
       "aliases": []
@@ -6796,6 +7835,8 @@
       "body": "sedan",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -6809,6 +7850,8 @@
       "body": "suv",
       "rarity": {
         "default": "legendary",
+        "EU_NORTH": "legendary",
+        "EU_EAST": "legendary",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -6822,6 +7865,8 @@
       "body": "sedan",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6836,6 +7881,8 @@
       "body": "van",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6850,6 +7897,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6863,6 +7912,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": []
@@ -6874,6 +7925,8 @@
       "body": "suv",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6887,6 +7940,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -6900,6 +7955,8 @@
       "body": "suv",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "ASIA_SE": "regular"
       },
       "aliases": []
@@ -6911,6 +7968,8 @@
       "body": "hatch",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -6924,6 +7983,8 @@
       "body": "sedan",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6937,6 +7998,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "regular"
       },
       "aliases": []
@@ -6948,6 +8011,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": []
@@ -6959,6 +8024,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6972,6 +8039,8 @@
       "body": "sedan",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6985,6 +8054,8 @@
       "body": "pickup",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -6998,6 +8069,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": []
@@ -7009,6 +8082,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": []
@@ -7020,6 +8095,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "regular"
       },
       "aliases": []
@@ -7031,6 +8108,8 @@
       "body": "sedan",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -7045,6 +8124,8 @@
       "body": "hatch",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "common"
       },
       "aliases": [
@@ -7058,6 +8139,8 @@
       "body": "suv",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "ASIA_SE": "regular"
       },
       "aliases": []
@@ -7069,22 +8152,11 @@
       "body": "van",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": []
-    },
-    {
-      "id": "kia-morning",
-      "make": "Kia",
-      "model": "Morning",
-      "body": "hatch",
-      "rarity": {
-        "default": "rare",
-        "ASIA_SE": "common"
-      },
-      "aliases": [
-        "picanto morning"
-      ]
     },
     {
       "id": "kia-seltos",
@@ -7093,6 +8165,8 @@
       "body": "suv",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "ASIA_SE": "regular"
       },
       "aliases": []
@@ -7104,6 +8178,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": []
@@ -7115,6 +8191,8 @@
       "body": "van",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -7128,6 +8206,10 @@
       "body": "sedan",
       "rarity": {
         "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "common",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -7142,6 +8224,8 @@
       "body": "suv",
       "rarity": {
         "default": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -7155,6 +8239,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": []
@@ -7166,6 +8252,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "regular"
       },
       "aliases": [
@@ -7179,6 +8267,8 @@
       "body": "suv",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": []
@@ -7190,6 +8280,8 @@
       "body": "hatch",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
       },
       "aliases": [
@@ -7203,7 +8295,654 @@
       "body": "van",
       "rarity": {
         "default": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
         "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-equinox",
+      "make": "Chevrolet",
+      "model": "Equinox",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "common",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-traverse",
+      "make": "Chevrolet",
+      "model": "Traverse",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-trax",
+      "make": "Chevrolet",
+      "model": "Trax",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-malibu",
+      "make": "Chevrolet",
+      "model": "Malibu",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-blazer",
+      "make": "Chevrolet",
+      "model": "Blazer",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "chevrolet-colorado",
+      "make": "Chevrolet",
+      "model": "Colorado",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-edge",
+      "make": "Ford",
+      "model": "Edge",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
+        "NA": "common",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-expedition",
+      "make": "Ford",
+      "model": "Expedition",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-maverick",
+      "make": "Ford",
+      "model": "Maverick",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-f-250",
+      "make": "Ford",
+      "model": "F-250",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-4runner",
+      "make": "Toyota",
+      "model": "4Runner",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "common",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-sienna",
+      "make": "Toyota",
+      "model": "Sienna",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-sequoia",
+      "make": "Toyota",
+      "model": "Sequoia",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "notable",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-grand-highlander",
+      "make": "Toyota",
+      "model": "Grand Highlander",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-sentra",
+      "make": "Nissan",
+      "model": "Sentra",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "common",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-altima",
+      "make": "Nissan",
+      "model": "Altima",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "common",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-pathfinder",
+      "make": "Nissan",
+      "model": "Pathfinder",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-murano",
+      "make": "Nissan",
+      "model": "Murano",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-kicks",
+      "make": "Nissan",
+      "model": "Kicks",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
+        "NA": "regular",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-ridgeline",
+      "make": "Honda",
+      "model": "Ridgeline",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-passport",
+      "make": "Honda",
+      "model": "Passport",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-crosstrek",
+      "make": "Subaru",
+      "model": "Crosstrek",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
+        "NA": "common",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "subaru-ascent",
+      "make": "Subaru",
+      "model": "Ascent",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-elantra",
+      "make": "Hyundai",
+      "model": "Elantra",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "rare",
+        "EU_NORTH": "notable",
+        "EU_EAST": "rare",
+        "NA": "common",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-palisade",
+      "make": "Hyundai",
+      "model": "Palisade",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-santa-cruz",
+      "make": "Hyundai",
+      "model": "Santa Cruz",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "rare",
+        "EU_EAST": "exotic",
+        "NA": "notable",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-soul",
+      "make": "Kia",
+      "model": "Soul",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "EU_NORTH": "regular",
+        "EU_EAST": "notable",
+        "NA": "regular",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-cx-50",
+      "make": "Mazda",
+      "model": "CX-50",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mazda-cx-90",
+      "make": "Mazda",
+      "model": "CX-90",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "rare",
+        "EU_NORTH": "rare",
+        "EU_EAST": "rare",
+        "NA": "regular",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "buick-encore",
+      "make": "Buick",
+      "model": "Encore",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "buick-enclave",
+      "make": "Buick",
+      "model": "Enclave",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "notable",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "jeep-wagoneer",
+      "make": "Jeep",
+      "model": "Wagoneer",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "notable",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ram-2500",
+      "make": "Ram",
+      "model": "2500",
+      "body": "pickup",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "regular",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "dodge-hornet",
+      "make": "Dodge",
+      "model": "Hornet",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "exotic",
+        "EU_NORTH": "exotic",
+        "EU_EAST": "exotic",
+        "NA": "notable",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "skoda-kamiq",
+      "make": "Skoda",
+      "model": "Kamiq",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "EU_NORTH": "regular",
+        "EU_EAST": "common",
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "fiat-500e",
+      "make": "Fiat",
+      "model": "500e",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "EU_NORTH": "notable",
+        "EU_EAST": "regular",
+        "NA": "rare",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-yaris-cross",
+      "make": "Toyota",
+      "model": "Yaris Cross",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
+        "NA": "exotic",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-bayon",
+      "make": "Hyundai",
+      "model": "Bayon",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-xceed",
+      "make": "Kia",
+      "model": "XCeed",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "EU_WEST": "regular",
+        "EU_NORTH": "common",
+        "EU_EAST": "regular",
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
+      },
+      "aliases": []
+    },
+    {
+      "id": "nissan-ariya",
+      "make": "Nissan",
+      "model": "Ariya",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
+        "NA": "notable",
+        "ASIA_SE": "rare"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mg-mg3",
+      "make": "MG",
+      "model": "MG3",
+      "body": "hatch",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
+        "NA": "exotic",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mg-hs",
+      "make": "MG",
+      "model": "HS",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "notable",
+        "EU_NORTH": "notable",
+        "EU_EAST": "notable",
+        "NA": "exotic",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "ford-transit-custom",
+      "make": "Ford",
+      "model": "Transit Custom",
+      "body": "van",
+      "rarity": {
+        "default": "notable",
+        "EU_WEST": "common",
+        "EU_NORTH": "common",
+        "EU_EAST": "common",
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     }
