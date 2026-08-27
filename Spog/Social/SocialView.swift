@@ -265,10 +265,10 @@ struct SocialView: View {
 }
 
 
-/// Saisie d'un code de parrainage depuis l'onglet Social, pour qui ne l'avait pas
-/// sous la main a l'inscription. Meme regles que dans l'onboarding : un seul endroit
-/// decide de ce qu'est un code valable, `ReferralStore`.
-private struct ReferralEntrySheet: View {
+/// Saisie d'un code de parrainage, depuis l'onglet Social ou depuis le paywall — c'est
+/// souvent la qu'on se souvient qu'un ami en a donne un. Memes regles que dans
+/// l'onboarding : un seul endroit decide de ce qu'est un code valable, `ReferralStore`.
+struct ReferralEntrySheet: View {
     @Environment(ReferralStore.self) private var referral
     @Environment(\.dismiss) private var dismiss
 

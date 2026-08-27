@@ -1344,19 +1344,87 @@
         }
       }
     },
-    "paywall.cards": {
+    "paywall.cancelAnytime": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rare cards and their gold neon"
+            "value": "Cancel anytime"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les cartes rares et leur néon doré"
+            "value": "Résiliable à tout moment"
+          }
+        }
+      }
+    },
+    "paywall.cards.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The gold neon of the top tiers, on cards nobody else has."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le néon doré des paliers les plus hauts, sur des cartes que personne d'autre n'a."
+          }
+        }
+      }
+    },
+    "paywall.cards.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rare cards"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les cartes rares"
+          }
+        }
+      }
+    },
+    "paywall.dex.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "593 models to track down, and the streak that keeps you out there."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "593 modèles à débusquer, et la série qui te fait sortir."
+          }
+        }
+      }
+    },
+    "paywall.dex.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The whole Spogdex"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le Spogdex entier"
           }
         }
       }
@@ -1395,53 +1463,87 @@
         }
       }
     },
-    "paywall.perMonth %@": {
+    "paywall.haveCode": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "that is %@ per month"
+            "value": "Have a code?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "soit %@ par mois"
+            "value": "Tu as un code ?"
           }
         }
       }
     },
-    "paywall.period.month": {
+    "paywall.legal.plain %@ %@": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "month"
+            "value": "Payment is charged to your Apple ID at confirmation. Your subscription renews automatically at %@ per month, or %@ per year, unless auto-renew is turned off at least 24 hours before the end of the period. Manage it in your Apple account."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "mois"
+            "value": "Le paiement est débité de ton compte Apple à la confirmation. L'abonnement se renouvelle automatiquement à %@ par mois, ou %@ par an, sauf résiliation au moins 24 heures avant la fin de la période. Il se gère depuis ton compte Apple."
           }
         }
       }
     },
-    "paywall.period.year": {
+    "paywall.legal.trial %lld %@ %@": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "year"
+            "value": "Payment is charged to your Apple ID at confirmation, after the %lld-day free trial. Your subscription renews automatically at %@ per month, or %@ per year, unless auto-renew is turned off at least 24 hours before the end of the period. Manage it in your Apple account."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "an"
+            "value": "Le paiement est débité de ton compte Apple à la confirmation, après l'essai gratuit de %lld jours. L'abonnement se renouvelle automatiquement à %@ par mois, ou %@ par an, sauf résiliation au moins 24 heures avant la fin de la période. Il se gère depuis ton compte Apple."
+          }
+        }
+      }
+    },
+    "paywall.perMonth": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/mo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/mois"
+          }
+        }
+      }
+    },
+    "paywall.perYear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/yr"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/an"
           }
         }
       }
@@ -1480,40 +1582,6 @@
         }
       }
     },
-    "paywall.price.plain %@ %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ per %2$@. Renews automatically, cancel any time."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ par %2$@. Renouvellement automatique, résiliable à tout moment."
-          }
-        }
-      }
-    },
-    "paywall.price.trial %lld %@ %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld days free, then %2$@ per %3$@. Renews automatically, cancel any time."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld jours offerts, puis %2$@ par %3$@. Renouvellement automatique, résiliable à tout moment."
-          }
-        }
-      }
-    },
     "paywall.pricesUnavailable": {
       "extractionState": "manual",
       "localizations": {
@@ -1531,19 +1599,53 @@
         }
       }
     },
-    "paywall.quests": {
+    "paywall.quests.body": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every daily quest and its bonus"
+            "value": "A new goal each morning, and the bonus points that come with it."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toutes les quêtes du jour et leurs bonus"
+            "value": "Un objectif chaque matin, et les points bonus qui vont avec."
+          }
+        }
+      }
+    },
+    "paywall.quests.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every daily quest"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les quêtes du jour"
+          }
+        }
+      }
+    },
+    "paywall.redeem": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REDEEM"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UTILISER"
           }
         }
       }
@@ -1565,36 +1667,53 @@
         }
       }
     },
-    "paywall.startTrial": {
+    "paywall.save %lld": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start my free trial"
+            "value": "SAVE %lld%%"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencer mon essai gratuit"
+            "value": "−%lld %%"
           }
         }
       }
     },
-    "paywall.subscribe": {
+    "paywall.share.body": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Subscribe"
+            "value": "Export any card in high definition, ready to post."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "S'abonner"
+            "value": "Exporte n'importe quelle carte en haute définition, prête à publier."
+          }
+        }
+      }
+    },
+    "paywall.share.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share your finds"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage tes trouvailles"
           }
         }
       }
@@ -1605,13 +1724,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You have seen what a card looks like. Here is what comes next."
+            "value": "The garage without a ceiling"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu as vu à quoi ressemble une carte. Voici la suite."
+            "value": "Le garage sans plafond"
           }
         }
       }
@@ -1633,53 +1752,53 @@
         }
       }
     },
-    "paywall.title": {
+    "paywall.unlimited.body": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Collect without limits"
+            "value": "No counter. Shoot every car you come across, every day."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Collectionne sans limite"
+            "value": "Plus de compteur. Photographie chaque voiture que tu croises, tous les jours."
           }
         }
       }
     },
-    "paywall.unlimited": {
+    "paywall.unlimited.title": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unlimited scans, every day"
+            "value": "Unlimited scans"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scans illimités, tous les jours"
+            "value": "Scans illimités"
           }
         }
       }
     },
-    "paywall.working": {
+    "paywall.wordmark": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Please wait…"
+            "value": "SPOG PRO"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un instant…"
+            "value": "SPOG PRO"
           }
         }
       }
