@@ -17,9 +17,9 @@ ajouter une donnée, jamais modifier du code.
 
 | Fichier | Rôle |
 |---|---|
-| `Spog/Catalog/markets.json` | Regroupement des pays en régions. Ajouter un pays = ajouter son code. |
+| `Spog/Catalog/markets.json` | Regroupement des pays en régions, et la liste de celles qui sont réellement calibrées (`populated`). Ajouter un pays = ajouter son code. |
 | `Spog/Catalog/rarity.json` | Les 6 paliers de rareté, leurs points, leurs clés de traduction, le seuil de confiance. |
-| `Spog/Catalog/vehicles.json` | Le catalogue : 510 véhicules, rareté par région. **Source de vérité, éditable à la main.** |
+| `Spog/Catalog/vehicles.json` | Le catalogue : 551 véhicules, rareté par région. **Source de vérité, éditable à la main.** |
 | `tools/validate_catalog.py` | Vérifie l'intégrité du catalogue. À relancer après chaque ajout. |
 | `tools/lookup_demo.py` | Démonstration du rapprochement et de la rareté. Sert de référence pour le futur code Swift. |
 | `supabase/functions/identify/index.ts` | Le relais vers l'IA : reçoit une photo, renvoie marque, modèle, couleur et confiance. Aucune règle de jeu, aucun pays. |
@@ -52,3 +52,7 @@ serveur, et ne suppose aucun pays.
 
 Cascade, du plus précis au plus général : **pays exact → région → `default`**.
 Un pays jamais calibré fonctionne donc quand même, sur la valeur `default` du véhicule.
+
+Trois régions sont calibrées à ce jour : `EU_WEST`, `NA` et `ASIA_SE`. La même Renault Clio
+est *commune* en France et *notable* au Viêt Nam — c'est tout l'intérêt du système, et la
+raison pour laquelle une rareté mondiale unique ne peut pas marcher.

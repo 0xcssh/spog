@@ -1,7 +1,7 @@
 {
   "_comment": "Catalogue vehicules, lot 1. Rarete par region de marche; 'default' sert de repli pour toute region non renseignee. Marque et modele sont des noms propres, non traduits. Les alias servent au rapprochement du texte renvoye par l'IA (toujours en anglais).",
   "version": 1,
-  "count": 510,
+  "count": 551,
   "vehicles": [
     {
       "id": "abarth-595",
@@ -11,7 +11,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "abarth 500"
@@ -25,7 +26,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -37,7 +39,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -49,7 +52,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -61,7 +65,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -73,7 +78,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -85,7 +91,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -97,7 +104,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -109,7 +117,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -121,7 +130,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -133,7 +143,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -145,7 +156,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "berlinette",
@@ -160,7 +172,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -170,7 +183,8 @@
       "model": "DB11",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -180,7 +194,8 @@
       "model": "DB5",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -190,7 +205,8 @@
       "model": "DB9",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -202,7 +218,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -212,7 +229,8 @@
       "model": "DBX",
       "body": "suv",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -222,7 +240,8 @@
       "model": "One-77",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -232,7 +251,8 @@
       "model": "Valkyrie",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -242,7 +262,8 @@
       "model": "Vantage",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -252,7 +273,8 @@
       "model": "Vulcan",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -264,7 +286,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -276,7 +299,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -288,7 +312,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -300,7 +325,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -312,7 +338,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -324,7 +351,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -336,7 +364,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -348,7 +377,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -360,7 +390,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -372,7 +403,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -384,7 +416,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -396,7 +429,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -408,7 +442,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -420,7 +455,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "ur quattro"
@@ -434,7 +470,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -446,7 +483,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -458,7 +496,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -470,7 +509,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -482,7 +522,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -494,7 +535,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -504,7 +546,8 @@
       "model": "Bentayga",
       "body": "suv",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -514,7 +557,8 @@
       "model": "Continental GT",
       "body": "sedan",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -524,7 +568,8 @@
       "model": "Flying Spur",
       "body": "sedan",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -536,7 +581,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -548,7 +594,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "serie 1"
@@ -562,7 +609,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -574,7 +622,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -586,7 +635,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -598,7 +648,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "e30"
@@ -612,7 +663,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -624,7 +676,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -636,7 +689,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -648,7 +702,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -660,7 +715,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -672,7 +728,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -684,7 +741,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -696,7 +754,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -708,7 +767,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -720,7 +780,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -732,7 +793,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "e30 m3"
@@ -746,7 +808,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "e46 m3"
@@ -760,7 +823,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -772,7 +836,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -784,7 +849,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -796,7 +862,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -808,7 +875,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -820,7 +888,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -832,7 +901,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -842,7 +912,8 @@
       "model": "Chiron",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -852,7 +923,8 @@
       "model": "Divo",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -862,7 +934,8 @@
       "model": "EB110",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -872,7 +945,8 @@
       "model": "Tourbillon",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -882,7 +956,8 @@
       "model": "Type 57",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -892,7 +967,8 @@
       "model": "Veyron",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -904,7 +980,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -916,7 +993,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -928,7 +1006,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -940,7 +1019,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -952,7 +1032,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -964,7 +1045,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -976,7 +1058,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -988,7 +1071,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1000,7 +1084,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1012,7 +1097,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "c3 corvette",
@@ -1027,7 +1113,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "c5 corvette"
@@ -1041,7 +1128,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "c7 corvette"
@@ -1055,7 +1143,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "c8 corvette"
@@ -1069,7 +1158,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1081,7 +1171,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1093,7 +1184,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1105,7 +1197,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1117,7 +1210,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1129,7 +1223,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1141,7 +1236,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1153,7 +1249,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1165,7 +1262,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "deux chevaux",
@@ -1180,7 +1278,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "notable",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1192,7 +1291,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1204,7 +1304,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1216,7 +1317,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1228,7 +1330,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1240,7 +1343,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1252,7 +1356,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1264,7 +1369,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1276,7 +1382,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1288,7 +1395,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1300,7 +1408,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "ds19",
@@ -1317,7 +1426,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1329,7 +1439,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1341,7 +1452,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1353,7 +1465,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1365,7 +1478,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1377,7 +1491,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1389,7 +1504,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1401,7 +1517,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1413,7 +1530,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1425,7 +1543,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1437,7 +1556,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1449,7 +1569,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1461,7 +1582,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1473,7 +1595,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1485,7 +1608,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1497,7 +1621,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1509,7 +1634,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1521,7 +1647,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1533,7 +1660,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1545,7 +1673,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1557,7 +1686,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "ds3 crossback"
@@ -1571,7 +1701,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1583,7 +1714,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1593,7 +1725,8 @@
       "model": "250 GTO",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1603,7 +1736,8 @@
       "model": "296 GTB",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1613,7 +1747,8 @@
       "model": "360 Modena",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1623,7 +1758,8 @@
       "model": "430 Scuderia",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1633,7 +1769,8 @@
       "model": "458 Italia",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1643,7 +1780,8 @@
       "model": "488 GTB",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1653,7 +1791,8 @@
       "model": "812 Superfast",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1663,7 +1802,8 @@
       "model": "Daytona SP3",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1675,7 +1815,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1685,7 +1826,8 @@
       "model": "Enzo",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1695,7 +1837,8 @@
       "model": "F355",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1705,7 +1848,8 @@
       "model": "F40",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1715,7 +1859,8 @@
       "model": "F50",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1725,7 +1870,8 @@
       "model": "F8 Tributo",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1735,7 +1881,8 @@
       "model": "LaFerrari",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -1745,7 +1892,8 @@
       "model": "Portofino",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1757,7 +1905,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1767,7 +1916,8 @@
       "model": "Roma",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1779,7 +1929,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1791,7 +1942,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1803,7 +1955,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1815,7 +1968,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1827,7 +1981,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "cinquecento",
@@ -1842,7 +1997,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1854,7 +2010,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1866,7 +2023,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1878,7 +2036,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1890,7 +2049,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1902,7 +2062,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1914,7 +2075,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -1926,7 +2088,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1938,7 +2101,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -1950,7 +2114,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "ford kuga us"
@@ -1964,7 +2129,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "escort cosworth"
@@ -1978,7 +2144,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -1990,7 +2157,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "f150",
@@ -2005,7 +2173,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2017,7 +2186,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2029,7 +2199,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2041,7 +2212,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2053,7 +2225,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2065,7 +2238,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -2077,7 +2251,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2089,7 +2264,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2101,7 +2277,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2113,7 +2290,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2125,7 +2303,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2137,7 +2316,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -2149,7 +2329,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2161,7 +2342,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2173,7 +2355,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -2185,7 +2368,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2197,7 +2381,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "sierra rs500"
@@ -2211,7 +2396,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2223,7 +2409,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2235,7 +2422,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2247,7 +2435,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2259,7 +2448,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2271,7 +2461,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2281,7 +2472,8 @@
       "model": "T.50",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2293,7 +2485,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2305,7 +2498,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2317,7 +2511,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2329,7 +2524,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2341,7 +2537,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2353,7 +2550,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "acura integra type r"
@@ -2367,7 +2565,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "common"
       },
       "aliases": [
         "fit",
@@ -2382,7 +2581,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "acura nsx"
@@ -2396,7 +2596,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2408,7 +2609,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2420,7 +2622,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -2432,7 +2635,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2444,7 +2648,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2456,7 +2661,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2468,7 +2674,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2480,7 +2687,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": [
         "elantra gt"
@@ -2494,7 +2702,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "elantra n"
@@ -2508,7 +2717,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2520,7 +2730,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2532,7 +2743,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2544,7 +2756,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2556,7 +2769,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2568,7 +2782,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -2580,7 +2795,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "xke"
@@ -2594,7 +2810,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2606,7 +2823,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2618,7 +2836,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2630,7 +2849,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2642,7 +2862,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2654,7 +2875,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2666,7 +2888,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2678,7 +2901,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2690,7 +2914,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2702,7 +2927,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2714,7 +2940,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2726,7 +2953,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2738,7 +2966,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2750,7 +2979,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2762,7 +2992,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2774,7 +3005,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2786,7 +3018,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -2798,7 +3031,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -2810,7 +3044,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -2822,7 +3057,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -2832,7 +3068,8 @@
       "model": "Agera",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2842,7 +3079,8 @@
       "model": "Jesko",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2852,7 +3090,8 @@
       "model": "Regera",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2862,7 +3101,8 @@
       "model": "Aventador",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2872,7 +3112,8 @@
       "model": "Countach",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2882,7 +3123,8 @@
       "model": "Diablo",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2892,7 +3134,8 @@
       "model": "Gallardo",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2902,7 +3145,8 @@
       "model": "Huracan",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2912,7 +3156,8 @@
       "model": "LM002",
       "body": "suv",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2922,7 +3167,8 @@
       "model": "Miura",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2932,7 +3178,8 @@
       "model": "Murcielago",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2942,7 +3189,8 @@
       "model": "Revuelto",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2952,7 +3200,8 @@
       "model": "Urus",
       "body": "suv",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -2964,7 +3213,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "delta integrale",
@@ -2979,7 +3229,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -2991,7 +3242,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3003,7 +3255,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3015,7 +3268,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3027,7 +3281,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3039,7 +3294,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3051,7 +3307,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3063,7 +3320,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3075,7 +3333,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3087,7 +3346,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3099,7 +3359,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3111,7 +3372,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3123,7 +3385,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3135,7 +3398,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3147,7 +3411,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3159,7 +3424,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3171,7 +3437,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3183,7 +3450,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3195,7 +3463,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3207,7 +3476,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3219,7 +3489,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3231,7 +3502,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3243,7 +3515,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3255,7 +3528,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3267,7 +3541,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3279,7 +3554,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3291,7 +3567,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3303,7 +3580,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3315,7 +3593,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -3327,7 +3606,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3339,7 +3619,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3351,7 +3632,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -3363,7 +3645,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3375,7 +3658,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3387,7 +3671,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "miata",
@@ -3403,7 +3688,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "fd rx7",
@@ -3418,7 +3704,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3428,7 +3715,8 @@
       "model": "570S",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3438,7 +3726,8 @@
       "model": "720S",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3450,7 +3739,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3460,7 +3750,8 @@
       "model": "Artura",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3470,7 +3761,8 @@
       "model": "F1",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3480,7 +3772,8 @@
       "model": "MP4-12C",
       "body": "sport",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3490,7 +3783,8 @@
       "model": "P1",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3500,7 +3794,8 @@
       "model": "Senna",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3512,7 +3807,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3524,7 +3820,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3536,7 +3833,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3548,7 +3846,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "classe a"
@@ -3562,7 +3861,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3574,7 +3874,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3586,7 +3887,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3598,7 +3900,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -3610,7 +3913,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3622,7 +3926,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3634,7 +3939,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "g wagon",
@@ -3651,7 +3957,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3663,7 +3970,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3675,7 +3983,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3687,7 +3996,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3699,7 +4009,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3711,7 +4022,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3723,7 +4035,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3735,7 +4048,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "metris"
@@ -3749,7 +4063,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -3761,7 +4076,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -3773,7 +4089,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3785,7 +4102,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -3797,7 +4115,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "classic mini",
@@ -3812,7 +4131,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -3824,7 +4144,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3836,7 +4157,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -3848,7 +4170,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "jcw"
@@ -3862,7 +4185,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "gto"
@@ -3876,7 +4200,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": [
         "outlander sport"
@@ -3890,7 +4215,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3902,7 +4228,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "notable"
       },
       "aliases": [
         "evo",
@@ -3919,7 +4246,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -3931,7 +4259,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "montero",
@@ -3946,7 +4275,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3958,7 +4288,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -3970,7 +4301,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "r35"
@@ -3984,7 +4316,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -3996,7 +4329,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -4008,7 +4342,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -4020,7 +4355,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "frontier"
@@ -4034,7 +4370,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -4046,7 +4383,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "armada"
@@ -4060,7 +4398,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -4072,7 +4411,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "200sx",
@@ -4088,7 +4428,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "r32",
@@ -4104,7 +4445,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "r34",
@@ -4121,7 +4463,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4133,7 +4476,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": [
         "rogue",
@@ -4148,7 +4492,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": [
         "vauxhall astra"
@@ -4162,7 +4507,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": [
         "vauxhall corsa"
@@ -4176,7 +4522,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "vauxhall grandland"
@@ -4190,7 +4537,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "vauxhall insignia"
@@ -4204,7 +4552,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4216,7 +4565,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "vauxhall mokka"
@@ -4230,7 +4580,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "vx220"
@@ -4244,7 +4595,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": [
         "vauxhall vivaro"
@@ -4258,7 +4610,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "vauxhall zafira"
@@ -4270,7 +4623,8 @@
       "model": "Huayra",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4280,7 +4634,8 @@
       "model": "Utopia",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4290,7 +4645,8 @@
       "model": "Zonda",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4302,7 +4658,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4314,7 +4671,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4326,7 +4684,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4338,7 +4697,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "205 gti"
@@ -4352,7 +4712,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4364,7 +4725,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4376,7 +4738,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4388,7 +4751,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4400,7 +4764,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4412,7 +4777,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4424,7 +4790,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4436,7 +4803,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4448,7 +4816,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4460,7 +4829,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4472,7 +4842,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4484,7 +4855,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4496,7 +4868,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4508,7 +4881,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4520,7 +4894,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4532,7 +4907,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4544,7 +4920,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4556,7 +4933,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4568,7 +4946,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4580,7 +4959,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4592,7 +4972,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4604,7 +4985,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4616,7 +4998,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4628,7 +5011,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "boxster",
@@ -4643,7 +5027,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "cayman",
@@ -4658,7 +5043,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "carrera",
@@ -4674,7 +5060,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "964"
@@ -4688,7 +5075,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "993"
@@ -4702,7 +5090,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4714,7 +5103,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4726,7 +5116,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4738,7 +5129,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4750,7 +5142,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4762,7 +5155,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4774,7 +5168,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4786,7 +5181,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4798,7 +5194,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -4810,7 +5207,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4822,7 +5220,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4834,7 +5233,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4846,7 +5246,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4858,7 +5259,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "dodge ram",
@@ -4874,7 +5276,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "notable",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "renault 5"
@@ -4888,7 +5291,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "r5 turbo",
@@ -4903,7 +5307,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4915,7 +5320,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4927,7 +5333,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4939,7 +5346,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4951,7 +5359,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4963,7 +5372,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -4975,7 +5385,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -4987,7 +5398,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -4999,7 +5411,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5011,7 +5424,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5023,7 +5437,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5035,7 +5450,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5047,7 +5463,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5059,7 +5476,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5071,7 +5489,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5083,7 +5502,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5095,7 +5515,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5105,7 +5526,8 @@
       "model": "Nevera",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -5117,7 +5539,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5129,7 +5552,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5139,7 +5563,8 @@
       "model": "Cullinan",
       "body": "suv",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5149,7 +5574,8 @@
       "model": "Ghost",
       "body": "sedan",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5161,7 +5587,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5173,7 +5600,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5183,7 +5611,8 @@
       "model": "Wraith",
       "body": "sedan",
       "rarity": {
-        "default": "exotic"
+        "default": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5195,7 +5624,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5207,7 +5637,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5219,7 +5650,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5231,7 +5663,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5241,7 +5674,8 @@
       "model": "Cobra 427",
       "body": "sport",
       "rarity": {
-        "default": "legendary"
+        "default": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -5253,7 +5687,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5265,7 +5700,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5277,7 +5713,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5289,7 +5726,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5301,7 +5739,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5313,7 +5752,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5325,7 +5765,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5337,7 +5778,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5349,7 +5791,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5361,7 +5804,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5373,7 +5817,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "legendary"
       },
       "aliases": []
     },
@@ -5385,7 +5830,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "wrx sti",
@@ -5402,7 +5848,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5414,7 +5861,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5426,7 +5874,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -5438,7 +5887,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -5450,7 +5900,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5462,7 +5913,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5474,7 +5926,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5486,7 +5939,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5498,7 +5952,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5510,7 +5965,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5522,7 +5978,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5534,7 +5991,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5546,7 +6004,8 @@
       "rarity": {
         "default": "legendary",
         "EU_WEST": "legendary",
-        "NA": "legendary"
+        "NA": "legendary",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5558,7 +6017,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -5570,7 +6030,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5582,7 +6043,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5594,7 +6056,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -5606,7 +6069,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -5618,7 +6082,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5630,7 +6095,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5642,7 +6108,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "regular"
       },
       "aliases": [
         "gr86",
@@ -5659,7 +6126,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5671,7 +6139,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5683,7 +6152,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5695,7 +6165,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5707,7 +6178,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5719,7 +6191,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5731,7 +6204,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "common"
       },
       "aliases": []
     },
@@ -5743,7 +6217,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": [
         "supra mk4",
@@ -5758,7 +6233,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": [
         "supra mk5",
@@ -5773,7 +6249,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5785,7 +6262,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "exotic",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5797,7 +6275,8 @@
       "rarity": {
         "default": "common",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "common"
       },
       "aliases": [
         "vitz"
@@ -5811,7 +6290,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5823,7 +6303,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "exotic",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5835,7 +6316,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5847,7 +6329,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "kafer",
@@ -5863,7 +6346,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "exotic",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "combi",
@@ -5880,7 +6364,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": [
         "bay window"
@@ -5894,7 +6379,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -5906,7 +6392,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5918,7 +6405,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": [
         "rabbit",
@@ -5933,7 +6421,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5945,7 +6434,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5957,7 +6447,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5969,7 +6460,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -5981,7 +6473,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "common"
+        "NA": "common",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -5993,7 +6486,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -6005,7 +6499,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -6017,7 +6512,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -6029,7 +6525,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -6041,7 +6538,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -6053,7 +6551,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -6065,7 +6564,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -6077,7 +6577,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "common",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -6089,7 +6590,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "regular",
-        "NA": "exotic"
+        "NA": "exotic",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -6101,7 +6603,8 @@
       "rarity": {
         "default": "notable",
         "EU_WEST": "notable",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -6113,7 +6616,8 @@
       "rarity": {
         "default": "exotic",
         "EU_WEST": "rare",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "exotic"
       },
       "aliases": []
     },
@@ -6125,7 +6629,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "notable",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -6137,7 +6642,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "notable"
+        "NA": "notable",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     },
@@ -6149,7 +6655,8 @@
       "rarity": {
         "default": "rare",
         "EU_WEST": "notable",
-        "NA": "rare"
+        "NA": "rare",
+        "ASIA_SE": "rare"
       },
       "aliases": []
     },
@@ -6161,7 +6668,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -6173,7 +6681,8 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "common",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "regular"
       },
       "aliases": []
     },
@@ -6185,7 +6694,516 @@
       "rarity": {
         "default": "regular",
         "EU_WEST": "regular",
-        "NA": "regular"
+        "NA": "regular",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vinfast-vf-3",
+      "make": "VinFast",
+      "model": "VF 3",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "vf3"
+      ]
+    },
+    {
+      "id": "vinfast-vf-5",
+      "make": "VinFast",
+      "model": "VF 5",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "vf5",
+        "vf 5 plus"
+      ]
+    },
+    {
+      "id": "vinfast-vf-6",
+      "make": "VinFast",
+      "model": "VF 6",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "vf6"
+      ]
+    },
+    {
+      "id": "vinfast-vf-7",
+      "make": "VinFast",
+      "model": "VF 7",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "vf7"
+      ]
+    },
+    {
+      "id": "vinfast-vf-8",
+      "make": "VinFast",
+      "model": "VF 8",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "vf8"
+      ]
+    },
+    {
+      "id": "vinfast-vf-9",
+      "make": "VinFast",
+      "model": "VF 9",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "vf9"
+      ]
+    },
+    {
+      "id": "vinfast-fadil",
+      "make": "VinFast",
+      "model": "Fadil",
+      "body": "hatch",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "vinfast-lux-a2-0",
+      "make": "VinFast",
+      "model": "Lux A2.0",
+      "body": "sedan",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "lux a"
+      ]
+    },
+    {
+      "id": "vinfast-lux-sa2-0",
+      "make": "VinFast",
+      "model": "Lux SA2.0",
+      "body": "suv",
+      "rarity": {
+        "default": "legendary",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "lux sa"
+      ]
+    },
+    {
+      "id": "toyota-vios",
+      "make": "Toyota",
+      "model": "Vios",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "yaris ativ",
+        "yaris sedan"
+      ]
+    },
+    {
+      "id": "toyota-innova",
+      "make": "Toyota",
+      "model": "Innova",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "innova zenix",
+        "kijang innova"
+      ]
+    },
+    {
+      "id": "toyota-veloz",
+      "make": "Toyota",
+      "model": "Veloz",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "avanza veloz"
+      ]
+    },
+    {
+      "id": "toyota-avanza",
+      "make": "Toyota",
+      "model": "Avanza",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-fortuner",
+      "make": "Toyota",
+      "model": "Fortuner",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "sw4"
+      ]
+    },
+    {
+      "id": "toyota-raize",
+      "make": "Toyota",
+      "model": "Raize",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "daihatsu rocky"
+      ]
+    },
+    {
+      "id": "toyota-corolla-cross",
+      "make": "Toyota",
+      "model": "Corolla Cross",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "toyota-wigo",
+      "make": "Toyota",
+      "model": "Wigo",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "agya"
+      ]
+    },
+    {
+      "id": "honda-city",
+      "make": "Honda",
+      "model": "City",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "city hatchback"
+      ]
+    },
+    {
+      "id": "honda-br-v",
+      "make": "Honda",
+      "model": "BR-V",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "honda-wr-v",
+      "make": "Honda",
+      "model": "WR-V",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "mitsubishi-xpander",
+      "make": "Mitsubishi",
+      "model": "Xpander",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "xpander cross"
+      ]
+    },
+    {
+      "id": "mitsubishi-attrage",
+      "make": "Mitsubishi",
+      "model": "Attrage",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "mirage g4"
+      ]
+    },
+    {
+      "id": "mitsubishi-triton",
+      "make": "Mitsubishi",
+      "model": "Triton",
+      "body": "pickup",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "l200"
+      ]
+    },
+    {
+      "id": "mitsubishi-xforce",
+      "make": "Mitsubishi",
+      "model": "Xforce",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "suzuki-ertiga",
+      "make": "Suzuki",
+      "model": "Ertiga",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": []
+    },
+    {
+      "id": "suzuki-xl7",
+      "make": "Suzuki",
+      "model": "XL7",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-accent",
+      "make": "Hyundai",
+      "model": "Accent",
+      "body": "sedan",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "verna",
+        "solaris"
+      ]
+    },
+    {
+      "id": "hyundai-grand-i10",
+      "make": "Hyundai",
+      "model": "Grand i10",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "grand i10 nios"
+      ]
+    },
+    {
+      "id": "hyundai-creta",
+      "make": "Hyundai",
+      "model": "Creta",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "hyundai-stargazer",
+      "make": "Hyundai",
+      "model": "Stargazer",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-morning",
+      "make": "Kia",
+      "model": "Morning",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "common"
+      },
+      "aliases": [
+        "picanto morning"
+      ]
+    },
+    {
+      "id": "kia-seltos",
+      "make": "Kia",
+      "model": "Seltos",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "regular"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-sonet",
+      "make": "Kia",
+      "model": "Sonet",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "kia-carnival",
+      "make": "Kia",
+      "model": "Carnival",
+      "body": "van",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "sedona"
+      ]
+    },
+    {
+      "id": "kia-k3",
+      "make": "Kia",
+      "model": "K3",
+      "body": "sedan",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "cerato",
+        "forte"
+      ]
+    },
+    {
+      "id": "ford-everest",
+      "make": "Ford",
+      "model": "Everest",
+      "body": "suv",
+      "rarity": {
+        "default": "notable",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "endeavour"
+      ]
+    },
+    {
+      "id": "ford-territory",
+      "make": "Ford",
+      "model": "Territory",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "isuzu-mu-x",
+      "make": "Isuzu",
+      "model": "mu-X",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "regular"
+      },
+      "aliases": [
+        "mux"
+      ]
+    },
+    {
+      "id": "mazda-cx-8",
+      "make": "Mazda",
+      "model": "CX-8",
+      "body": "suv",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": []
+    },
+    {
+      "id": "wuling-mini-ev",
+      "make": "Wuling",
+      "model": "Mini EV",
+      "body": "hatch",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
+      },
+      "aliases": [
+        "hongguang mini ev"
+      ]
+    },
+    {
+      "id": "wuling-hongguang",
+      "make": "Wuling",
+      "model": "Hongguang",
+      "body": "van",
+      "rarity": {
+        "default": "rare",
+        "ASIA_SE": "notable"
       },
       "aliases": []
     }
