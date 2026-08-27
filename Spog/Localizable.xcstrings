@@ -2745,6 +2745,23 @@
         }
       }
     },
+    "scanError.saturated": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog is overloaded right now. Try again in a little while."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog est saturé pour le moment. Réessaie dans un moment."
+          }
+        }
+      }
+    },
     "scanError.unavailable": {
       "extractionState": "manual",
       "localizations": {

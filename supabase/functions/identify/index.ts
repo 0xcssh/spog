@@ -21,7 +21,7 @@ const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 // client et peut être falsifié : le quota par IP rattrape la rotation d'identifiants.
 const WINDOW_SECONDS = 60;
 
-const DEVICE_DAY_LIMIT = 200;   // par appareil et par jour — un joueur intensif scanne ~30 fois
+const DEVICE_DAY_LIMIT = 100;   // par appareil et par jour — personne ne croise 100 voitures
 const DEVICE_WINDOW_LIMIT = 15; // par appareil et par minute
 
 // Les opérateurs mobiles font passer des milliers d'abonnés derrière une seule IP
@@ -29,6 +29,18 @@ const DEVICE_WINDOW_LIMIT = 15; // par appareil et par minute
 // ne sert qu'à casser une boucle d'attaque massive.
 const IP_DAY_LIMIT = 20_000;
 const IP_WINDOW_LIMIT = 1_200;
+
+// Plafond de dépense : un compteur unique, partagé par tous. Les deux quotas
+// ci-dessus bornent un appareil et une IP, jamais le total — dix IP suffisaient donc
+// à faire exploser la facture OpenAI, et une boucle dans une future version de l'app
+// aurait produit le même résultat sans la moindre malveillance.
+//
+// Le seuil n'est pas un budget : c'est un mur contre la catastrophe. Il doit rester
+// très au-dessus de l'usage réel, parce que l'atteindre coupe le jeu pour **tout le
+// monde**. 10 000 identifications par jour couvrent environ un millier de joueurs
+// actifs, et bornent la dépense à quelques dizaines d'euros par jour.
+const GLOBAL_DAY_LIMIT = 10_000;
+const GLOBAL_WINDOW_LIMIT = 300; // par minute, pour casser une boucle avant la journée entière
 
 const MAX_IMAGE_BASE64 = 8_000_000; // ~6 Mo d'image, au-delà c'est anormal
 
@@ -161,10 +173,18 @@ Deno.serve(async (req) => {
 
   const clientIP = (req.headers.get("x-forwarded-for") ?? "ip-inconnue").split(",")[0].trim();
   const deviceId = req.headers.get("x-device-id") ?? clientIP;
-  const [deviceOK, ipOK] = await Promise.all([
+  const [deviceOK, ipOK, globalOK] = await Promise.all([
     isWithinQuota(`device:${deviceId}`, DEVICE_DAY_LIMIT, DEVICE_WINDOW_LIMIT),
     isWithinQuota(`ip:${clientIP}`, IP_DAY_LIMIT, IP_WINDOW_LIMIT),
+    isWithinQuota("global", GLOBAL_DAY_LIMIT, GLOBAL_WINDOW_LIMIT),
   ]);
+  // Le plafond global est distingué du quota personnel : dire « tu as trop scanné »
+  // à quelqu'un qui n'y est pour rien serait un mensonge, et il chercherait la faute
+  // de son côté.
+  if (!globalOK) {
+    console.error("plafond global atteint");
+    return json({ code: "service_saturated", error: "Le service est saturé. Réessaie plus tard." }, 503);
+  }
   if (!deviceOK || !ipOK) {
     return json({ code: "rate_limited", error: "Trop de scans d'affilée. Réessaie un peu plus tard." }, 429);
   }

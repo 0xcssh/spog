@@ -49,6 +49,7 @@ enum IdentifyService {
         private static func message(for code: String?) -> String? {
             switch code {
             case "rate_limited":     String(localized: "scanError.rateLimited")
+            case "service_saturated": String(localized: "scanError.saturated")
             case "image_too_large":  String(localized: "scanError.imageTooLarge")
             case "missing_input":    String(localized: "scanError.unreadableImage")
             case "identification_failed", "unreadable_ai_response":
