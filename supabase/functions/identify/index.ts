@@ -35,11 +35,15 @@ const IP_WINDOW_LIMIT = 1_200;
 // à faire exploser la facture OpenAI, et une boucle dans une future version de l'app
 // aurait produit le même résultat sans la moindre malveillance.
 //
-// Le seuil n'est pas un budget : c'est un mur contre la catastrophe. Il doit rester
-// très au-dessus de l'usage réel, parce que l'atteindre coupe le jeu pour **tout le
-// monde**. 10 000 identifications par jour couvrent environ un millier de joueurs
-// actifs, et bornent la dépense à quelques dizaines d'euros par jour.
-const GLOBAL_DAY_LIMIT = 10_000;
+// Le seuil n'est pas un budget : c'est un mur contre la catastrophe. L'atteindre coupe
+// le jeu pour **tout le monde**, avec un message de saturation et zéro carte gagnée.
+//
+// ⚠️ 5 000/jour est un plafond de PRÉ-LANCEMENT. Il tient environ 500 joueurs actifs.
+// Le jour où l'app marche, il devient le premier goulot d'étranglement, et la panne
+// arrivera pile au moment où il ne faut pas : le succès. À relever avant, pas après.
+// Signal à surveiller : la ligne « plafond global atteint » dans les journaux de la
+// fonction, et le code d'erreur `service_saturated` renvoyé aux joueurs.
+const GLOBAL_DAY_LIMIT = 5_000;
 const GLOBAL_WINDOW_LIMIT = 300; // par minute, pour casser une boucle avant la journée entière
 
 const MAX_IMAGE_BASE64 = 8_000_000; // ~6 Mo d'image, au-delà c'est anormal
