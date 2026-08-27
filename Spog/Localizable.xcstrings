@@ -602,13 +602,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Last updated 25 August 2026"
+            "value": "Last updated 27 August 2026"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dernière mise à jour le 25 août 2026"
+            "value": "Dernière mise à jour le 27 août 2026"
           }
         }
       }
@@ -1724,13 +1724,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name when you enable location. Nothing else. No advertising identifier, no behavioral tracking, no third-party analytics."
+            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name if you turn location on. Each identification also carries an anonymous device identifier provided by Apple, used only to cap how many scans one device can make and to prevent abuse. It is tied to no identity, it changes if you reinstall the app, and our server keeps only a fingerprint of it. Nothing else: no advertising identifier, no behavioral tracking, no third-party analytics."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collecte les photos que tu prends dans l'app, le pays où tu repères tes voitures, et le nom de la ville si tu actives la localisation. Rien d'autre. Aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
+            "value": "Spog collecte les photos que tu prends dans l'app, le pays où tu repères tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi un identifiant d'appareil anonyme fourni par Apple : il sert uniquement à limiter le nombre de scans d'un même appareil et à prévenir les abus. Il n'est rattaché à aucune identité, il change si tu réinstalles l'app, et notre serveur n'en conserve qu'une empreinte. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
           }
         }
       }
@@ -1792,13 +1792,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your cards and photos stay on your device for as long as you keep them. Removing a card from the garage deletes its photos immediately and permanently."
+            "value": "Your cards and photos stay on your device for as long as you keep them. Removing a card from the garage deletes its photos immediately and permanently. Your referral code, any code you entered, and the vehicles the app has learned from your scans also live on your device, and go away with the app."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immédiatement et définitivement."
+            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immédiatement et définitivement. Ton code de parrainage, celui que tu as éventuellement saisi, et les véhicules que l'app a appris de tes scans vivent également sur ton appareil, et disparaissent avec elle."
           }
         }
       }
@@ -1860,13 +1860,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location is optional and the app works fully without it. When enabled, your position is converted immediately into a country code and a city name, then discarded. No coordinates are stored or transmitted, and no movement history is built. Permission requested is \"while using the app\" only."
+            "value": "Location is optional and the app works entirely without it. When it is on, your position is turned into a country code and a city name straight away, then dropped. No coordinates are kept or transmitted, and no movement history is built. Permission is requested for “while using the app” only. On the scan screen, your position is also used to measure your speed, so that scanning locks itself if you are driving. That measurement stays on the device, is neither stored nor transmitted, and stops as soon as you leave the screen."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La localisation est facultative et l'app fonctionne entièrement sans elle. Quand elle est active, ta position est convertie immédiatement en code pays et nom de ville, puis abandonnée. Aucune coordonnée n'est conservée ni transmise, et aucun historique de déplacements n'est constitué. L'autorisation demandée est « pendant l'utilisation » uniquement."
+            "value": "La localisation est facultative et l'app fonctionne entièrement sans elle. Quand elle est active, ta position est convertie immédiatement en code pays et nom de ville, puis abandonnée. Aucune coordonnée n'est conservée ni transmise, et aucun historique de déplacements n'est constitué. L'autorisation demandée est « pendant l'utilisation » uniquement. Sur l'écran de scan, ta position sert en outre à mesurer ta vitesse, afin de bloquer le scan si tu roules. Cette mesure reste sur l'appareil, n'est ni conservée ni transmise, et s'arrête dès que tu quittes l'écran."
           }
         }
       }
@@ -3982,13 +3982,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vehicle identification relies on automated analysis and can be wrong. Rarity depends on the country you spot in and reflects an editorial judgement, not an official ranking. Neither is guaranteed."
+            "value": "Vehicle identification relies on automated analysis and can be wrong. When a model is missing from the catalog, it may be added automatically from what the analysis read, so its name may be approximate. Rarity depends on the country you spot in and is an editorial choice, not an official ranking. Neither is guaranteed."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'identification des véhicules repose sur une analyse automatisée et peut se tromper. La rareté dépend du pays de repérage et relève d'un choix éditorial, non d'un classement officiel. Ni l'une ni l'autre ne sont garanties."
+            "value": "L'identification des véhicules repose sur une analyse automatisée et peut se tromper. Quand un modèle est absent du catalogue, il peut y être ajouté automatiquement à partir de ce que l'analyse a lu : son nom peut donc être approximatif. La rareté dépend du pays de repérage et relève d'un choix éditorial, non d'un classement officiel. Ni l'une ni l'autre ne sont garanties."
           }
         }
       }
@@ -4152,13 +4152,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Never use Spog while driving. Do not photograph from a moving vehicle, do not step onto a roadway, and respect the privacy of others: photograph cars, not people. You alone are responsible for the circumstances in which you take a photo."
+            "value": "Never use Spog while driving. Above a certain speed, the app locks scanning by itself whenever your location is on. Do not shoot from a moving vehicle, do not step into the road, and respect other people's privacy: photograph cars, not people. You alone are responsible for the circumstances in which you take a photo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "N'utilise jamais Spog en conduisant. Ne photographie pas depuis un véhicule en mouvement, ne descends pas sur la chaussée, et respecte la vie privée d'autrui : photographie des voitures, pas des personnes. Tu es seul responsable des circonstances dans lesquelles tu prends une photo."
+            "value": "N'utilise jamais Spog en conduisant. Au-delà d'une certaine vitesse, l'app bloque elle-même le scan dès lors que ta position est active. Ne photographie pas depuis un véhicule en mouvement, ne descends pas sur la chaussée, et respecte la vie privée d'autrui : photographie des voitures, pas des personnes. Tu es seul responsable des circonstances dans lesquelles tu prends une photo."
           }
         }
       }
