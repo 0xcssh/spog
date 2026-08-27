@@ -7,9 +7,12 @@ struct OnboardingView: View {
     @Environment(AppState.self) private var app
     @Environment(PlayerProfile.self) private var profile
 
+    @Environment(LocationProvider.self) private var location
+
     @State private var step: Step = .welcome
-    @State private var location = LocationProvider()
     @State private var pickingCountry = false
+    /// Position refusée : il faut le dire, sinon le repli en mode manuel est inexplicable.
+    @State private var locationRefused = false
     @FocusState private var typing: Bool
 
     private let store = CatalogStore.shared
@@ -68,6 +71,7 @@ struct OnboardingView: View {
                 }
             }
         }
+        .overlay(alignment: .topLeading) { backButton }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $pickingCountry) { MarketPickerSheet() }
         .background {
@@ -158,8 +162,12 @@ struct OnboardingView: View {
                 .font(Theme.mono(11))
                 .foregroundStyle(Theme.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
+            Text("onboarding.taste.multi")
+                .font(Theme.label(10)).tracking(0.8)
+                .foregroundStyle(Theme.accent)
 
-            // Toucher une réponse enchaîne : pas de bouton « Passer » à chercher.
+            // Plusieurs réponses : toucher n'enchaîne plus, sinon le premier choix
+            // fermerait la question. C'est le bouton du bas qui avance.
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 9),
                                 GridItem(.flexible(), spacing: 9)], spacing: 9) {
                 ForEach(PlayerProfile.choices, id: \.body) { choice in
@@ -171,16 +179,26 @@ struct OnboardingView: View {
     }
 
     private func tasteCard(_ body: String, icon: String) -> some View {
-        let selected = profile.favouriteBody == body
+        let selected = profile.favouriteBodies.contains(body)
         return Button {
             @Bindable var player = profile
-            player.favouriteBody = body
-            advance()
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                if selected { player.favouriteBodies.remove(body) }
+                else        { player.favouriteBodies.insert(body) }
+            }
         } label: {
             VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(selected ? Theme.accentBright : Theme.textSecondary)
+                ZStack(alignment: .topTrailing) {
+                    Image(systemName: icon)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(selected ? Theme.accentBright : Theme.textSecondary)
+                    if selected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.accentBright)
+                            .offset(x: 16, y: -4)
+                    }
+                }
                 Text(LocalizedStringKey("quest.body." + body))
                     .font(Theme.display(13, .semibold))
                     .foregroundStyle(Theme.textPrimary)
@@ -253,6 +271,8 @@ struct OnboardingView: View {
             modeCard(.manual, icon: "mappin",
                      title: "onboarding.manual.title", body: "onboarding.manual.body")
 
+            autoStatus
+
             if app.locationMode == .manual {
                 Button { pickingCountry = true } label: {
                     HStack {
@@ -274,13 +294,61 @@ struct OnboardingView: View {
         }
     }
 
+    /// Ce que la position donne, en direct. Sans ça le joueur choisit « automatique »,
+    /// ne voit rien changer, et découvre au récapitulatif un pays qui n'est pas le sien.
+    @ViewBuilder private var autoStatus: some View {
+        if locationRefused {
+            statusLine("exclamationmark.triangle.fill", "onboarding.location.denied",
+                       color: RarityTier.trophyGold)
+        } else if app.locationMode == .automatic {
+            if location.isResolving {
+                statusLine("location.circle", "onboarding.locating", color: Theme.textMuted)
+            } else if location.countryCode != nil {
+                statusLine("checkmark.circle.fill",
+                           LocalizedStringKey("onboarding.location.found \(placeText)"),
+                           color: Theme.accent)
+            }
+        }
+    }
+
+    private func statusLine(_ icon: String, _ text: LocalizedStringKey,
+                            color: Color) -> some View {
+        HStack(spacing: 9) {
+            Image(systemName: icon)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(color)
+            Text(text)
+                .font(Theme.mono(11))
+                .foregroundStyle(Theme.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 4)
+    }
+
+    /// Résout le pays **tout de suite**, pas au moment de terminer : le récapitulatif
+    /// doit montrer ce qui est vrai. Un refus fait retomber en mode manuel, sinon les
+    /// prises seraient marquées vérifiables alors que le pays est déclaré à la main.
+    private func resolveAutomatically() {
+        locationRefused = false
+        location.currentCountry { code in
+            @Bindable var state = app
+            if let code {
+                state.country = code
+            } else if location.status == .denied {
+                state.locationMode = .manual
+                locationRefused = true
+            }
+        }
+    }
+
     private func modeCard(_ mode: AppState.LocationMode, icon: String,
                           title: LocalizedStringKey, body: LocalizedStringKey) -> some View {
         let selected = app.locationMode == mode
         return Button {
             @Bindable var state = app
             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { state.locationMode = mode }
-            if mode == .automatic { location.requestAccess() }
+            if mode == .automatic { resolveAutomatically() } else { locationRefused = false }
         } label: {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: icon)
@@ -368,16 +436,15 @@ struct OnboardingView: View {
 
             NeonFrame(radius: 16) {
                 VStack(spacing: 0) {
-                    recapRow("mappin", "market.title", store.countryName(app.country))
+                    recapRow("mappin", "onboarding.recap.place", placeText)
                     Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
                     recapRow(app.locationMode == .automatic ? "location.fill" : "hand.tap.fill",
                              "onboarding.recap.mode",
                              String(localized: app.locationMode == .automatic
                                     ? "onboarding.auto.title" : "onboarding.manual.title"))
-                    if let favourite = profile.favouriteBody {
+                    if !profile.favouriteBodies.isEmpty {
                         Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
-                        recapRow("heart.fill", "onboarding.recap.taste",
-                                 String(localized: String.LocalizationValue("quest.body." + favourite)))
+                        recapRow("heart.fill", "onboarding.recap.taste", favouritesText)
                     }
                     Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
                     recapRow("gift.fill", "onboarding.recap.free",
@@ -390,6 +457,26 @@ struct OnboardingView: View {
                 .foregroundStyle(Theme.textMuted)
                 .padding(.horizontal, 4)
         }
+    }
+
+    /// Le lieu tel qu'on le connaît vraiment à cet instant — jamais une valeur par défaut
+    /// présentée comme un résultat. En automatique, tant que la position n'a pas répondu,
+    /// on le dit au lieu d'afficher le pays de l'appareil.
+    private var placeText: String {
+        if app.locationMode == .automatic && location.isResolving {
+            return String(localized: "onboarding.locating")
+        }
+        let country = store.countryName(app.country)
+        if let city = location.city, app.locationMode == .automatic {
+            return "\(city), \(country)"
+        }
+        return country
+    }
+
+    private var favouritesText: String {
+        profile.favouriteList
+            .map { String(localized: String.LocalizationValue("quest.body." + $0)) }
+            .joined(separator: ", ")
     }
 
     private func recapRow(_ icon: String, _ label: LocalizedStringKey, _ value: String) -> some View {
@@ -405,12 +492,32 @@ struct OnboardingView: View {
             Text(value)
                 .font(Theme.mono(11))
                 .foregroundStyle(Theme.textMuted)
-                .lineLimit(1)
+                .multilineTextAlignment(.trailing)
+                .lineLimit(2)
         }
         .padding(.horizontal, 14).padding(.vertical, 14)
     }
 
     // MARK: Navigation
+
+    /// Marche arrière. Un parcours d'entrée sans retour est une impasse : une faute de
+    /// frappe dans le pseudo obligeait à désinstaller l'app pour la corriger.
+    /// Absent de la première étape, et de la préparation qui n'attend aucune réponse.
+    @ViewBuilder private var backButton: some View {
+        if step != .welcome && step != .preparing {
+            Button { back() } label: {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(Theme.textSecondary)
+                    .frame(width: 38, height: 38)
+                    .background(Circle().fill(Theme.surface))
+                    .overlay(Circle().stroke(Theme.stroke, lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+            .padding(.leading, 20)
+            .padding(.top, 4)
+        }
+    }
 
     private var dots: some View {
         HStack(spacing: 6) {
@@ -446,15 +553,20 @@ struct OnboardingView: View {
         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = next }
     }
 
+    private func back() {
+        typing = false
+        // La préparation ne se rejoue pas : depuis le récapitulatif, on remonte
+        // directement à la dernière vraie question.
+        let previous = step == .recap ? .market : Step(rawValue: step.rawValue - 1)
+        guard let previous else { return }
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = previous }
+    }
+
     private func finish() {
         @Bindable var state = app
-        if state.locationMode == .automatic {
-            location.currentCountry { code in
-                if let code { state.country = code }
-                state.hasOnboarded = true
-            }
-        } else {
-            state.hasOnboarded = true
-        }
+        // Le pays est déjà résolu à l'étape du repérage. Si la position tarde encore,
+        // elle arrivera par le même chemin et corrigera le pays toute seule : on
+        // n'immobilise pas le joueur devant un écran d'attente.
+        state.hasOnboarded = true
     }
 }

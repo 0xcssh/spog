@@ -11,19 +11,34 @@ final class PlayerProfile {
         didSet { UserDefaults.standard.set(nickname, forKey: Keys.nickname) }
     }
 
-    /// Carrosserie préférée, parmi celles du catalogue. Nil = pas de préférence.
-    var favouriteBody: String? {
-        didSet { UserDefaults.standard.set(favouriteBody, forKey: Keys.favourite) }
+    /// Carrosseries préférées. **Plusieurs réponses possibles** : personne n'aime
+    /// exactement un type de voiture, et forcer un choix unique donnait une réponse fausse.
+    /// Vide = pas de préférence, ce qui reste un choix valable.
+    var favouriteBodies: Set<String> {
+        didSet { UserDefaults.standard.set(favouriteList, forKey: Keys.favourites) }
     }
+
+    /// Ordre stable, pour l'affichage comme pour les graines de quête.
+    /// Un `Set` n'a pas d'ordre : s'en servir tel quel rendrait la quête du jour instable.
+    var favouriteList: [String] { favouriteBodies.sorted() }
 
     private enum Keys {
         static let nickname = "profile.nickname"
-        static let favourite = "profile.favouriteBody"
+        static let favourite = "profile.favouriteBody"    // ancienne clé, réponse unique
+        static let favourites = "profile.favouriteBodies"
     }
 
     init() {
-        nickname = UserDefaults.standard.string(forKey: Keys.nickname) ?? ""
-        favouriteBody = UserDefaults.standard.string(forKey: Keys.favourite)
+        let defaults = UserDefaults.standard
+        nickname = defaults.string(forKey: Keys.nickname) ?? ""
+        if let stored = defaults.array(forKey: Keys.favourites) as? [String] {
+            favouriteBodies = Set(stored)
+        } else if let single = defaults.string(forKey: Keys.favourite) {
+            // Profil créé quand la question n'acceptait qu'une réponse : on la garde.
+            favouriteBodies = [single]
+        } else {
+            favouriteBodies = []
+        }
     }
 
     /// Nom affiché : le pseudo choisi, ou un repli traduit si le joueur l'a laissé vide.

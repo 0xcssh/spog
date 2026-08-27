@@ -14,6 +14,9 @@ final class LocationProvider: NSObject, CLLocationManagerDelegate {
     private(set) var countryCode: String?
     /// Ville, déjà traduite par le système.
     private(set) var city: String?
+    /// Vrai tant que la position n'a pas répondu. Sans ça l'écran reste muet
+    /// et le joueur croit que rien ne se passe.
+    private(set) var isResolving = false
 
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()
@@ -33,17 +36,33 @@ final class LocationProvider: NSObject, CLLocationManagerDelegate {
 
     /// Relève le pays courant. Rend `nil` si la position n'est pas disponible :
     /// **un scan ne doit jamais échouer à cause de la localisation.**
+    ///
+    /// L'autorisation pas encore accordée n'est **pas** un échec : la demande reste
+    /// en attente et repart toute seule quand le joueur répond à la question d'iOS.
+    /// Rendre `nil` tout de suite, comme avant, laissait le pays de l'appareil en place
+    /// — un iPhone réglé sur la France affichait « France » depuis le Viêt Nam.
     func currentCountry(_ completion: @escaping (String?) -> Void) {
-        guard status == .ready else { completion(countryCode); return }
         pendingRequest = completion
-        manager.requestLocation()
+        isResolving = true
+        switch status {
+        case .ready:
+            manager.requestLocation()
+        case .unknown:
+            manager.requestWhenInUseAuthorization() // la suite arrive par le délégué
+        case .denied:
+            finish(countryCode)
+        }
     }
 
     // MARK: CLLocationManagerDelegate
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         refreshStatus()
-        if status == .ready { manager.requestLocation() }
+        switch status {
+        case .ready:  manager.requestLocation()
+        case .denied: finish(countryCode)   // refus : on rend la main, on ne fait pas attendre
+        case .unknown: break
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -75,6 +94,9 @@ final class LocationProvider: NSObject, CLLocationManagerDelegate {
     private func finish(_ code: String?) {
         let callback = pendingRequest
         pendingRequest = nil
-        DispatchQueue.main.async { callback?(code) }
+        DispatchQueue.main.async {
+            self.isResolving = false
+            callback?(code)
+        }
     }
 }

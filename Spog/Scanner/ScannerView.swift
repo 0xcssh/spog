@@ -8,6 +8,7 @@ struct ScannerView: View {
     @Environment(ProgressStore.self) private var progress
     @Environment(SubscriptionStore.self) private var subscriptions
     @Environment(PlayerProfile.self) private var profile
+    @Environment(LocationProvider.self) private var location
 
     @State private var camera = CameraController()
     @State private var working = false
@@ -55,7 +56,12 @@ struct ScannerView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
         }
-        .task { await camera.start() }
+        .task {
+            await camera.start()
+            // « Ta position te suit en voyage » est promis à l'onboarding : sans ce
+            // rafraîchissement, le pays restait celui du jour de l'installation.
+            refreshCountryIfAutomatic()
+        }
         .onDisappear { camera.stop() }
         .fullScreenCover(isPresented: $showingPaywall) { PaywallView() }
         .fullScreenCover(item: $reveal) { item in
@@ -175,6 +181,18 @@ struct ScannerView: View {
         }
     }
 
+    /// Remet le pays à jour quand le joueur a choisi le mode automatique.
+    /// Silencieux et sans blocage : une position indisponible ne doit jamais
+    /// empêcher un scan, elle laisse simplement le dernier pays connu.
+    private func refreshCountryIfAutomatic() {
+        guard app.locationMode == .automatic else { return }
+        location.currentCountry { code in
+            guard let code else { return }
+            @Bindable var state = app
+            state.country = code
+        }
+    }
+
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url)
@@ -268,7 +286,7 @@ struct ScannerView: View {
                               verified: app.isVerifiedCapture, paint: paint, shot: shot)
 
         let quest = QuestFactory.quest(for: Date(), country: app.country,
-                                        favourite: profile.favouriteBody)
+                                        favourites: profile.favouriteList)
         let tier = CatalogStore.shared.resolve(vehicle, in: app.country).tier
         let satisfied = quest.isSatisfied(vehicle: vehicle, tier: tier,
                                           isNewModel: isNew, todayCount: garage.todayCount)

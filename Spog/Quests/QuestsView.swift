@@ -73,7 +73,7 @@ struct QuestsView: View {
     /// La quete du jour. Meme objectif pour tout le monde, tire de la date.
     private var questCard: some View {
         let quest = QuestFactory.quest(for: Date(), country: app.country,
-                                        favourite: profile.favouriteBody)
+                                        favourites: profile.favouriteList)
         let done = progress.isDone(quest)
         return NeonFrame(color: done ? Theme.accent : Color(hex: 0xF5B942),
                          radius: 16, intensity: done ? 0.7 : 1) {

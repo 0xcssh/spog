@@ -545,6 +545,57 @@
         }
       }
     },
+    "onboarding.locating": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking for your position…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche de ta position…"
+          }
+        }
+      }
+    },
+    "onboarding.location.denied": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position refused. Pick your country by hand — you can change it any time in Settings."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position refusée. Choisis ton pays à la main — modifiable à tout moment dans les Réglages."
+          }
+        }
+      }
+    },
+    "onboarding.location.found %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotted in %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repéré depuis %@"
+          }
+        }
+      }
+    },
     "onboarding.manual.body": {
       "extractionState": "manual",
       "localizations": {
@@ -817,6 +868,23 @@
         }
       }
     },
+    "onboarding.recap.place": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotting location"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieu de repérage"
+          }
+        }
+      }
+    },
     "onboarding.recap.taste": {
       "extractionState": "manual",
       "localizations": {
@@ -949,6 +1017,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repère-la. Photographie-la. Collectionne-la."
+          }
+        }
+      }
+    },
+    "onboarding.taste.multi": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick as many as you like."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plusieurs réponses possibles."
           }
         }
       }

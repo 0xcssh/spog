@@ -6,6 +6,9 @@ struct RootView: View {
     @State private var progress = ProgressStore()
     @State private var subscriptions = SubscriptionStore()
     @State private var profile = PlayerProfile()
+    /// Une seule instance pour toute l'app : l'onboarding, les réglages et le scan
+    /// parlent à la même position, et l'autorisation n'est demandée qu'une fois.
+    @State private var location = LocationProvider()
     @State private var tab: Tab = .garage
 
     init() {
@@ -47,6 +50,7 @@ struct RootView: View {
             }
         }
         .environment(app)
+        .environment(location)
         .environment(garage)
         .environment(progress)
         .environment(subscriptions)
@@ -84,6 +88,7 @@ struct RootView: View {
             }
         }
         .environment(app)
+        .environment(location)
         .environment(garage)
         .environment(progress)
         .preferredColorScheme(.dark)

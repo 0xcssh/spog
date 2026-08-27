@@ -45,17 +45,17 @@ struct DailyQuest {
 /// Le pays compte : demander une Nissan en France est jouable, une Bugatti ne l'est pas.
 enum QuestFactory {
 
-    /// - Parameter favourite: carrosserie preferee du joueur. Elle entre dans la graine :
-    ///   deux joueurs aux gouts differents n'ont pas la meme quete, mais **la quete d'un
-    ///   joueur donne reste la meme toute la journee**. C'est cette derniere propriete qui
-    ///   compte : sans elle, on rouvre l'app jusqu'a tomber sur une quete facile.
-    static func quest(for day: Date, country: String, favourite: String? = nil) -> DailyQuest {
+    /// - Parameter favourites: carrosseries preferees du joueur. Elles entrent dans la
+    ///   graine : deux joueurs aux gouts differents n'ont pas la meme quete, mais **la quete
+    ///   d'un joueur donne reste la meme toute la journee**. C'est cette derniere propriete
+    ///   qui compte : sans elle, on rouvre l'app jusqu'a tomber sur une quete facile.
+    static func quest(for day: Date, country: String, favourites: [String] = []) -> DailyQuest {
         let store = CatalogStore.shared
         let dayNumber = Int(day.timeIntervalSince1970 / 86_400)
-        let taste = UInt64(abs((favourite ?? "").hashValue % 9_973))
+        let taste = stableHash(favourites.sorted().joined(separator: ",")) % 9_973
         var rng = SeededRNG(seed: (UInt64(bitPattern: Int64(dayNumber)) &+ taste)
                                   &* 0x9E37_79B9_7F4A_7C15)
-        let id = "\(dayNumber)-\(country)-\(favourite ?? "any")"
+        let id = "\(dayNumber)-\(country)-\(favourites.isEmpty ? "any" : favourites.sorted().joined(separator: "+"))"
 
         // On ne propose que ce qui se croise vraiment dans le pays du joueur.
         let plausible = store.vehicles.filter { vehicle in
@@ -71,8 +71,11 @@ enum QuestFactory {
         case 3, 4:
             // Une fois sur deux, la quete porte sur ce que le joueur aime :
             // c'est le seul usage de sa preference, et il est visible.
-            if let favourite, bodies.contains(favourite), rng.next(upTo: 2) == 0 {
-                return DailyQuest(id: id, kind: .body(favourite), reward: 150)
+            // Parmi les gouts du joueur, on ne retient que ceux qui se croisent chez lui :
+            // aimer les pick-up ne doit pas donner une quete impossible en France.
+            let liked = favourites.filter(bodies.contains)
+            if !liked.isEmpty, rng.next(upTo: 2) == 0 {
+                return DailyQuest(id: id, kind: .body(liked[rng.next(upTo: liked.count)]), reward: 150)
             }
             let body = bodies.isEmpty ? "suv" : bodies[rng.next(upTo: bodies.count)]
             return DailyQuest(id: id, kind: .body(body), reward: 150)
@@ -86,6 +89,18 @@ enum QuestFactory {
             return DailyQuest(id: id, kind: .freshModel, reward: 200)
         }
     }
+}
+
+/// Empreinte stable d'un texte (FNV-1a). `hashValue` de Swift est **resale a chaque
+/// lancement du processus** : s'en servir ici faisait changer la quete a chaque ouverture
+/// de l'app, exactement ce que cette fabrique promet d'empecher.
+private func stableHash(_ text: String) -> UInt64 {
+    var hash: UInt64 = 0xCBF2_9CE4_8422_2325
+    for byte in text.utf8 {
+        hash ^= UInt64(byte)
+        hash = hash &* 0x0000_0100_0000_01B3
+    }
+    return hash
 }
 
 /// Generateur pseudo-aleatoire reproductible : la meme graine donne la meme suite.

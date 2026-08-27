@@ -7,6 +7,7 @@ import StoreKit
 struct SettingsView: View {
     @Environment(AppState.self) private var app
     @Environment(SubscriptionStore.self) private var subscriptions
+    @Environment(LocationProvider.self) private var location
     @Environment(\.dismiss) private var dismiss
 
     @State private var pickingCountry = false
@@ -45,6 +46,16 @@ struct SettingsView: View {
             }
         }
         .preferredColorScheme(.dark)
+        // Passer en automatique doit relever la position tout de suite. Sinon le
+        // réglage change d'étiquette sans rien changer au pays, ce qui est un mensonge.
+        .onChange(of: app.locationMode) { _, mode in
+            guard mode == .automatic else { return }
+            location.currentCountry { code in
+                guard let code else { return }
+                @Bindable var state = app
+                state.country = code
+            }
+        }
         .sheet(isPresented: $pickingCountry) { MarketPickerSheet() }
         .sheet(item: $document) { LegalDocumentView(document: $0) }
         .fullScreenCover(isPresented: $showingPaywall) { PaywallView() }
