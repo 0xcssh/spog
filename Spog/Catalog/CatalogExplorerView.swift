@@ -58,12 +58,13 @@ struct CatalogExplorerView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Overline(text: "catalog.section")
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        // Ce qu'on a sur ce qu'il y a : le chiffre qui compte pour
-                        // un collectionneur n'est pas la taille du catalogue.
+                        // Pas de dénominateur : la taille du catalogue n'est pas un
+                        // plafond. L'IA nomme des modèles qu'il ne contient pas, et ils
+                        // s'y ajoutent — annoncer un total ferait croire à une fin.
                         Text("\(garage.dexCaught)")
                             .font(Theme.display(26))
                             .foregroundStyle(Theme.textPrimary)
-                        Text("dex.outOf \(store.vehicles.count)")
+                        Text("dex.caught")
                             .font(Theme.label(12)).tracking(1.4).textCase(.uppercase)
                             .foregroundStyle(Theme.textSecondary)
                     }
@@ -71,10 +72,6 @@ struct CatalogExplorerView: View {
                 Spacer()
                 MarketChip()
             }
-
-            SegmentedBar(progress: store.vehicles.isEmpty ? 0
-                         : Double(garage.dexCaught) / Double(store.vehicles.count),
-                         segments: 30, height: 7)
 
             filterBar
         }

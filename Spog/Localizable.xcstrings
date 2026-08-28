@@ -392,6 +392,23 @@
         }
       }
     },
+    "dex.caught": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "caught"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "attrapées"
+          }
+        }
+      }
+    },
     "dex.emptyCaught": {
       "extractionState": "manual",
       "localizations": {
@@ -473,23 +490,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "appris"
-          }
-        }
-      }
-    },
-    "dex.outOf %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "of %lld caught"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sur %lld attrapées"
           }
         }
       }
