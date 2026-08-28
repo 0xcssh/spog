@@ -1401,13 +1401,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Five catches don't make a collection. The Spogdex is built one street at a time."
+            "value": "The AI names the model even when the catalog doesn't know it: it joins your collection on the spot."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cinq prises ne font pas une collection. Le Spogdex se remplit rue après rue."
+            "value": "L'IA nomme le modèle même s'il n'est pas au catalogue : il entre alors dans ta collection."
           }
         }
       }
@@ -1418,13 +1418,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "593 models to find"
+            "value": "Every car out there"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "593 modèles à trouver"
+            "value": "Toutes les voitures"
           }
         }
       }
