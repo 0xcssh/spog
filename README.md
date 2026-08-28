@@ -19,7 +19,7 @@ ajouter une donnée, jamais modifier du code.
 |---|---|
 | `Spog/Catalog/markets.json` | Regroupement des pays en régions, et la liste de celles qui sont réellement calibrées (`populated`). Ajouter un pays = ajouter son code. |
 | `Spog/Catalog/rarity.json` | Les 6 paliers de rareté, leurs points, leurs clés de traduction, le seuil de confiance. |
-| `Spog/Catalog/vehicles.json` | Le catalogue : 593 véhicules, rareté par région. **Source de vérité, éditable à la main.** |
+| `Spog/Catalog/vehicles.json` | Le catalogue : 867 véhicules, rareté par région. **Source de vérité, éditable à la main.** |
 | `tools/validate_catalog.py` | Vérifie l'intégrité du catalogue. À relancer après chaque ajout. |
 | `tools/lookup_demo.py` | Démonstration du rapprochement et de la rareté. Sert de référence pour le futur code Swift. |
 | `supabase/functions/identify/index.ts` | Le relais vers l'IA : reçoit une photo, renvoie marque, modèle, couleur et confiance. Aucune règle de jeu, aucun pays. |
