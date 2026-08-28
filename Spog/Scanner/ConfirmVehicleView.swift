@@ -128,28 +128,7 @@ struct ConfirmVehicleView: View {
         .buttonStyle(.plain)
     }
 
-    private var searchField: some View {
-        HStack(spacing: 9) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(Theme.textMuted)
-            TextField(text: $query) { Text("catalog.search") }
-                .textFieldStyle(.plain)
-                .font(Theme.display(14, .medium))
-                .foregroundStyle(Theme.textPrimary)
-                .autocorrectionDisabled()
-            if !query.isEmpty {
-                Button { query = "" } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(Theme.textMuted)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(.horizontal, 14).padding(.vertical, 11)
-        .background(Theme.surface, in: Capsule())
-        .overlay(Capsule().stroke(Theme.stroke, lineWidth: 1))
-    }
+    private var searchField: some View { SearchField(query: $query) }
 
     private var list: some View {
         ScrollView {
@@ -172,33 +151,10 @@ struct ConfirmVehicleView: View {
         .scrollDismissesKeyboard(.immediately)
     }
 
-    /// Meme dessin de ligne que le catalogue : le joueur reconnait ce qu'il a deja vu.
+    /// La ligne et le champ de recherche sont ceux du selecteur de vehicule :
+    /// deux ecrans qui posent la meme question doivent la poser pareil.
     private func row(_ vehicle: Vehicle) -> some View {
-        let resolution = catalog.resolve(vehicle, in: app.country)
-        return HStack(spacing: 12) {
-            RoundedRectangle(cornerRadius: 3)
-                .fill(resolution.tier.color)
-                .frame(width: 3, height: 30)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(vehicle.make.uppercased())
-                    .font(Theme.label(9)).tracking(1.4)
-                    .foregroundStyle(Theme.textMuted)
-                Text(vehicle.model)
-                    .font(Theme.display(15, .semibold))
-                    .foregroundStyle(Theme.textPrimary)
-            }
-            Spacer()
-            Text(resolution.tier.label)
-                .font(Theme.label(9)).tracking(1.2).textCase(.uppercase)
-                .foregroundStyle(resolution.tier.color)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(Theme.textMuted)
-        }
-        .padding(.horizontal, 14).padding(.vertical, 11)
-        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .stroke(resolution.tier.color.opacity(0.18), lineWidth: 1))
+        VehicleRow(vehicle: vehicle, resolution: catalog.resolve(vehicle, in: app.country))
     }
+
 }

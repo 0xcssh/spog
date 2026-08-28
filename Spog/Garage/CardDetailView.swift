@@ -7,6 +7,7 @@ struct CardDetailView: View {
     @Environment(GarageStore.self) private var garage
     @State private var shareImage: UIImage?
     @State private var confirmingRemoval = false
+    @State private var correcting = false
 
     var body: some View {
         ZStack {
@@ -61,13 +62,22 @@ struct CardDetailView: View {
                 .buttonStyle(.plain)
                 .padding(.horizontal, 20)
 
-                Button { confirmingRemoval = true } label: {
-                    Text("card.remove")
-                        .font(Theme.label(11)).tracking(1)
-                        .foregroundStyle(Theme.textMuted)
-                        .padding(.vertical, 14)
+                HStack(spacing: 20) {
+                    // L'identification se fait sans question au-dessus du seuil de
+                    // confiance : quand elle se trompe, c'est ici qu'on la rattrape.
+                    Button { correcting = true } label: {
+                        Text("card.correct")
+                            .font(Theme.label(11)).tracking(1)
+                            .foregroundStyle(Theme.textSecondary)
+                    }
+                    Button { confirmingRemoval = true } label: {
+                        Text("card.remove")
+                            .font(Theme.label(11)).tracking(1)
+                            .foregroundStyle(Theme.textMuted)
+                    }
                 }
                 .buttonStyle(.plain)
+                .padding(.vertical, 14)
                 .padding(.bottom, 8)
             }
         }
@@ -75,6 +85,15 @@ struct CardDetailView: View {
         .sheet(item: Binding(get: { shareImage.map(ShareableImage.init) },
                              set: { _ in shareImage = nil })) { wrapper in
             ShareSheet(items: [wrapper.image])
+        }
+        .sheet(isPresented: $correcting) {
+            VehiclePickerSheet(title: "card.correct") { vehicle in
+                guard let item = garage.catches.first(where: { $0.id == card.id }) else { return }
+                garage.reassign(item, to: vehicle.id)
+                // La fiche tient une copie de la carte : elle ne se met pas a jour toute
+                // seule. On referme, le garage montre la correction.
+                dismiss()
+            }
         }
         .confirmationDialog(Text("card.removeConfirm"),
                             isPresented: $confirmingRemoval, titleVisibility: .visible) {

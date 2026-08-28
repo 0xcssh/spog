@@ -18,6 +18,23 @@
         }
       }
     },
+    "card.correct": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fix the model"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corriger le modèle"
+          }
+        }
+      }
+    },
     "card.declared": {
       "extractionState": "manual",
       "localizations": {

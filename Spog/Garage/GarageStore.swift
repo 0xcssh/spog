@@ -4,7 +4,9 @@ import SwiftUI
 /// elle est resolue a l'affichage a partir du pays ou la voiture a ete attrapee.
 struct Catch: Identifiable, Codable {
     let id: UUID
-    let vehicleID: String
+    /// Modele attribue a la prise. Modifiable : l'IA se trompe, et le joueur
+    /// doit pouvoir corriger sans perdre sa carte.
+    var vehicleID: String
     let serial: Int
     let caughtAt: Date
     /// Pays de reperage au moment de la capture. Une carte garde son contexte.
@@ -62,6 +64,16 @@ final class GarageStore {
     private func save() {
         guard let data = try? JSONEncoder().encode(catches) else { return }
         try? data.write(to: Self.fileURL, options: .atomic)
+    }
+
+    /// Change le modele d'une prise. Tout le reste est conserve — numero de serie,
+    /// date, pays, photo, teinte : c'est **la meme prise**, seul son nom etait faux.
+    /// La rarete et les points suivent, puisqu'ils sont resolus a l'affichage.
+    func reassign(_ item: Catch, to vehicleID: String) {
+        guard let index = catches.firstIndex(where: { $0.id == item.id }),
+              catches[index].vehicleID != vehicleID else { return }
+        catches[index].vehicleID = vehicleID
+        save()
     }
 
     func remove(_ item: Catch) {
