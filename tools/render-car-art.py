@@ -68,7 +68,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int)
     parser.add_argument("--ids", help="identifiants separes par des virgules")
-    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--workers", type=int, default=2,
+                        help="au-dela de 2, OpenAI refuse la moitie du lot")
     parser.add_argument("--yes", action="store_true", help="ne pas demander confirmation")
     args = parser.parse_args()
 

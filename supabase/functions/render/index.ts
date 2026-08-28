@@ -23,9 +23,14 @@ const PROMPT = (make: string, model: string, body: string, paint: string) =>
   `Photorealistic photograph of a ${paint} ${make} ${model}, ${body}, ` +
   "in a dark showroom lit by horizontal neon light bars. " +
   "Three-quarter front view, camera slightly below the beltline, the whole car in frame with room around it. " +
-  "Cyan and violet neon strips glowing on the wall behind the car, their light reflected along the flanks " +
-  "and mirrored on a wet polished black floor, deep black shadows, cinematic rim lighting on the shoulder line, " +
-  "glossy paint with crisp highlights. " +
+  // Le sujet d'abord : sans une vraie lumière principale sur la carrosserie, la voiture
+  // se noyait dans le décor et la carte ne montrait qu'une silhouette.
+  "The car is the subject and is BRIGHTLY and EVENLY LIT by a large soft key light from the " +
+  "front left, every panel clearly readable, wheels and grille well exposed, no crushed blacks " +
+  "on the bodywork, bright specular highlights along the shoulder line. " +
+  "Cyan and violet neon strips glow on the wall behind, mirrored on a polished dark floor, " +
+  "but they stay in the background and never outshine the car. " +
+  "High-key automotive product photography, clean and luminous, glossy paint. " +
   "No text, no badges, no logos, no licence plate, no people, no props. " +
   "Wide landscape composition, the car filling most of the width, high-end automotive advertising look.";
 
