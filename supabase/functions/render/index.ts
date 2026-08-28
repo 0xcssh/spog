@@ -22,7 +22,11 @@ const RENDER_SECRET = Deno.env.get("RENDER_SECRET");
 const PROMPT = (make: string, model: string, body: string, paint: string) =>
   `Photorealistic photograph of a ${paint} ${make} ${model}, ${body}, ` +
   "in a dark showroom lit by horizontal neon light bars. " +
-  "Three-quarter front view, camera slightly below the beltline, the whole car in frame with room around it. " +
+  // Toutes les voitures dans le même sens : une grille où les unes regardent à gauche
+  // et les autres à droite n'a pas l'air d'une collection, elle a l'air d'un accident.
+  "Three-quarter FRONT-LEFT view: the car points to the LEFT of the frame, its front-left " +
+  "corner nearest the camera, the front bumper on the left side and the rear on the right. " +
+  "Camera slightly below the beltline, the whole car in frame with room around it. " +
   // Le sujet d'abord : sans une vraie lumière principale sur la carrosserie, la voiture
   // se noyait dans le décor et la carte ne montrait qu'une silhouette.
   "The car is the subject and is BRIGHTLY and EVENLY LIT by a large soft key light from the " +

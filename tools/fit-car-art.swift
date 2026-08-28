@@ -14,6 +14,8 @@ import Foundation
 import CoreGraphics
 import ImageIO
 import UniformTypeIdentifiers
+import Vision
+import CoreImage
 
 let args = CommandLine.arguments
 guard args.count >= 3 else { fatalError("usage: <source> <sortie> [largeur]") }
@@ -58,4 +60,32 @@ CGImageDestinationAddImage(dest, final,
                            isJPEG ? [kCGImageDestinationLossyCompressionQuality: 0.82] as CFDictionary
                                   : nil)
 CGImageDestinationFinalize(dest)
-print("\(args[2]) — \(outWidth)x\(outHeight)")
+
+// Masque de la carrosserie, calculé ici et livré avec l'illustration.
+//
+// L'app repeint la voiture à la teinte de celle qui a été photographiée : il lui faut
+// savoir où s'arrête la carrosserie. Le détourage de Vision **n'existe pas dans le
+// simulateur** (« could not create inference context ») et reste, sur l'appareil, un
+// modèle chargé pour rien à chaque affichage. Ici il tourne une fois, sur le Mac, et le
+// résultat voyage avec l'image — une dizaine de kilo-octets en niveaux de gris.
+let maskPath = (args[2] as NSString).deletingPathExtension + "-mask.jpg"
+let request = VNGenerateForegroundInstanceMaskRequest()
+let handler = VNImageRequestHandler(cgImage: final, orientation: .up)
+if (try? handler.perform([request])) != nil,
+   let result = request.results?.first,
+   let buffer = try? result.generateScaledMaskForImage(forInstances: result.allInstances,
+                                                       from: handler) {
+    let ci = CIImage(cvPixelBuffer: buffer)
+    let scaled = ci.transformed(by: CGAffineTransform(scaleX: CGFloat(outWidth) / ci.extent.width,
+                                                      y: CGFloat(outHeight) / ci.extent.height))
+    if let maskImage = CIContext().createCGImage(scaled, from: scaled.extent),
+       let maskDest = CGImageDestinationCreateWithURL(URL(fileURLWithPath: maskPath) as CFURL,
+                                                      UTType.jpeg.identifier as CFString, 1, nil) {
+        CGImageDestinationAddImage(maskDest, maskImage,
+                                   [kCGImageDestinationLossyCompressionQuality: 0.7] as CFDictionary)
+        CGImageDestinationFinalize(maskDest)
+        print("\(args[2]) — \(outWidth)x\(outHeight) + masque")
+    }
+} else {
+    print("\(args[2]) — \(outWidth)x\(outHeight), MASQUE ÉCHOUÉ")
+}

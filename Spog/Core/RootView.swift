@@ -63,6 +63,11 @@ struct RootView: View {
             if let code = ReferralStore.code(from: url) { referral.pendingFromLink = code }
         }
         .preferredColorScheme(.dark)
+        // Les teintes sont calculées hors du fil principal : sinon la première ouverture
+        // du garage repeint quatorze voitures d'un coup, et ça se voit.
+        .task(id: garage.catches.count) {
+            await CarArt.warm(garage.catches.map { ($0.vehicleID, $0.paint) })
+        }
     }
 
     private var main: some View {
