@@ -82,10 +82,10 @@ struct PaywallView: View {
 
     private let items: [Advantage] = [
         .init(icon: "infinity", title: "paywall.unlimited.title", body: "paywall.unlimited.body"),
-        .init(icon: "trophy.fill", title: "paywall.quests.title", body: "paywall.quests.body"),
         .init(icon: "square.grid.2x2.fill", title: "paywall.dex.title", body: "paywall.dex.body"),
+        .init(icon: "trophy.fill", title: "paywall.quests.title", body: "paywall.quests.body"),
         .init(icon: "sparkles", title: "paywall.cards.title", body: "paywall.cards.body"),
-        .init(icon: "square.and.arrow.up", title: "paywall.share.title", body: "paywall.share.body"),
+        .init(icon: "flame.fill", title: "paywall.share.title", body: "paywall.share.body"),
     ]
 
     private var advantages: some View {

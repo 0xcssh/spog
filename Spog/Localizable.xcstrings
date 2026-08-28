@@ -1367,13 +1367,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The gold neon of the top tiers, on cards nobody else has."
+            "value": "Gold neon is earned outside. The more you go out, the more you cross paths with it."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le néon doré des paliers les plus hauts, sur des cartes que personne d'autre n'a."
+            "value": "Le néon doré se gagne dehors. Plus tu sors, plus tu le croises."
           }
         }
       }
@@ -1384,13 +1384,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rare cards"
+            "value": "The rare ones"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les cartes rares"
+            "value": "Les rares"
           }
         }
       }
@@ -1401,13 +1401,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "593 models to track down, and the streak that keeps you out there."
+            "value": "Five catches don't make a collection. The Spogdex is built one street at a time."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "593 modèles à débusquer, et la série qui te fait sortir."
+            "value": "Cinq prises ne font pas une collection. Le Spogdex se remplit rue après rue."
           }
         }
       }
@@ -1418,13 +1418,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The whole Spogdex"
+            "value": "593 models to find"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le Spogdex entier"
+            "value": "593 modèles à trouver"
           }
         }
       }
@@ -1605,13 +1605,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A new goal each morning, and the bonus points that come with it."
+            "value": "A new goal each morning and its bonus points — you still need catches left to chase it."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un objectif chaque matin, et les points bonus qui vont avec."
+            "value": "Un objectif chaque matin et ses points bonus — encore faut-il avoir des prises devant soi."
           }
         }
       }
@@ -1622,13 +1622,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every daily quest"
+            "value": "A quest every day"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toutes les quêtes du jour"
+            "value": "Une quête chaque jour"
           }
         }
       }
@@ -1690,13 +1690,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export any card in high definition, ready to post."
+            "value": "One day without a catch and it starts over from zero."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Exporte n'importe quelle carte en haute définition, prête à publier."
+            "value": "Un jour sans prise et elle repart de zéro."
           }
         }
       }
@@ -1707,13 +1707,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share your finds"
+            "value": "Your streak"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partage tes trouvailles"
+            "value": "Ta série"
           }
         }
       }
@@ -1724,13 +1724,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The garage without a ceiling"
+            "value": "Five catches offered. Then no ceiling."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le garage sans plafond"
+            "value": "Cinq prises offertes. Ensuite, plus de plafond."
           }
         }
       }
@@ -1758,13 +1758,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No counter. Shoot every car you come across, every day."
+            "value": "Past your five free catches, the counter disappears for good."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus de compteur. Photographie chaque voiture que tu croises, tous les jours."
+            "value": "Passé tes cinq prises offertes, le compteur disparaît pour de bon."
           }
         }
       }
@@ -1775,13 +1775,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unlimited scans"
+            "value": "Unlimited catches"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scans illimités"
+            "value": "Prises illimitées"
           }
         }
       }
