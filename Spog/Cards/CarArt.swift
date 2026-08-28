@@ -108,7 +108,9 @@ enum CarArt {
         let mix = CIFilter.mix()
         mix.inputImage = colorize.outputImage
         mix.backgroundImage = source
-        mix.amount = saturation < 0.15 ? 1 : 0.8
+        // Même sur une teinte sans couleur, on ne pousse pas la fusion à fond : à pleine
+        // puissance la carrosserie perd ses nuances et la voiture paraît en carton.
+        mix.amount = 0.8
 
         // La fusion « couleur » ne transporte **que** la teinte et la saturation : un noir
         // ou un bleu nuit appliques ainsi ressortent gris clair, puisque la clarte reste
@@ -120,8 +122,13 @@ enum CarArt {
         // Correction volontairement partielle : a pleine puissance, un gris nardo ou un
         // bleu nuit tournaient au noir et la voiture disparaissait dans le fond sombre de
         // la carte. La moitie du chemin suffit a lire « sombre » sans perdre la carrosserie.
-        lightness.brightness = Float(max(-0.22, min(0.12, (brightness - reference) * 0.5)))
-        lightness.contrast = 1
+        // Éclaircir est bien plus destructeur qu'assombrir : les hautes lumières d'une
+        // carrosserie sont déjà proches du blanc, et les pousser efface les reliefs.
+        // Une voiture blanche reste donc à peine plus claire que l'argent de référence.
+        let delta = (brightness - reference) * 0.5
+        lightness.brightness = Float(max(-0.22, min(0.04, delta)))
+        // Un peu de contraste rendu : c'est lui qui redonne les arêtes de carrosserie.
+        lightness.contrast = 1.06
         lightness.saturation = 1
 
         let compose = CIFilter.blendWithMask()

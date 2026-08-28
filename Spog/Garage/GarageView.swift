@@ -12,7 +12,9 @@ struct GarageView: View {
     @State private var browsingCatalog = false
     @State private var showingSettings = false
 
-    private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+    /// L'écart doit être plus large que le débordement du néon doré, sinon le halo d'une
+    /// carte mord sur sa voisine et les deux paraissent encadrées ensemble.
+    private let columns = [GridItem(.flexible(), spacing: 22), GridItem(.flexible(), spacing: 22)]
 
     var body: some View {
         ScrollView {
@@ -64,7 +66,7 @@ struct GarageView: View {
         if garage.cards.isEmpty {
             emptyState
         } else {
-            LazyVGrid(columns: columns, spacing: 12) {
+            LazyVGrid(columns: columns, spacing: 22) {
                 ForEach(garage.cards) { card in
                     Button { selected = card } label: { MiniCard(card: card) }
                         .buttonStyle(.plain)
@@ -129,7 +131,7 @@ struct MiniCard: View {
         //   carte flottait sans contour.
         NeonFrame(color: card.tier.frameColor ?? card.tier.color, radius: 16,
                   intensity: card.tier.isTrophy ? card.tier.frameIntensity : 0.7,
-                  neon: card.tier.isTrophy, spread: 0.4) {
+                  neon: card.tier.isTrophy, spread: 0.28) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Text(String(format: "%03d", card.serial))

@@ -20,23 +20,31 @@ const RENDER_SECRET = Deno.env.get("RENDER_SECRET");
 /// Même gabarit que pour les huit premières illustrations : c'est l'unité de style qui
 /// fait tenir une collection. Ni logo ni plaque — on ne reproduit pas de marque déposée.
 const PROMPT = (make: string, model: string, body: string, paint: string) =>
+  // L'orientation est la toute première consigne, et répétée : enfouie en milieu de
+  // phrase, le modèle la suivait une fois sur deux et la grille se retrouvait avec des
+  // voitures qui se regardent en chiens de faïence.
+  "IMPORTANT — ORIENTATION: the car FACES LEFT. Its front bumper, grille and headlights are " +
+  "on the LEFT side of the frame; its rear and tail lights are on the RIGHT side. " +
   `Photorealistic photograph of a ${paint} ${make} ${model}, ${body}, ` +
-  "in a dark showroom lit by horizontal neon light bars. " +
-  // Toutes les voitures dans le même sens : une grille où les unes regardent à gauche
-  // et les autres à droite n'a pas l'air d'une collection, elle a l'air d'un accident.
-  "Three-quarter FRONT-LEFT view: the car points to the LEFT of the frame, its front-left " +
-  "corner nearest the camera, the front bumper on the left side and the rear on the right. " +
-  "Camera slightly below the beltline, the whole car in frame with room around it. " +
-  // Le sujet d'abord : sans une vraie lumière principale sur la carrosserie, la voiture
-  // se noyait dans le décor et la carte ne montrait qu'une silhouette.
+  "in a dark showroom lit by horizontal neon light bars, seen from the FRONT-LEFT three-quarter " +
+  "angle, front of the car on the LEFT. Camera slightly below the beltline, the whole car in " +
+  "frame with room around it. " +
   "The car is the subject and is BRIGHTLY and EVENLY LIT by a large soft key light from the " +
   "front left, every panel clearly readable, wheels and grille well exposed, no crushed blacks " +
   "on the bodywork, bright specular highlights along the shoulder line. " +
   "Cyan and violet neon strips glow on the wall behind, mirrored on a polished dark floor, " +
   "but they stay in the background and never outshine the car. " +
   "High-key automotive product photography, clean and luminous, glossy paint. " +
+  // Le reproche fait au premier lot : « on dirait un jeu vidéo ». Ce qui manquait, ce
+  // sont les accidents du réel — jointures, grain de la gomme, reflets qui déforment.
+  "Extremely detailed and razor sharp: visible panel gaps and shut lines, real headlight " +
+  "internals with individual lenses and reflectors, mesh texture inside the grille, brake " +
+  "calipers and discs visible through the spokes, tyre tread and sidewall texture, fine " +
+  "orange-peel texture in the paint, sharp environment reflections that bend along the " +
+  "body curves. Shot on a full-frame camera with an 85mm lens at f/8, tack sharp, " +
+  "photographic depth, no CGI smoothness, no plastic look. " +
   "No text, no badges, no logos, no licence plate, no people, no props. " +
-  "Wide landscape composition, the car filling most of the width, high-end automotive advertising look.";
+  "Wide landscape composition, the car filling most of the width, front pointing LEFT.";
 
 const BODY_WORDS: Record<string, string> = {
   hatch: "compact hatchback", sedan: "four-door sedan", suv: "SUV",
@@ -74,7 +82,10 @@ Deno.serve(async (req) => {
     model: "gpt-image-1",
     prompt: PROMPT(make, model, shape, paint),
     size: "1536x1024",
-    quality: "medium",
+    // « high » plutôt que « medium » : en medium, les carrosseries sortent lisses et les
+    // cartes ont un air de jeu vidéo. Le surcoût par image est réel mais s'applique une
+    // seule fois par modèle, jamais par joueur.
+    quality: "high",
     output_format: "png",
     n: 1,
   };
