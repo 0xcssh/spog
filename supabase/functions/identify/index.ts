@@ -223,7 +223,20 @@ Deno.serve(async (req) => {
 
   if (!openaiResponse || !openaiResponse.ok) {
     if (openaiResponse) {
-      console.error("OpenAI error", openaiResponse.status, await openaiResponse.text());
+      const detail = await openaiResponse.text();
+      console.error("OpenAI error", openaiResponse.status, detail.slice(0, 400));
+
+      // Compte sans provision ou clé refusée : ce n'est pas une panne passagère, et
+      // réessayer n'y changera rien. On le distingue dans les journaux — « réessaie dans
+      // un instant » enverrait chercher un problème de réseau pendant des heures.
+      // Côté joueur, le message reste neutre : le solde de l'éditeur ne le regarde pas.
+      const unfunded = openaiResponse.status === 401 || openaiResponse.status === 403 ||
+                       detail.includes("insufficient_quota") || detail.includes("billing");
+      if (unfunded) {
+        console.error("⚠️ COMPTE OPENAI SANS PROVISION OU CLÉ REFUSÉE — vérifier la facturation");
+        return json({ code: "server_misconfigured",
+                      error: "Le service est momentanément indisponible." }, 503);
+      }
     }
     return json({ code: "identification_failed", error: "L'identification a échoué, réessaie" }, 502);
   }
