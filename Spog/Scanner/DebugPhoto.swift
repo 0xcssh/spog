@@ -1,8 +1,10 @@
 import UIKit
 
-/// TEMP — à retirer avec la vraie caméra.
-/// Le simulateur n'a pas de caméra : cette photo de synthèse permet d'éprouver
-/// la chaîne complète (masquage de plaque, mise en scène, carte) sans appareil.
+#if targetEnvironment(simulator)
+/// Le simulateur n'a pas de caméra : cette photo de synthèse permet d'éprouver la
+/// chaîne complète (masquage de plaque, mise en scène, carte) sans appareil. Elle est
+/// exclue de la compilation sur téléphone, où une caméra en panne doit se dire plutôt
+/// que produire une carte.
 enum DebugPhoto {
 
     static func sample() -> UIImage {
@@ -49,3 +51,4 @@ enum DebugPhoto {
         }
     }
 }
+#endif

@@ -276,10 +276,21 @@ struct ScannerView: View {
         withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) { pulse = true }
         defer { working = false }
 
-        // TEMP — le simulateur n'a pas de caméra. Une illustration embarquée tient
-        // lieu de photo, pour que la chaîne réelle (masquage, serveur, rapprochement,
-        // confirmation) reste éprouvable sans appareil. À retirer avec DebugPhoto.
+        // Le simulateur n'a pas de caméra : une illustration embarquée y tient lieu de
+        // photo, pour que la chaîne réelle (masquage, serveur, rapprochement, confirmation)
+        // reste éprouvable sans appareil.
+        //
+        // Sur un téléphone, une capture ratée doit se dire. Sans cette garde, une panne
+        // d'appareil photo offrait une carte tirée au sort pour une voiture jamais vue —
+        // et consommait une prise, plus un appel facturé, pour la fabriquer.
+        #if targetEnvironment(simulator)
         let raw = await camera.capture() ?? Self.simulatedPhoto()
+        #else
+        guard let raw = await camera.capture() else {
+            await MainActor.run { failure = String(localized: "scan.captureFailed") }
+            return
+        }
+        #endif
 
         // Masquage des plaques AVANT tout enregistrement : la photo conservée
         // sur l'appareil est déjà anonymisée, pas seulement celle qui part au serveur.
@@ -341,14 +352,16 @@ struct ScannerView: View {
         await MainActor.run { reveal = record(vehicle, shot: shot, paint: paint) }
     }
 
-    /// TEMP — photo de substitution sur simulateur : un rendu embarqué tiré au sort,
-    /// que le serveur identifie pour de vrai. À retirer avec DebugPhoto.
+    #if targetEnvironment(simulator)
+    /// Photo de substitution sur simulateur : un rendu embarqué tiré au sort, que le
+    /// serveur identifie pour de vrai. Ne se compile pas dans l'app livrée.
     private static func simulatedPhoto() -> UIImage {
         for vehicle in CatalogStore.shared.vehicles.shuffled() {
             if let art = CarArt.image(for: vehicle.id) { return art }
         }
         return DebugPhoto.sample()
     }
+    #endif
 
     /// Enregistre la prise, entretient la série, valide la quête si elle est remplie,
     /// et rend de quoi révéler la carte au joueur.

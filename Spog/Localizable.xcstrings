@@ -2704,6 +2704,23 @@
         }
       }
     },
+    "scan.captureFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The photo could not be taken. Try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La photo n'a pas pu être prise. Réessaie."
+          }
+        }
+      }
+    },
     "scan.denied": {
       "extractionState": "manual",
       "localizations": {

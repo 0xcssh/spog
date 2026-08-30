@@ -96,7 +96,7 @@ enum CarArt {
         var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
         target.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
 
-        let flat = CIImage(color: CIColor(color: target) ?? .gray).cropped(to: source.extent)
+        let flat = CIImage(color: CIColor(color: target)).cropped(to: source.extent)
 
         let colorize = CIFilter.colorBlendMode()
         colorize.inputImage = flat
