@@ -36,6 +36,17 @@ Tester une identification :
 
 Sans argument, `lookup_demo.py` déroule une série d'exemples commentés.
 
+Lancer les tests (59 tests, cible `SpogTests`) :
+
+    xcodebuild -project Spog.xcodeproj -scheme Spog \
+      -destination 'platform=iOS Simulator,name=iPhone 17' test
+
+Ils couvrent les règles qui se trompent en silence : la cascade de rareté, le
+rapprochement du texte libre de l'IA avec le catalogue, les codes de parrainage,
+la stabilité de la quête du jour, et le décompte des prises offertes. Le contrat
+de couleurs et de carrosseries entre l'app et la fonction `identify` y est épinglé
+des deux côtés — les deux listes vivent dans deux fichiers que rien d'autre ne relie.
+
 ## Le backend
 
 Une seule fonction, `identify`, hébergée sur le projet Supabase partagé avec l'autre app
