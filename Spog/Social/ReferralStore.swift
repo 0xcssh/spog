@@ -54,10 +54,9 @@ final class ReferralStore {
         String((0..<codeLength).map { _ in alphabet.randomElement()! })
     }
 
-    /// Met un code saisi a la main sous sa forme canonique : majuscules, sans espaces
-    /// ni tirets, et les confusions classiques ramenees au bon caractere.
-    /// Recopier « O » au lieu de « 0 » ne doit pas faire echouer une invitation.
-    static func normalize(_ raw: String) -> String {
+    /// Forme canonique, **sans troncature** : majuscules, sans espaces ni tirets, et
+    /// les confusions classiques ramenees au bon caractere.
+    private static func canonical(_ raw: String) -> String {
         var result = ""
         for character in raw.uppercased() {
             switch character {
@@ -68,7 +67,17 @@ final class ReferralStore {
                 if alphabet.contains(character) { result.append(character) }
             }
         }
-        return String(result.prefix(codeLength))
+        return result
+    }
+
+    /// Met un code **saisi a la main** sous sa forme canonique.
+    /// Recopier « O » au lieu de « 0 » ne doit pas faire echouer une invitation.
+    ///
+    /// La troncature borne le champ de saisie pendant la frappe. Elle ne vaut que la :
+    /// pour un lien, couper un segment trop long revient a inventer un code que
+    /// personne n'a ecrit. Voir `code(from:)`.
+    static func normalize(_ raw: String) -> String {
+        String(canonical(raw).prefix(codeLength))
     }
 
     static func isValid(_ code: String) -> Bool {
@@ -128,12 +137,18 @@ final class ReferralStore {
     }
 
     /// Code porte par un lien `spog://invite/XXXXXX`. Rend nil si l'URL n'en contient pas.
+    ///
+    /// Le segment est pris **entier**, jamais tronque. `spog://invite/TROPCOURT1` ne
+    /// contient aucun code : en le coupant, on en fabriquait un — « TR0PC0 » — que
+    /// personne n'avait ecrit, et le joueur se voyait proposer le parrainage d'un
+    /// inconnu tire d'un lien abime. Un lien qui ne porte pas exactement un code
+    /// n'en porte aucun.
     static func code(from url: URL) -> String? {
         guard url.scheme?.lowercased() == "spog" else { return nil }
         let parts = ([url.host] + url.pathComponents).compactMap { $0 }
             .filter { $0 != "/" && !$0.isEmpty }
         guard parts.first?.lowercased() == "invite", parts.count >= 2 else { return nil }
-        let code = normalize(parts[1])
+        let code = canonical(parts[1])
         return isValid(code) ? code : nil
     }
 }

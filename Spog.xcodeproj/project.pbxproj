@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		CA00000000000000000000B1 /* Spog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB00000000000000000000B1 /* SpogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +17,22 @@
 			path = Spog;
 			sourceTree = "<group>";
 		};
+		CB00000000000000000000A1 /* SpogTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SpogTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		CA00000000000000000000C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB00000000000000000000C2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				CA00000000000000000000A1 /* Spog */,
+				CB00000000000000000000A1 /* SpogTests */,
 				CA00000000000000000000B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				CA00000000000000000000B1 /* Spog.app */,
+				CB00000000000000000000B1 /* SpogTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +85,29 @@
 			productReference = CA00000000000000000000B1 /* Spog.app */;
 			productType = "com.apple.product-type.application";
 		};
+		CB00000000000000000000D0 /* SpogTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB00000000000000000000E2 /* Build configuration list for PBXNativeTarget "SpogTests" */;
+			buildPhases = (
+				CB00000000000000000000C1 /* Sources */,
+				CB00000000000000000000C2 /* Frameworks */,
+				CB00000000000000000000C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB00000000000000000000F2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CB00000000000000000000A1 /* SpogTests */,
+			);
+			name = SpogTests;
+			packageProductDependencies = (
+			);
+			productName = SpogTests;
+			productReference = CB00000000000000000000B1 /* SpogTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +120,10 @@
 				TargetAttributes = {
 					CA00000000000000000000D0 = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					CB00000000000000000000D0 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = CA00000000000000000000D0;
 					};
 				};
 			};
@@ -102,12 +144,20 @@
 			projectRoot = "";
 			targets = (
 				CA00000000000000000000D0 /* Spog */,
+				CB00000000000000000000D0 /* SpogTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CA00000000000000000000C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB00000000000000000000C3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -124,7 +174,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CB00000000000000000000C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		CB00000000000000000000F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA00000000000000000000F0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA00000000000000000000D0;
+			remoteInfo = Spog;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		CB00000000000000000000F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA00000000000000000000D0 /* Spog */;
+			targetProxy = CB00000000000000000000F1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CA00000000000000000000E3 /* Debug */ = {
@@ -310,6 +385,44 @@
 			};
 			name = Release;
 		};
+		CB00000000000000000000E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82C2LNA792;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mandaloregroup.spog.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Spog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Spog";
+			};
+			name = Debug;
+		};
+		CB00000000000000000000E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82C2LNA792;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mandaloregroup.spog.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Spog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Spog";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +440,15 @@
 			buildConfigurations = (
 				CA00000000000000000000E5 /* Debug */,
 				CA00000000000000000000E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB00000000000000000000E2 /* Build configuration list for PBXNativeTarget "SpogTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB00000000000000000000E5 /* Debug */,
+				CB00000000000000000000E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

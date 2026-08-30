@@ -255,8 +255,8 @@ struct ScannerView: View {
 
     /// Prises restantes avant le paywall. Nil si l'utilisateur est abonne.
     private var freeScansLeft: Int? {
-        guard !subscriptions.hasAccess else { return nil }
-        return max(0, SubscriptionStore.freeScans - app.scansPerformed)
+        ScanAllowance.remaining(performed: app.scansPerformed,
+                                hasAccess: subscriptions.hasAccess)
     }
 
     private func shoot() async {
@@ -266,7 +266,8 @@ struct ScannerView: View {
 
         // Le paywall se presente ici, pas a l'ouverture de l'app :
         // il arrive quand le joueur a deja vu ce qu'il achete.
-        if let left = freeScansLeft, left == 0 {
+        if ScanAllowance.mustPay(performed: app.scansPerformed,
+                                 hasAccess: subscriptions.hasAccess) {
             await MainActor.run { showingPaywall = true }
             return
         }

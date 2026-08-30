@@ -91,10 +91,15 @@ enum QuestFactory {
     }
 }
 
-/// Empreinte stable d'un texte (FNV-1a). `hashValue` de Swift est **resale a chaque
+/// Empreinte stable d'un texte (FNV-1a). Volontairement visible aux tests, qui
+/// l'epinglent sur les vecteurs connus de FNV-1a : c'est la seule verification qui
+/// aurait attrape la faute d'origine, une empreinte stable dans un processus mais
+/// differente au lancement suivant.
+///
+/// `hashValue` de Swift est **resale a chaque
 /// lancement du processus** : s'en servir ici faisait changer la quete a chaque ouverture
 /// de l'app, exactement ce que cette fabrique promet d'empecher.
-private func stableHash(_ text: String) -> UInt64 {
+func stableHash(_ text: String) -> UInt64 {
     var hash: UInt64 = 0xCBF2_9CE4_8422_2325
     for byte in text.utf8 {
         hash ^= UInt64(byte)
