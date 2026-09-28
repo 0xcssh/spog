@@ -15,10 +15,12 @@ enum CardShareRenderer {
         return renderer.uiImage
     }
 
-    /// Le visuel de la carte, dans le meme ordre de priorite que l'affichage.
+    /// Le visuel de la carte, dans le meme ordre de priorite que l'affichage :
+    /// la voiture reellement croisee passe avant le rendu du modele. Une carte
+    /// partagee doit montrer ce que le joueur a trouve, pas un exemplaire de catalogue.
     private static func flatArtwork(for card: CardData) -> UIImage? {
-        if let render = CarArt.image(for: card.vehicle.id, paint: card.paint) { return render }
         if let shot = card.shot { return shot.stylized }
+        if let render = CarArt.image(for: card.vehicle.id, paint: card.paint) { return render }
         return snapshot3D(card)
     }
 

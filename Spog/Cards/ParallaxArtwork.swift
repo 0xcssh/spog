@@ -36,14 +36,25 @@ struct ParallaxArtwork: View {
             if showOriginal, let shot {
                 // Le cliche brut de l'utilisateur.
                 filled(shot.original, depth: 0.3)
-            } else if let render = CarArt.image(for: vehicleID, paint: paint) {
-                // Rendu studio du modele identifie : le visuel de reference de la carte.
-                // Affiche en entier, pas rogne : c'est la silhouette qui fait reconnaitre
-                // la voiture, un gros plan sur une aile ne dit rien.
-                fitted(render, depth: 0.85)
             } else if let shot {
-                // Pas encore de rendu pour ce modele : la photo mise en scene fait l'interim.
+                // **La voiture reellement croisee passe avant le modele.**
+                //
+                // Le rendu studio montre un exemplaire neuf et standard du modele, dans
+                // l'une des quatorze teintes de la palette. Il ne sait representer ni un
+                // covering zebre, ni une livree de taxi, ni un kit large, ni vingt ans de
+                // soleil sur la peinture. Le joueur qui repere une Porsche zebree a trouve
+                // **cette** voiture-la ; lui rendre un Macan argente de catalogue, ce
+                // serait lui prendre sa prise pour lui donner une illustration.
+                //
+                // La photo mise en scene est donc le visuel de la carte des qu'il y en a
+                // une, et le rendu studio sert aux cartes qui n'en ont pas : le Spogdex,
+                // et les modeles pas encore attrapes.
                 filled(shot.stylized, depth: 0.9, scale: 1.06)
+            } else if let render = CarArt.image(for: vehicleID, paint: paint) {
+                // Rendu studio du modele. Affiche en entier, pas rogne : c'est la
+                // silhouette qui fait reconnaitre la voiture, un gros plan sur une aile
+                // ne dit rien.
+                fitted(render, depth: 0.85)
             } else {
                 placeholderScene
             }

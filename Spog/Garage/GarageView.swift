@@ -148,18 +148,17 @@ struct MiniCard: View {
                 ZStack {
                     RadialGradient(colors: [card.tier.color.opacity(0.35), .clear],
                                    center: .center, startRadius: 2, endRadius: 70)
-                    if let art = CarArt.image(for: card.vehicle.id, paint: card.paint) {
-                        // Rendu du modele : c'est lui qui fait reconnaitre la voiture.
-                        Image(uiImage: art)
-                            .resizable().scaledToFill()
-                    } else if let stylized = card.shot?.stylized {
-                        // Pas encore de rendu studio pour ce modele — c'est le cas de la
-                        // grande majorite du catalogue. La photo prise par le joueur, mise
-                        // en scene, vaut infiniment mieux qu'une silhouette anonyme : c'est
-                        // **sa** voiture, celle qu'il est alle chercher dans la rue.
-                        // La fiche detaillee s'en servait deja ; la grille l'ignorait, et
-                        // la grille est le premier ecran que le joueur voit.
+                    if let stylized = card.shot?.stylized {
+                        // **La voiture reellement croisee, pas le modele.** Meme ordre de
+                        // priorite que la fiche detaillee : un covering zebre, une livree
+                        // de taxi ou un kit large n'existent que sur la photo du joueur.
+                        // Le rendu studio les remplacerait par un exemplaire de catalogue.
                         Image(uiImage: stylized)
+                            .resizable().scaledToFill()
+                    } else if let art = CarArt.image(for: card.vehicle.id, paint: card.paint) {
+                        // Aucune photo : une carte de demonstration, ou un modele du
+                        // Spogdex. Le rendu du modele fait alors reconnaitre la voiture.
+                        Image(uiImage: art)
                             .resizable().scaledToFill()
                     } else {
                         // Ni rendu, ni photo : une carte de demonstration, ou un modele
