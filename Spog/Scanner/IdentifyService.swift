@@ -14,11 +14,25 @@ struct Identification {
     /// Teinte en anglais, prise dans une liste fermee. Rapprochee de la palette par CarPaint.
     let color: String
     let confidence: Double
+    /// Cote d'occasion estimee, en fourchette. Nil quand le serveur n'a pas su, ce qui
+    /// est frequent et voulu : il ne voit ni le kilometrage ni l'etat mecanique.
+    let price: PriceBracket?
 
     /// Texte libre soumis au rapprochement avec le catalogue.
     var fullText: String {
         [make, model, generation].filter { !$0.isEmpty }.joined(separator: " ")
     }
+}
+
+/// Fourchette de cote. **Jamais un chiffre unique** : la photo ne contient pas de quoi
+/// justifier une precision au centaine d'euros pres, et un montant exact serait cru sur
+/// parole puis dementi par le premier joueur qui connait sa voiture.
+struct PriceBracket: Equatable {
+    let low: Int
+    let high: Int
+    /// Code ISO de la devise, decide par le serveur. L'app ne convertit rien :
+    /// afficher une somme convertie a un taux inconnu serait une invention de plus.
+    let currency: String
 }
 
 /// Appelle la Edge Function "identify", seul point de sortie reseau de l'app.
@@ -115,6 +129,9 @@ enum IdentifyService {
             let body: String?
             let confidence: Double
             let is_screen: Bool, vehicle_present: Bool
+            // Optionnels : une app installee avant le deploiement de la cote doit
+            // continuer a fonctionner sans rien afficher de plus.
+            let price_min: Int?, price_max: Int?, price_currency: String?
         }
         guard let payload = try? JSONDecoder().decode(SuccessPayload.self, from: data) else {
             throw IdentifyError.server(code: "unreadable_ai_response", fallback: nil)
@@ -124,6 +141,12 @@ enum IdentifyService {
         if payload.is_screen { throw IdentifyError.notLive }
         guard payload.vehicle_present, !payload.model.isEmpty else { throw IdentifyError.noVehicle }
 
+        var price: PriceBracket?
+        if let low = payload.price_min, let high = payload.price_max, low > 0, high >= low {
+            price = PriceBracket(low: low, high: high,
+                                 currency: payload.price_currency ?? "EUR")
+        }
+
         return Identification(make: payload.make,
                               model: payload.model,
                               generation: payload.generation,
@@ -131,7 +154,12 @@ enum IdentifyService {
                               // serveur renvoie la carrosserie ne doit pas cesser de marcher.
                               body: payload.body ?? "sedan",
                               color: payload.color,
-                              confidence: payload.confidence)
+                              confidence: payload.confidence,
+                              // Le serveur ecarte deja les fourchettes absurdes. On
+                              // reverifie ici parce qu'une app reste en service longtemps
+                              // apres qu'un serveur a change, et qu'afficher « 0 € »
+                              // serait pire que ne rien afficher du tout.
+                              price: price)
     }
 
     /// Recompresse la photo (max 1280 px) : bien assez pour reconnaitre une voiture,

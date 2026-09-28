@@ -61,6 +61,17 @@ const COLORS = [
 /// pourtant savoir mettre en scène.
 const BODIES = ["hatch", "sedan", "suv", "sport", "pickup", "van"];
 
+/// Tarifs gpt-4o, en dollars par jeton. Ils ne servent qu'à écrire le coût dans les
+/// journaux : une valeur périmée fausse la ligne de journal, jamais la facturation.
+const PRICE_IN = 2.50 / 1_000_000;
+const PRICE_OUT = 10.00 / 1_000_000;
+
+/// Devise de la cote. Le marché de l'occasion n'est pas le même d'un pays à l'autre,
+/// et le serveur ne connaît pas celui du joueur — la photo est tout ce qu'il reçoit.
+/// L'estimation vaut donc pour l'Europe. Le champ existe pour que l'app n'ait rien à
+/// réécrire le jour où le pays sera transmis et la cote calculée par marché.
+const PRICE_CURRENCY = "EUR";
+
 /// Empreinte SHA-256 de l'identifiant d'appareil : on ne stocke jamais l'ID brut.
 /// Le préfixe "spog:" sépare les compteurs de ceux de l'autre app du même projet.
 async function hashDevice(deviceId: string): Promise<string> {
@@ -145,7 +156,9 @@ const SYSTEM_PROMPT = `You identify a car from a photograph taken in the street.
   "generation": string,
   "body": string,
   "color": string,
-  "confidence": number
+  "confidence": number,
+  "price_min": number,
+  "price_max": number
 }
 
 Rules:
@@ -157,7 +170,8 @@ Rules:
 - "body": exactly one of ${BODIES.map((b) => `"${b}"`).join(", ")}. "hatch" covers superminis and hatchbacks, "van" covers minivans, MPVs and panel vans, "sport" is for coupés and sports cars.
 - "color": exactly one of ${COLORS.map((c) => `"${c}"`).join(", ")}. Pick the closest one for the body paint, ignoring wraps of shadow and reflections.
 - "confidence": how sure you are of make AND model, from 0 to 1. Be honest: a distant, dark or partial photo deserves a low value. Never inflate it — a wrong card is worse than a confirmation screen.
-- When vehicle_present is false or is_screen is true, still return every field, with empty strings and confidence 0.
+- "price_min" and "price_max": what this car would sell for second-hand on the European market today, in euros, as a bracket. You cannot see mileage, service history or mechanical condition, so the bracket must be wide enough to be honest — a narrow one you cannot justify is worse than none. Use the visible age, trim and condition. Both 0 when you would be guessing, including whenever confidence is below 0.7: an empty bracket is a valid answer and the app handles it.
+- When vehicle_present is false or is_screen is true, still return every field, with empty strings, confidence 0 and both prices 0.
 - Never add any text outside the JSON.`;
 
 Deno.serve(async (req) => {
@@ -242,6 +256,17 @@ Deno.serve(async (req) => {
   }
 
   const completion = await openaiResponse.json();
+
+  // Coût réel de l'appel, inscrit dans les journaux Supabase — visibles de toi seul,
+  // jamais du téléphone. OpenAI renvoie ce décompte gratuitement dans chaque réponse ;
+  // sans lui, le coût par scan reste une estimation qu'on recalcule à la main.
+  const usage = completion.usage;
+  if (usage) {
+    const cost = (usage.prompt_tokens ?? 0) * PRICE_IN + (usage.completion_tokens ?? 0) * PRICE_OUT;
+    console.log(`scan: ${usage.prompt_tokens} jetons entrée, ${usage.completion_tokens} sortie, ` +
+                `$${cost.toFixed(5)}`);
+  }
+
   try {
     const parsed = JSON.parse(completion.choices[0].message.content);
     const text = (value: unknown) => (typeof value === "string" ? value.trim().slice(0, 60) : "");
@@ -259,12 +284,33 @@ Deno.serve(async (req) => {
       confidence: Math.max(0, Math.min(1, Number(parsed.confidence) || 0)),
       is_screen: parsed.is_screen === true,
       vehicle_present: parsed.vehicle_present !== false,
+      ...priceBracket(parsed),
     });
   } catch {
     console.error("Réponse OpenAI inattendue", completion.choices?.[0]?.message?.content);
     return json({ code: "unreadable_ai_response", error: "Réponse IA illisible, réessaie" }, 502);
   }
 });
+
+/// Fourchette de cote, nettoyée avant de partir vers le téléphone.
+///
+/// Une estimation tirée d'une seule photo ne connaît ni le kilométrage, ni l'entretien,
+/// ni l'état mécanique. On refuse donc plus qu'on n'accepte : bornes absurdes, fourchette
+/// inversée, ou fourchette si étroite qu'elle prétend une précision que la photo ne
+/// contient pas. Rendre zéro est une réponse valable — l'app n'affiche alors rien,
+/// ce qui vaut mieux qu'un chiffre que le joueur saura faux d'un coup d'œil.
+function priceBracket(parsed: Record<string, unknown>) {
+  const vide = { price_min: 0, price_max: 0, price_currency: PRICE_CURRENCY };
+  const min = Math.round(Number(parsed.price_min) || 0);
+  const max = Math.round(Number(parsed.price_max) || 0);
+  if (min <= 0 || max <= 0 || max < min) return vide;
+  // Au-delà de trois millions d'euros, on sort du parc automobile ordinaire :
+  // c'est plus probablement une hallucination qu'une Bugatti garée dans la rue.
+  if (max > 3_000_000) return vide;
+  // Une fourchette plus serrée que ±10 % de son centre serait une fausse précision.
+  if (max - min < (min + max) / 2 * 0.2) return vide;
+  return { price_min: min, price_max: max, price_currency: PRICE_CURRENCY };
+}
 
 function json(payload: unknown, status = 200): Response {
   return new Response(JSON.stringify(payload), {
