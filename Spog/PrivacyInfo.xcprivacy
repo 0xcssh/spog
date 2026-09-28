@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Manifeste de confidentialité. Obligatoire pour toute soumission App Store, et
+  refusé à l'envoi s'il manque. Son contenu doit décrire ce que l'app fait
+  réellement : Apple recoupe, et le texte de la fiche App Store doit concorder.
+
+  Ce qui sort de l'appareil, et rien d'autre :
+    - la photo, envoyée à la fonction `identify` qui la relaie au modèle de vision ;
+      elle n'est conservée par aucun de nos serveurs.
+    - un identifiant d'appareil anonyme, uniquement pour compter les scans et
+      empêcher qu'un seul appareil épuise le budget. Le serveur n'en garde qu'une
+      empreinte SHA-256, jamais la valeur brute.
+
+  Le pays et la ville ne figurent pas ici : ils sont résolus sur l'appareil et
+  n'atteignent aucun de nos serveurs.
+-->
+<plist version="1.0">
+<dict>
+    <key>NSPrivacyTracking</key>
+    <false/>
+
+    <key>NSPrivacyTrackingDomains</key>
+    <array/>
+
+    <key>NSPrivacyCollectedDataTypes</key>
+    <array>
+        <dict>
+            <!-- La photo prise par le joueur, transmise pour identification. -->
+            <key>NSPrivacyCollectedDataType</key>
+            <string>NSPrivacyCollectedDataTypePhotosorVideos</string>
+            <key>NSPrivacyCollectedDataTypeLinked</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypeTracking</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypePurposes</key>
+            <array>
+                <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+            </array>
+        </dict>
+        <dict>
+            <!-- Identifiant anonyme d'appareil : quotas et lutte contre l'abus. -->
+            <key>NSPrivacyCollectedDataType</key>
+            <string>NSPrivacyCollectedDataTypeDeviceID</string>
+            <key>NSPrivacyCollectedDataTypeLinked</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypeTracking</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypePurposes</key>
+            <array>
+                <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+            </array>
+        </dict>
+    </array>
+
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+        <dict>
+            <!-- Réglages du joueur, garage, compteur de prises : ses propres données,
+                 dans son app. CA92.1 est la raison prévue pour exactement ce cas. -->
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>CA92.1</string>
+            </array>
+        </dict>
+    </array>
+</dict>
+</plist>
