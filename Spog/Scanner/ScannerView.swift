@@ -329,8 +329,7 @@ struct ScannerView: View {
                                      body: identification.body)
             }
             if let vehicle {
-                await complete(vehicle, photo: photo, paint: paint,
-                               price: identification.price)
+                await complete(vehicle, photo: photo, paint: paint)
                 return
             }
         }
@@ -347,12 +346,11 @@ struct ScannerView: View {
     }
 
     /// Met la photo en scène, enregistre la carte et la révèle au joueur.
-    private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?,
-                          price: PriceBracket? = nil) async {
+    private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?) async {
         let glow = garage.glowColor(vehicleID: vehicle.id, country: app.country)
         let shot = await CardArtStylizer.stylize(photo, glow: glow)
             ?? StyledShot(stylized: photo, original: photo)
-        await MainActor.run { reveal = record(vehicle, shot: shot, paint: paint, price: price) }
+        await MainActor.run { reveal = record(vehicle, shot: shot, paint: paint) }
     }
 
     #if targetEnvironment(simulator)
@@ -368,12 +366,10 @@ struct ScannerView: View {
 
     /// Enregistre la prise, entretient la série, valide la quête si elle est remplie,
     /// et rend de quoi révéler la carte au joueur.
-    private func record(_ vehicle: Vehicle, shot: StyledShot?, paint: UInt32?,
-                        price: PriceBracket? = nil) -> Reveal? {
+    private func record(_ vehicle: Vehicle, shot: StyledShot?, paint: UInt32?) -> Reveal? {
         let isNew = !garage.hasModel(vehicle.id)
         let item = garage.add(vehicleID: vehicle.id, country: app.country,
-                              verified: app.isVerifiedCapture, paint: paint, shot: shot,
-                              price: price)
+                              verified: app.isVerifiedCapture, paint: paint, shot: shot)
 
         let quest = QuestFactory.quest(for: Date(), country: app.country,
                                         favourites: profile.favouriteList)

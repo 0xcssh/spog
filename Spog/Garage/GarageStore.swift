@@ -17,16 +17,6 @@ struct Catch: Identifiable, Codable {
     let paint: UInt32
     /// Vrai si des photos sont rangees sur le disque pour cette capture.
     var hasShot: Bool = false
-    /// Cote d'occasion estimee au moment de la prise, en fourchette. Nil quand le
-    /// serveur n'a pas su, ou quand la carte est anterieure a cette fonction.
-    ///
-    /// Elle est **figee a la capture** plutot que recalculee : la carte garde la valeur
-    /// du jour ou la voiture a ete croisee, comme elle garde deja son pays et sa date.
-    /// La recalculer couterait un appel a chaque ouverture de fiche, pour un chiffre
-    /// qui changerait sous les yeux du joueur sans qu'il comprenne pourquoi.
-    var priceLow: Int? = nil
-    var priceHigh: Int? = nil
-    var priceCurrency: String? = nil
 
     /// Photos relues depuis le disque, jamais gardees en memoire dans la capture.
     var shot: StyledShot? { hasShot ? ShotStore.load(id) : nil }
@@ -177,8 +167,7 @@ final class GarageStore {
 
     @discardableResult
     func add(vehicleID: String, country: String, verified: Bool,
-             paint: UInt32? = nil, shot: StyledShot? = nil,
-             price: PriceBracket? = nil) -> Catch {
+             paint: UInt32? = nil, shot: StyledShot? = nil) -> Catch {
         let id = UUID()
         if let shot { ShotStore.save(shot, for: id) }
         let item = Catch(id: id,
@@ -188,10 +177,7 @@ final class GarageStore {
                          countryCode: country,
                          verified: verified,
                          paint: paint ?? CarPaint.random(),
-                         hasShot: shot != nil,
-                         priceLow: price?.low,
-                         priceHigh: price?.high,
-                         priceCurrency: price?.currency)
+                         hasShot: shot != nil)
         catches.append(item)
         save()
         return item

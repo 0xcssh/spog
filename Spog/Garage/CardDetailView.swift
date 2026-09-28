@@ -9,19 +9,6 @@ struct CardDetailView: View {
     @State private var confirmingRemoval = false
     @State private var correcting = false
 
-    /// Fourchette de cote de cette prise, mise en forme, ou nil.
-    ///
-    /// Elle est lue dans le garage plutot que portee par `CardData` : la cote appartient
-    /// a **la prise** — une capture datee, dans un pays donne — pas au modele de voiture,
-    /// et le garage est deja la source de verite des prises.
-    private var priceText: String? {
-        guard let item = garage.catches.first(where: { $0.id == card.id }),
-              let low = item.priceLow, let high = item.priceHigh else { return nil }
-        let format = FloatingPointFormatStyle<Double>.Currency(code: item.priceCurrency ?? "EUR")
-            .precision(.fractionLength(0))
-        return "\(Double(low).formatted(format)) – \(Double(high).formatted(format))"
-    }
-
     var body: some View {
         ZStack {
             Theme.background.ignoresSafeArea()
@@ -54,20 +41,6 @@ struct CardDetailView: View {
                     .frame(maxWidth: 290)
                     .padding(.horizontal, 24)
                 Spacer()
-
-                if let price = priceText {
-                    // Le mot « approximative » n'est pas une precaution de style : la
-                    // cote est devinee d'une photo, sans kilometrage ni carnet
-                    // d'entretien. L'annoncer sechement serait promettre une exactitude
-                    // qu'aucune image ne contient.
-                    VStack(spacing: 4) {
-                        Overline(text: "card.priceLabel")
-                        Text(price)
-                            .font(Theme.display(17, .semibold))
-                            .foregroundStyle(Theme.textPrimary)
-                    }
-                    .padding(.bottom, 14)
-                }
 
                 Overline(text: "card.hint")
                     .padding(.bottom, 18)

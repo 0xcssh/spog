@@ -86,23 +86,6 @@
         }
       }
     },
-    "card.priceLabel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approximate value"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cote approximative"
-          }
-        }
-      }
-    },
     "card.remove": {
       "extractionState": "manual",
       "localizations": {
