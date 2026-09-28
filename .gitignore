@@ -22,3 +22,9 @@ supabase/.temp/
 *.MOV
 *.mov
 *.mp4
+
+# Photos de test téléchargées — elles ne nous appartiennent pas
+/test-photos/*.jpg
+/test-photos/*.jpeg
+/test-photos/*.png
+/resultats-identification.csv
