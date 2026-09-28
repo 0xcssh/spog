@@ -152,8 +152,18 @@ struct MiniCard: View {
                         // Rendu du modele : c'est lui qui fait reconnaitre la voiture.
                         Image(uiImage: art)
                             .resizable().scaledToFill()
+                    } else if let stylized = card.shot?.stylized {
+                        // Pas encore de rendu studio pour ce modele — c'est le cas de la
+                        // grande majorite du catalogue. La photo prise par le joueur, mise
+                        // en scene, vaut infiniment mieux qu'une silhouette anonyme : c'est
+                        // **sa** voiture, celle qu'il est alle chercher dans la rue.
+                        // La fiche detaillee s'en servait deja ; la grille l'ignorait, et
+                        // la grille est le premier ecran que le joueur voit.
+                        Image(uiImage: stylized)
+                            .resizable().scaledToFill()
                     } else {
-                        // Repli tant qu'un modele n'a pas son rendu.
+                        // Ni rendu, ni photo : une carte de demonstration, ou un modele
+                        // du Spogdex pas encore attrape.
                         Image(systemName: "car.side.fill")
                             .font(.system(size: 40))
                             .foregroundStyle(
