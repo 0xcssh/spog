@@ -1,31 +1,14 @@
-fichier,marque,modele,couleur
-renault-clio.jpg,Renault,Clio,
-peugeot-208.jpg,Peugeot,208,
-citroen-c3.jpg,Citroen,C3,
-peugeot-308.jpg,Peugeot,308,
-renault-captur.jpg,Renault,Captur,
-dacia-sandero.jpg,Dacia,Sandero,
-peugeot-3008.jpg,Peugeot,3008,
-renault-megane.jpg,Renault,Megane,
-citroen-c4.jpg,Citroen,C4,
-renault-twingo.jpg,Renault,Twingo,
-vw-golf.jpg,Volkswagen,Golf,
-vw-polo.jpg,Volkswagen,Polo,
-ford-fiesta.jpg,Ford,Fiesta,
-opel-corsa.jpg,Opel,Corsa,
-toyota-yaris.jpg,Toyota,Yaris,
-fiat-500.jpg,Fiat,500,
-nissan-qashqai.jpg,Nissan,Qashqai,
-dacia-duster.jpg,Dacia,Duster,
-peugeot-2008.jpg,Peugeot,2008,
-renault-scenic.jpg,Renault,Scenic,
-citroen-berlingo.jpg,Citroen,Berlingo,
-renault-kangoo.jpg,Renault,Kangoo,
-bmw-serie-1.jpg,BMW,1 Series,
-audi-a3.jpg,Audi,A3,
-mercedes-a-class.jpg,Mercedes-Benz,A-Class,
-peugeot-508.jpg,Peugeot,508,
-renault-zoe.jpg,Renault,Zoe,
-citroen-c5-aircross.jpg,Citroen,C5 Aircross,
-skoda-octavia.jpg,Skoda,Octavia,
-seat-ibiza.jpg,Seat,Ibiza,
+fichier,marque,modele,couleur,type
+toyota-aygo.webp,Toyota,Aygo,,annonce
+bmw-serie-1.webp,BMW,1 Series,black,annonce
+citroen-c3.webp,Citroen,C3,red,annonce
+ford-fiesta.webp,Ford,Fiesta,blue,annonce
+porsche-macan.webp,Porsche,Macan,,annonce
+porsche-panamera.webp,Porsche,Panamera,green,annonce
+opel-meriva.webp,Opel,Meriva,white,annonce
+peugeot-307.webp,Peugeot,307,blue,annonce
+lamborghini-urus.webp,Lamborghini,Urus,grey,annonce
+lamborghini-huracan.webp,Lamborghini,Huracan,red,studio
+bentley-continental-gt.webp,Bentley,Continental GT,black,studio
+peugeot-3008.webp,Peugeot,3008,,annonce
+mazda-cx-3.webp,Mazda,CX-3,white,annonce

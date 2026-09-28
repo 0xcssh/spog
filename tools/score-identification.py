@@ -26,7 +26,7 @@ import urllib.request, urllib.error
 
 ENDPOINT = "https://pymrhossbzvhsertjhtc.supabase.co/functions/v1/identify"
 COST_PER_CALL = 0.005          # $ — mesure faite sur les reglages reels d'identify
-EXTS = (".jpg", ".jpeg", ".png", ".heic")
+EXTS = (".jpg", ".jpeg", ".png", ".heic", ".webp")
 
 
 def anon_key() -> str:
@@ -70,7 +70,31 @@ def identify(image_b64: str, key: str, device: str) -> dict:
 
 
 def normalise(text: str) -> str:
-    return "".join(c for c in text.lower() if c.isalnum())
+    """Meme repliage que `CatalogStore.normalize` cote Swift.
+
+    Les accents doivent disparaitre : le modele ecrit « Citroen » correctement
+    accentue, le catalogue non. Sans ce repliage, une identification parfaite
+    etait comptee comme un echec — c'est arrive a la premiere mesure.
+    """
+    import unicodedata
+    plat = unicodedata.normalize("NFD", text.lower())
+    plat = "".join(c for c in plat if unicodedata.category(c) != "Mn")
+    return " ".join("".join(c if c.isalnum() else " " for c in plat).split())
+
+
+def repond_juste(lu: str, attendu: str) -> bool:
+    """Le modele a-t-il designe la bonne voiture ?
+
+    Il repond souvent **plus precisement** que la fiche du catalogue : « Peugeot
+    307 CC » pour une 307, « Porsche Panamera Sport Turismo » pour une Panamera.
+    Exiger l'egalite stricte compterait ces bonnes reponses comme des fautes,
+    alors que le rapprochement de l'app les resout sans broncher. On reproduit
+    donc sa regle : la fiche attendue doit se retrouver dans ce qui a ete lu.
+    """
+    lu, attendu = normalise(lu), normalise(attendu)
+    if lu == attendu:
+        return True
+    return f" {attendu} " in f" {lu} "
 
 
 def main() -> None:
@@ -100,7 +124,12 @@ def main() -> None:
 
     key = anon_key()
     device = f"score-{int(time.time())}"
-    lignes, bons, couleurs, refus = [], 0, 0, 0
+    # Compte separe par famille de photo. Une photo de presse ou de concession —
+    # fond blanc, lumiere de studio, carrosserie lavee — est reconnue bien plus
+    # facilement qu'une annonce de particulier. Les melanger donnerait un taux
+    # flatteur qui ne dit rien de ce que verra un joueur dans la rue.
+    lignes, bons, couleurs, refus, couleurs_mesurees = [], 0, 0, 0, 0
+    par_type = {}
 
     for name in photos:
         answer = identify(shrink(os.path.join(args.dossier, name)), key, device)
@@ -117,13 +146,18 @@ def main() -> None:
         juste = couleur_juste = None
         if name in verite:
             attendu = f"{verite[name]['marque']} {verite[name]['modele']}"
-            juste = normalise(lu) == normalise(attendu)
+            juste = repond_juste(lu, attendu)
             bons += bool(juste)
             if verite[name].get("couleur"):
                 couleur_juste = answer.get("color", "") == verite[name]["couleur"]
                 couleurs += bool(couleur_juste)
+                couleurs_mesurees += 1
+            famille = verite[name].get("type", "sans type")
+            compte = par_type.setdefault(famille, [0, 0])
+            compte[1] += 1
+            compte[0] += bool(juste)
             marque = "✔" if juste else "✘"
-            print(f"  {marque} {name:24s} lu « {lu} » ({conf:.2f}) — attendu « {attendu} »")
+            print(f"  {marque} {name:28s} lu « {lu} » ({conf:.2f}) — attendu « {attendu} »")
         else:
             print(f"    {name:24s} lu « {lu} » ({conf:.2f}) couleur {answer.get('color','?')}")
         lignes.append((name, answer, juste, couleur_juste))
@@ -144,7 +178,14 @@ def main() -> None:
     if verite:
         n = len([l for l in lignes if l[2] is not None])
         print(f"Identification correcte : {bons}/{n}  ({100*bons/max(n,1):.0f} %)")
-        print(f"Couleur correcte        : {couleurs}/{n}  ({100*couleurs/max(n,1):.0f} %)")
+        # Diviser par le nombre total de photos punirait celles dont la teinte
+        # etait trop ambigue pour qu'on ose la noter. On ne compte que le mesurable.
+        print(f"Couleur correcte        : {couleurs}/{couleurs_mesurees}"
+              f"  ({100*couleurs/max(couleurs_mesurees,1):.0f} %)")
+        if len(par_type) > 1:
+            print("\nPar famille de photo :")
+            for famille, (ok, total) in sorted(par_type.items()):
+                print(f"  {famille:12s} {ok}/{total}  ({100*ok/max(total,1):.0f} %)")
     if refus:
         print(f"Photos où l'IA n'a vu aucun véhicule : {refus}")
     print("Détail dans resultats-identification.csv")
