@@ -4,7 +4,11 @@ import CoreImage
 
 /// Une photo separee en deux plans.
 struct LiftedPhoto {
-    let subject: UIImage      // le sujet detoure, fond transparent
+    /// Le sujet detoure, **recadre a ses propres bords**, fond transparent.
+    /// Le recadrage n'est pas un detail : sans lui, la voiture reste la ou elle etait
+    /// sur la photo — souvent collee a un bord, parfois coupee — et la mise en scene
+    /// ne peut ni la centrer ni la poser sur un sol.
+    let subject: UIImage
     let background: UIImage   // le decor
 }
 
@@ -24,7 +28,7 @@ enum SubjectLifter {
         guard let result = request.results?.first, !result.allInstances.isEmpty,
               let masked = try? result.generateMaskedImage(ofInstances: result.allInstances,
                                                            from: handler,
-                                                           croppedToInstancesExtent: false)
+                                                           croppedToInstancesExtent: true)
         else { return nil }
 
         // Rendu explicite en CGImage : sans quoi l'image n'a pas de bitmap exploitable
