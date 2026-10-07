@@ -3,7 +3,9 @@
 *Dernière mise à jour : 07/10/2026.*
 
 Ce fichier dit **où on en est, ce qui marche, ce qui bloque**. Pour les conventions de
-travail, voir [CLAUDE.md](CLAUDE.md).
+travail, voir [CLAUDE.md](CLAUDE.md). La refonte lancée le 07/10/2026 — sans Mac, backend
+Neon, scans offerts tenus par le serveur, collecte pour le classifieur — a son propre
+suivi dans [REFONTE.md](REFONTE.md).
 
 ---
 
@@ -23,8 +25,9 @@ vaut rien à Paris et beaucoup à Los Angeles.
 | Rareté | Calibrée pour `EU_WEST`, `EU_NORTH`, `EU_EAST`, `NA`, `ASIA_SE` |
 | Catalogue auto-apprenant | Un modèle inconnu entre au catalogue au premier scan |
 | Correction d'identification | « Corriger le modèle » depuis la fiche d'une carte |
-| Tests | 63, tous au vert (1 défaut connu : Vision en simulateur) |
-| Paywall | 5 scans offerts, 7 €/mois ou 60 €/an, essai 3 jours |
+| Tests | App : tous au vert en CI (1 défaut connu : Vision en simulateur). Backend : 63 |
+| Paywall | 5 scans offerts **décomptés par le serveur**, 7 €/mois ou 60 €/an, essai 3 jours |
+| Build | Signé avec le compte Mandalore depuis la CI, IPA installable par USB |
 | Parrainage | Code personnel, saisie, liens `spog://invite/XXXXXX` |
 | Quêtes, série, Spogdex, partage | Faits |
 | Documents légaux | FR et EN, conformes au comportement réel |
@@ -32,16 +35,15 @@ vaut rien à Paris et beaucoup à Los Angeles.
 
 ## Ce qui bloque — et tout est côté Apple
 
-Rien de technique ne s'oppose à une première version testable. Trois choses, dans cet ordre,
-la première commandant les deux autres :
+Le build signé fonctionne depuis le 07/10/2026 (compte Mandalore LLC, équipe `GXS33F5JT9`).
+Reste, dans App Store Connect :
 
-1. **L'adhésion Apple Developer.** Ce Mac ne porte que des certificats de développement,
-   aucun de distribution. L'archivage échoue. Sans adhésion payante, **pas de TestFlight**,
-   donc pas de build pour un testeur.
-2. **Les deux produits App Store Connect** — `com.mandaloregroup.spog.premium.monthly` et
-   `.yearly`. Sans eux, le paywall ne peut rien vendre.
+1. **La fiche de l'app** (bundle `com.mandalore-group.spog`) : sans elle, pas d'envoi sur
+   TestFlight. L'IPA de développement s'installe déjà par USB.
+2. **Les deux produits** — `com.mandaloregroup.spog.premium.monthly` et `.yearly` — et le
+   contrat « Paid Applications » de la LLC. Sans eux, le paywall ne peut rien vendre.
 3. **Le solde OpenAI.** Si le crédit est à zéro, tous les scans échouent. `identify`
-   distingue désormais ce cas d'une panne passagère et l'écrit en clair dans les journaux.
+   distingue ce cas d'une panne passagère et l'écrit en clair dans les journaux.
 
 ## Décisions qui attendent une réponse
 
@@ -82,14 +84,9 @@ les voitures à moitié cachées. Le chiffre baissera — la question est de com
 C'est le dernier risque sérieux avant publication, et aucun test de simulateur ne peut y
 répondre.
 
-## Sauvegarde — à régler
+## Sauvegarde — réglée
 
-Au 07/10/2026 : **le projet n'existe que sur ce Mac.** Pas de dépôt distant, pas de Time
-Machine, et l'iCloud du Bureau est saturé et en erreur — la copie sur laquelle on comptait
-ne fonctionne plus. Les 37 commits sont à une panne de disque près.
-
-Un dépôt GitHub privé réglerait les deux problèmes à la fois : la sauvegarde, et l'échange
-de code avec un second développeur.
+Depuis le 07/10/2026, le dépôt vit sur GitHub (`0xcssh/spog`, privé), historique complet.
 
 ## Repères de coût
 

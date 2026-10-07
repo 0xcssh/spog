@@ -52,7 +52,7 @@ Une seule fonction, `identify`, sur Neon Functions, dans un projet dédié à Sp
 vivent dans sa base Postgres (`backend/migrations/`). **La clé OpenAI n'existe que là**,
 jamais dans l'app.
 
-    cd backend && npm install && npm test          # 18 tests, tournent sous Windows
+    cd backend && npm install && npm test          # 63 tests, tournent sous Windows
     gh workflow run backend.yml -f deploy=true      # déploiement
 
 Elle ne renvoie que des données brutes. La rareté, les points et les paliers restent dans

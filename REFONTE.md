@@ -170,10 +170,52 @@ de comparer un modèle moins cher que `gpt-4o` sur le jeu de test avant d'en cha
 | Phase | Contenu | Livrable |
 |---|---|---|
 | **0. Socle** | Dépôt GitHub, `project.yml`, `ios.yml` repris de RepLock, nouveau bundle ID, projet Neon dédié, `identify` porté sur Neon Functions | Un build TestFlight lancé depuis Windows |
-| **1. Comptes et argent** | Compte anonyme, App Attest, DeviceCheck, crédits serveur, RevenueCat | Les 5 scans offerts ne se contournent plus |
-| **2. Refonte de l'app** | Nouvelle structure, onboarding questionnaire, Superwall, PostHog, Sentry, synchro du garage | v1 publiable |
+| **1. Comptes et argent** | Crédits serveur, abonnement vérifié côté serveur, App Attest | Les 5 scans offerts ne se contournent plus |
+| **2. Refonte de l'app** | Onboarding questionnaire, analytics, plantages, synchro du garage | v1 publiable |
 | **3. Collecte et classifieur** | Consentement, `training_samples`, classifieur en arrière-plan puis en premier | Coût par scan en baisse |
 | **4. Social** | Amis, classement, crews | L'écran Social cesse d'être vide |
+
+## Où on en est — 07/10/2026
+
+Chaque ligne « fait » a été vérifiée en production ou en CI, pas seulement écrite.
+
+**Phase 0 — faite.** Dépôt `0xcssh/spog` (privé), XcodeGen, CI macOS verte, build signé
+Mandalore qui produit une IPA. Projet Neon `spog`, `identify` déployé et testé sur une vraie
+photo. L'app appelle Neon ; l'ancienne fonction Supabase `identify` est retirée du dépôt.
+
+**Phase 1 — faite, sauf App Attest.**
+- Le serveur décompte les scans offerts par installation (`free_scans`), l'identifiant
+  d'installation vit dans le trousseau et survit à la réinstallation. Vérifié en production :
+  4, 3… puis 402 `paywall_required` à zéro.
+- L'abonnement se prouve par la transaction StoreKit 2 signée par Apple, vérifiée côté
+  serveur sans réseau (code repris de Cyranox, 27 tests).
+- Une photo sans voiture ou d'écran ne coûte pas de scan offert.
+- **Pas fait : App Attest.** En attendant, l'invention d'identifiants d'installation est
+  bornée à 60 scans offerts par IP et par jour (~0,26 € au pire par IP). À faire avant toute
+  campagne : il faut l'activer sur l'App ID et le tester sur un vrai iPhone.
+- **Choix : pas de RevenueCat pour l'instant.** La vérification StoreKit côté serveur couvre
+  le besoin sans compte tiers. RevenueCat reste utile le jour où l'on voudra des offres
+  pilotées à distance ; il faudra alors un compte et sa clé.
+
+**Phase 2 — commencée.**
+- Fait : le volume 3D SceneKit (522 lignes) remplacé par une silhouette de carrosserie.
+- Fait : analytics TelemetryDeck branchés (tunnel d'onboarding, scans, cartes, paywall,
+  achats), **coupés** tant que `Analytics.appID` n'est pas renseigné — il faut créer l'app
+  dans TelemetryDeck, et corriger la politique de confidentialité dans le même commit.
+- Pas fait : onboarding en questionnaire à la RepLock, Sentry (il faut un DSN), synchro du
+  garage (il faut Neon Auth et décider de ce qui part sur le serveur).
+- Gardé pour l'instant : les rendus studio (`CarArt`) et leur fabrique. Leur sort dépend
+  de la décision « lot d'illustrations » de PLAN.md, toujours ouverte.
+
+**Phase 3 — circuit de collecte fait, classifieur à venir.**
+- Avec l'accord du joueur, demandé une fois après sa première carte et modifiable dans les
+  réglages, une vraie prise est conservée (compartiment privé `training`, table
+  `training_samples`) avec l'étiquette de l'IA, puis celle du joueur quand il confirme ou
+  corrige. Retirer l'accord efface tout. Vérifié en production de bout en bout.
+- La politique de confidentialité (app et `Legal/*.html`) le dit. **Les pages publiées sur
+  le site doivent être remplacées par les nouvelles versions de `Legal/`.**
+- Le classifieur lui-même attend des données : quelques centaines de photos étiquetées par
+  modèle, sur les modèles les plus scannés.
 
 ## Prérequis hors code
 
@@ -192,8 +234,14 @@ signer une app de Mandalore.
   Les identifiants d'abonnement peuvent garder `com.mandaloregroup.spog.premium.*`.
 - **Les produits App Store Connect** mensuel et annuel, et la fiche de l'app.
 
-Côté développeur : un dépôt GitHub (privé, et l'historique de 37 commits poussé tel quel),
-ce qui règle aussi la sauvegarde.
+Fait le 07/10/2026 : clé API (`27XC5K46K6`) et certificats Mandalore récupérés dans les
+fichiers de Cyranox et posés dans les secrets GitHub ; le build signé fonctionne. Restent
+le contrat « Paid Applications », la fiche de l'app et les deux produits dans App Store
+Connect.
+
+La CI tourne sur un dépôt privé dont les minutes macOS gratuites sont épuisées : le dépôt
+passe en public le temps de chaque CI, puis repasse en privé. Le code n'est poussé que
+pendant qu'il est privé.
 
 ## Risques connus
 

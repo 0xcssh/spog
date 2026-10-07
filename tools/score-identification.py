@@ -21,44 +21,46 @@ un premier coup d'oeil, mais il ne mesure rien.
 Chaque photo coute environ un demi-centime de dollar. Le script annonce la facture
 et demande confirmation avant le premier appel.
 """
-import argparse, base64, csv, io, json, os, sys, time
+import argparse, base64, csv, io, json, os, sys, time, uuid
 import urllib.request, urllib.error
 
-ENDPOINT = "https://pymrhossbzvhsertjhtc.supabase.co/functions/v1/identify"
-COST_PER_CALL = 0.005          # $ — mesure faite sur les reglages reels d'identify
+COST_PER_CALL = 0.005          # $ — mesure faite sur les reglages reels d'identify (gpt-4o)
 EXTS = (".jpg", ".jpeg", ".png", ".heic", ".webp")
 
 
-def anon_key() -> str:
-    """La cle publique de l'app, lue dans le code plutot que recopiee ici."""
+def endpoint() -> str:
+    """L'URL de la fonction Neon, lue dans le code de l'app plutot que recopiee ici."""
     path = os.path.join(os.path.dirname(__file__), "..", "Spog", "Core", "BackendConfig.swift")
     with io.open(path, encoding="utf-8") as handle:
         for line in handle:
-            if "supabaseAnonKey" in line and '"' in line:
+            if "identifyURL" in line and '"' in line:
                 return line.split('"')[1]
-    sys.exit("Cle anonyme introuvable dans BackendConfig.swift")
+    sys.exit("identifyURL introuvable dans BackendConfig.swift")
 
 
 def shrink(path: str, max_side: int = 1280, quality: int = 70) -> str:
     """Meme traitement que l'app : 1280 px, JPEG qualite 0.7.
 
     Tester sur des images plus grandes fausserait le resultat dans le bon sens —
-    on mesurerait une qualite que le telephone n'envoie jamais.
+    on mesurerait une qualite que le telephone n'envoie jamais. Pillow plutot que
+    `sips` : l'outil tourne desormais sous Windows.
     """
-    out = "/tmp/spog-score.jpg"
-    os.system(f'sips -Z {max_side} -s format jpeg -s formatOptions {quality} '
-              f'"{path}" --out {out} >/dev/null 2>&1')
-    with open(out, "rb") as handle:
-        return base64.b64encode(handle.read()).decode()
+    from PIL import Image
+    image = Image.open(path).convert("RGB")
+    image.thumbnail((max_side, max_side))
+    buffer = io.BytesIO()
+    image.save(buffer, "JPEG", quality=quality)
+    return base64.b64encode(buffer.getvalue()).decode()
 
 
-def identify(image_b64: str, key: str, device: str) -> dict:
+def identify(image_b64: str, url: str, device: str) -> dict:
     payload = json.dumps({"imageBase64": image_b64}).encode()
-    request = urllib.request.Request(ENDPOINT, data=payload, headers={
+    # Une installation neuve par photo : le serveur decompte les scans offerts, et une
+    # mesure de trente photos s'arreterait sinon au sixieme appel.
+    request = urllib.request.Request(url, data=payload, headers={
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {key}",
-        "apikey": key,
         "x-device-id": device,
+        "x-install-id": f"{device}-{uuid.uuid4()}",
     })
     try:
         with urllib.request.urlopen(request, timeout=40) as response:
@@ -122,7 +124,7 @@ def main() -> None:
             for row in csv.DictReader(handle):
                 verite[row["fichier"]] = row
 
-    key = anon_key()
+    url = endpoint()
     device = f"score-{int(time.time())}"
     # Compte separe par famille de photo. Une photo de presse ou de concession —
     # fond blanc, lumiere de studio, carrosserie lavee — est reconnue bien plus
@@ -132,7 +134,7 @@ def main() -> None:
     par_type = {}
 
     for name in photos:
-        answer = identify(shrink(os.path.join(args.dossier, name)), key, device)
+        answer = identify(shrink(os.path.join(args.dossier, name)), url, device)
         if "_erreur" in answer:
             print(f"  ✘ {name:24s} {answer['_erreur']} {answer.get('_detail','')}")
             lignes.append((name, answer, None, None))
