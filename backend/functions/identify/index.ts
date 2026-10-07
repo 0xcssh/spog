@@ -1,0 +1,31 @@
+// Fonction Neon "identify" — relais unique entre l'app iOS Spog et OpenAI.
+// La clé OpenAI vit ici (variable d'environnement OPENAI_API_KEY), jamais dans l'app.
+// Contrat et logique : voir handler.ts. Ce fichier ne fait que brancher
+// l'environnement réel (variables, base Neon, fetch) sur le handler.
+
+import { attachDatabasePool } from "@neon/functions";
+import { Pool } from "pg";
+import { createHandler } from "./handler";
+
+// Base Neon de la branche (DATABASE_URL injectée par Neon Functions). Timeouts courts :
+// une base injoignable doit répondre « indisponible » vite, pas faire attendre le joueur
+// devant son viseur. attachDatabasePool absorbe les déconnexions de clients inactifs.
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 5,
+    connectionTimeoutMillis: 3000,
+    query_timeout: 3000,
+    idleTimeoutMillis: 30_000,
+  })
+  : null;
+if (pool) attachDatabasePool(pool);
+
+const handle = createHandler({
+  openaiKey: process.env.OPENAI_API_KEY,
+  db: pool,
+  fetch: (input, init) => fetch(input, init),
+  model: process.env.OPENAI_MODEL,
+});
+
+export default { fetch: handle };

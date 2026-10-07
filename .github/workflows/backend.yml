@@ -1,0 +1,53 @@
+name: Backend
+
+# Fonction Neon `identify` (backend/). Sur push : typecheck + tests + build.
+# Déploiement manuel (workflow_dispatch, deploy=true) vers Neon Functions via l'API,
+# comme Cyranox. Le projet et la branche ne sont pas secrets : ils ont une valeur par
+# défaut, les variables du dépôt ne servent qu'à les remplacer.
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Déployer sur Neon après les tests"
+        type: boolean
+        default: false
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Deploy to Neon Functions
+        if: inputs.deploy
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PROJECT: ${{ vars.NEON_PROJECT_ID || 'damp-fire-11684360' }}
+          BRANCH: ${{ vars.NEON_BRANCH_ID || 'br-plain-fog-b7f3ate2' }}
+        run: |
+          ENV_JSON=$(jq -cn --arg k "$OPENAI_API_KEY" '{OPENAI_API_KEY: $k}')
+          curl -sf -X POST "https://console.neon.tech/api/v2/projects/$PROJECT/branches/$BRANCH/functions/identify/deployments" \
+            -H "Authorization: Bearer $NEON_API_KEY" \
+            -F "zip=@dist/function.zip" -F "runtime=nodejs24" -F "environment=$ENV_JSON" | jq '{id, status}'
+          for i in $(seq 1 30); do
+            S=$(curl -sf "https://console.neon.tech/api/v2/projects/$PROJECT/branches/$BRANCH/functions/identify" -H "Authorization: Bearer $NEON_API_KEY")
+            STATUS=$(echo "$S" | jq -r '.current_deployment.status // .function.current_deployment.status')
+            echo "status: $STATUS"
+            [ "$STATUS" = "completed" ] && echo "$S" | jq -r '.invocation_url // .function.invocation_url' && exit 0
+            [ "$STATUS" = "failed" ] && echo "$S" && exit 1
+            sleep 5
+          done
+          exit 1
