@@ -225,7 +225,6 @@ final class GarageStore {
                          scanID: scanID)
         catches.append(item)
         save()
-        let id = item.id
         Task { @MainActor in await self.sync(id) }
         return item
     }
