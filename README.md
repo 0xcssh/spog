@@ -5,7 +5,8 @@
 App iOS de collection de voitures repérées dans la vraie vie : tu photographies une voiture,
 l'IA l'identifie, elle devient une carte unique dans ton garage.
 
-Plan complet : `~/.claude/plans/spog-plan.md`
+État du projet, blocages et décisions en attente : [PLAN.md](PLAN.md).
+Conventions de travail : [CLAUDE.md](CLAUDE.md).
 
 ## Contrainte fondatrice
 
