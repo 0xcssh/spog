@@ -5,15 +5,24 @@ import {
   FREE_SCANS, type HandlerDeps, type Queryable,
 } from "./handler";
 import type { EntitlementResult } from "./entitlement";
+import type { SampleStore } from "./storage";
 
 // ---------- Doublures ----------
 
 /// Base factice : quotas décidés par `decide`, scans offerts tenus en mémoire.
-function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUsed: Record<string, number> = {}) {
+function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUsed: Record<string, number> = {},
+                sampleKeys: string[] = []) {
   const keys: unknown[] = [];
+  const queries: { text: string; values: unknown[] }[] = [];
   let consumed = 0;
   const db: Queryable = {
     async query(text, values = []) {
+      queries.push({ text, values });
+      if (text.includes("training_samples")) {
+        if (decide("training") === "throw") throw new Error("connection timeout");
+        if (text.includes("select object_key")) return { rows: sampleKeys.map((object_key) => ({ object_key })) };
+        return { rows: [] };
+      }
       keys.push(values[0]);
       const key = String(values[0]);
       if (text.includes("from public.free_scans")) {
@@ -30,7 +39,7 @@ function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUs
       return { rows: [{ result: { allowed: d } }] };
     },
   };
-  return { db, keys, freeUsed, consumed: () => consumed };
+  return { db, keys, queries, freeUsed, consumed: () => consumed };
 }
 
 const noSubscription = async (): Promise<EntitlementResult> => ({ ok: false, reason: "missing" });
@@ -274,5 +283,92 @@ describe("scans offerts et abonnement", () => {
   test("sans x-install-id (ancienne app), l'installation est l'appareil", () => {
     assert.equal(installIdFrom(new Headers(), "device-1"), "device-1");
     assert.equal(installIdFrom(new Headers({ "x-install-id": " abc " }), "device-1"), "abc");
+  });
+});
+
+function fakeSamples(fail = false) {
+  const put: string[] = [];
+  const removed: string[] = [];
+  const store: SampleStore = {
+    async put(key) { if (fail) throw new Error("s3 down"); put.push(key); },
+    async remove(keys) { removed.push(...keys); },
+  };
+  return { store, put, removed };
+}
+
+const SAMPLE_ID = "11111111-2222-3333-4444-555555555555";
+
+describe("photos d'entraînement", () => {
+  test("sans accord, rien n'est conservé", async () => {
+    const samples = fakeSamples();
+    const res = await handler({ samples: samples.store })(post({ imageBase64: "abc" }));
+    assert.equal((await res.json() as any).sample_id, undefined);
+    assert.equal(samples.put.length, 0);
+  });
+
+  test("avec accord, la prise est conservée et étiquetée par l'IA", async () => {
+    const samples = fakeSamples();
+    const store = fakeDb();
+    const res = await handler({ db: store.db, samples: samples.store, newId: () => SAMPLE_ID })(
+      post({ imageBase64: "abc", training_consent: true }));
+    assert.equal((await res.json() as any).sample_id, SAMPLE_ID);
+    assert.deepEqual(samples.put, [`samples/${SAMPLE_ID}.jpg`]);
+    const insert = store.queries.find((q) => q.text.includes("insert into public.training_samples"));
+    assert.ok(insert);
+    assert.equal(insert!.values[1], hashKey("install-1"));
+    assert.equal(insert!.values[4], "3008");
+  });
+
+  test("une photo sans voiture n'est jamais conservée", async () => {
+    const samples = fakeSamples();
+    const empty = { ...goodCar, vehicle_present: false, model: "" };
+    await handler({ samples: samples.store, fetch: fakeFetch([aiResponse(empty)]).fn })(
+      post({ imageBase64: "abc", training_consent: true }));
+    assert.equal(samples.put.length, 0);
+  });
+
+  test("un stockage en panne ne coûte pas sa carte au joueur", async () => {
+    const res = await handler({ samples: fakeSamples(true).store })(
+      post({ imageBase64: "abc", training_consent: true }));
+    assert.equal(res.status, 200);
+    assert.equal((await res.json() as any).sample_id, undefined);
+  });
+
+  test("étiquette du joueur, limitée à sa propre installation", async () => {
+    const store = fakeDb();
+    const res = await handler({ db: store.db })(
+      post({ action: "label", sample_id: SAMPLE_ID, vehicle_id: "peugeot-3008", source: "corrected" }));
+    assert.deepEqual(await res.json(), { ok: true });
+    const update = store.queries.find((q) => q.text.includes("update public.training_samples"));
+    assert.deepEqual(update!.values, [SAMPLE_ID, hashKey("install-1"), "peugeot-3008", "corrected"]);
+  });
+
+  test("étiquette invalide refusée", async () => {
+    for (const bad of [
+      { action: "label", sample_id: "x", vehicle_id: "a", source: "confirmed" },
+      { action: "label", sample_id: SAMPLE_ID, vehicle_id: "", source: "confirmed" },
+      { action: "label", sample_id: SAMPLE_ID, vehicle_id: "a", source: "guessed" },
+    ]) {
+      const res = await handler()(post(bad));
+      assert.equal(res.status, 400);
+    }
+  });
+
+  test("retrait de l'accord : images puis lignes effacées", async () => {
+    const samples = fakeSamples();
+    const store = fakeDb(() => true, {}, ["samples/a.jpg", "samples/b.jpg"]);
+    const res = await handler({ db: store.db, samples: samples.store })(post({ action: "forget" }));
+    assert.deepEqual(await res.json(), { deleted: 2 });
+    assert.deepEqual(samples.removed, ["samples/a.jpg", "samples/b.jpg"]);
+    const del = store.queries.find((q) => q.text.startsWith("delete from public.training_samples"));
+    assert.deepEqual(del!.values, [hashKey("install-1")]);
+  });
+
+  test("les actions ne passent pas par OpenAI ni par les scans offerts", async () => {
+    const ai = fakeFetch([aiResponse(goodCar)]);
+    const store = fakeDb();
+    await handler({ db: store.db, fetch: ai.fn })(post({ action: "forget" }));
+    assert.equal(ai.count(), 0);
+    assert.equal(store.consumed(), 0);
   });
 });

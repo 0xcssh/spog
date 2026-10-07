@@ -45,7 +45,10 @@ struct CardDetailView: View {
                 Overline(text: "card.hint")
                     .padding(.bottom, 18)
 
-                Button { shareImage = CardShareRenderer.render(card) } label: {
+                Button {
+                    shareImage = CardShareRenderer.render(card)
+                    Analytics.track(.cardShared, ["tier": card.tier.id])
+                } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "square.and.arrow.up").font(.system(size: 13, weight: .bold))
                         Text("card.share").font(Theme.label(12)).tracking(1)

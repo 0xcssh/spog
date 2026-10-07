@@ -652,6 +652,7 @@ struct OnboardingView: View {
     private func advance() {
         guard let next = Step(rawValue: step.rawValue + 1) else { return }
         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = next }
+        Analytics.track(.onboardingStep, ["step": "\(next)"])
     }
 
     private func back() {
@@ -669,5 +670,6 @@ struct OnboardingView: View {
         // elle arrivera par le même chemin et corrigera le pays toute seule : on
         // n'immobilise pas le joueur devant un écran d'attente.
         state.hasOnboarded = true
+        Analytics.track(.onboardingCompleted)
     }
 }

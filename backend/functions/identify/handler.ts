@@ -9,6 +9,12 @@
 //   → 200 { make, model, generation, body, color, confidence, is_screen, vehicle_present,
 //           free_scans_left: number | null }      (null = abonné, pas de plafond)
 //   → 402 { code: "paywall_required", error, free_scans_left: 0 }
+//        Avec `training_consent: true`, une vraie prise est conservée pour entraîner le
+//        classifieur embarqué, et la réponse porte `sample_id`.
+//   POST { action: "label", sample_id, vehicle_id, source: "confirmed" | "corrected" }
+//   → 200 { ok: true }      (le joueur a désigné le bon modèle : l'étiquette qui fait foi)
+//   POST { action: "forget" }
+//   → 200 { deleted: n }    (retrait de l'accord : toutes les photos de l'installation)
 //   → 4xx/5xx { code: string, error: string }
 //     `code` est stable et traduit côté app ; `error` n'est qu'un repli lisible.
 //
@@ -22,8 +28,9 @@
 // tout ça vit dans le catalogue embarqué de l'app, donc modifiable sans redéployer
 // et sans supposer un pays. Ici on ne fait que lire une photo.
 
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { EntitlementResult } from "./entitlement";
+import type { SampleStore } from "./storage";
 
 /** Sous-ensemble de pg.Pool utilisé ici. */
 export interface Queryable {
@@ -38,6 +45,9 @@ export interface HandlerDeps {
   verifyEntitlement: (jws: unknown) => Promise<EntitlementResult>;
   /** Scans offerts par installation (défaut : FREE_SCANS). */
   freeScans?: number;
+  /** Compartiment des photos d'entraînement ; null = collecte désactivée. */
+  samples?: SampleStore | null;
+  newId?: () => string;
   /** Attente entre deux tentatives OpenAI (remplaçable en test). */
   sleep?: (ms: number) => Promise<void>;
   model?: string;
@@ -167,10 +177,83 @@ export function json(payload: unknown, status = 200): Response {
 
 type QuotaStatus = "allowed" | "blocked" | "unavailable";
 
+export const LABEL_SOURCES = ["confirmed", "corrected"];
+const MAX_VEHICLE_ID = 120;
+
 export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Response> {
   const sleep = deps.sleep ?? ((ms: number) => new Promise((r) => setTimeout(r, ms)));
   const model = deps.model || DEFAULT_MODEL;
   const freeScans = deps.freeScans ?? FREE_SCANS;
+  const newId = deps.newId ?? randomUUID;
+
+  /// Conserve une prise pour l'entraînement. Jamais bloquant : un échec de stockage
+  /// coûte un exemple au classifieur, il ne doit pas coûter sa carte au joueur.
+  async function keepSample(installKey: string, image: Buffer, ai: {
+    make: string; model: string; generation: string; body: string; color: string; confidence: number;
+  }): Promise<string | null> {
+    if (!deps.samples || !deps.db) return null;
+    const id = newId();
+    const key = `samples/${id}.jpg`;
+    try {
+      await deps.samples.put(key, image);
+      await deps.db.query(
+        `insert into public.training_samples
+           (id, install_hash, object_key, ai_make, ai_model, ai_generation, ai_body, ai_color, ai_confidence)
+         values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [id, hashKey(installKey), key, ai.make, ai.model, ai.generation, ai.body, ai.color, ai.confidence],
+      );
+      return id;
+    } catch (error) {
+      console.error("sample not kept", error instanceof Error ? error.message : error);
+      return null;
+    }
+  }
+
+  /// Étiquette du joueur. Limitée aux photos de sa propre installation : sans cette
+  /// condition, n'importe qui connaissant un identifiant pourrait fausser le jeu de données.
+  async function handleLabel(req: Request, body: Record<string, unknown>): Promise<Response> {
+    const sampleId = typeof body.sample_id === "string" ? body.sample_id : "";
+    const vehicleId = typeof body.vehicle_id === "string" ? body.vehicle_id.trim().slice(0, MAX_VEHICLE_ID) : "";
+    const source = typeof body.source === "string" && LABEL_SOURCES.includes(body.source) ? body.source : "";
+    if (!/^[0-9a-f-]{36}$/i.test(sampleId) || !vehicleId || !source) {
+      return json({ code: "bad_request", error: "Étiquette invalide" }, 400);
+    }
+    if (!deps.db) return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    const clientIP = clientIPFrom(req.headers);
+    const installKey = installIdFrom(req.headers, deviceIdFrom(req.headers, clientIP));
+    try {
+      await deps.db.query(
+        `update public.training_samples
+            set label_vehicle = $3, label_source = $4, labeled_at = now()
+          where id = $1 and install_hash = $2`,
+        [sampleId, hashKey(installKey), vehicleId, source],
+      );
+      return json({ ok: true });
+    } catch (error) {
+      console.error("label not recorded", error instanceof Error ? error.message : error);
+      return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    }
+  }
+
+  /// Retrait de l'accord : tout ce que cette installation a confié disparaît, images
+  /// comprises. Les lignes ne sont effacées qu'une fois les images supprimées, pour ne
+  /// jamais laisser une image orpheline qu'aucune ligne ne permettrait plus de retrouver.
+  async function handleForget(req: Request): Promise<Response> {
+    if (!deps.db) return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    const clientIP = clientIPFrom(req.headers);
+    const installHash = hashKey(installIdFrom(req.headers, deviceIdFrom(req.headers, clientIP)));
+    try {
+      const { rows } = await deps.db.query(
+        "select object_key from public.training_samples where install_hash = $1", [installHash]);
+      const keys = rows.map((r) => String(r.object_key));
+      if (keys.length && deps.samples) await deps.samples.remove(keys);
+      await deps.db.query("delete from public.training_samples where install_hash = $1", [installHash]);
+      return json({ deleted: keys.length });
+    } catch (error) {
+      console.error("forget failed", error instanceof Error ? error.message : error);
+      return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    }
+  }
 
   /// Scans offerts déjà consommés par cette installation ; null si la base ne répond pas.
   async function freeScansUsed(installKey: string): Promise<number | null> {
@@ -261,12 +344,17 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       return json({ code: "server_misconfigured", error: "OPENAI_API_KEY manquante côté serveur" }, 500);
     }
 
-    let body: { imageBase64?: unknown; entitlement?: unknown };
+    let body: { imageBase64?: unknown; entitlement?: unknown; training_consent?: unknown; action?: unknown };
     try {
       body = await req.json();
     } catch {
       return json({ code: "bad_request", error: "Corps de requête invalide" }, 400);
     }
+    if (typeof body !== "object" || body === null) {
+      return json({ code: "bad_request", error: "Corps de requête invalide" }, 400);
+    }
+    if (body.action === "label") return handleLabel(req, body as Record<string, unknown>);
+    if (body.action === "forget") return handleForget(req);
 
     const imageBase64 = typeof body?.imageBase64 === "string" ? body.imageBase64 : "";
     if (!imageBase64) {
@@ -381,12 +469,21 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
 
       // Seule une vraie prise consomme un scan offert : une photo sans voiture ou
       // d'un écran est refusée par l'app, la facturer au joueur serait injuste.
+      const realCatch = vehiclePresent && !isScreen && text(parsed.model) !== "";
       let freeScansLeft: number | null = null;
       if (freeUsed !== null) {
-        const counts = vehiclePresent && !isScreen && text(parsed.model) !== "";
-        const used = counts ? (await consumeFreeScan(installKey)) ?? freeUsed + 1 : freeUsed;
+        const used = realCatch ? (await consumeFreeScan(installKey)) ?? freeUsed + 1 : freeUsed;
         freeScansLeft = Math.max(0, freeScans - used);
       }
+      const confidence = Math.max(0, Math.min(1, Number(parsed.confidence) || 0));
+      const bodyValue = BODIES.includes(bodyType) ? bodyType : "sedan";
+      const colorValue = COLORS.includes(color) ? color : "";
+      const sampleId = realCatch && body.training_consent === true
+        ? await keepSample(installKey, Buffer.from(imageBase64, "base64"), {
+          make: text(parsed.make), model: text(parsed.model), generation: text(parsed.generation),
+          body: bodyValue, color: colorValue, confidence,
+        })
+        : null;
 
       return json({
         make: text(parsed.make),
@@ -394,12 +491,13 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
         generation: text(parsed.generation),
         // Repli sur "sedan" : la silhouette la plus neutre ; une carrosserie absente
         // empêcherait de dessiner la carte.
-        body: BODIES.includes(bodyType) ? bodyType : "sedan",
-        color: COLORS.includes(color) ? color : "",
-        confidence: Math.max(0, Math.min(1, Number(parsed.confidence) || 0)),
+        body: bodyValue,
+        color: colorValue,
+        confidence,
         is_screen: isScreen,
         vehicle_present: vehiclePresent,
         free_scans_left: freeScansLeft,
+        ...(sampleId ? { sample_id: sampleId } : {}),
       });
     } catch {
       console.error("Réponse OpenAI inattendue", completion?.choices?.[0]?.message?.content);

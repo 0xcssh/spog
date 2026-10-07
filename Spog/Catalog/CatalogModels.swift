@@ -48,7 +48,7 @@ struct Vehicle: Codable, Identifiable, Hashable {
     let id: String
     let make: String
     let model: String
-    /// Type de carrosserie : pilote la geometrie 3D. Voir CarBody.
+    /// Type de carrosserie : choisit la silhouette de repli. Voir CarBody.
     let body: String
     /// Rarete par marche. Cle = code pays, code region, ou "default".
     let rarity: [String: String]

@@ -1,9 +1,6 @@
 import SwiftUI
-import SceneKit
 
 /// Fabrique l'image partagee : la carte, mise a plat, en haute definition.
-/// Le rendu 3D est capture separement — un moteur SceneKit ne se laisse pas
-/// photographier par le rendu SwiftUI.
 enum CardShareRenderer {
 
     @MainActor
@@ -20,29 +17,12 @@ enum CardShareRenderer {
     /// partagee doit montrer ce que le joueur a trouve, pas un exemplaire de catalogue.
     private static func flatArtwork(for card: CardData) -> UIImage? {
         if let shot = card.shot { return shot.stylized }
-        if let render = CarArt.image(for: card.vehicle.id, paint: card.paint) { return render }
-        return snapshot3D(card)
-    }
-
-    /// Capture hors ecran de la scene 3D.
-    private static func snapshot3D(_ card: CardData) -> UIImage? {
-        let view = SCNView(frame: CGRect(x: 0, y: 0, width: 700, height: 700))
-        view.backgroundColor = UIColor(Theme.surface)
-        view.antialiasingMode = .multisampling4X
-        view.scene = CarSceneBuilder.scene(body: CarBody(card.vehicle.body),
-                                           paint: CarPaint.uiColor(card.paint),
-                                           accent: UIColor(card.tier.color))
-        view.pointOfView = view.scene?.rootNode.childNode(withName: "camera", recursively: true)
-        if let rig = view.scene?.rootNode.childNode(withName: "rig", recursively: false) {
-            rig.eulerAngles = SCNVector3(Float(2.0 * Double.pi / 180),
-                                         Float(28.0 * Double.pi / 180), 0)
-        }
-        return view.snapshot()
+        return CarArt.image(for: card.vehicle.id, paint: card.paint)
     }
 }
 
-/// Version figee de la carte, destinee au partage. Pas d'animation, pas de 3D vivante,
-/// pas de reflet mobile : une image que l'on peut poster.
+/// Version figee de la carte, destinee au partage. Pas d'animation, pas de reflet
+/// mobile : une image que l'on peut poster.
 private struct ShareCardView: View {
     let card: CardData
     let artwork: UIImage?
@@ -53,7 +33,12 @@ private struct ShareCardView: View {
                 if let artwork {
                     Image(uiImage: artwork).resizable().scaledToFill()
                 } else {
-                    Theme.surfaceRaised
+                    // Ni photo ni rendu : la silhouette, comme sur la carte affichee.
+                    ZStack {
+                        Theme.surfaceRaised
+                        CarSilhouette(body: CarBody(card.vehicle.body),
+                                      paint: card.paint, tint: card.tier.color)
+                    }
                 }
                 Text(String(format: "%03d", card.serial))
                     .font(Theme.mono(13, .semibold))

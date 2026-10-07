@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(AppState.self) private var app
     @Environment(SubscriptionStore.self) private var subscriptions
     @Environment(LocationProvider.self) private var location
+    @Environment(TrainingConsent.self) private var training
     @Environment(\.dismiss) private var dismiss
 
     @State private var pickingCountry = false
@@ -29,6 +30,7 @@ struct SettingsView: View {
                 VStack(spacing: 16) {
                     spotting
                     subscription
+                    data
                     legal
                     about
                 }
@@ -103,7 +105,6 @@ struct SettingsView: View {
             row(icon: "arrow.up.right.square", label: "settings.manage", value: nil) {
                 Task { await openManageSubscriptions() }
             }
-            divider
             if !subscriptions.isSubscribed {
                 divider
                 row(icon: "sparkles", label: "settings.subscribe", value: nil) {
@@ -115,6 +116,37 @@ struct SettingsView: View {
                 value: restoring ? String(localized: "settings.restoring") : nil) {
                 Task { await restorePurchases() }
             }
+        }
+    }
+
+    // MARK: Données
+
+    /// L'accord pour l'entraînement : le désactiver efface les photos déjà confiées
+    /// (voir TrainingConsent). Le texte sous l'interrupteur dit ce qu'implique l'état
+    /// actuel, pas une généralité.
+    private var data: some View {
+        section("settings.data") {
+            @Bindable var consent = training
+            Toggle(isOn: $consent.granted) {
+                HStack(spacing: 12) {
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Theme.accentBright)
+                        .frame(width: 22)
+                    Text("settings.training")
+                        .font(Theme.display(14, .medium))
+                        .foregroundStyle(Theme.textPrimary)
+                }
+            }
+            .tint(Theme.accent)
+            .padding(.horizontal, 14).padding(.vertical, 10)
+
+            Text(training.granted ? "settings.training.on" : "settings.training.off")
+                .font(Theme.mono(10))
+                .foregroundStyle(Theme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 14).padding(.bottom, 12)
         }
     }
 

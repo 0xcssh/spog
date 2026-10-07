@@ -17,6 +17,9 @@ struct Identification {
     /// Scans offerts restants selon le serveur, qui en est l'autorite. Nil pour un
     /// abonne, ou face a un serveur plus ancien qui ne le renvoie pas.
     var freeScansLeft: Int? = nil
+    /// Photo conservée pour l'entraînement, si le joueur l'a accepté : sert à y attacher
+    /// son étiquette quand il confirme ou corrige le modèle.
+    var sampleID: String? = nil
 
     /// Texte libre soumis au rapprochement avec le catalogue.
     var fullText: String {
@@ -88,7 +91,8 @@ enum IdentifyService {
     /// - Parameter entitlement: transaction d'abonnement signee par Apple, si le joueur
     ///   en a une. Le serveur la verifie lui-meme ; sans elle, le scan est decompte
     ///   des scans offerts.
-    static func identify(_ photo: UIImage, entitlement: String?) async throws -> Identification {
+    static func identify(_ photo: UIImage, entitlement: String?,
+                         trainingConsent: Bool) async throws -> Identification {
         guard let base64 = compressedJPEGBase64(from: photo) else {
             throw IdentifyError.unreadableImage
         }
@@ -106,6 +110,7 @@ enum IdentifyService {
         request.setValue(InstallIdentity.current, forHTTPHeaderField: "x-install-id")
         var body: [String: Any] = ["imageBase64": base64]
         if let entitlement { body["entitlement"] = entitlement }
+        if trainingConsent { body["training_consent"] = true }
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
         let data: Data, response: URLResponse
@@ -129,6 +134,7 @@ enum IdentifyService {
             let confidence: Double
             let is_screen: Bool, vehicle_present: Bool
             let free_scans_left: Int?
+            let sample_id: String?
         }
         guard let payload = try? JSONDecoder().decode(SuccessPayload.self, from: data) else {
             throw IdentifyError.server(code: "unreadable_ai_response", fallback: nil)
@@ -146,7 +152,37 @@ enum IdentifyService {
                               body: payload.body ?? "sedan",
                               color: payload.color,
                               confidence: payload.confidence,
-                              freeScansLeft: payload.free_scans_left)
+                              freeScansLeft: payload.free_scans_left,
+                              sampleID: payload.sample_id)
+    }
+
+    // MARK: Entraînement
+
+    enum LabelSource: String { case confirmed, corrected }
+
+    /// Le joueur a désigné le bon modèle : c'est l'étiquette qui fait foi pour
+    /// l'entraînement. Silencieux en cas d'échec — une étiquette perdue ne doit
+    /// jamais gêner le jeu.
+    static func label(sampleID: String, vehicleID: String, source: LabelSource) async {
+        _ = try? await post(["action": "label", "sample_id": sampleID,
+                             "vehicle_id": vehicleID, "source": source.rawValue])
+    }
+
+    /// Retrait de l'accord : le serveur efface toutes les photos de cette installation.
+    static func forgetTrainingSamples() async {
+        _ = try? await post(["action": "forget"])
+    }
+
+    private static func post(_ body: [String: Any]) async throws -> Data {
+        guard let url = URL(string: BackendConfig.identifyURL) else { throw IdentifyError.network }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 20
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(deviceIdentifier, forHTTPHeaderField: "x-device-id")
+        request.setValue(InstallIdentity.current, forHTTPHeaderField: "x-install-id")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        return try await URLSession.shared.data(for: request).0
     }
 
     /// Recompresse la photo (max 1280 px) : bien assez pour reconnaitre une voiture,

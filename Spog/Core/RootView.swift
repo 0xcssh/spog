@@ -10,6 +10,7 @@ struct RootView: View {
     /// parlent à la même position, et l'autorisation n'est demandée qu'une fois.
     @State private var location = LocationProvider()
     @State private var referral = ReferralStore()
+    @State private var training = TrainingConsent()
     @State private var tab: Tab = .garage
 
     init() {
@@ -57,6 +58,7 @@ struct RootView: View {
         .environment(progress)
         .environment(subscriptions)
         .environment(profile)
+        .environment(training)
         // Lien d'invitation `spog://invite/XXXXXX`. Le code est seulement **proposé** :
         // on n'accepte pas un parrainage à la place du joueur, un lien s'ouvre par accident.
         .onOpenURL { url in

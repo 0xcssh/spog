@@ -15,7 +15,7 @@ struct ParallaxArtwork: View {
     let tint: Color
     /// Identifiant du vehicule : sert a retrouver son illustration embarquee.
     var vehicleID: String = ""
-    /// Carrosserie et teinte du vehicule, pour le rendu 3D de repli.
+    /// Carrosserie et teinte du vehicule, pour la silhouette de repli.
     var carBody: CarBody = .sedan
     var paint: UInt32 = 0xB4B8BE
     /// Photo de l'utilisateur, transformee. Sinon, decor genere.
@@ -116,8 +116,7 @@ struct ParallaxArtwork: View {
             RoadCanvas(tint: tint)
                 .offset(shift(0.6))
 
-            // Plan 3 — la voiture en volume, au plus pres de la vitre.
-            // Elle tourne sur elle-meme quand la carte s'incline.
+            // Plan 3 — la voiture, au plus pres de la vitre.
             if let art = CarArt.image(for: vehicleID) {
                 // Illustration du modele exact : on reconnait la voiture.
                 Image(uiImage: art)
@@ -127,13 +126,10 @@ struct ParallaxArtwork: View {
                     .padding(.horizontal, 8)
                     .offset(shift(1.0))
             } else {
-                // Repli : volume genere par le code, valable pour tout le catalogue.
-                Car3DView(body: carBody,
-                          paint: CarPaint.uiColor(paint),
-                          yaw: 28 + px * 60,
-                          pitch: 2 - py * 7,
-                          accent: UIColor(tint))
-                    .offset(shift(0.55))
+                // Repli : silhouette de la carrosserie, valable pour tout le catalogue.
+                CarSilhouette(body: carBody, paint: paint, tint: tint)
+                    .offset(y: 10)
+                    .offset(shift(0.8))
             }
         }
     }

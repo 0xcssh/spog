@@ -17,6 +17,9 @@ struct Catch: Identifiable, Codable {
     let paint: UInt32
     /// Vrai si des photos sont rangees sur le disque pour cette capture.
     var hasShot: Bool = false
+    /// Photo confiee a l'entrainement, si le joueur l'a accepte (voir TrainingConsent).
+    /// Optionnelle au decodage : les garages enregistres avant elle se relisent tels quels.
+    var sampleID: String? = nil
 
     /// Photos relues depuis le disque, jamais gardees en memoire dans la capture.
     var shot: StyledShot? { hasShot ? ShotStore.load(id) : nil }
@@ -74,6 +77,10 @@ final class GarageStore {
               catches[index].vehicleID != vehicleID else { return }
         catches[index].vehicleID = vehicleID
         save()
+        // Une correction est la meilleure etiquette qui soit : l'IA s'etait trompee.
+        if let sample = catches[index].sampleID {
+            Task { await IdentifyService.label(sampleID: sample, vehicleID: vehicleID, source: .corrected) }
+        }
     }
 
     func remove(_ item: Catch) {
@@ -167,7 +174,7 @@ final class GarageStore {
 
     @discardableResult
     func add(vehicleID: String, country: String, verified: Bool,
-             paint: UInt32? = nil, shot: StyledShot? = nil) -> Catch {
+             paint: UInt32? = nil, shot: StyledShot? = nil, sampleID: String? = nil) -> Catch {
         let id = UUID()
         if let shot { ShotStore.save(shot, for: id) }
         let item = Catch(id: id,
@@ -177,7 +184,8 @@ final class GarageStore {
                          countryCode: country,
                          verified: verified,
                          paint: paint ?? CarPaint.random(),
-                         hasShot: shot != nil)
+                         hasShot: shot != nil,
+                         sampleID: sampleID)
         catches.append(item)
         save()
         return item

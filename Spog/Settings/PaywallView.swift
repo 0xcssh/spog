@@ -193,7 +193,12 @@ struct PaywallView: View {
         return Button {
             @Bindable var store = subscriptions
             store.selected = plan
-            Task { if await subscriptions.purchase() { dismiss() } }
+            Task {
+                let bought = await subscriptions.purchase()
+                Analytics.track(.purchaseResult, ["plan": plan == .yearly ? "yearly" : "monthly",
+                                                  "result": bought ? "success" : "cancelled"])
+                if bought { dismiss() }
+            }
         } label: {
             HStack(spacing: 9) {
                 Spacer(minLength: 0)
@@ -239,7 +244,12 @@ struct PaywallView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack(spacing: 16) {
-                Button { Task { await subscriptions.restore() } } label: {
+                Button {
+                    Task {
+                        await subscriptions.restore()
+                        Analytics.track(.restoreResult, ["result": subscriptions.isSubscribed ? "restored" : "none"])
+                    }
+                } label: {
                     Text("settings.restore").font(Theme.label(10)).tracking(0.6)
                 }
                 Button { document = .terms } label: {

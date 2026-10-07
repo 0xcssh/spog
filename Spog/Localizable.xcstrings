@@ -619,13 +619,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Last updated 27 August 2026"
+            "value": "Last updated 7 October 2026"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dernière mise à jour le 27 août 2026"
+            "value": "DerniÃ¨re mise Ã  jour le 7 octobre 2026"
           }
         }
       }
@@ -1860,13 +1860,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name if you turn location on. Each identification also carries an anonymous device identifier provided by Apple, used only to cap how many scans one device can make and to prevent abuse. It is tied to no identity, it changes if you reinstall the app, and our server keeps only a fingerprint of it. Nothing else: no advertising identifier, no behavioral tracking, no third-party analytics."
+            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name if you turn location on. Each identification also carries two anonymous identifiers: the device identifier provided by Apple, and an installation identifier drawn at random by the app and stored in your iPhone's keychain, which survives a reinstall. They are used only to count your free scans, to cap how many scans can be made and to prevent abuse. They are tied to no identity, and our server keeps only a fingerprint of them, along with the number of free scans already used. Nothing else: no advertising identifier, no behavioral tracking, no third-party analytics."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collecte les photos que tu prends dans l'app, le pays où tu repères tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi un identifiant d'appareil anonyme fourni par Apple : il sert uniquement à limiter le nombre de scans d'un même appareil et à prévenir les abus. Il n'est rattaché à aucune identité, il change si tu réinstalles l'app, et notre serveur n'en conserve qu'une empreinte. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
+            "value": "Spog collecte les photos que tu prends dans l'app, le pays oÃ¹ tu repÃ¨res tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi deux identifiants anonymes : celui de l'appareil, fourni par Apple, et un identifiant d'installation tirÃ© au sort par l'app et rangÃ© dans le trousseau de ton iPhone, qui survit Ã  une rÃ©installation. Ils servent uniquement Ã  dÃ©compter tes scans offerts, Ã  limiter le nombre de scans et Ã  prÃ©venir les abus. Ils ne sont rattachÃ©s Ã  aucune identitÃ©, et notre serveur n'en conserve qu'une empreinte, avec le nombre de scans offerts dÃ©jÃ  utilisÃ©s. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
           }
         }
       }
@@ -1962,13 +1962,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. Before any transmission, license plates detected in the image are blurred on your device. Transmitted photos are not used to train any model and are not kept once the answer is returned."
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree â€” you are asked once, and the \"Help recognize cars\" setting lets you change your mind â€” the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Les photos transmises ne servent à entraîner aucun modèle et ne sont pas conservées une fois la réponse rendue."
+            "value": "Les photos sont stockÃ©es sur ton appareil. Pour identifier un vÃ©hicule, une photo est envoyÃ©e Ã  notre serveur, qui la transmet Ã  un prestataire d'intelligence artificielle pour analyse, puis renvoie le rÃ©sultat. Avant toute transmission, les plaques d'immatriculation dÃ©tectÃ©es dans l'image sont floutÃ©es sur ton appareil. Par dÃ©faut, les photos transmises ne sont pas conservÃ©es une fois la rÃ©ponse rendue. Si tu l'acceptes â€” la question t'est posÃ©e une fois, et le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â» permet de changer d'avis â€”, les photos de tes prises sont conservÃ©es sur notre serveur, plaques dÃ©jÃ  floutÃ©es, avec le modÃ¨le identifiÃ© et celui que tu as Ã©ventuellement corrigÃ©, pour entraÃ®ner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachÃ©es Ã  aucune identitÃ©, et ne sont jamais publiÃ©es, vendues ni partagÃ©es."
           }
         }
       }
@@ -2030,13 +2030,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Since no data is linked to an identity on our side, we hold nothing to give you access to or to delete on request. Everything is in your hands, on your device. You may withdraw location permission at any time in the iOS Settings app."
+            "value": "No data is linked to an identity on our side. The training photos you agreed to share are all deleted as soon as you turn off the \"Help recognize cars\" setting. Everything else is in your hands, on your device. You may withdraw location permission at any time in the iOS Settings app."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune donnée n'étant rattachée à une identité de notre côté, nous ne détenons rien à te communiquer ni à effacer sur demande. Tout est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation à tout moment dans les Réglages d'iOS."
+            "value": "Aucune donnÃ©e n'est rattachÃ©e Ã  une identitÃ© de notre cÃ´tÃ©. Les photos d'entraÃ®nement que tu as acceptÃ© de confier sont toutes effacÃ©es dÃ¨s que tu dÃ©sactives le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â». Le reste est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation Ã  tout moment dans les RÃ©glages d'iOS."
           }
         }
       }
@@ -3102,6 +3102,23 @@
         }
       }
     },
+    "settings.data": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DonnÃ©es"
+          }
+        }
+      }
+    },
     "settings.legal": {
       "extractionState": "manual",
       "localizations": {
@@ -3370,6 +3387,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Réglages"
+          }
+        }
+      }
+    },
+    "settings.training": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help recognize cars"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aider Ã  reconnaÃ®tre les voitures"
+          }
+        }
+      }
+    },
+    "settings.training.off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your photos are only used to identify the car, then are not kept."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes photos servent seulement Ã  identifier la voiture, puis ne sont pas conservÃ©es."
+          }
+        }
+      }
+    },
+    "settings.training.on": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos of your catches are kept, with plates blurred, to train on-device recognition. Turning this off deletes all the ones already shared."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les photos de tes prises sont conservÃ©es, plaques floutÃ©es, pour entraÃ®ner la reconnaissance sur l'iPhone. DÃ©sactiver efface toutes celles dÃ©jÃ  confiÃ©es."
           }
         }
       }
@@ -4380,6 +4448,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abonnement"
+          }
+        }
+      }
+    },
+    "training.ask.accept": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J'accepte"
+          }
+        }
+      }
+    },
+    "training.ask.decline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No thanks"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non merci"
+          }
+        }
+      }
+    },
+    "training.ask.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With your permission, the photos of your catches are kept, with plates blurred, to train recognition that runs right on your iPhone: faster, and even offline. No identity is attached, and you can change your mind at any time in Settings."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec ton accord, les photos de tes prises sont conservÃ©es, plaques floutÃ©es, pour entraÃ®ner une reconnaissance qui marchera directement sur ton iPhone : plus rapide, et mÃªme sans rÃ©seau. Aucune identitÃ© n'y est rattachÃ©e, et tu peux changer d'avis Ã  tout moment dans les rÃ©glages."
+          }
+        }
+      }
+    },
+    "training.ask.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help Spog recognize cars?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aider Spog Ã  reconnaÃ®tre les voitures ?"
           }
         }
       }

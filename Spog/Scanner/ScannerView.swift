@@ -9,6 +9,7 @@ struct ScannerView: View {
     @Environment(SubscriptionStore.self) private var subscriptions
     @Environment(PlayerProfile.self) private var profile
     @Environment(LocationProvider.self) private var location
+    @Environment(TrainingConsent.self) private var training
 
     /// Seuil de blocage du scan, **exprimé dans le système du pays** : 30 km/h là où on
     /// compte en kilomètres, 20 mph là où on compte en miles. Ce sont deux façons de dire
@@ -40,6 +41,7 @@ struct ScannerView: View {
     /// Nombre de plaques masquées sur la dernière prise, montré brièvement.
     @State private var maskedPlates = 0
     @State private var showingPaywall = false
+    @State private var askingTraining = false
     /// Carte a reveler juste apres une prise.
     @State private var reveal: Reveal?
     /// Prise en attente d'une confirmation du joueur : l'IA n'etait pas assez sure.
@@ -61,6 +63,7 @@ struct ScannerView: View {
         let reading: String
         let candidates: [Vehicle]
         let paint: UInt32?
+        let sampleID: String?
         /// Ce que l'IA a lu, en pieces detachees : de quoi ajouter le modele au
         /// catalogue si le joueur confirme qu'elle avait raison.
         let make: String
@@ -97,7 +100,11 @@ struct ScannerView: View {
         }
         .onDisappear { camera.stop() }
         .fullScreenCover(isPresented: $showingPaywall) { PaywallView() }
-        .fullScreenCover(item: $reveal) { item in
+        // La question de l'entraînement vient après la première carte révélée : le
+        // joueur sait alors à quoi ses photos serviraient.
+        .fullScreenCover(item: $reveal, onDismiss: {
+            if !training.asked && !garage.catches.isEmpty { askingTraining = true }
+        }) { item in
             CatchRevealView(card: item.card, isNewModel: item.isNewModel,
                             questReward: item.questReward,
                             onScanAgain: { Task { await shoot() } })
@@ -107,9 +114,17 @@ struct ScannerView: View {
                                reading: item.reading,
                                candidates: item.candidates,
                                onPick: { vehicle in
-                                   let photo = item.photo, paint = item.paint
+                                   let photo = item.photo, paint = item.paint, sample = item.sampleID
                                    pending = nil
-                                   Task { await complete(vehicle, photo: photo, paint: paint) }
+                                   Task {
+                                       // Le joueur a tranché entre plusieurs modèles :
+                                       // une étiquette humaine, la plus précieuse.
+                                       if let sample {
+                                           await IdentifyService.label(sampleID: sample, vehicleID: vehicle.id,
+                                                                       source: .confirmed)
+                                       }
+                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample)
+                                   }
                                },
                                onLearn: {
                                    // Le joueur confirme que l'IA avait bien lu : le modèle
@@ -117,11 +132,23 @@ struct ScannerView: View {
                                    guard let vehicle = CatalogStore.shared.learn(
                                        make: item.make, model: item.model, body: item.body)
                                    else { return }
-                                   let photo = item.photo, paint = item.paint
+                                   let photo = item.photo, paint = item.paint, sample = item.sampleID
                                    pending = nil
-                                   Task { await complete(vehicle, photo: photo, paint: paint) }
+                                   Task {
+                                       if let sample {
+                                           await IdentifyService.label(sampleID: sample, vehicleID: vehicle.id,
+                                                                       source: .confirmed)
+                                       }
+                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample)
+                                   }
                                },
                                onCancel: { pending = nil })
+        }
+        .alert(String(localized: "training.ask.title"), isPresented: $askingTraining) {
+            Button(String(localized: "training.ask.accept")) { training.answer(true) }
+            Button(String(localized: "training.ask.decline"), role: .cancel) { training.answer(false) }
+        } message: {
+            Text("training.ask.message")
         }
         .alert(String(localized: "scan.failedTitle"),
                isPresented: Binding(get: { failure != nil },
@@ -268,10 +295,12 @@ struct ScannerView: View {
         // il arrive quand le joueur a deja vu ce qu'il achete.
         if ScanAllowance.mustPay(performed: app.scansPerformed,
                                  hasAccess: subscriptions.hasAccess) {
+            Analytics.track(.paywallShown, ["from": "scan"])
             await MainActor.run { showingPaywall = true }
             return
         }
 
+        Analytics.track(.scanStarted, ["freeLeft": freeScansLeft.map(String.init) ?? "subscriber"])
         working = true
         pulse = false
         withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) { pulse = true }
@@ -301,7 +330,8 @@ struct ScannerView: View {
         let identification: Identification
         do {
             identification = try await IdentifyService.identify(
-                photo, entitlement: subscriptions.entitlementJWS)
+                photo, entitlement: subscriptions.entitlementJWS,
+                trainingConsent: training.granted)
         } catch IdentifyService.IdentifyError.paywall {
             // Le serveur a le dernier mot : le compteur local se recale sur lui.
             await MainActor.run {
@@ -309,8 +339,10 @@ struct ScannerView: View {
                 state.scansPerformed = max(state.scansPerformed, SubscriptionStore.freeScans)
                 showingPaywall = true
             }
+            Analytics.track(.paywallShown, ["from": "server"])
             return
         } catch {
+            Analytics.track(.scanFailed, ["reason": Self.reason(error)])
             await MainActor.run { failure = error.localizedDescription }
             return
         }
@@ -343,10 +375,14 @@ struct ScannerView: View {
                                      body: identification.body)
             }
             if let vehicle {
-                await complete(vehicle, photo: photo, paint: paint)
+                Analytics.track(.scanIdentified, ["confidence": String(format: "%.1f", identification.confidence),
+                                                  "matched": "auto"])
+                await complete(vehicle, photo: photo, paint: paint, sampleID: identification.sampleID)
                 return
             }
         }
+        Analytics.track(.scanIdentified, ["confidence": String(format: "%.1f", identification.confidence),
+                                          "matched": "ask"])
 
         // En dessous du seuil, c'est le joueur qui tranche : une mauvaise carte est pire
         // qu'une question.
@@ -354,17 +390,32 @@ struct ScannerView: View {
         await MainActor.run {
             pending = Pending(photo: photo, reading: identification.fullText,
                               candidates: candidates, paint: paint,
+                              sampleID: identification.sampleID,
                               make: identification.make, model: identification.model,
                               body: identification.body)
         }
     }
 
     /// Met la photo en scène, enregistre la carte et la révèle au joueur.
-    private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?) async {
+    private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?,
+                          sampleID: String?) async {
         let glow = garage.glowColor(vehicleID: vehicle.id, country: app.country)
         let shot = await CardArtStylizer.stylize(photo, glow: glow)
             ?? StyledShot(stylized: photo, original: photo)
-        await MainActor.run { reveal = record(vehicle, shot: shot, paint: paint) }
+        await MainActor.run { reveal = record(vehicle, shot: shot, paint: paint, sampleID: sampleID) }
+    }
+
+    /// Raison d'échec stable pour l'analytics : le code serveur, jamais un texte traduit.
+    private static func reason(_ error: Error) -> String {
+        guard let error = error as? IdentifyService.IdentifyError else { return "unknown" }
+        switch error {
+        case .server(let code, _): return code ?? "server"
+        case .network:             return "network"
+        case .unreadableImage:     return "unreadable_image"
+        case .noVehicle:           return "no_vehicle"
+        case .notLive:             return "not_live"
+        case .paywall:             return "paywall"
+        }
     }
 
     #if targetEnvironment(simulator)
@@ -380,10 +431,12 @@ struct ScannerView: View {
 
     /// Enregistre la prise, entretient la série, valide la quête si elle est remplie,
     /// et rend de quoi révéler la carte au joueur.
-    private func record(_ vehicle: Vehicle, shot: StyledShot?, paint: UInt32?) -> Reveal? {
+    private func record(_ vehicle: Vehicle, shot: StyledShot?, paint: UInt32?,
+                        sampleID: String?) -> Reveal? {
         let isNew = !garage.hasModel(vehicle.id)
         let item = garage.add(vehicleID: vehicle.id, country: app.country,
-                              verified: app.isVerifiedCapture, paint: paint, shot: shot)
+                              verified: app.isVerifiedCapture, paint: paint, shot: shot,
+                              sampleID: sampleID)
 
         let quest = QuestFactory.quest(for: Date(), country: app.country,
                                         favourites: profile.favouriteList)
@@ -393,6 +446,7 @@ struct ScannerView: View {
         let reward = progress.register(satisfies: quest, satisfied: satisfied)
 
         guard let card = garage.card(item) else { return nil }
+        Analytics.track(.cardCreated, ["tier": card.tier.id])
         return Reveal(card: card, isNewModel: isNew, questReward: reward)
     }
 }

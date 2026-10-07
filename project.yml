@@ -9,6 +9,12 @@ options:
     iOS: "17.0"
   createIntermediateGroups: true
 
+packages:
+  # Analytics produit anonyme (pas d'ATT, pas d'identifiant), comme RepLock. Voir Core/Analytics.swift.
+  TelemetryDeck:
+    url: https://github.com/TelemetryDeck/SwiftSDK
+    from: 2.0.0
+
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -58,6 +64,9 @@ targets:
         # App Store sans déclarer les quatre orientations (leçon de RepLock).
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+    dependencies:
+      - package: TelemetryDeck
+        product: TelemetryDeck
 
   SpogTests:
     type: bundle.unit-test
