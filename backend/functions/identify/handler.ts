@@ -112,10 +112,19 @@ export const COLORS = [
 /// géométries que l'app sait dessiner. Même épinglage que COLORS.
 export const BODIES = ["hatch", "sedan", "suv", "sport", "pickup", "van"];
 
-/// Tarifs gpt-4o, en dollars par jeton. Ils ne servent qu'à écrire le coût dans les
-/// journaux : une valeur périmée fausse la ligne de journal, jamais la facturation.
-const PRICE_IN = 2.50 / 1_000_000;
-const PRICE_OUT = 10.00 / 1_000_000;
+/// Tarifs en dollars par million de jetons (entrée, sortie), par modèle. Ils ne servent
+/// qu'à écrire le coût dans les journaux : une valeur périmée fausse la ligne de journal,
+/// jamais la facturation. Un modèle absent de la table est journalisé sans coût plutôt
+/// qu'au tarif d'un autre — c'est ce qui se passait quand seul gpt-4o y figurait.
+export const PRICES: Record<string, [number, number]> = {
+  "gpt-4o": [2.50, 10.00],
+  "gpt-4.1-mini": [0.40, 1.60],
+};
+
+export function costOf(model: string, promptTokens: number, completionTokens: number): number | null {
+  const price = PRICES[model];
+  return price ? (promptTokens * price[0] + completionTokens * price[1]) / 1_000_000 : null;
+}
 
 /// Empreinte SHA-256 de la clé de quota : on ne stocke jamais l'ID ni l'IP brute.
 export function hashKey(key: string): string {
@@ -455,8 +464,9 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     // Coût réel de l'appel, inscrit dans les journaux de la fonction.
     const usage = completion?.usage;
     if (usage) {
-      const cost = (usage.prompt_tokens ?? 0) * PRICE_IN + (usage.completion_tokens ?? 0) * PRICE_OUT;
-      console.log(`scan: ${usage.prompt_tokens} jetons entrée, ${usage.completion_tokens} sortie, $${cost.toFixed(5)}`);
+      const cost = costOf(model, usage.prompt_tokens ?? 0, usage.completion_tokens ?? 0);
+      console.log(`scan ${model}: ${usage.prompt_tokens} jetons entrée, ${usage.completion_tokens} sortie, ` +
+                  (cost === null ? "coût inconnu" : `$${cost.toFixed(5)}`));
     }
 
     try {

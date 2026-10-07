@@ -165,6 +165,21 @@ On commence par la trentaine de modèles les plus scannés — ce sont eux qui c
 Le coût de l'appel IA baisse aussi indépendamment : `tools/score-identification.py` permet
 de comparer un modèle moins cher que `gpt-4o` sur le jeu de test avant d'en changer.
 
+**Mesure du 07/10/2026, sur les 13 photos de `test-photos/` :**
+
+| Modèle | Identification | Couleur | Confiance |
+|---|---|---|---|
+| `gpt-4o` (en production) | 13/13 | 9/10 | 0,90 à 0,95 |
+| `gpt-4.1-mini` | 13/13 | 9/10 | 0,80 à 0,95 |
+
+À qualité égale sur ce jeu, `gpt-4.1-mini` coûte environ deux à trois fois moins par scan
+(tarif six fois plus bas, mais il compte plus de jetons par image). Deux réserves avant
+d'en changer : sa confiance descend jusqu'au seuil de l'app (0,80 dans `rarity.json`), donc
+plus d'écrans de confirmation ; et treize photos d'annonces ne disent rien de la rue. On
+garde `gpt-4o` pour le premier vrai test dans la rue, puis on refait la mesure sur ces
+photos-là. Changer de modèle ne demande aucun code :
+`gh workflow run backend.yml -f deploy=true -f model=gpt-4.1-mini`.
+
 ## Ordre des travaux
 
 | Phase | Contenu | Livrable |

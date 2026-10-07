@@ -372,3 +372,16 @@ describe("photos d'entraînement", () => {
     assert.equal(store.consumed(), 0);
   });
 });
+
+describe("coût journalisé", () => {
+  test("au tarif du modèle réellement appelé", async () => {
+    const { costOf } = await import("./handler");
+    assert.equal(costOf("gpt-4o", 1_000_000, 0), 2.5);
+    assert.equal(costOf("gpt-4.1-mini", 1_000_000, 1_000_000), 2.0);
+  });
+
+  test("un modèle inconnu n'emprunte pas le tarif d'un autre", async () => {
+    const { costOf } = await import("./handler");
+    assert.equal(costOf("gpt-9", 1000, 1000), null);
+  });
+});
