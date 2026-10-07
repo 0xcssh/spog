@@ -20,6 +20,9 @@ struct Identification {
     /// Photo conservée pour l'entraînement, si le joueur l'a accepté : sert à y attacher
     /// son étiquette quand il confirme ou corrige le modèle.
     var sampleID: String? = nil
+    /// Trace de l'identification côté serveur : la preuve, pour le classement, que la
+    /// prise déclarée ensuite correspond à cette photo.
+    var scanID: String? = nil
 
     /// Texte libre soumis au rapprochement avec le catalogue.
     var fullText: String {
@@ -75,19 +78,6 @@ enum IdentifyService {
         }
     }
 
-    /// Identifiant d'appareil anonyme, envoye au backend pour appliquer un quota
-    /// anti-abus. `identifierForVendor` est fourni par Apple, propre a cet editeur,
-    /// et reinitialise a la desinstallation — il n'identifie pas la personne.
-    /// Le serveur n'en stocke que l'empreinte.
-    private static let deviceIdentifier: String = {
-        if let vendorID = UIDevice.current.identifierForVendor?.uuidString { return vendorID }
-        let key = "fallbackDeviceIdentifier"
-        if let existing = UserDefaults.standard.string(forKey: key) { return existing }
-        let generated = UUID().uuidString
-        UserDefaults.standard.set(generated, forKey: key)
-        return generated
-    }()
-
     /// - Parameter entitlement: transaction d'abonnement signee par Apple, si le joueur
     ///   en a une. Le serveur la verifie lui-meme ; sans elle, le scan est decompte
     ///   des scans offerts.
@@ -106,7 +96,7 @@ enum IdentifyService {
         // un viseur fige. Le serveur repond en 3 a 8 s dans les cas normaux.
         request.timeoutInterval = 25
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(deviceIdentifier, forHTTPHeaderField: "x-device-id")
+        request.setValue(Backend.deviceIdentifier, forHTTPHeaderField: "x-device-id")
         request.setValue(InstallIdentity.current, forHTTPHeaderField: "x-install-id")
         var body: [String: Any] = ["imageBase64": base64]
         if let entitlement { body["entitlement"] = entitlement }
@@ -135,6 +125,7 @@ enum IdentifyService {
             let is_screen: Bool, vehicle_present: Bool
             let free_scans_left: Int?
             let sample_id: String?
+            let scan_id: String?
         }
         guard let payload = try? JSONDecoder().decode(SuccessPayload.self, from: data) else {
             throw IdentifyError.server(code: "unreadable_ai_response", fallback: nil)
@@ -153,7 +144,8 @@ enum IdentifyService {
                               color: payload.color,
                               confidence: payload.confidence,
                               freeScansLeft: payload.free_scans_left,
-                              sampleID: payload.sample_id)
+                              sampleID: payload.sample_id,
+                              scanID: payload.scan_id)
     }
 
     // MARK: Entraînement
@@ -164,25 +156,14 @@ enum IdentifyService {
     /// l'entraînement. Silencieux en cas d'échec — une étiquette perdue ne doit
     /// jamais gêner le jeu.
     static func label(sampleID: String, vehicleID: String, source: LabelSource) async {
-        _ = try? await post(["action": "label", "sample_id": sampleID,
-                             "vehicle_id": vehicleID, "source": source.rawValue])
+        _ = await Backend.call(["action": "label", "sample_id": sampleID,
+                                "vehicle_id": vehicleID, "source": source.rawValue],
+                               as: Backend.ErrorPayload.self)
     }
 
     /// Retrait de l'accord : le serveur efface toutes les photos de cette installation.
     static func forgetTrainingSamples() async {
-        _ = try? await post(["action": "forget"])
-    }
-
-    private static func post(_ body: [String: Any]) async throws -> Data {
-        guard let url = URL(string: BackendConfig.identifyURL) else { throw IdentifyError.network }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 20
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(deviceIdentifier, forHTTPHeaderField: "x-device-id")
-        request.setValue(InstallIdentity.current, forHTTPHeaderField: "x-install-id")
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-        return try await URLSession.shared.data(for: request).0
+        _ = await Backend.call(["action": "forget"], as: Backend.ErrorPayload.self)
     }
 
     /// Recompresse la photo (max 1280 px) : bien assez pour reconnaitre une voiture,

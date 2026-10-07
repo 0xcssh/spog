@@ -64,6 +64,13 @@ targets:
         # App Store sans déclarer les quatre orientations (leçon de RepLock).
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+    # Sign in with Apple : sert seulement à retrouver sa collection sur un autre appareil.
+    # La CI active la capacité sur l'App ID toute seule (signature automatique + clé API).
+    entitlements:
+      path: Spog.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
     dependencies:
       - package: TelemetryDeck
         product: TelemetryDeck

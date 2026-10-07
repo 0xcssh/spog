@@ -11,6 +11,7 @@ struct RootView: View {
     @State private var location = LocationProvider()
     @State private var referral = ReferralStore()
     @State private var training = TrainingConsent()
+    @State private var account = AccountStore()
     @State private var tab: Tab = .garage
 
     init() {
@@ -59,6 +60,13 @@ struct RootView: View {
         .environment(subscriptions)
         .environment(profile)
         .environment(training)
+        .environment(account)
+        // Prises restées en attente, puis l'état du joueur : au lancement, et à chaque
+        // nouvelle prise (le classement bouge).
+        .task(id: garage.catches.count) {
+            await garage.syncPending()
+            await account.refresh()
+        }
         // Lien d'invitation `spog://invite/XXXXXX`. Le code est seulement **proposé** :
         // on n'accepte pas un parrainage à la place du joueur, un lien s'ouvre par accident.
         .onOpenURL { url in

@@ -10,7 +10,7 @@
 // classement, là où tricher fait du tort aux autres.
 //
 // Actions (POST, en-tête x-install-id) :
-//   me · set_pseudo · apple_link · catch · reassign · delete_catch · league · garage
+//   me · set_pseudo · apple_link · catch · reassign · delete_catch · league · garage · delete_account
 
 import { resolve } from "./catalog";
 import type { AppleResult } from "./apple";
@@ -39,7 +39,8 @@ function reply(payload: unknown, status = 200): Response {
 const unavailable = () => reply({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
 const bad = (error: string) => reply({ code: "bad_request", error }, 400);
 
-export const SOCIAL_ACTIONS = ["me", "set_pseudo", "apple_link", "catch", "reassign", "delete_catch", "league", "garage"];
+export const SOCIAL_ACTIONS = ["me", "set_pseudo", "apple_link", "catch", "reassign", "delete_catch", "league", "garage",
+  "delete_account"];
 
 export function createSocial(deps: SocialDeps) {
   const now = deps.now ?? (() => new Date());
@@ -195,6 +196,16 @@ export function createSocial(deps: SocialDeps) {
         promote: LEAGUE_PROMOTE, demote: LEAGUE_DEMOTE,
         members: members.map((m, i) => ({ rank: i + 1, pseudo: m.pseudo, points: m.points, me: m.player_id === player })),
       });
+    },
+
+    /// Suppression du compte, exigée par l'App Store (5.1.1(v)) pour toute app qui en crée :
+    /// pseudo, prises, premiers repéreurs, ligues et rattachement Apple disparaissent. Les
+    /// photos d'entraînement s'effacent par l'action "forget", que l'app appelle aussi. Le
+    /// décompte des scans offerts, lui, reste : il protège du contournement, pas du joueur.
+    async delete_account(installHash) {
+      const player = await playerOf(installHash);
+      await deps.db!.query("delete from public.players where id = $1", [player]);
+      return reply({ ok: true });
     },
 
     async garage(installHash) {

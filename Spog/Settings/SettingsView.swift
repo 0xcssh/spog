@@ -9,6 +9,7 @@ struct SettingsView: View {
     @Environment(SubscriptionStore.self) private var subscriptions
     @Environment(LocationProvider.self) private var location
     @Environment(TrainingConsent.self) private var training
+    @Environment(AccountStore.self) private var account
     @Environment(\.dismiss) private var dismiss
 
     @State private var pickingCountry = false
@@ -16,6 +17,8 @@ struct SettingsView: View {
     @State private var restoring = false
     @State private var showingPaywall = false
     @State private var restoreResult: RestoreResult?
+    @State private var confirmingDeletion = false
+    @State private var deletionFailed = false
 
     private let store = CatalogStore.shared
 
@@ -61,6 +64,19 @@ struct SettingsView: View {
         .sheet(isPresented: $pickingCountry) { MarketPickerSheet() }
         .sheet(item: $document) { LegalDocumentView(document: $0) }
         .fullScreenCover(isPresented: $showingPaywall) { PaywallView() }
+        // Suppression du compte : exigée par l'App Store (5.1.1(v)) dès qu'une app en crée.
+        // Le garage local n'est pas touché — il appartient à l'appareil.
+        .confirmationDialog(String(localized: "account.delete.title"), isPresented: $confirmingDeletion,
+                            titleVisibility: .visible) {
+            Button(String(localized: "account.delete.confirm"), role: .destructive) {
+                Task { if !(await account.deleteAccount()) { deletionFailed = true } }
+            }
+        } message: {
+            Text("account.delete.message")
+        }
+        .alert(String(localized: "account.delete.failed"), isPresented: $deletionFailed) {
+            Button(String(localized: "common.ok"), role: .cancel) {}
+        }
         .alert(item: $restoreResult) { result in
             Alert(title: Text(result == .none ? "settings.restore.none" : "settings.restore.failed"),
                   dismissButton: .default(Text("common.ok")))
@@ -147,6 +163,11 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 14).padding(.bottom, 12)
+
+            divider
+            row(icon: "person.crop.circle.badge.xmark", label: "account.delete.row", value: nil) {
+                confirmingDeletion = true
+            }
         }
     }
 

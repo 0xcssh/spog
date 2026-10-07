@@ -1,131 +1,212 @@
 import SwiftUI
+import AuthenticationServices
 
-/// Amis et crews. La structure est en place ; les fonctions collectives
-/// attendent des comptes utilisateurs et un serveur (voir la note en bas d'ecran).
+/// Le jeu à plusieurs : pseudo, ligue de la semaine, compte Apple, parrainage.
+///
+/// La ligue est le cœur de l'écran : trente joueurs du même palier, remis à zéro chaque
+/// lundi, les premiers montent et les derniers descendent. C'est le serveur qui compte
+/// (voir backend/functions/identify/social.ts) ; l'écran ne fait qu'afficher.
 struct SocialView: View {
     @Environment(AppState.self) private var app
     @Environment(GarageStore.self) private var garage
     @Environment(ProgressStore.self) private var progress
     @Environment(PlayerProfile.self) private var profile
     @Environment(ReferralStore.self) private var referral
+    @Environment(AccountStore.self) private var account
 
     @State private var enteringCode = false
+    @State private var choosingPseudo = false
+    @State private var appleFailed = false
     /// Code copie a l'instant : la coche remplace l'icone une seconde.
     @State private var justCopied = false
-
-    private var totalPoints: Int { garage.totalPoints + progress.bonusPoints }
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 SectionHeader(overline: "social.section",
                               title: String(localized: "social.title"))
-                friendsBlock
+                identityBlock
+                leagueBlock
+                if account.profile?.apple_linked == false { appleBlock }
+                duelsBlock
                 referralBlock
                 crewBlock
-                leaderboard
-                note
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 16)
         }
+        .refreshable { await account.refresh() }
+        .task { await account.refresh() }
         .sheet(isPresented: $enteringCode) { ReferralEntrySheet() }
+        .sheet(isPresented: $choosingPseudo) { PseudoSheet() }
+        .alert(String(localized: "account.apple.failed"), isPresented: $appleFailed) {
+            Button(String(localized: "common.ok"), role: .cancel) {}
+        }
     }
 
-    // MARK: Classement
+    // MARK: Identité
 
-    /// Le classement des amis. Pour l'instant il ne contient que le joueur —
-    /// c'est volontairement montre plutot que cache : on voit ce qui viendra s'y ajouter.
-    private var leaderboard: some View {
+    /// Le pseudo, et ce que le serveur sait du joueur. Sans pseudo, le joueur figure au
+    /// classement sous un nom générique : le choisir n'est jamais obligatoire.
+    private var identityBlock: some View {
         NeonFrame(radius: 16) {
             VStack(alignment: .leading, spacing: 12) {
-                Overline(text: "social.leaderboard")
-
-                row(rank: 1, name: profile.displayName,
-                    level: Progression.level(for: totalPoints),
-                    points: totalPoints, isYou: true)
-
-                ForEach(2...4, id: \.self) { rank in
-                    emptyRow(rank: rank)
+                Overline(text: "social.you.overline")
+                Button { choosingPseudo = true } label: {
+                    HStack(spacing: 10) {
+                        Text(account.profile?.pseudo.map { "@\($0)" } ?? String(localized: "social.pseudo.choose"))
+                            .font(Theme.mono(18, .bold))
+                            .foregroundStyle(account.profile?.pseudo == nil ? Theme.accentBright : Theme.textPrimary)
+                            .lineLimit(1).minimumScaleFactor(0.6)
+                        Spacer(minLength: 6)
+                        Image(systemName: "pencil")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Theme.textMuted)
+                    }
                 }
+                .buttonStyle(.plain)
 
-                Text("social.leaderboardEmpty")
-                    .font(Theme.mono(10))
-                    .foregroundStyle(Theme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, 2)
+                HStack(spacing: 0) {
+                    stat(value: account.profile?.catches ?? garage.catches.count, label: "social.stat.catches")
+                    stat(value: account.profile?.points ?? garage.totalPoints, label: "social.stat.points")
+                    stat(value: account.profile?.first_spots ?? 0, label: "social.stat.firstSpots")
+                }
             }
             .padding(14)
         }
     }
 
-    private func row(rank: Int, name: String, level: Int,
-                     points: Int, isYou: Bool) -> some View {
-        HStack(spacing: 12) {
-            Text("\(rank)")
-                .font(Theme.mono(14, .bold))
-                .foregroundStyle(isYou ? Theme.background : Theme.textMuted)
-                .frame(width: 28, height: 28)
+    private func stat(value: Int, label: LocalizedStringKey) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(value.formatted())
+                .font(Theme.mono(17, .bold))
+                .foregroundStyle(Theme.textPrimary)
+            Text(label)
+                .font(Theme.mono(9))
+                .foregroundStyle(Theme.textMuted)
+                .textCase(.uppercase)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // MARK: Ligue
+
+    private var leagueBlock: some View {
+        NeonFrame(radius: 16) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Overline(text: "league.overline")
+                    Spacer()
+                    if let ends = account.league?.endsAt {
+                        // Le compte à rebours fait partie du jeu : il pousse à sortir avant lundi.
+                        Text("league.endsIn \(ends.formatted(.relative(presentation: .numeric)))")
+                            .font(Theme.mono(9))
+                            .foregroundStyle(Theme.textMuted)
+                    }
+                }
+
+                if let league = account.league {
+                    Text(LocalizedStringKey("league.tier.\(league.tier)"))
+                        .font(Theme.display(22))
+                        .foregroundStyle(Theme.textPrimary)
+
+                    if league.joined {
+                        VStack(spacing: 6) {
+                            ForEach(league.members) { member in
+                                leagueRow(member, zone: league.zone(of: member))
+                            }
+                        }
+                        Text("league.rules \(league.promote) \(league.demote)")
+                            .font(Theme.mono(9))
+                            .foregroundStyle(Theme.textMuted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else {
+                        EmptySlot(icon: "trophy", message: "league.notJoined")
+                    }
+                } else {
+                    EmptySlot(icon: "wifi.slash", message: "league.offline")
+                }
+            }
+            .padding(14)
+        }
+    }
+
+    private func leagueRow(_ member: AccountStore.League.Member, zone: AccountStore.League.Zone) -> some View {
+        HStack(spacing: 11) {
+            Text("\(member.rank)")
+                .font(Theme.mono(13, .bold))
+                .foregroundStyle(member.me ? Theme.background : Theme.textMuted)
+                .frame(width: 26, height: 26)
                 .background {
-                    if isYou {
+                    if member.me {
                         Circle().fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
                                                      startPoint: .topLeading, endPoint: .bottomTrailing))
                     } else {
                         Circle().fill(Theme.surfaceRaised)
                     }
                 }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(name)
-                    .font(Theme.mono(13, .bold))
-                    .foregroundStyle(Theme.textPrimary)
-                Text("profile.level \(level)")
-                    .font(Theme.mono(9))
-                    .foregroundStyle(Theme.textMuted)
+            Text(member.pseudo.map { "@\($0)" } ?? String(localized: "social.anonymous"))
+                .font(Theme.mono(12, member.me ? .bold : .regular))
+                .foregroundStyle(member.pseudo == nil ? Theme.textMuted : Theme.textPrimary)
+                .lineLimit(1)
+            Spacer(minLength: 6)
+            switch zone {
+            case .promotion:
+                Image(systemName: "arrow.up").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.accentBright)
+            case .demotion:
+                Image(systemName: "arrow.down").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.textMuted)
+            case .safe:
+                EmptyView()
             }
-            Spacer()
-            Text(points.formatted())
-                .font(Theme.mono(14, .bold))
-                .foregroundStyle(isYou ? Theme.accentBright : Theme.textSecondary)
+            Text(member.points.formatted())
+                .font(Theme.mono(13, .bold))
+                .foregroundStyle(member.me ? Theme.accentBright : Theme.textSecondary)
         }
-        .padding(.horizontal, 11).padding(.vertical, 9)
-        .background(isYou ? Theme.accent.opacity(0.10) : .clear,
-                    in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(isYou ? Theme.accent.opacity(0.35) : .clear, lineWidth: 1))
+        .padding(.horizontal, 10).padding(.vertical, 7)
+        .background(member.me ? Theme.accent.opacity(0.10) : .clear,
+                    in: RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
-    /// Place libre : ce que l'arrivee d'un ami viendra remplir.
-    private func emptyRow(rank: Int) -> some View {
-        HStack(spacing: 12) {
-            Text("\(rank)")
-                .font(Theme.mono(14, .bold))
-                .foregroundStyle(Theme.textMuted.opacity(0.5))
-                .frame(width: 28, height: 28)
-            Capsule()
-                .fill(Theme.textMuted.opacity(0.12))
-                .frame(width: 84, height: 8)
-            Spacer()
-            Capsule()
-                .fill(Theme.textMuted.opacity(0.12))
-                .frame(width: 34, height: 8)
+    // MARK: Compte Apple
+
+    /// Facultatif : il ne sert qu'à retrouver sa collection et son rang sur un autre
+    /// appareil. Rien d'autre n'est demandé à Apple — ni nom, ni e-mail.
+    private var appleBlock: some View {
+        NeonFrame(radius: 16) {
+            VStack(alignment: .leading, spacing: 12) {
+                Overline(text: "account.apple.overline")
+                Text("account.apple.why")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                SignInWithAppleButton(.signIn) { request in
+                    request.requestedScopes = []
+                } onCompletion: { result in
+                    guard case .success(let authorization) = result,
+                          let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                          let token = credential.identityToken else {
+                        if case .failure(let error) = result,
+                           (error as? ASAuthorizationError)?.code == .canceled { return }
+                        appleFailed = true
+                        return
+                    }
+                    Task { if !(await account.linkApple(identityToken: token)) { appleFailed = true } }
+                }
+                .signInWithAppleButtonStyle(.white)
+                .frame(height: 46)
+                .clipShape(Capsule())
+            }
+            .padding(14)
         }
-        .padding(.horizontal, 11).padding(.vertical, 11)
-        .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                .foregroundStyle(Theme.stroke))
     }
 
-    // MARK: Amis
-    // MARK: Amis
+    // MARK: Duels
 
-    private var friendsBlock: some View {
+    private var duelsBlock: some View {
         NeonFrame(radius: 16) {
             VStack(alignment: .leading, spacing: 13) {
-                Overline(text: "social.friends")
-                EmptySlot(icon: "person.2", message: "social.friendsEmpty")
+                Overline(text: "social.duels")
+                EmptySlot(icon: "figure.fencing", message: "social.duelsEmpty")
                 LockedButton(icon: "person.badge.plus", label: "social.invite")
             }
             .padding(14)
@@ -251,16 +332,6 @@ struct SocialView: View {
             try? await Task.sleep(for: .seconds(1.6))
             withAnimation { justCopied = false }
         }
-    }
-
-    private var note: some View {
-        Text("social.note")
-            .font(Theme.mono(10))
-            .foregroundStyle(Theme.textMuted)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 4)
     }
 }
 

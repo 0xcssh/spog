@@ -60,6 +60,16 @@ describe("joueur", () => {
     assert.equal((await call("set_pseudo", "b", { pseudo: "keno_75" })).body.code, "pseudo_taken");
   });
 
+  test("supprimer son compte efface pseudo et prises ; la requête suivante repart de zéro", async () => {
+    await call("set_pseudo", "a", { pseudo: "Alice" });
+    await caught("a", "porsche-macan");
+    assert.equal((await call("delete_account", "a")).status, 200);
+    const me = await call("me", "a");
+    assert.equal(me.body.pseudo, null);
+    assert.equal(me.body.catches, 0);
+    assert.equal((await call("set_pseudo", "b", { pseudo: "Alice" })).status, 200);   // pseudo libéré
+  });
+
   test("compte Apple : jeton refusé, puis rattachement", async () => {
     assert.equal((await call("apple_link", "a", { identity_token: "bad" })).status, 401);
     const r = await call("apple_link", "a", { identity_token: "good" });

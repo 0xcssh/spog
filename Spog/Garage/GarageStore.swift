@@ -20,6 +20,14 @@ struct Catch: Identifiable, Codable {
     /// Photo confiee a l'entrainement, si le joueur l'a accepte (voir TrainingConsent).
     /// Optionnelle au decodage : les garages enregistres avant elle se relisent tels quels.
     var sampleID: String? = nil
+    /// Identification serveur dont la prise est issue : sans elle, la carte existe mais
+    /// ne compte pas au classement (voir backend/functions/identify/social.ts).
+    var scanID: String? = nil
+    /// Envoyée au serveur ? Optionnel, comme tout ce qui s'ajoute à `Catch` : un booléen
+    /// non optionnel rendrait illisibles les garages enregistrés avant lui.
+    var synced: Bool? = nil
+    /// Premier joueur à attraper ce modèle dans ce pays, d'après le serveur.
+    var firstSpot: Bool? = nil
 
     /// Photos relues depuis le disque, jamais gardees en memoire dans la capture.
     var shot: StyledShot? { hasShot ? ShotStore.load(id) : nil }
@@ -81,12 +89,38 @@ final class GarageStore {
         if let sample = catches[index].sampleID {
             Task { await IdentifyService.label(sampleID: sample, vehicleID: vehicleID, source: .corrected) }
         }
+        let id = item.id
+        Task { await CatchSync.reassign(id, to: vehicleID) }
     }
 
     func remove(_ item: Catch) {
         catches.removeAll { $0.id == item.id }
         ShotStore.delete(item.id)
         save()
+        let id = item.id
+        Task { await CatchSync.delete(id) }
+    }
+
+    // MARK: Synchronisation
+
+    /// Envoie une prise au serveur et retient ce qu'il en dit (premier repéreur).
+    @MainActor
+    func sync(_ id: UUID) async {
+        guard let item = catches.first(where: { $0.id == id }), item.synced != true,
+              let result = await CatchSync.submit(item),
+              let index = catches.firstIndex(where: { $0.id == id }) else { return }
+        catches[index].synced = true
+        catches[index].firstSpot = result.first_spot ?? false
+        save()
+    }
+
+    /// Repousse les prises restées en attente (hors réseau, ou d'avant les comptes).
+    /// Les prises de démonstration ne partent jamais : elles ne sont pas de vraies prises.
+    @MainActor
+    func syncPending() async {
+        for item in catches where item.synced != true && item.hasShot {
+            await sync(item.id)
+        }
     }
 
     // MARK: Lecture
@@ -103,7 +137,8 @@ final class GarageStore {
                         placeName: catalog.countryName(item.countryCode),
                         verified: item.verified,
                         paint: item.paint,
-                        shot: item.shot)
+                        shot: item.shot,
+                        firstSpot: item.firstSpot ?? false)
     }
 
     var cards: [CardData] {
@@ -174,7 +209,8 @@ final class GarageStore {
 
     @discardableResult
     func add(vehicleID: String, country: String, verified: Bool,
-             paint: UInt32? = nil, shot: StyledShot? = nil, sampleID: String? = nil) -> Catch {
+             paint: UInt32? = nil, shot: StyledShot? = nil, sampleID: String? = nil,
+             scanID: String? = nil) -> Catch {
         let id = UUID()
         if let shot { ShotStore.save(shot, for: id) }
         let item = Catch(id: id,
@@ -185,9 +221,12 @@ final class GarageStore {
                          verified: verified,
                          paint: paint ?? CarPaint.random(),
                          hasShot: shot != nil,
-                         sampleID: sampleID)
+                         sampleID: sampleID,
+                         scanID: scanID)
         catches.append(item)
         save()
+        let id = item.id
+        Task { @MainActor in await self.sync(id) }
         return item
     }
 

@@ -64,6 +64,7 @@ struct ScannerView: View {
         let candidates: [Vehicle]
         let paint: UInt32?
         let sampleID: String?
+        let scanID: String?
         /// Ce que l'IA a lu, en pieces detachees : de quoi ajouter le modele au
         /// catalogue si le joueur confirme qu'elle avait raison.
         let make: String
@@ -114,7 +115,7 @@ struct ScannerView: View {
                                reading: item.reading,
                                candidates: item.candidates,
                                onPick: { vehicle in
-                                   let photo = item.photo, paint = item.paint, sample = item.sampleID
+                                   let photo = item.photo, paint = item.paint, sample = item.sampleID, scan = item.scanID
                                    pending = nil
                                    Task {
                                        // Le joueur a tranché entre plusieurs modèles :
@@ -123,7 +124,7 @@ struct ScannerView: View {
                                            await IdentifyService.label(sampleID: sample, vehicleID: vehicle.id,
                                                                        source: .confirmed)
                                        }
-                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample)
+                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample, scanID: scan)
                                    }
                                },
                                onLearn: {
@@ -132,14 +133,14 @@ struct ScannerView: View {
                                    guard let vehicle = CatalogStore.shared.learn(
                                        make: item.make, model: item.model, body: item.body)
                                    else { return }
-                                   let photo = item.photo, paint = item.paint, sample = item.sampleID
+                                   let photo = item.photo, paint = item.paint, sample = item.sampleID, scan = item.scanID
                                    pending = nil
                                    Task {
                                        if let sample {
                                            await IdentifyService.label(sampleID: sample, vehicleID: vehicle.id,
                                                                        source: .confirmed)
                                        }
-                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample)
+                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample, scanID: scan)
                                    }
                                },
                                onCancel: { pending = nil })
@@ -377,7 +378,8 @@ struct ScannerView: View {
             if let vehicle {
                 Analytics.track(.scanIdentified, ["confidence": String(format: "%.1f", identification.confidence),
                                                   "matched": "auto"])
-                await complete(vehicle, photo: photo, paint: paint, sampleID: identification.sampleID)
+                await complete(vehicle, photo: photo, paint: paint, sampleID: identification.sampleID,
+                               scanID: identification.scanID)
                 return
             }
         }
@@ -391,6 +393,7 @@ struct ScannerView: View {
             pending = Pending(photo: photo, reading: identification.fullText,
                               candidates: candidates, paint: paint,
                               sampleID: identification.sampleID,
+                              scanID: identification.scanID,
                               make: identification.make, model: identification.model,
                               body: identification.body)
         }
@@ -398,11 +401,13 @@ struct ScannerView: View {
 
     /// Met la photo en scène, enregistre la carte et la révèle au joueur.
     private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?,
-                          sampleID: String?) async {
+                          sampleID: String?, scanID: String?) async {
         let glow = garage.glowColor(vehicleID: vehicle.id, country: app.country)
         let shot = await CardArtStylizer.stylize(photo, glow: glow)
             ?? StyledShot(stylized: photo, original: photo)
-        await MainActor.run { reveal = record(vehicle, shot: shot, paint: paint, sampleID: sampleID) }
+        await MainActor.run {
+            reveal = record(vehicle, shot: shot, paint: paint, sampleID: sampleID, scanID: scanID)
+        }
     }
 
     /// Raison d'échec stable pour l'analytics : le code serveur, jamais un texte traduit.
@@ -432,11 +437,11 @@ struct ScannerView: View {
     /// Enregistre la prise, entretient la série, valide la quête si elle est remplie,
     /// et rend de quoi révéler la carte au joueur.
     private func record(_ vehicle: Vehicle, shot: StyledShot?, paint: UInt32?,
-                        sampleID: String?) -> Reveal? {
+                        sampleID: String?, scanID: String?) -> Reveal? {
         let isNew = !garage.hasModel(vehicle.id)
         let item = garage.add(vehicleID: vehicle.id, country: app.country,
                               verified: app.isVerifiedCapture, paint: paint, shot: shot,
-                              sampleID: sampleID)
+                              sampleID: sampleID, scanID: scanID)
 
         let quest = QuestFactory.quest(for: Date(), country: app.country,
                                         favourites: profile.favouriteList)

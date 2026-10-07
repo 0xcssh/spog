@@ -15,6 +15,8 @@ struct CardData: Identifiable {
     let paint: UInt32
     /// Photo de l'utilisateur et sa version transformee. Nil avant le premier scan.
     var shot: StyledShot? = nil
+    /// Premier joueur a attraper ce modele dans ce pays : une marque meritee, a vie.
+    var firstSpot: Bool = false
 }
 
 /// La carte a collectionner. Se penche sous le doigt sur deux axes, avec un reflet
@@ -218,6 +220,12 @@ struct CollectibleCardView: View {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: 9))
                         .foregroundStyle(card.tier.color)
+                }
+                if card.firstSpot {
+                    Image(systemName: "flag.checkered")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(RarityTier.trophyGold)
+                        .accessibilityLabel(Text("card.firstSpot"))
                 }
                 Spacer()
                 Image("LogoMark")

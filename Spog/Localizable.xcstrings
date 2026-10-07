@@ -1,6 +1,142 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "account.apple.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signing in with Apple didn't work. Try again in a moment."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La connexion avec Apple n'a pas abouti. RÃ©essaie dans un instant."
+          }
+        }
+      }
+    },
+    "account.apple.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sauvegarde"
+          }
+        }
+      }
+    },
+    "account.apple.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple to get your collection and rank back on another iPhone. Spog receives neither your name nor your email."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecte-toi avec Apple pour retrouver ta collection et ton rang sur un autre iPhone. Spog ne reÃ§oit ni ton nom ni ton e-mail."
+          }
+        }
+      }
+    },
+    "account.delete.confirm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete permanently"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer dÃ©finitivement"
+          }
+        }
+      }
+    },
+    "account.delete.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deletion didn't go through. Check your connection and try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La suppression n'a pas abouti. VÃ©rifie ta connexion et rÃ©essaie."
+          }
+        }
+      }
+    },
+    "account.delete.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your handle, your ranking and the catches stored on our server will be erased, along with any photos shared for training. The cards on this phone stay in your garage."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton pseudo, ton classement et tes prises enregistrÃ©es sur notre serveur seront effacÃ©s, ainsi que les photos confiÃ©es Ã  l'entraÃ®nement. Les cartes de ce tÃ©lÃ©phone restent dans ton garage."
+          }
+        }
+      }
+    },
+    "account.delete.row": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete my account"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer mon compte"
+          }
+        }
+      }
+    },
+    "account.delete.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete your account?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer ton compte ?"
+          }
+        }
+      }
+    },
     "card.caught": {
       "extractionState": "manual",
       "localizations": {
@@ -48,6 +184,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prise déclarée"
+          }
+        }
+      }
+    },
+    "card.firstSpot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First spotter of this model in this country"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premier repÃ©reur de ce modÃ¨le dans ce pays"
           }
         }
       }
@@ -579,6 +732,193 @@
         }
       }
     },
+    "league.endsIn %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin %@"
+          }
+        }
+      }
+    },
+    "league.notJoined": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first catch of the week puts you in a group of thirty spotters at your level."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta premiÃ¨re prise de la semaine t'inscrit dans un groupe de trente repÃ©reurs de ton niveau."
+          }
+        }
+      }
+    },
+    "league.offline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leaderboard unavailable right now. Pull down to try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classement indisponible pour le moment. Tire vers le bas pour rÃ©essayer."
+          }
+        }
+      }
+    },
+    "league.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week's league"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligue de la semaine"
+          }
+        }
+      }
+    },
+    "league.rules %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every Monday, the top %1$lld move up a league and the bottom %2$lld move down. Only catches whose country comes from your location count."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque lundi, les %1$lld premiers montent de ligue et les %2$lld derniers descendent. Seules comptent les prises dont le pays vient de ta position."
+          }
+        }
+      }
+    },
+    "league.tier.bronze": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bronze"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bronze"
+          }
+        }
+      }
+    },
+    "league.tier.diamond": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diamond"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diamant"
+          }
+        }
+      }
+    },
+    "league.tier.gold": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gold"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Or"
+          }
+        }
+      }
+    },
+    "league.tier.ruby": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruby"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rubis"
+          }
+        }
+      }
+    },
+    "league.tier.sapphire": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sapphire"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saphir"
+          }
+        }
+      }
+    },
+    "league.tier.silver": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Silver"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Argent"
+          }
+        }
+      }
+    },
     "legal.privacy.title": {
       "extractionState": "manual",
       "localizations": {
@@ -619,13 +959,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Last updated 7 October 2026"
+            "value": "Last updated 8 October 2026"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DerniÃ¨re mise Ã  jour le 7 octobre 2026"
+            "value": "DerniÃ¨re mise Ã  jour le 8 octobre 2026"
           }
         }
       }
@@ -1826,13 +2166,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog requires no account, no email address and no password. Your garage lives on your device. If you delete the app, everything it contains is deleted with it."
+            "value": "Spog asks for no email address and no password. For leaderboards, our server recognizes your player through the anonymous installation identifier, and keeps your catches: the model, the country, the date and the points â€” never your photos, unless you agreed to share them for training. The handle you choose is visible to the other players in your league. Sign in with Apple is optional: it is only used to get your collection back on another device, and Spog receives nothing from Apple but an anonymous identifier, neither your name nor your email. You can delete your account at any time in Settings."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog ne demande ni compte, ni adresse e-mail, ni mot de passe. Ton garage vit sur ton appareil. Si tu supprimes l'app, tout ce qu'elle contient est supprimé avec elle."
+            "value": "Spog ne demande ni adresse e-mail ni mot de passe. Pour les classements, notre serveur reconnaÃ®t ton joueur grÃ¢ce Ã  l'identifiant d'installation anonyme, et conserve tes prises : le modÃ¨le, le pays, la date et les points â€” jamais tes photos, sauf si tu as acceptÃ© de les confier Ã  l'entraÃ®nement. Le pseudo que tu choisis est visible des autres joueurs de ta ligue. Sign in with Apple est facultatif : il sert uniquement Ã  retrouver ta collection sur un autre appareil, et Spog ne reÃ§oit d'Apple qu'un identifiant anonyme, ni ton nom ni ton e-mail. Tu peux supprimer ton compte Ã  tout moment dans les rÃ©glages."
           }
         }
       }
@@ -1928,13 +2268,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your cards and photos stay on your device for as long as you keep them. Removing a card from the garage deletes its photos immediately and permanently. Your referral code, any code you entered, and the vehicles the app has learned from your scans also live on your device, and go away with the app."
+            "value": "Your cards and photos stay on your device for as long as you keep them. Removing a card from the garage deletes its photos immediately and permanently, and removes it from the leaderboards too. Catches recorded for the leaderboards are kept on our server for as long as your account exists; deleting it, in Settings, erases everything. Your referral code, any code you entered, and the vehicles the app has learned from your scans live on your device, and go away with the app."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immédiatement et définitivement. Ton code de parrainage, celui que tu as éventuellement saisi, et les véhicules que l'app a appris de tes scans vivent également sur ton appareil, et disparaissent avec elle."
+            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immÃ©diatement et dÃ©finitivement, et la retire aussi des classements. Les prises enregistrÃ©es pour les classements sont conservÃ©es sur notre serveur tant que ton compte existe ; le supprimer, dans les rÃ©glages, efface tout. Ton code de parrainage, celui que tu as Ã©ventuellement saisi, et les vÃ©hicules que l'app a appris de tes scans vivent sur ton appareil, et disparaissent avec elle."
           }
         }
       }
@@ -2030,13 +2370,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No data is linked to an identity on our side. The training photos you agreed to share are all deleted as soon as you turn off the \"Help recognize cars\" setting. Everything else is in your hands, on your device. You may withdraw location permission at any time in the iOS Settings app."
+            "value": "No data is linked to your real identity on our side. Deleting your account, in Settings, erases your handle, your recorded catches and your ranking. The training photos you agreed to share are all deleted as soon as you turn off the \"Help recognize cars\" setting. Everything else is in your hands, on your device. You may withdraw location permission at any time in the iOS Settings app."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune donnÃ©e n'est rattachÃ©e Ã  une identitÃ© de notre cÃ´tÃ©. Les photos d'entraÃ®nement que tu as acceptÃ© de confier sont toutes effacÃ©es dÃ¨s que tu dÃ©sactives le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â». Le reste est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation Ã  tout moment dans les RÃ©glages d'iOS."
+            "value": "Aucune donnÃ©e n'est rattachÃ©e Ã  ton identitÃ© rÃ©elle de notre cÃ´tÃ©. Supprimer ton compte, dans les rÃ©glages, efface ton pseudo, tes prises enregistrÃ©es et ton classement. Les photos d'entraÃ®nement que tu as acceptÃ© de confier sont toutes effacÃ©es dÃ¨s que tu dÃ©sactives le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â». Le reste est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation Ã  tout moment dans les RÃ©glages d'iOS."
           }
         }
       }
@@ -2173,6 +2513,125 @@
           "stringUnit": {
             "state": "translated",
             "value": "encore %lld pts"
+          }
+        }
+      }
+    },
+    "pseudo.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save right now. Try again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'enregistrer pour le moment. RÃ©essaie."
+          }
+        }
+      }
+    },
+    "pseudo.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "handle"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pseudo"
+          }
+        }
+      }
+    },
+    "pseudo.rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 to 20 characters: letters, numbers, dot and underscore."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 3 Ã  20 caractÃ¨res : lettres, chiffres, point et tiret bas."
+          }
+        }
+      }
+    },
+    "pseudo.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
+    "pseudo.taken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That handle is already taken."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce pseudo est dÃ©jÃ  pris."
+          }
+        }
+      }
+    },
+    "pseudo.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your handle"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton pseudo"
+          }
+        }
+      }
+    },
+    "pseudo.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is the name the other players in your league see. You can change it any time."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est le nom que voient les autres joueurs de ta ligue. Tu peux le changer quand tu veux."
           }
         }
       }
@@ -3442,6 +3901,23 @@
         }
       }
     },
+    "social.anonymous": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anonymous spotter"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RepÃ©reur anonyme"
+          }
+        }
+      }
+    },
     "social.createCrew": {
       "extractionState": "manual",
       "localizations": {
@@ -3493,36 +3969,36 @@
         }
       }
     },
-    "social.friends": {
+    "social.duels": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Friends"
+            "value": "Duels"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Amis"
+            "value": "Duels"
           }
         }
       }
     },
-    "social.friendsEmpty": {
+    "social.duelsEmpty": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No friends yet. Compare your garages and see who spots the rarest cars."
+            "value": "Challenge a friend for seven days: whoever scores the most points wins."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun ami pour l'instant. Comparez vos garages et voyez qui repère les plus belles voitures."
+            "value": "DÃ©fie un ami pendant sept jours : celui qui marque le plus de points gagne."
           }
         }
       }
@@ -3561,53 +4037,19 @@
         }
       }
     },
-    "social.leaderboard": {
+    "social.pseudo.choose": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Leaderboard"
+            "value": "Pick your handle"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Classement"
-          }
-        }
-      }
-    },
-    "social.leaderboardEmpty": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add friends and their garages show up here, ranked by points."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoute des amis : leurs garages apparaîtront ici, classés aux points."
-          }
-        }
-      }
-    },
-    "social.note": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Friends and crews need user accounts and a server. Nothing is sent anywhere yet — your garage stays on this device."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les amis et les crews demandent des comptes utilisateurs et un serveur. Rien n'est encore envoyé nulle part : ton garage reste sur cet appareil."
+            "value": "Choisis ton pseudo"
           }
         }
       }
@@ -3765,24 +4207,92 @@
         }
       }
     },
+    "social.stat.catches": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catches"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prises"
+          }
+        }
+      }
+    },
+    "social.stat.firstSpots": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firsts"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premiers"
+          }
+        }
+      }
+    },
+    "social.stat.points": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        }
+      }
+    },
     "social.title": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Friends & crews"
+            "value": "League & rivals"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Amis et crews"
+            "value": "Ligue et rivaux"
           }
         }
       }
     },
     "social.you": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toi"
+          }
+        }
+      }
+    },
+    "social.you.overline": {
       "extractionState": "manual",
       "localizations": {
         "en": {
