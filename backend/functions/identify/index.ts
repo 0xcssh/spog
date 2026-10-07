@@ -8,6 +8,7 @@ import { Pool } from "pg";
 import { verifyEntitlement } from "./entitlement";
 import { createHandler } from "./handler";
 import { createSampleStore } from "./storage";
+import { testersFrom } from "./develop";
 
 // Transactions Sandbox (TestFlight, revue Apple) acceptées par défaut. À couper
 // avec ALLOW_SANDBOX=false une fois l'app publiée, si l'abus se présente.
@@ -35,6 +36,7 @@ const handle = createHandler({
   // Photos d'entraînement, avec l'accord du joueur. Coupable sans redéployer le code :
   // TRAINING_ENABLED=false au déploiement.
   samples: process.env.TRAINING_ENABLED === "false" ? null : createSampleStore(),
+  developTesters: testersFrom(process.env.DEVELOP_TESTERS),
   model: process.env.OPENAI_MODEL,
 });
 

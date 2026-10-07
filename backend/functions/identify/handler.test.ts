@@ -385,3 +385,44 @@ describe("coût journalisé", () => {
     assert.equal(costOf("gpt-9", 1000, 1000), null);
   });
 });
+
+describe("développement", () => {
+  const png = Buffer.from("fake-png").toString("base64");
+  const imageResponse = () => new Response(JSON.stringify({
+    data: [{ b64_json: png }],
+    usage: { input_tokens: 1300, output_tokens: 1000, input_tokens_details: { text_tokens: 100, image_tokens: 1200 } },
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+
+  test("fermé à qui n'est pas testeur, sans appel OpenAI", async () => {
+    const ai = fakeFetch([imageResponse()]);
+    const res = await handler({ fetch: ai.fn })(post({ action: "develop", imageBase64: "abc" }));
+    assert.equal(res.status, 403);
+    assert.equal(ai.count(), 0);
+  });
+
+  test("un testeur reçoit le rendu et son coût", async () => {
+    const ai = fakeFetch([imageResponse()]);
+    const res = await handler({ fetch: ai.fn, developTesters: new Set(["install-1"]) })(
+      post({ action: "develop", imageBase64: "abc", model: "gpt-image-1-mini", quality: "low" }));
+    const out = await res.json() as any;
+    assert.equal(res.status, 200);
+    assert.equal(out.image, png);
+    assert.equal(out.quality, "low");
+    assert.equal(out.cost_usd, (100 * 2 + 1200 * 2.5 + 1000 * 8) / 1_000_000);
+  });
+
+  test("une erreur OpenAI n'est jamais rejouée", async () => {
+    const ai = fakeFetch([new Response("busy", { status: 503 }), imageResponse()]);
+    const res = await handler({ fetch: ai.fn, developTesters: new Set(["install-1"]) })(
+      post({ action: "develop", imageBase64: "abc" }));
+    assert.equal(res.status, 502);
+    assert.equal(ai.count(), 1);
+  });
+
+  test("un modèle inconnu retombe sur le moins cher", async () => {
+    const ai = fakeFetch([imageResponse()]);
+    const res = await handler({ fetch: ai.fn, developTesters: new Set(["install-1"]) })(
+      post({ action: "develop", imageBase64: "abc", model: "dall-e-9" }));
+    assert.equal((await res.json() as any).model, "gpt-image-1-mini");
+  });
+});

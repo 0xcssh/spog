@@ -15,6 +15,10 @@
 //   → 200 { ok: true }      (le joueur a désigné le bon modèle : l'étiquette qui fait foi)
 //   POST { action: "forget" }
 //   → 200 { deleted: n }    (retrait de l'accord : toutes les photos de l'installation)
+//   POST { action: "develop", imageBase64, model?, quality? }
+//   → 200 { image: "<png base64>", model, quality, usage, cost_usd }
+//        Rendu studio de la voiture photographiée. Réservé aux installations de
+//        DEVELOP_TESTERS tant que la monnaie de développement n'existe pas (voir develop.ts).
 //   → 4xx/5xx { code: string, error: string }
 //     `code` est stable et traduit côté app ; `error` n'est qu'un repli lisible.
 //
@@ -31,6 +35,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { EntitlementResult } from "./entitlement";
 import type { SampleStore } from "./storage";
+import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
 
 /** Sous-ensemble de pg.Pool utilisé ici. */
 export interface Queryable {
@@ -48,6 +53,8 @@ export interface HandlerDeps {
   /** Compartiment des photos d'entraînement ; null = collecte désactivée. */
   samples?: SampleStore | null;
   newId?: () => string;
+  /** Installations autorisées à développer (tests de coût et de qualité). */
+  developTesters?: Set<string>;
   /** Attente entre deux tentatives OpenAI (remplaçable en test). */
   sleep?: (ms: number) => Promise<void>;
   model?: string;
@@ -244,6 +251,49 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
   }
 
+  /// Génère le rendu studio de la voiture photographiée. Une seule tentative : un rendu
+  /// coûte cher, et le rejouer automatiquement sur une erreur pourrait le facturer deux fois.
+  async function handleDevelop(req: Request, body: Record<string, unknown>): Promise<Response> {
+    const clientIP = clientIPFrom(req.headers);
+    const installId = installIdFrom(req.headers, deviceIdFrom(req.headers, clientIP));
+    if (!deps.developTesters?.has(installId)) {
+      return json({ code: "develop_unavailable", error: "Le développement n'est pas encore ouvert." }, 403);
+    }
+    const image = typeof body.imageBase64 === "string" ? body.imageBase64 : "";
+    if (!image) return json({ code: "missing_input", error: "Photo manquante" }, 400);
+    if (image.length > MAX_IMAGE_BASE64) return json({ code: "image_too_large", error: "Cette photo est trop lourde" }, 413);
+    const imageModel = typeof body.model === "string" && DEVELOP_MODELS.includes(body.model) ? body.model : "gpt-image-1-mini";
+    const quality = typeof body.quality === "string" && DEVELOP_QUALITIES.includes(body.quality) ? body.quality : "medium";
+
+    const form = new FormData();
+    form.append("model", imageModel);
+    form.append("prompt", DEVELOP_PROMPT);
+    form.append("size", "1536x1024");
+    form.append("quality", quality);
+    form.append("image", new Blob([Buffer.from(image, "base64")], { type: "image/jpeg" }), "car.jpg");
+    let response: Response;
+    try {
+      response = await deps.fetch("https://api.openai.com/v1/images/edits", {
+        method: "POST", headers: { "Authorization": `Bearer ${deps.openaiKey}` }, body: form,
+      });
+    } catch (error) {
+      console.error("develop unreachable", error instanceof Error ? error.message : error);
+      return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
+    }
+    if (!response.ok) {
+      console.error("develop error", response.status, (await response.text()).slice(0, 400));
+      return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
+    }
+    const result = await response.json() as { data?: { b64_json?: string }[]; usage?: ImageUsage };
+    const png = result.data?.[0]?.b64_json;
+    if (!png) return json({ code: "unreadable_ai_response", error: "Rendu illisible, réessaie" }, 502);
+    const usage = result.usage ?? {};
+    const cost = developCost(imageModel, usage);
+    console.log(`develop ${imageModel} ${quality}: ${JSON.stringify(usage)}, ` +
+                (cost === null ? "coût inconnu" : `$${cost.toFixed(4)}`));
+    return json({ image: png, model: imageModel, quality, usage, cost_usd: cost });
+  }
+
   /// Retrait de l'accord : tout ce que cette installation a confié disparaît, images
   /// comprises. Les lignes ne sont effacées qu'une fois les images supprimées, pour ne
   /// jamais laisser une image orpheline qu'aucune ligne ne permettrait plus de retrouver.
@@ -364,6 +414,10 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
     if (body.action === "label") return handleLabel(req, body as Record<string, unknown>);
     if (body.action === "forget") return handleForget(req);
+    if (body.action === "develop") {
+      if (!deps.openaiKey) return json({ code: "server_misconfigured", error: "OPENAI_API_KEY manquante côté serveur" }, 500);
+      return handleDevelop(req, body as Record<string, unknown>);
+    }
 
     const imageBase64 = typeof body?.imageBase64 === "string" ? body.imageBase64 : "";
     if (!imageBase64) {
