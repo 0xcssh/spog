@@ -21,8 +21,8 @@ struct Identification {
     }
 }
 
-/// Appelle la Edge Function "identify", seul point de sortie reseau de l'app.
-/// Voir supabase/functions/identify/index.ts pour le contrat.
+/// Appelle la fonction Neon "identify", seul point de sortie reseau de l'app.
+/// Voir backend/functions/identify/handler.ts pour le contrat.
 enum IdentifyService {
 
     enum IdentifyError: LocalizedError {
@@ -82,7 +82,7 @@ enum IdentifyService {
         guard let base64 = compressedJPEGBase64(from: photo) else {
             throw IdentifyError.unreadableImage
         }
-        guard let url = URL(string: "\(BackendConfig.supabaseURL)/functions/v1/identify") else {
+        guard let url = URL(string: BackendConfig.identifyURL) else {
             throw IdentifyError.network
         }
 
@@ -92,7 +92,6 @@ enum IdentifyService {
         // un viseur fige. Le serveur repond en 3 a 8 s dans les cas normaux.
         request.timeoutInterval = 25
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(BackendConfig.supabaseAnonKey)", forHTTPHeaderField: "Authorization")
         request.setValue(deviceIdentifier, forHTTPHeaderField: "x-device-id")
         request.httpBody = try? JSONSerialization.data(withJSONObject: ["imageBase64": base64])
 

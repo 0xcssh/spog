@@ -48,9 +48,11 @@ modèles pas encore attrapés. Là, il n'y a rien à trahir.
 
 Le seul coût variable est l'appel d'identification : **0,44 centime d'euro par scan**
 (`gpt-4o`, image 1280 px en `detail: "high"`). Chaque appel inscrit son coût réel dans les
-journaux Supabase.
+journaux de la fonction Neon.
 
-Trois garde-fous dans `identify` :
+Trois garde-fous dans `identify` (`backend/functions/identify/handler.ts`). Ils sont
+**fail-closed** : si la base des quotas ne répond pas, les scans sont refusés plutôt que
+laissés sans plafond.
 
 | | Valeur | Rôle |
 |---|---|---|
@@ -68,11 +70,16 @@ pas un coût de service : budgète-le à côté de la publicité.
 
 ## Les secrets
 
-- `OPENAI_API_KEY` → secrets Supabase, **jamais dans le dépôt ni dans l'app**.
-- `RENDER_SECRET` → secrets Supabase, et sa contrepartie locale dans `~/.spog/render-secret`.
-- La clé `anon` Supabase est dans `Core/BackendConfig.swift` et **c'est normal** : elle est
-  publique par conception, extractible de tout binaire iOS, et ne donne droit qu'à appeler
-  les fonctions sous leurs quotas.
+Le backend est sur **Neon**, projet `spog` (`damp-fire-11684360`, branche
+`br-plain-fog-b7f3ate2`), sur le compte Neon du développeur. Le déploiement passe par la
+CI : `gh workflow run backend.yml -f deploy=true`.
+
+- `OPENAI_API_KEY` et `NEON_API_KEY` → secrets GitHub du dépôt, **jamais dans le dépôt ni
+  dans l'app**. La CI pousse la clé OpenAI dans l'environnement de la fonction à chaque
+  déploiement.
+- `Core/BackendConfig.swift` ne contient que l'URL publique de la fonction.
+- `RENDER_SECRET` → reste sur l'ancien projet Supabase, avec la fonction `render` des
+  illustrations studio, appelée à disparaître (voir REFONTE.md).
 
 ## Construire et tester
 

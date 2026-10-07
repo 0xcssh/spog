@@ -23,7 +23,7 @@ ajouter une donnée, jamais modifier du code.
 | `Spog/Catalog/vehicles.json` | Le catalogue : 867 véhicules, rareté par région. **Source de vérité, éditable à la main.** |
 | `tools/validate_catalog.py` | Vérifie l'intégrité du catalogue. À relancer après chaque ajout. |
 | `tools/lookup_demo.py` | Démonstration du rapprochement et de la rareté. Sert de référence pour le futur code Swift. |
-| `supabase/functions/identify/index.ts` | Le relais vers l'IA : reçoit une photo, renvoie marque, modèle, couleur et confiance. Aucune règle de jeu, aucun pays. |
+| `backend/functions/identify/handler.ts` | Le relais vers l'IA : reçoit une photo, renvoie marque, modèle, couleur et confiance. Aucune règle de jeu, aucun pays. |
 
 ## Commandes
 
@@ -37,10 +37,8 @@ Tester une identification :
 
 Sans argument, `lookup_demo.py` déroule une série d'exemples commentés.
 
-Lancer les tests (59 tests, cible `SpogTests`) :
-
-    xcodebuild -project Spog.xcodeproj -scheme Spog \
-      -destination 'platform=iOS Simulator,name=iPhone 17' test
+Lancer les tests (cible `SpogTests`) : ils tournent dans la CI à chaque push
+(`.github/workflows/ios.yml`). Voir CLAUDE.md pour la boucle sans Mac.
 
 Ils couvrent les règles qui se trompent en silence : la cascade de rareté, le
 rapprochement du texte libre de l'IA avec le catalogue, les codes de parrainage,
@@ -50,11 +48,12 @@ des deux côtés — les deux listes vivent dans deux fichiers que rien d'autre 
 
 ## Le backend
 
-Une seule fonction, `identify`, hébergée sur le projet Supabase partagé avec l'autre app
-de l'éditeur. **La clé OpenAI n'existe que là**, jamais dans l'app.
+Une seule fonction, `identify`, sur Neon Functions, dans un projet dédié à Spog. Les quotas
+vivent dans sa base Postgres (`backend/migrations/`). **La clé OpenAI n'existe que là**,
+jamais dans l'app.
 
-    SUPABASE_ACCESS_TOKEN=$(cat ~/.supabase/access-token) \
-      npx -y supabase@latest functions deploy identify --project-ref pymrhossbzvhsertjhtc
+    cd backend && npm install && npm test          # 18 tests, tournent sous Windows
+    gh workflow run backend.yml -f deploy=true      # déploiement
 
 Elle ne renvoie que des données brutes. La rareté, les points et les paliers restent dans
 le catalogue embarqué : changer l'équilibre du jeu ne demande jamais de redéployer le

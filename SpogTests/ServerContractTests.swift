@@ -5,12 +5,12 @@ import Testing
 ///
 /// Le serveur ne renvoie que des valeurs tirées de listes fermées, et l'app les traduit
 /// en couleur de carrosserie et en géométrie 3D. Les deux listes vivent dans deux fichiers
-/// que rien ne relie : `supabase/functions/identify/index.ts` d'un côté, Swift de l'autre.
+/// que rien ne relie : `backend/functions/identify/handler.ts` d'un côté, Swift de l'autre.
 /// Ajouter « gold » côté serveur sans y penser ici ne casse rien visiblement — les voitures
 /// dorées prennent simplement une couleur au hasard, et personne ne comprend pourquoi.
 struct ServerContractTests {
 
-    /// Copie littérale de `COLORS` dans `supabase/functions/identify/index.ts`.
+    /// Copie littérale de `COLORS` dans `backend/functions/identify/handler.ts`.
     /// À modifier ici **et là-bas**, jamais dans un seul des deux.
     private static let serverColors = [
         "white", "black", "silver", "grey", "red", "blue", "dark blue",

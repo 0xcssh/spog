@@ -16,7 +16,7 @@ la contrainte fondatrice en tête : rien de codé en dur, aucun pays supposé.
 | Méthode | **Celle de RepLock** : sans Mac, tout passe par la CI | Éprouvée de bout en bout sur RepLock, PodRadar et Dunk It, jusqu'à TestFlight. Voir plus bas. |
 | Offre | **5 scans offerts**, puis abonnement | On garde l'offre actuelle : le joueur voit plusieurs cartes avant de payer. |
 | Identification | **Appel IA + classifieur embarqué** | L'IA identifie tout dès le premier jour ; le classifieur prend le relais au fil des données et fait baisser le coût. |
-| Backend | **Projet Supabase dédié, en plan payant** | Le projet actuel (`pymrhossbzvhsertjhtc`) est partagé avec Cyranox, en plan gratuit, et il est resté bloqué en `COMING_UP` depuis le 12/09/2026 (voir le CLAUDE.md de Cyranox). |
+| Backend | **Neon**, projet dédié `spog` (`damp-fire-11684360`) | Décidé le 07/10/2026 : même pile que Cyranox (Neon Functions + Postgres). L'ancien projet Supabase était partagé avec Cyranox, en plan gratuit, et bloqué depuis le 12/09/2026. |
 | Compte Apple | **Mandalore LLC**, équipe `GXS33F5JT9` | Le compte de l'éditeur. Spog était signé avec une équipe personnelle gratuite. |
 
 ## La méthode RepLock, appliquée à Spog
@@ -79,7 +79,7 @@ réinstallation rend les 5 scans offerts.
 
 Cible — le serveur décide, l'app affiche :
 
-1. **Compte anonyme Supabase** créé au premier lancement, sans rien demander au joueur.
+1. **Compte anonyme (Neon Auth)** créé au premier lancement, sans rien demander au joueur.
    Sign in with Apple se greffe dessus plus tard pour retrouver son garage.
 2. **App Attest** : chaque appel à `identify` prouve qu'il vient de la vraie app sur un
    vrai iPhone. La clé `anon` seule ne suffit plus.
@@ -87,7 +87,7 @@ Cible — le serveur décide, l'app affiche :
    réinstallation**. Un bit = « les scans offerts ont été consommés ».
 4. **Crédits en base** : `identify` décrémente le solde du compte et refuse à zéro, sauf
    abonnement actif.
-5. **Abonnement vérifié côté serveur** : RevenueCat prévient Supabase par webhook, une
+5. **Abonnement vérifié côté serveur** : RevenueCat prévient le backend par webhook, une
    table `entitlements` fait foi.
 
 ## Architecture cible
@@ -103,7 +103,7 @@ Spog/
   Scanner/        caméra, flou des plaques, sécurité routière
   Cards/          mise en scène, révélation, partage
   Garage/         collection, fiche, correction du modèle
-  Account/        session Supabase, crédits, abonnement
+  Account/        session Neon Auth, crédits, abonnement
   Onboarding/     questionnaire, pays, premier scan guidé
   Social/         amis, classement (phase 4)
 ```
@@ -111,7 +111,7 @@ Spog/
 `Catalog/` reste en Swift pur, sans dépendance à iOS : il se teste aussi depuis Windows
 avec la chaîne d'outils Swift, ce qui compte tant qu'on n'a pas de Mac sous la main.
 
-### Backend (Supabase)
+### Backend (Neon)
 
 | Table | Contenu |
 |---|---|
@@ -121,7 +121,7 @@ avec la chaîne d'outils Swift, ce qui compte tant qu'on n'a pas de Mac sous la 
 | `entitlements` | abonnement actif, alimenté par le webhook RevenueCat |
 | `training_samples` | photos confirmées par le joueur, avec son consentement |
 
-Photos dans Supabase Storage, deux compartiments : `shots` (privé, la collection du joueur)
+Photos dans le stockage Neon, deux compartiments : `shots` (privé, la collection du joueur)
 et `training` (photos consenties, servent au classifieur).
 
 Fonctions : `identify` (réécrite autour des points ci-dessus), `revenuecat-webhook`,
@@ -169,7 +169,7 @@ de comparer un modèle moins cher que `gpt-4o` sur le jeu de test avant d'en cha
 
 | Phase | Contenu | Livrable |
 |---|---|---|
-| **0. Socle** | Dépôt GitHub, `project.yml`, `ios.yml` repris de RepLock, nouveau bundle ID, projet Supabase dédié | Un build TestFlight lancé depuis Windows |
+| **0. Socle** | Dépôt GitHub, `project.yml`, `ios.yml` repris de RepLock, nouveau bundle ID, projet Neon dédié, `identify` porté sur Neon Functions | Un build TestFlight lancé depuis Windows |
 | **1. Comptes et argent** | Compte anonyme, App Attest, DeviceCheck, crédits serveur, RevenueCat | Les 5 scans offerts ne se contournent plus |
 | **2. Refonte de l'app** | Nouvelle structure, onboarding questionnaire, Superwall, PostHog, Sentry, synchro du garage | v1 publiable |
 | **3. Collecte et classifieur** | Consentement, `training_samples`, classifieur en arrière-plan puis en premier | Coût par scan en baisse |
