@@ -24,6 +24,9 @@ final class SubscriptionStore {
 
     enum Plan { case monthly, yearly }
     private(set) var isSubscribed = false
+    /// Transaction active, telle qu'Apple l'a signée. Envoyée au serveur, qui la vérifie
+    /// lui-même : c'est lui qui décide si un scan est payé, pas l'app.
+    private(set) var entitlementJWS: String?
     private(set) var isWorking = false
     private(set) var lastError: String?
 
@@ -90,13 +93,17 @@ final class SubscriptionStore {
     /// Vérifie les droits en cours auprès de StoreKit.
     func refresh() async {
         var active = false
+        var jws: String?
         for await entitlement in Transaction.currentEntitlements {
             guard case .verified(let transaction) = entitlement,
                   Self.productIDs.contains(transaction.productID) else { continue }
-            if transaction.revocationDate == nil { active = true }
+            if transaction.revocationDate == nil {
+                active = true
+                jws = entitlement.jwsRepresentation
+            }
         }
-        let value = active
-        await MainActor.run { isSubscribed = value }
+        let value = active, signed = jws
+        await MainActor.run { isSubscribed = value; entitlementJWS = signed }
     }
 
     @discardableResult

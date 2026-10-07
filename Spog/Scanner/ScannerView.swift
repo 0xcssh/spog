@@ -300,17 +300,31 @@ struct ScannerView: View {
 
         let identification: Identification
         do {
-            identification = try await IdentifyService.identify(photo)
+            identification = try await IdentifyService.identify(
+                photo, entitlement: subscriptions.entitlementJWS)
+        } catch IdentifyService.IdentifyError.paywall {
+            // Le serveur a le dernier mot : le compteur local se recale sur lui.
+            await MainActor.run {
+                @Bindable var state = app
+                state.scansPerformed = max(state.scansPerformed, SubscriptionStore.freeScans)
+                showingPaywall = true
+            }
+            return
         } catch {
             await MainActor.run { failure = error.localizedDescription }
             return
         }
 
         // Le serveur a répondu : la prise est consommée, même si le joueur renonce
-        // à l'écran de confirmation. Sinon l'appel à l'IA serait gratuit à l'infini.
+        // à l'écran de confirmation. Le compteur local n'est qu'un miroir du serveur,
+        // qui seul décompte les scans offerts ; il sert à afficher le reste avant le scan.
         await MainActor.run {
             @Bindable var state = app
-            state.scansPerformed += 1
+            if let left = identification.freeScansLeft {
+                state.scansPerformed = max(0, SubscriptionStore.freeScans - left)
+            } else {
+                state.scansPerformed += 1
+            }
         }
 
         let paint = CarPaint.fromServer(identification.color)

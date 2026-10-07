@@ -1,24 +1,41 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import {
-  createHandler, hashKey, clientIPFrom, deviceIdFrom, COLORS, BODIES, MAX_IMAGE_BASE64,
-  type HandlerDeps, type Queryable,
+  createHandler, hashKey, clientIPFrom, deviceIdFrom, installIdFrom, COLORS, BODIES, MAX_IMAGE_BASE64,
+  FREE_SCANS, type HandlerDeps, type Queryable,
 } from "./handler";
+import type { EntitlementResult } from "./entitlement";
 
 // ---------- Doublures ----------
 
-function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true) {
+/// Base factice : quotas décidés par `decide`, scans offerts tenus en mémoire.
+function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUsed: Record<string, number> = {}) {
   const keys: unknown[] = [];
+  let consumed = 0;
   const db: Queryable = {
-    async query(_text, values = []) {
+    async query(text, values = []) {
       keys.push(values[0]);
+      const key = String(values[0]);
+      if (text.includes("from public.free_scans")) {
+        if (decide("free-scans") === "throw") throw new Error("connection timeout");
+        return { rows: key in freeUsed ? [{ used: freeUsed[key] }] : [] };
+      }
+      if (text.includes("consume_free_scan")) {
+        consumed++;
+        freeUsed[key] = (freeUsed[key] ?? 0) + 1;
+        return { rows: [{ used: freeUsed[key] }] };
+      }
       const d = decide(values[0]);
       if (d === "throw") throw new Error("connection timeout");
       return { rows: [{ result: { allowed: d } }] };
     },
   };
-  return { db, keys };
+  return { db, keys, freeUsed, consumed: () => consumed };
 }
+
+const noSubscription = async (): Promise<EntitlementResult> => ({ ok: false, reason: "missing" });
+const activeSubscription = async (): Promise<EntitlementResult> =>
+  ({ ok: true, productId: "com.mandaloregroup.spog.premium.yearly", environment: "Production", originalTransactionId: "2000000999" });
 
 function aiResponse(content: unknown, status = 200): Response {
   return new Response(JSON.stringify({
@@ -42,6 +59,7 @@ function handler(over: Partial<HandlerDeps> = {}) {
     openaiKey: "sk-test",
     db: fakeDb().db,
     fetch: fakeFetch([aiResponse(goodCar)]).fn,
+    verifyEntitlement: noSubscription,
     sleep: async () => {},
     ...over,
   });
@@ -50,7 +68,7 @@ function handler(over: Partial<HandlerDeps> = {}) {
 function post(body: unknown, headers: Record<string, string> = {}) {
   return new Request("https://fn.test/identify", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "x-device-id": "device-1", "x-forwarded-for": "1.2.3.4", ...headers },
+    headers: { "Content-Type": "application/json", "x-device-id": "device-1", "x-install-id": "install-1", "x-forwarded-for": "1.2.3.4", ...headers },
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
 }
@@ -66,7 +84,7 @@ describe("contrat de réponse", () => {
   test("une photo reconnue renvoie les champs attendus par l'app", async () => {
     const res = await handler()(post({ imageBase64: "abc" }));
     assert.equal(res.status, 200);
-    assert.deepEqual(await res.json(), { ...goodCar });
+    assert.deepEqual(await res.json(), { ...goodCar, free_scans_left: FREE_SCANS - 1 });
   });
 
   test("couleur et carrosserie hors liste sont neutralisées", async () => {
@@ -180,5 +198,81 @@ describe("OpenAI", () => {
   test("clé absente côté serveur", async () => {
     const res = await handler({ openaiKey: undefined })(post({ imageBase64: "abc" }));
     assert.equal((await res.json() as any).code, "server_misconfigured");
+  });
+});
+
+describe("scans offerts et abonnement", () => {
+  const installKey = hashKey("install-1");
+
+  test("chaque vraie prise consomme un scan offert", async () => {
+    const store = fakeDb(() => true, { [installKey]: 2 });
+    const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
+    assert.equal((await res.json() as any).free_scans_left, FREE_SCANS - 3);
+    assert.equal(store.freeUsed[installKey], 3);
+  });
+
+  test("scans épuisés : 402 paywall_required, sans appel OpenAI", async () => {
+    const ai = fakeFetch([aiResponse(goodCar)]);
+    const store = fakeDb(() => true, { [installKey]: FREE_SCANS });
+    const res = await handler({ db: store.db, fetch: ai.fn })(post({ imageBase64: "abc" }));
+    assert.equal(res.status, 402);
+    assert.deepEqual(await res.json(), { code: "paywall_required", error: "Les scans offerts sont épuisés.", free_scans_left: 0 });
+    assert.equal(ai.count(), 0);
+  });
+
+  test("une photo sans voiture ne coûte pas de scan offert", async () => {
+    const store = fakeDb(() => true, { [installKey]: 1 });
+    const empty = { ...goodCar, vehicle_present: false, make: "", model: "", confidence: 0 };
+    const res = await handler({ db: store.db, fetch: fakeFetch([aiResponse(empty)]).fn })(post({ imageBase64: "abc" }));
+    assert.equal((await res.json() as any).free_scans_left, FREE_SCANS - 1);
+    assert.equal(store.consumed(), 0);
+  });
+
+  test("une photo d'écran ne coûte pas de scan offert", async () => {
+    const store = fakeDb();
+    const screen = { ...goodCar, is_screen: true };
+    await handler({ db: store.db, fetch: fakeFetch([aiResponse(screen)]).fn })(post({ imageBase64: "abc" }));
+    assert.equal(store.consumed(), 0);
+  });
+
+  test("abonné : pas de plafond de scans offerts, free_scans_left nul", async () => {
+    const store = fakeDb(() => true, { [installKey]: 99 });
+    const res = await handler({ db: store.db, verifyEntitlement: activeSubscription })(
+      post({ imageBase64: "abc", entitlement: "jws" }));
+    assert.equal(res.status, 200);
+    assert.equal((await res.json() as any).free_scans_left, null);
+    assert.equal(store.consumed(), 0);
+  });
+
+  test("abonné : quota par transaction d'origine", async () => {
+    const subKey = hashKey("sub:2000000999");
+    const store = fakeDb((k) => k !== subKey);
+    const res = await handler({ db: store.db, verifyEntitlement: activeSubscription })(
+      post({ imageBase64: "abc", entitlement: "jws" }));
+    assert.equal(res.status, 429);
+  });
+
+  test("transaction invalide : retour aux scans offerts", async () => {
+    const store = fakeDb(() => true, { [installKey]: FREE_SCANS });
+    const res = await handler({ db: store.db })(post({ imageBase64: "abc", entitlement: "forged" }));
+    assert.equal(res.status, 402);
+  });
+
+  test("base des scans offerts injoignable : refus", async () => {
+    const store = fakeDb((k) => (k === "free-scans" ? "throw" : true));
+    const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
+    assert.equal(res.status, 503);
+  });
+
+  test("plafond de scans offerts par IP", async () => {
+    const freeIPKey = hashKey("free-ip:1.2.3.4");
+    const store = fakeDb((k) => k !== freeIPKey);
+    const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
+    assert.equal(res.status, 429);
+  });
+
+  test("sans x-install-id (ancienne app), l'installation est l'appareil", () => {
+    assert.equal(installIdFrom(new Headers(), "device-1"), "device-1");
+    assert.equal(installIdFrom(new Headers({ "x-install-id": " abc " }), "device-1"), "abc");
   });
 });

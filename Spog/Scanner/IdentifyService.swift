@@ -14,6 +14,9 @@ struct Identification {
     /// Teinte en anglais, prise dans une liste fermee. Rapprochee de la palette par CarPaint.
     let color: String
     let confidence: Double
+    /// Scans offerts restants selon le serveur, qui en est l'autorite. Nil pour un
+    /// abonne, ou face a un serveur plus ancien qui ne le renvoie pas.
+    var freeScansLeft: Int? = nil
 
     /// Texte libre soumis au rapprochement avec le catalogue.
     var fullText: String {
@@ -36,6 +39,9 @@ enum IdentifyService {
         /// Photo d'un ecran, d'une affiche ou d'une miniature : la regle du jeu
         /// est la camera en direct sur une vraie voiture.
         case notLive
+        /// Scans offerts epuises, constate par le serveur : le paywall doit s'interposer,
+        /// meme si le compteur local croyait qu'il en restait (reinstallation, autre appareil).
+        case paywall
 
         var errorDescription: String? {
             switch self {
@@ -43,6 +49,7 @@ enum IdentifyService {
             case .unreadableImage: String(localized: "scanError.unreadableImage")
             case .noVehicle:       String(localized: "scanError.noVehicle")
             case .notLive:         String(localized: "scanError.notLive")
+            case .paywall:         String(localized: "scanError.paywall")
             case .server(let code, let fallback):
                 Self.message(for: code) ?? fallback ?? String(localized: "scanError.failed")
             }
@@ -78,7 +85,10 @@ enum IdentifyService {
         return generated
     }()
 
-    static func identify(_ photo: UIImage) async throws -> Identification {
+    /// - Parameter entitlement: transaction d'abonnement signee par Apple, si le joueur
+    ///   en a une. Le serveur la verifie lui-meme ; sans elle, le scan est decompte
+    ///   des scans offerts.
+    static func identify(_ photo: UIImage, entitlement: String?) async throws -> Identification {
         guard let base64 = compressedJPEGBase64(from: photo) else {
             throw IdentifyError.unreadableImage
         }
@@ -93,7 +103,10 @@ enum IdentifyService {
         request.timeoutInterval = 25
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(deviceIdentifier, forHTTPHeaderField: "x-device-id")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: ["imageBase64": base64])
+        request.setValue(InstallIdentity.current, forHTTPHeaderField: "x-install-id")
+        var body: [String: Any] = ["imageBase64": base64]
+        if let entitlement { body["entitlement"] = entitlement }
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
         let data: Data, response: URLResponse
         do {
@@ -106,6 +119,7 @@ enum IdentifyService {
         struct ErrorPayload: Decodable { let code: String?; let error: String? }
         guard http.statusCode == 200 else {
             let payload = try? JSONDecoder().decode(ErrorPayload.self, from: data)
+            if payload?.code == "paywall_required" { throw IdentifyError.paywall }
             throw IdentifyError.server(code: payload?.code, fallback: payload?.error)
         }
 
@@ -114,6 +128,7 @@ enum IdentifyService {
             let body: String?
             let confidence: Double
             let is_screen: Bool, vehicle_present: Bool
+            let free_scans_left: Int?
         }
         guard let payload = try? JSONDecoder().decode(SuccessPayload.self, from: data) else {
             throw IdentifyError.server(code: "unreadable_ai_response", fallback: nil)
@@ -123,7 +138,6 @@ enum IdentifyService {
         if payload.is_screen { throw IdentifyError.notLive }
         guard payload.vehicle_present, !payload.model.isEmpty else { throw IdentifyError.noVehicle }
 
-
         return Identification(make: payload.make,
                               model: payload.model,
                               generation: payload.generation,
@@ -131,7 +145,8 @@ enum IdentifyService {
                               // serveur renvoie la carrosserie ne doit pas cesser de marcher.
                               body: payload.body ?? "sedan",
                               color: payload.color,
-                              confidence: payload.confidence)
+                              confidence: payload.confidence,
+                              freeScansLeft: payload.free_scans_left)
     }
 
     /// Recompresse la photo (max 1280 px) : bien assez pour reconnaitre une voiture,

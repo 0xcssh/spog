@@ -2,18 +2,28 @@
 // index.ts l'instancie avec process.env, la vraie base et le vrai fetch ;
 // les tests l'instancient avec des doublures.
 //
-// Portage de l'ancienne Edge Function Supabase, contrat inchangé pour que l'app
-// actuelle n'ait qu'une URL à changer :
-//   POST { imageBase64: string }
-//   → 200 { make, model, generation, body, color, confidence, is_screen, vehicle_present }
+// Contrat d'API :
+//   POST { imageBase64: string, entitlement?: string }
+//        en-têtes : x-install-id (identifiant d'installation, rangé dans le trousseau
+//        iOS, il survit à la désinstallation), x-device-id (identifierForVendor)
+//   → 200 { make, model, generation, body, color, confidence, is_screen, vehicle_present,
+//           free_scans_left: number | null }      (null = abonné, pas de plafond)
+//   → 402 { code: "paywall_required", error, free_scans_left: 0 }
 //   → 4xx/5xx { code: string, error: string }
 //     `code` est stable et traduit côté app ; `error` n'est qu'un repli lisible.
+//
+// **Le serveur est l'autorité sur les scans offerts.** Tant que le décompte vivait
+// dans l'app, une réinstallation rendait les cinq scans et l'URL suffisait à scanner
+// gratuitement. Un abonné le prouve par sa transaction StoreKit 2 signée par Apple
+// (`entitlement`, vérifiée sans réseau, voir entitlement.ts) ; les autres consomment
+// leurs scans offerts, comptés en base par installation.
 //
 // Le serveur ne connaît NI la rareté, NI les points, NI les règles du jeu :
 // tout ça vit dans le catalogue embarqué de l'app, donc modifiable sans redéployer
 // et sans supposer un pays. Ici on ne fait que lire une photo.
 
 import { createHash } from "node:crypto";
+import type { EntitlementResult } from "./entitlement";
 
 /** Sous-ensemble de pg.Pool utilisé ici. */
 export interface Queryable {
@@ -25,10 +35,30 @@ export interface HandlerDeps {
   /** Base des quotas ; null = pas de DATABASE_URL (fail-closed : 503). */
   db: Queryable | null;
   fetch: typeof fetch;
+  verifyEntitlement: (jws: unknown) => Promise<EntitlementResult>;
+  /** Scans offerts par installation (défaut : FREE_SCANS). */
+  freeScans?: number;
   /** Attente entre deux tentatives OpenAI (remplaçable en test). */
   sleep?: (ms: number) => Promise<void>;
   model?: string;
 }
+
+/// Scans offerts avant le paywall. Cinq : assez pour avoir vu plusieurs cartes et
+/// compris le jeu, trop peu pour se faire une collection. L'app affiche ce que le
+/// serveur lui renvoie ; sa propre constante ne sert plus qu'avant le premier scan.
+export const FREE_SCANS = 5;
+
+// Un abonnement peut servir sur plusieurs appareils (Partage familial) : borné
+// par la transaction d'origine, infalsifiable, en plus du quota par appareil.
+export const SUBSCRIPTION_DAY_LIMIT = 100;
+export const SUBSCRIPTION_WINDOW_LIMIT = 15;
+
+// Scans offerts demandés depuis une même IP par jour. L'identifiant d'installation
+// vient du client : sans ce plafond, en inventer un nouveau à chaque requête
+// donnerait des scans gratuits à l'infini. Large, parce que les opérateurs mobiles
+// partagent une IP entre des milliers d'abonnés ; App Attest le remplacera.
+export const FREE_IP_DAY_LIMIT = 60;
+export const FREE_IP_WINDOW_LIMIT = 20;
 
 const WINDOW_SECONDS = 60;
 
@@ -94,6 +124,12 @@ export function deviceIdFrom(headers: Headers, clientIP: string): string {
   return raw || clientIP;
 }
 
+/// Identifiant d'installation ; absent (ancienne version de l'app) → l'appareil.
+export function installIdFrom(headers: Headers, deviceId: string): string {
+  const raw = (headers.get("x-install-id") ?? "").trim().slice(0, MAX_DEVICE_ID);
+  return raw || deviceId;
+}
+
 // Identifiants techniques en anglais, jamais affichés tels quels : l'app traduit.
 // Aucune règle de jeu ici, et surtout aucune mention de pays — la même réponse
 // doit valoir partout.
@@ -134,6 +170,38 @@ type QuotaStatus = "allowed" | "blocked" | "unavailable";
 export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Response> {
   const sleep = deps.sleep ?? ((ms: number) => new Promise((r) => setTimeout(r, ms)));
   const model = deps.model || DEFAULT_MODEL;
+  const freeScans = deps.freeScans ?? FREE_SCANS;
+
+  /// Scans offerts déjà consommés par cette installation ; null si la base ne répond pas.
+  async function freeScansUsed(installKey: string): Promise<number | null> {
+    if (!deps.db) return null;
+    try {
+      const { rows } = await deps.db.query(
+        "select used from public.free_scans where install_hash = $1",
+        [hashKey(installKey)],
+      );
+      return Number(rows[0]?.used ?? 0);
+    } catch (error) {
+      console.error("free scans unavailable", error instanceof Error ? error.message : error);
+      return null;
+    }
+  }
+
+  /// Consomme un scan offert et renvoie le nouveau total. Un échec ici ne prive pas
+  /// le joueur de sa carte : l'IA a déjà été payée, autant lui rendre le résultat.
+  async function consumeFreeScan(installKey: string): Promise<number | null> {
+    if (!deps.db) return null;
+    try {
+      const { rows } = await deps.db.query(
+        "select public.consume_free_scan($1) as used",
+        [hashKey(installKey)],
+      );
+      return Number(rows[0]?.used ?? 0);
+    } catch (error) {
+      console.error("free scan not recorded", error instanceof Error ? error.message : error);
+      return null;
+    }
+  }
 
   /// Incrémente et vérifie un compteur. Fail-closed, contrairement à l'ancienne
   /// version Supabase : une base injoignable désactivait tous les quotas, et c'est
@@ -193,7 +261,7 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       return json({ code: "server_misconfigured", error: "OPENAI_API_KEY manquante côté serveur" }, 500);
     }
 
-    let body: { imageBase64?: unknown };
+    let body: { imageBase64?: unknown; entitlement?: unknown };
     try {
       body = await req.json();
     } catch {
@@ -226,6 +294,39 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
     if (device === "blocked" || ip === "blocked") {
       return json({ code: "rate_limited", error: "Trop de scans d'affilée. Réessaie un peu plus tard." }, 429);
+    }
+
+    // Abonné ou joueur sur ses scans offerts. Une transaction absente ou invalide
+    // n'est pas une erreur : c'est le cas normal des cinq premiers scans.
+    const entitlement = body.entitlement ? await deps.verifyEntitlement(body.entitlement) : null;
+    const installKey = installIdFrom(req.headers, deviceId);
+    let freeUsed: number | null = null;
+
+    if (entitlement?.ok) {
+      const sub = await checkQuota(`sub:${entitlement.originalTransactionId}`,
+        SUBSCRIPTION_DAY_LIMIT, SUBSCRIPTION_WINDOW_LIMIT);
+      if (sub === "unavailable") {
+        return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+      }
+      if (sub === "blocked") {
+        return json({ code: "rate_limited", error: "Trop de scans d'affilée. Réessaie un peu plus tard." }, 429);
+      }
+    } else {
+      if (entitlement) console.warn("abonnement refusé:", entitlement.reason);
+      freeUsed = await freeScansUsed(installKey);
+      if (freeUsed === null) {
+        return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+      }
+      if (freeUsed >= freeScans) {
+        return json({ code: "paywall_required", error: "Les scans offerts sont épuisés.", free_scans_left: 0 }, 402);
+      }
+      const freeIP = await checkQuota(`free-ip:${clientIP}`, FREE_IP_DAY_LIMIT, FREE_IP_WINDOW_LIMIT);
+      if (freeIP === "unavailable") {
+        return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+      }
+      if (freeIP === "blocked") {
+        return json({ code: "rate_limited", error: "Trop de scans d'affilée. Réessaie un peu plus tard." }, 429);
+      }
     }
 
     const openaiResponse = await callOpenAI({
@@ -275,6 +376,18 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       const text = (value: unknown) => (typeof value === "string" ? value.trim().slice(0, 60) : "");
       const color = text(parsed.color).toLowerCase();
       const bodyType = text(parsed.body).toLowerCase();
+      const isScreen = parsed.is_screen === true;
+      const vehiclePresent = parsed.vehicle_present !== false;
+
+      // Seule une vraie prise consomme un scan offert : une photo sans voiture ou
+      // d'un écran est refusée par l'app, la facturer au joueur serait injuste.
+      let freeScansLeft: number | null = null;
+      if (freeUsed !== null) {
+        const counts = vehiclePresent && !isScreen && text(parsed.model) !== "";
+        const used = counts ? (await consumeFreeScan(installKey)) ?? freeUsed + 1 : freeUsed;
+        freeScansLeft = Math.max(0, freeScans - used);
+      }
+
       return json({
         make: text(parsed.make),
         model: text(parsed.model),
@@ -284,8 +397,9 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
         body: BODIES.includes(bodyType) ? bodyType : "sedan",
         color: COLORS.includes(color) ? color : "",
         confidence: Math.max(0, Math.min(1, Number(parsed.confidence) || 0)),
-        is_screen: parsed.is_screen === true,
-        vehicle_present: parsed.vehicle_present !== false,
+        is_screen: isScreen,
+        vehicle_present: vehiclePresent,
+        free_scans_left: freeScansLeft,
       });
     } catch {
       console.error("Réponse OpenAI inattendue", completion?.choices?.[0]?.message?.content);

@@ -3017,6 +3017,23 @@
         }
       }
     },
+    "scanError.paywall": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your free scans are used up."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes scans offerts sont Ã©puisÃ©s."
+          }
+        }
+      }
+    },
     "scanError.rateLimited": {
       "extractionState": "manual",
       "localizations": {

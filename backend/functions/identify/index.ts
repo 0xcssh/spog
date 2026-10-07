@@ -5,7 +5,12 @@
 
 import { attachDatabasePool } from "@neon/functions";
 import { Pool } from "pg";
+import { verifyEntitlement } from "./entitlement";
 import { createHandler } from "./handler";
+
+// Transactions Sandbox (TestFlight, revue Apple) acceptées par défaut. À couper
+// avec ALLOW_SANDBOX=false une fois l'app publiée, si l'abus se présente.
+const ALLOW_SANDBOX = process.env.ALLOW_SANDBOX !== "false";
 
 // Base Neon de la branche (DATABASE_URL injectée par Neon Functions). Timeouts courts :
 // une base injoignable doit répondre « indisponible » vite, pas faire attendre le joueur
@@ -25,6 +30,7 @@ const handle = createHandler({
   openaiKey: process.env.OPENAI_API_KEY,
   db: pool,
   fetch: (input, init) => fetch(input, init),
+  verifyEntitlement: (jws) => verifyEntitlement(jws, { allowSandbox: ALLOW_SANDBOX }),
   model: process.env.OPENAI_MODEL,
 });
 
