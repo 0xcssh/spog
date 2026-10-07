@@ -103,7 +103,7 @@ jobs:
             -authenticationKeyPath "$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8" \
             -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" \
             -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" \
-            DEVELOPMENT_TEAM="${{ vars.APPLE_TEAM_ID }}" \
+            DEVELOPMENT_TEAM="${{ vars.APPLE_TEAM_ID || 'GXS33F5JT9' }}" \
             CURRENT_PROJECT_VERSION="${{ github.run_number }}"
 
       - name: Export IPA
@@ -120,7 +120,7 @@ jobs:
             <key>method</key>
             <string>${METHOD}</string>
             <key>teamID</key>
-            <string>${{ vars.APPLE_TEAM_ID }}</string>
+            <string>${{ vars.APPLE_TEAM_ID || 'GXS33F5JT9' }}</string>
             <key>signingStyle</key>
             <string>automatic</string>
             <key>destination</key>
