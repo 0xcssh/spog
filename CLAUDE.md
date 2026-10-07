@@ -76,14 +76,31 @@ pas un coût de service : budgète-le à côté de la publicité.
 
 ## Construire et tester
 
-```bash
-# Les 63 tests
-xcodebuild -project Spog.xcodeproj -scheme Spog \
-  -destination 'platform=iOS Simulator,name=iPhone 17' test
+**Depuis le 07/10/2026, on développe sous Windows, sans Mac** — la méthode de RepLock
+(voir [REFONTE.md](REFONTE.md)). Le projet Xcode n'est plus versionné : il est généré par
+XcodeGen depuis `project.yml`. Ne jamais éditer de `project.pbxproj`, ne jamais proposer
+d'ouvrir Xcode ni le simulateur en local.
 
-# Vérifier le catalogue après toute édition de vehicles.json
-python3 tools/validate_catalog.py
+La boucle : modifier → push → la CI (`.github/workflows/ios.yml`, runner macOS) compile et
+lance les tests → build signé à la demande :
+
+```bash
+# IPA de développement, à installer par USB
+gh workflow run ios.yml -f export_method=debugging
+gh run download --name Spog-ipa
+py -3.12 -m pymobiledevice3 apps install Spog.ipa   # Python 3.12, pas 3.14
+
+# Envoi direct sur TestFlight
+gh workflow run ios.yml -f export_method=app-store-connect
+
+# Vérifier le catalogue après toute édition de vehicles.json (tourne sous Windows)
+py tools/validate_catalog.py
 ```
+
+Signature : équipe Mandalore LLC `GXS33F5JT9`, bundle `com.mandalore-group.spog`. Les
+certificats et la clé API vivent dans les secrets GitHub du dépôt, jamais dans le dépôt.
+
+Sur un Mac, l'ancienne voie marche toujours : `xcodegen generate`, puis `xcodebuild`.
 
 ⚠️ **Le Bureau est synchronisé par iCloud**, et ses attributs étendus cassent la signature
 de code. Construis toujours hors du projet :

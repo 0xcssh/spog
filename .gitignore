@@ -28,3 +28,6 @@ supabase/.temp/
 /test-photos/*.jpeg
 /test-photos/*.png
 /resultats-identification.csv
+
+# Projet Xcode généré par XcodeGen à partir de project.yml — jamais édité à la main
+Spog.xcodeproj/

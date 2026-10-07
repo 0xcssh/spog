@@ -1,0 +1,145 @@
+name: iOS
+
+# Repris de RepLock et Cyranox : sans Mac, ce runner est la seule machine qui compile Spog.
+# Chaque push lance les tests ; le build signé se lance à la main (onglet Actions, ou
+# `gh workflow run ios.yml -f export_method=…`) pour épargner les minutes macOS.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      export_method:
+        description: "debugging = IPA à installer par USB ; app-store-connect = envoi sur TestFlight"
+        type: choice
+        options: [debugging, app-store-connect]
+        default: debugging
+
+jobs:
+  test:
+    name: Build & tests (simulateur)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Run unit tests
+        run: |
+          set -o pipefail
+          # La liste des simulateurs change d'une image de runner à l'autre : on prend le
+          # premier iPhone disponible plutôt que d'en nommer un qui disparaîtra.
+          DEVICE=$(xcrun simctl list devices available | grep -Eo 'iPhone [^(]+' | head -1 | xargs)
+          echo "Simulateur : $DEVICE"
+          xcodebuild test \
+            -project Spog.xcodeproj \
+            -scheme Spog \
+            -destination "platform=iOS Simulator,name=$DEVICE" \
+            CODE_SIGNING_ALLOWED=NO
+
+  device-build:
+    name: Build signé (IPA)
+    if: github.event_name == 'workflow_dispatch'
+    needs: test
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          # La validation App Store exige le SDK iOS 26 (Xcode 26+).
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Import development certificate
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          # Les deux imports partagent le MÊME mot de passe de trousseau : le second
+          # déverrouille le trousseau créé par le premier.
+          keychain-password: ${{ github.run_id }}
+          p12-file-base64: ${{ secrets.CERT_P12_BASE64 }}
+          p12-password: ${{ secrets.CERT_P12_PASSWORD }}
+
+      - name: Import distribution certificate (TestFlight)
+        if: github.event.inputs.export_method == 'app-store-connect'
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          create-keychain: false
+          keychain-password: ${{ github.run_id }}
+          p12-file-base64: ${{ secrets.CERT_DIST_P12_BASE64 }}
+          p12-password: ${{ secrets.CERT_P12_PASSWORD }}
+
+      - name: Install App Store Connect API key
+        run: |
+          mkdir -p "$HOME/private_keys"
+          echo "${{ secrets.ASC_API_KEY_P8_BASE64 }}" | base64 --decode \
+            > "$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8"
+
+      - name: Archive
+        run: |
+          set -o pipefail
+          xcodebuild archive \
+            -project Spog.xcodeproj \
+            -scheme Spog \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/Spog.xcarchive \
+            -allowProvisioningUpdates \
+            -allowProvisioningDeviceRegistration \
+            -authenticationKeyPath "$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8" \
+            -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" \
+            DEVELOPMENT_TEAM="${{ vars.APPLE_TEAM_ID }}" \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+
+      - name: Export IPA
+        run: |
+          METHOD="${{ github.event.inputs.export_method || 'debugging' }}"
+          # En app-store-connect, la destination « upload » envoie le build sur TestFlight
+          # pendant l'export ; en debugging, on garde une IPA en artefact.
+          if [ "$METHOD" = "app-store-connect" ]; then DEST="upload"; else DEST="export"; fi
+          cat > ExportOptions.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>${METHOD}</string>
+            <key>teamID</key>
+            <string>${{ vars.APPLE_TEAM_ID }}</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+            <key>destination</key>
+            <string>${DEST}</string>
+          </dict>
+          </plist>
+          EOF
+          xcodebuild -exportArchive \
+            -archivePath build/Spog.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8" \
+            -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}"
+
+      - name: Upload IPA artifact
+        if: github.event.inputs.export_method != 'app-store-connect'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Spog-ipa
+          path: build/export/*.ipa
