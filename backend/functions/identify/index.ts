@@ -9,6 +9,7 @@ import { verifyEntitlement } from "./entitlement";
 import { createHandler } from "./handler";
 import { createSampleStore } from "./storage";
 import { testersFrom } from "./develop";
+import { createAppleVerifier } from "./apple";
 
 // Transactions Sandbox (TestFlight, revue Apple) acceptées par défaut. À couper
 // avec ALLOW_SANDBOX=false une fois l'app publiée, si l'abus se présente.
@@ -37,6 +38,7 @@ const handle = createHandler({
   // TRAINING_ENABLED=false au déploiement.
   samples: process.env.TRAINING_ENABLED === "false" ? null : createSampleStore(),
   developTesters: testersFrom(process.env.DEVELOP_TESTERS),
+  verifyApple: createAppleVerifier((input, init) => fetch(input, init)),
   model: process.env.OPENAI_MODEL,
 });
 

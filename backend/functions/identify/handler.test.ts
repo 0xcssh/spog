@@ -18,6 +18,7 @@ function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUs
   const db: Queryable = {
     async query(text, values = []) {
       queries.push({ text, values });
+      if (text.includes("public.scans")) return { rows: [] };
       if (text.includes("training_samples")) {
         if (decide("training") === "throw") throw new Error("connection timeout");
         if (text.includes("select object_key")) return { rows: sampleKeys.map((object_key) => ({ object_key })) };
@@ -93,7 +94,9 @@ describe("contrat de réponse", () => {
   test("une photo reconnue renvoie les champs attendus par l'app", async () => {
     const res = await handler()(post({ imageBase64: "abc" }));
     assert.equal(res.status, 200);
-    assert.deepEqual(await res.json(), { ...goodCar, free_scans_left: FREE_SCANS - 1 });
+    const { scan_id, ...rest } = await res.json() as any;
+    assert.deepEqual(rest, { ...goodCar, free_scans_left: FREE_SCANS - 1 });
+    assert.match(scan_id, /^[0-9a-f-]{36}$/);
   });
 
   test("couleur et carrosserie hors liste sont neutralisées", async () => {
@@ -424,5 +427,23 @@ describe("développement", () => {
     const res = await handler({ fetch: ai.fn, developTesters: new Set(["install-1"]) })(
       post({ action: "develop", imageBase64: "abc", model: "dall-e-9" }));
     assert.equal((await res.json() as any).model, "gpt-image-1-mini");
+  });
+});
+
+describe("trace des identifications", () => {
+  test("une vraie prise laisse le modèle attendu et les propositions", async () => {
+    const store = fakeDb();
+    await handler({ db: store.db, newId: () => SAMPLE_ID })(post({ imageBase64: "abc" }));
+    const insert = store.queries.find((q) => q.text.includes("insert into public.scans"));
+    assert.ok(insert);
+    assert.equal(insert!.values[2], "peugeot-3008");
+    assert.ok((insert!.values[3] as string[]).includes("peugeot-3008"));
+  });
+
+  test("une photo sans voiture n'en laisse aucune", async () => {
+    const store = fakeDb();
+    const empty = { ...goodCar, vehicle_present: false, model: "" };
+    await handler({ db: store.db, fetch: fakeFetch([aiResponse(empty)]).fn })(post({ imageBase64: "abc" }));
+    assert.equal(store.queries.some((q) => q.text.includes("insert into public.scans")), false);
   });
 });

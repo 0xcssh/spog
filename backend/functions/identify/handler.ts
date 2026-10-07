@@ -15,6 +15,9 @@
 //   → 200 { ok: true }      (le joueur a désigné le bon modèle : l'étiquette qui fait foi)
 //   POST { action: "forget" }
 //   → 200 { deleted: n }    (retrait de l'accord : toutes les photos de l'installation)
+//   Une vraie prise renvoie aussi `scan_id` : la preuve, pour le classement, que le modèle
+//   déclaré ensuite correspond à une photo identifiée ici (voir social.ts).
+//   POST { action: "me" | "set_pseudo" | "apple_link" | "catch" | … } → voir social.ts
 //   POST { action: "develop", imageBase64, model?, quality? }
 //   → 200 { image: "<png base64>", model, quality, usage, cost_usd }
 //        Rendu studio de la voiture photographiée. Réservé aux installations de
@@ -36,6 +39,9 @@ import { createHash, randomUUID } from "node:crypto";
 import type { EntitlementResult } from "./entitlement";
 import type { SampleStore } from "./storage";
 import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
+import { candidates, expectedVehicleId } from "./catalog";
+import { createSocial, SOCIAL_ACTIONS } from "./social";
+import type { AppleResult } from "./apple";
 
 /** Sous-ensemble de pg.Pool utilisé ici. */
 export interface Queryable {
@@ -55,6 +61,7 @@ export interface HandlerDeps {
   newId?: () => string;
   /** Installations autorisées à développer (tests de coût et de qualité). */
   developTesters?: Set<string>;
+  verifyApple?: (token: unknown) => Promise<AppleResult>;
   /** Attente entre deux tentatives OpenAI (remplaçable en test). */
   sleep?: (ms: number) => Promise<void>;
   model?: string;
@@ -201,6 +208,31 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
   const model = deps.model || DEFAULT_MODEL;
   const freeScans = deps.freeScans ?? FREE_SCANS;
   const newId = deps.newId ?? randomUUID;
+  const social = createSocial({
+    db: deps.db,
+    verifyApple: deps.verifyApple ?? (async () => ({ ok: false, reason: "disabled" })),
+  });
+
+  /// Trace d'une identification réussie : le modèle retenu et les propositions qu'on
+  /// montrerait au joueur. Jamais bloquante — sans elle, la prise reste une carte, mais
+  /// n'entre pas au classement.
+  async function recordScan(installKey: string, make: string, model: string, generation: string,
+                            confidence: number): Promise<string | null> {
+    if (!deps.db) return null;
+    const id = newId();
+    try {
+      const full = [make, model, generation].filter(Boolean).join(" ");
+      await deps.db.query(
+        `insert into public.scans (id, install_hash, expected_vehicle, candidate_ids, confidence)
+         values ($1, $2, $3, $4, $5)`,
+        [id, hashKey(installKey), expectedVehicleId(make, model, generation),
+         candidates(full).map((v) => v.id), confidence]);
+      return id;
+    } catch (error) {
+      console.error("scan not recorded", error instanceof Error ? error.message : error);
+      return null;
+    }
+  }
 
   /// Conserve une prise pour l'entraînement. Jamais bloquant : un échec de stockage
   /// coûte un exemple au classifieur, il ne doit pas coûter sa carte au joueur.
@@ -414,6 +446,17 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
     if (body.action === "label") return handleLabel(req, body as Record<string, unknown>);
     if (body.action === "forget") return handleForget(req);
+    if (typeof body.action === "string" && SOCIAL_ACTIONS.includes(body.action)) {
+      const ip = clientIPFrom(req.headers);
+      // Les actions sociales ne coûtent rien côté IA, mais restent sous le quota de l'appareil.
+      const quota = await checkQuota(`social:${deviceIdFrom(req.headers, ip)}`, 2_000, 120);
+      if (quota === "unavailable") {
+        return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+      }
+      if (quota === "blocked") return json({ code: "rate_limited", error: "Trop de requêtes. Réessaie un peu plus tard." }, 429);
+      return social(body.action, hashKey(installIdFrom(req.headers, deviceIdFrom(req.headers, ip))),
+                    body as Record<string, unknown>);
+    }
     if (body.action === "develop") {
       if (!deps.openaiKey) return json({ code: "server_misconfigured", error: "OPENAI_API_KEY manquante côté serveur" }, 500);
       return handleDevelop(req, body as Record<string, unknown>);
@@ -542,6 +585,9 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       const confidence = Math.max(0, Math.min(1, Number(parsed.confidence) || 0));
       const bodyValue = BODIES.includes(bodyType) ? bodyType : "sedan";
       const colorValue = COLORS.includes(color) ? color : "";
+      const scanId = realCatch
+        ? await recordScan(installKey, text(parsed.make), text(parsed.model), text(parsed.generation), confidence)
+        : null;
       const sampleId = realCatch && body.training_consent === true
         ? await keepSample(installKey, Buffer.from(imageBase64, "base64"), {
           make: text(parsed.make), model: text(parsed.model), generation: text(parsed.generation),
@@ -562,6 +608,7 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
         vehicle_present: vehiclePresent,
         free_scans_left: freeScansLeft,
         ...(sampleId ? { sample_id: sampleId } : {}),
+        ...(scanId ? { scan_id: scanId } : {}),
       });
     } catch {
       console.error("Réponse OpenAI inattendue", completion?.choices?.[0]?.message?.content);
