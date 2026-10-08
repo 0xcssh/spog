@@ -25,6 +25,10 @@ struct CollectibleCardView: View {
 
     let card: CardData
     var interactive: Bool = true
+    /// Bascule carte / cliché brut d'un tap. La prise de démonstration de l'onboarding la
+    /// coupe : là, toucher la carte la développe, et l'invite « ton cliché » contredirait
+    /// la consigne affichée juste en dessous.
+    var showsShotToggle: Bool = true
 
     @State private var tilt: CGSize = .zero
     @State private var isPressed = false
@@ -155,7 +159,7 @@ struct CollectibleCardView: View {
                 .foregroundStyle(Theme.textSecondary)
                 .padding(10)
 
-            if card.shot != nil {
+            if card.shot != nil && showsShotToggle {
                 VStack {
                     Spacer()
                     HStack {
@@ -170,7 +174,7 @@ struct CollectibleCardView: View {
         .aspectRatio(1.02, contentMode: .fit)
         .contentShape(Rectangle())
         .onTapGesture {
-            guard card.shot != nil else { return }
+            guard card.shot != nil, showsShotToggle else { return }
             withAnimation(.easeInOut(duration: 0.22)) { showOriginal.toggle() }
         }
     }

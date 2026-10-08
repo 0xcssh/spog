@@ -13,7 +13,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La connexion avec Apple n'a pas abouti. RÃ©essaie dans un instant."
+            "value": "La connexion avec Apple n'a pas abouti. Réessaie dans un instant."
           }
         }
       }
@@ -47,7 +47,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Connecte-toi avec Apple pour retrouver ta collection et ton rang sur un autre iPhone. Spog ne reÃ§oit ni ton nom ni ton e-mail."
+            "value": "Connecte-toi avec Apple pour retrouver ta collection et ton rang sur un autre iPhone. Spog ne reçoit ni ton nom ni ton e-mail."
           }
         }
       }
@@ -64,7 +64,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprimer dÃ©finitivement"
+            "value": "Supprimer définitivement"
           }
         }
       }
@@ -81,7 +81,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La suppression n'a pas abouti. VÃ©rifie ta connexion et rÃ©essaie."
+            "value": "La suppression n'a pas abouti. Vérifie ta connexion et réessaie."
           }
         }
       }
@@ -98,7 +98,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ton pseudo, ton classement et tes prises enregistrÃ©es sur notre serveur seront effacÃ©s, ainsi que les photos confiÃ©es Ã  l'entraÃ®nement. Les cartes de ce tÃ©lÃ©phone restent dans ton garage."
+            "value": "Ton pseudo, ton classement et tes prises enregistrées sur notre serveur seront effacés, ainsi que les photos confiées à l'entraînement. Les cartes de ce téléphone restent dans ton garage."
           }
         }
       }
@@ -166,7 +166,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "TrouvÃ©e !"
+            "value": "Trouvée !"
           }
         }
       }
@@ -183,7 +183,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tout le pays chasse les mÃªmes cibles. Le premier qui en croise une prend le gros bonus."
+            "value": "Tout le pays chasse les mêmes cibles. Le premier qui en croise une prend le gros bonus."
           }
         }
       }
@@ -211,13 +211,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nobody yet Â· +%lld"
+            "value": "Nobody yet · +%lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personne encore Â· +%lld"
+            "value": "Personne encore · +%lld"
           }
         }
       }
@@ -285,7 +285,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ton pack de la semaine est arrivÃ© : trois voitures Ã  trouver dans la rue."
+            "value": "Ton pack de la semaine est arrivé : trois voitures à trouver dans la rue."
           }
         }
       }
@@ -296,13 +296,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Already found Â· still +%lld"
+            "value": "Already found · still +%lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DÃ©jÃ  trouvÃ©e Â· encore +%lld"
+            "value": "Déjà trouvée · encore +%lld"
           }
         }
       }
@@ -313,13 +313,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "1st: @%1$@ Â· still +%2$lld"
+            "value": "1st: @%1$@ · still +%2$lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "1re : @%1$@ Â· encore +%2$lld"
+            "value": "1re : @%1$@ · encore +%2$lld"
           }
         }
       }
@@ -387,7 +387,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DÃ©velopper la carte"
+            "value": "Développer la carte"
           }
         }
       }
@@ -398,13 +398,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Developingâ€¦"
+            "value": "Developing…"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DÃ©veloppement en coursâ€¦"
+            "value": "Développement en cours…"
           }
         }
       }
@@ -421,7 +421,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Premier repÃ©reur de ce modÃ¨le dans ce pays"
+            "value": "Premier repéreur de ce modèle dans ce pays"
           }
         }
       }
@@ -795,7 +795,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le rendu n'a pas abouti. VÃ©rifie ta connexion et rÃ©essaie : rien n'a Ã©tÃ© dÃ©comptÃ©."
+            "value": "Le rendu n'a pas abouti. Vérifie ta connexion et réessaie : rien n'a été décompté."
           }
         }
       }
@@ -812,7 +812,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Une carte par jour se dÃ©veloppe en rendu studio. Reviens demain, ou passe Pro pour toutes les dÃ©velopper."
+            "value": "Une carte par jour se développe en rendu studio. Reviens demain, ou passe Pro pour toutes les développer."
           }
         }
       }
@@ -846,7 +846,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rendu du jour dÃ©jÃ  utilisÃ©"
+            "value": "Rendu du jour déjà utilisé"
           }
         }
       }
@@ -965,7 +965,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DÃ©fier un ami"
+            "value": "Défier un ami"
           }
         }
       }
@@ -999,7 +999,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de crÃ©er le duel pour le moment. RÃ©essaie dans un instant."
+            "value": "Impossible de créer le duel pour le moment. Réessaie dans un instant."
           }
         }
       }
@@ -1016,7 +1016,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ã‰galitÃ©"
+            "value": "Égalité"
           }
         }
       }
@@ -1050,7 +1050,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de rejoindre pour le moment. RÃ©essaie."
+            "value": "Impossible de rejoindre pour le moment. Réessaie."
           }
         }
       }
@@ -1067,7 +1067,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est ton propre dÃ©fi : envoie-le Ã  un ami."
+            "value": "C'est ton propre défi : envoie-le à un ami."
           }
         }
       }
@@ -1084,7 +1084,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ce duel a dÃ©jÃ  un adversaire."
+            "value": "Ce duel a déjà un adversaire."
           }
         }
       }
@@ -1101,7 +1101,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ce code ne correspond Ã  aucun duel."
+            "value": "Ce code ne correspond à aucun duel."
           }
         }
       }
@@ -1152,7 +1152,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entre le code que ton ami t'a envoyÃ©. Pendant sept jours, chacun marque les points de ses prises."
+            "value": "Entre le code que ton ami t'a envoyé. Pendant sept jours, chacun marque les points de ses prises."
           }
         }
       }
@@ -1197,13 +1197,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "I challenge you on Spog: seven days, whoever spots the best cars wins. Duel code: %1$@ â€” %2$@"
+            "value": "I challenge you on Spog: seven days, whoever spots the best cars wins. Duel code: %1$@ — %2$@"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je te dÃ©fie sur Spog : sept jours, celui qui repÃ¨re les plus belles voitures gagne. Code du duel : %1$@ â€” %2$@"
+            "value": "Je te défie sur Spog : sept jours, celui qui repère les plus belles voitures gagne. Code du duel : %1$@ — %2$@"
           }
         }
       }
@@ -1220,7 +1220,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partage le code : le duel dÃ©marre quand ton ami le rejoint."
+            "value": "Partage le code : le duel démarre quand ton ami le rejoint."
           }
         }
       }
@@ -1254,7 +1254,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "GagnÃ©"
+            "value": "Gagné"
           }
         }
       }
@@ -1356,7 +1356,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ta premiÃ¨re prise de la semaine t'inscrit dans un groupe de trente repÃ©reurs de ton niveau."
+            "value": "Ta première prise de la semaine t'inscrit dans un groupe de trente repéreurs de ton niveau."
           }
         }
       }
@@ -1373,7 +1373,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Classement indisponible pour le moment. Tire vers le bas pour rÃ©essayer."
+            "value": "Classement indisponible pour le moment. Tire vers le bas pour réessayer."
           }
         }
       }
@@ -1560,7 +1560,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DerniÃ¨re mise Ã  jour le 8 octobre 2026"
+            "value": "Dernière mise à jour le 8 octobre 2026"
           }
         }
       }
@@ -1633,53 +1633,512 @@
         }
       }
     },
-    "onboarding.collect.body": {
+    "onboarding.demo.caught": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Each car becomes a one-of-a-kind card in your garage."
+            "value": "Caught!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chaque voiture devient une carte unique dans ton garage."
+            "value": "Attrapée !"
           }
         }
       }
     },
-    "onboarding.collect.title": {
+    "onboarding.demo.caughtTier %@ %@": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Collect"
+            "value": "Rarity here: %1$@ · %2$@"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Collectionne"
+            "value": "Rareté ici : %1$@ · %2$@"
           }
         }
       }
     },
-    "onboarding.how.title": {
+    "onboarding.demo.hint": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "How it works"
+            "value": "Press to catch it"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Comment ça marche"
+            "value": "Appuie pour l'attraper"
+          }
+        }
+      }
+    },
+    "onboarding.demo.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo catch: it won't go into your garage."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise de démonstration : elle ne rejoint pas ton garage."
+          }
+        }
+      }
+    },
+    "onboarding.demo.shutter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take the shot"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendre la photo"
+          }
+        }
+      }
+    },
+    "onboarding.demo.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A car drives by. Your move."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une voiture passe. À toi de jouer."
+          }
+        }
+      }
+    },
+    "onboarding.develop.daily %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free studio renders every day: %lld. Save them for your best catches."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendus studio offerts chaque jour : %lld. Garde-les pour tes plus belles prises."
+          }
+        }
+      }
+    },
+    "onboarding.develop.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio render ready"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendu studio prêt"
+          }
+        }
+      }
+    },
+    "onboarding.develop.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your photo becomes a studio render: your car, showroom-ready."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta photo devient un rendu studio : ta voiture, comme en vitrine."
+          }
+        }
+      }
+    },
+    "onboarding.develop.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap your card"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche ta carte"
+          }
+        }
+      }
+    },
+    "onboarding.free.daily.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your counter refills every day, free of charge."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton compteur se recharge chaque jour, sans rien payer."
+          }
+        }
+      }
+    },
+    "onboarding.free.daily.title %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Then %lld a day"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puis %lld par jour"
+          }
+        }
+      }
+    },
+    "onboarding.free.develop.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For the card you're proudest of."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour la carte dont tu es le plus fier."
+          }
+        }
+      }
+    },
+    "onboarding.free.develop.title %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio renders: %lld a day"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendus studio : %lld par jour"
+          }
+        }
+      }
+    },
+    "onboarding.free.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratuit"
+          }
+        }
+      }
+    },
+    "onboarding.free.pro.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan without limits, every car you come across."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanne sans limite, chaque voiture que tu croises."
+          }
+        }
+      }
+    },
+    "onboarding.free.pro.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog Pro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spog Pro"
+          }
+        }
+      }
+    },
+    "onboarding.free.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enough to start hunting today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De quoi chasser dès aujourd'hui"
+          }
+        }
+      }
+    },
+    "onboarding.free.today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "free scans today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "scans offerts aujourd'hui"
+          }
+        }
+      }
+    },
+    "onboarding.game.bounty.body %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every Monday, a sealed pack reveals %lld cars to hunt, the same for the whole country. The first to find one takes the big bonus."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque lundi, un pack scellé révèle %lld voitures à chasser, les mêmes pour tout le pays. Le premier qui en trouve une rafle le gros bonus."
+          }
+        }
+      }
+    },
+    "onboarding.game.bounty.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week's bounties"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les primes de la semaine"
+          }
+        }
+      }
+    },
+    "onboarding.game.first.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Be the first in your country to catch a model: your catch counts double, and the mark stays on your card forever."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sois le premier de ton pays à attraper un modèle : ta prise compte double, et la marque reste sur ta carte pour toujours."
+          }
+        }
+      }
+    },
+    "onboarding.game.first.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First spotter"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premier repéreur"
+          }
+        }
+      }
+    },
+    "onboarding.game.league.body %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groups of %1$lld players, reset every Monday. The top %2$lld move up a league."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des groupes de %1$lld joueurs, remis à zéro chaque lundi. Les %2$lld premiers montent d'une ligue."
+          }
+        }
+      }
+    },
+    "onboarding.game.league.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly leagues"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligues de la semaine"
+          }
+        }
+      }
+    },
+    "onboarding.game.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The game"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le jeu"
+          }
+        }
+      }
+    },
+    "onboarding.game.rarity.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every country has its own rarities: a car that's everyday where you live can be a trophy elsewhere, and the other way round."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque pays a ses propres raretés : une voiture banale chez toi peut être un trophée ailleurs, et l'inverse."
+          }
+        }
+      }
+    },
+    "onboarding.game.rarity.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Spog difference"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La différence Spog"
+          }
+        }
+      }
+    },
+    "onboarding.game.rarity.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rarity depends on the country"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La rareté dépend du pays"
+          }
+        }
+      }
+    },
+    "onboarding.game.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's waiting for you"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce qui t'attend"
           }
         }
       }
@@ -1765,6 +2224,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je choisis"
+          }
+        }
+      }
+    },
+    "onboarding.market.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your hunting ground"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton terrain de chasse"
           }
         }
       }
@@ -1952,6 +2428,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "On prépare ton garage"
+          }
+        }
+      }
+    },
+    "onboarding.profile.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your profile"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton profil"
           }
         }
       }
@@ -2156,74 +2649,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jamais au volant. Quand ta position est active, le scan se bloque au-delà de %@."
-          }
-        }
-      }
-    },
-    "onboarding.snap.body": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Live camera only. That is what makes a catch worth something."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Caméra en direct uniquement. C'est ce qui donne sa valeur à une prise."
-          }
-        }
-      }
-    },
-    "onboarding.snap.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Snap"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Photographie"
-          }
-        }
-      }
-    },
-    "onboarding.spot.body": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A car in the street, in a parking lot, anywhere in real life."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une voiture dans la rue, sur un parking, n'importe où dans la vraie vie."
-          }
-        }
-      }
-    },
-    "onboarding.spot.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spot"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Repère"
           }
         }
       }
@@ -2733,7 +3158,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scanne autant que tu veux et dÃ©veloppe chaque carte en rendu studio, sans attendre le lendemain."
+            "value": "Scanne autant que tu veux et développe chaque carte en rendu studio, sans attendre le lendemain."
           }
         }
       }
@@ -2750,7 +3175,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scans et rendus illimitÃ©s"
+            "value": "Scans et rendus illimités"
           }
         }
       }
@@ -2778,13 +3203,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog asks for no email address and no password. For leaderboards, our server recognizes your player through the anonymous installation identifier, and keeps your catches: the model, the country, the date and the points â€” never your photos, unless you agreed to share them for training. The handle you choose is visible to the other players in your league. Sign in with Apple is optional: it is only used to get your collection back on another device, and Spog receives nothing from Apple but an anonymous identifier, neither your name nor your email. You can delete your account at any time in Settings."
+            "value": "Spog asks for no email address and no password. For leaderboards, our server recognizes your player through the anonymous installation identifier, and keeps your catches: the model, the country, the date and the points — never your photos, unless you agreed to share them for training. The handle you choose is visible to the other players in your league. Sign in with Apple is optional: it is only used to get your collection back on another device, and Spog receives nothing from Apple but an anonymous identifier, neither your name nor your email. You can delete your account at any time in Settings."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog ne demande ni adresse e-mail ni mot de passe. Pour les classements, notre serveur reconnaÃ®t ton joueur grÃ¢ce Ã  l'identifiant d'installation anonyme, et conserve tes prises : le modÃ¨le, le pays, la date et les points â€” jamais tes photos, sauf si tu as acceptÃ© de les confier Ã  l'entraÃ®nement. Le pseudo que tu choisis est visible des autres joueurs de ta ligue. Sign in with Apple est facultatif : il sert uniquement Ã  retrouver ta collection sur un autre appareil, et Spog ne reÃ§oit d'Apple qu'un identifiant anonyme, ni ton nom ni ton e-mail. Tu peux supprimer ton compte Ã  tout moment dans les rÃ©glages."
+            "value": "Spog ne demande ni adresse e-mail ni mot de passe. Pour les classements, notre serveur reconnaît ton joueur grâce à l'identifiant d'installation anonyme, et conserve tes prises : le modèle, le pays, la date et les points — jamais tes photos, sauf si tu as accepté de les confier à l'entraînement. Le pseudo que tu choisis est visible des autres joueurs de ta ligue. Sign in with Apple est facultatif : il sert uniquement à retrouver ta collection sur un autre appareil, et Spog ne reçoit d'Apple qu'un identifiant anonyme, ni ton nom ni ton e-mail. Tu peux supprimer ton compte à tout moment dans les réglages."
           }
         }
       }
@@ -2818,7 +3243,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collecte les photos que tu prends dans l'app, le pays oÃ¹ tu repÃ¨res tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi deux identifiants anonymes : celui de l'appareil, fourni par Apple, et un identifiant d'installation tirÃ© au sort par l'app et rangÃ© dans le trousseau de ton iPhone, qui survit Ã  une rÃ©installation. Ils servent uniquement Ã  dÃ©compter tes scans et tes rendus du jour, Ã  limiter le nombre de requÃªtes et Ã  prÃ©venir les abus. Ils ne sont rattachÃ©s Ã  aucune identitÃ©, et notre serveur n'en conserve qu'une empreinte, avec ce que tu as utilisÃ© dans la journÃ©e. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
+            "value": "Spog collecte les photos que tu prends dans l'app, le pays où tu repères tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi deux identifiants anonymes : celui de l'appareil, fourni par Apple, et un identifiant d'installation tiré au sort par l'app et rangé dans le trousseau de ton iPhone, qui survit à une réinstallation. Ils servent uniquement à décompter tes scans et tes rendus du jour, à limiter le nombre de requêtes et à prévenir les abus. Ils ne sont rattachés à aucune identité, et notre serveur n'en conserve qu'une empreinte, avec ce que tu as utilisé dans la journée. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
           }
         }
       }
@@ -2886,7 +3311,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immÃ©diatement et dÃ©finitivement, et la retire aussi des classements. Les prises enregistrÃ©es pour les classements sont conservÃ©es sur notre serveur tant que ton compte existe ; le supprimer, dans les rÃ©glages, efface tout. Ton code de parrainage, celui que tu as Ã©ventuellement saisi, et les vÃ©hicules que l'app a appris de tes scans vivent sur ton appareil, et disparaissent avec elle."
+            "value": "Tes cartes et tes photos restent sur ton appareil aussi longtemps que tu les gardes. Retirer une carte du garage supprime ses photos immédiatement et définitivement, et la retire aussi des classements. Les prises enregistrées pour les classements sont conservées sur notre serveur tant que ton compte existe ; le supprimer, dans les réglages, efface tout. Ton code de parrainage, celui que tu as éventuellement saisi, et les véhicules que l'app a appris de tes scans vivent sur ton appareil, et disparaissent avec elle."
           }
         }
       }
@@ -2914,13 +3339,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. When you develop a card, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree â€” you are asked once, and the \"Help recognize cars\" setting lets you change your mind â€” the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. When you develop a card, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree — you are asked once, and the \"Help recognize cars\" setting lets you change your mind — the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les photos sont stockÃ©es sur ton appareil. Pour identifier un vÃ©hicule, une photo est envoyÃ©e Ã  notre serveur, qui la transmet Ã  un prestataire d'intelligence artificielle pour analyse, puis renvoie le rÃ©sultat. Quand tu dÃ©veloppes une carte, sa photo est envoyÃ©e de la mÃªme faÃ§on pour en gÃ©nÃ©rer le rendu studio, qui est ensuite rangÃ© sur ton appareil. Avant toute transmission, les plaques d'immatriculation dÃ©tectÃ©es dans l'image sont floutÃ©es sur ton appareil. Par dÃ©faut, les photos transmises ne sont pas conservÃ©es une fois la rÃ©ponse rendue. Si tu l'acceptes â€” la question t'est posÃ©e une fois, et le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â» permet de changer d'avis â€”, les photos de tes prises sont conservÃ©es sur notre serveur, plaques dÃ©jÃ  floutÃ©es, avec le modÃ¨le identifiÃ© et celui que tu as Ã©ventuellement corrigÃ©, pour entraÃ®ner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachÃ©es Ã  aucune identitÃ©, et ne sont jamais publiÃ©es, vendues ni partagÃ©es."
+            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Quand tu développes une carte, sa photo est envoyée de la même façon pour en générer le rendu studio, qui est ensuite rangé sur ton appareil. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Par défaut, les photos transmises ne sont pas conservées une fois la réponse rendue. Si tu l'acceptes — la question t'est posée une fois, et le réglage « Aider à reconnaître les voitures » permet de changer d'avis —, les photos de tes prises sont conservées sur notre serveur, plaques déjà floutées, avec le modèle identifié et celui que tu as éventuellement corrigé, pour entraîner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachées à aucune identité, et ne sont jamais publiées, vendues ni partagées."
           }
         }
       }
@@ -2988,7 +3413,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune donnÃ©e n'est rattachÃ©e Ã  ton identitÃ© rÃ©elle de notre cÃ´tÃ©. Supprimer ton compte, dans les rÃ©glages, efface ton pseudo, tes prises enregistrÃ©es et ton classement. Les photos d'entraÃ®nement que tu as acceptÃ© de confier sont toutes effacÃ©es dÃ¨s que tu dÃ©sactives le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â». Le reste est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation Ã  tout moment dans les RÃ©glages d'iOS."
+            "value": "Aucune donnée n'est rattachée à ton identité réelle de notre côté. Supprimer ton compte, dans les réglages, efface ton pseudo, tes prises enregistrées et ton classement. Les photos d'entraînement que tu as accepté de confier sont toutes effacées dès que tu désactives le réglage « Aider à reconnaître les voitures ». Le reste est entre tes mains, sur ton appareil. Tu peux retirer l'autorisation de localisation à tout moment dans les Réglages d'iOS."
           }
         }
       }
@@ -3141,7 +3566,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible d'enregistrer pour le moment. RÃ©essaie."
+            "value": "Impossible d'enregistrer pour le moment. Réessaie."
           }
         }
       }
@@ -3175,7 +3600,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De 3 Ã  20 caractÃ¨res : lettres, chiffres, point et tiret bas."
+            "value": "De 3 à 20 caractères : lettres, chiffres, point et tiret bas."
           }
         }
       }
@@ -3209,7 +3634,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ce pseudo est dÃ©jÃ  pris."
+            "value": "Ce pseudo est déjà pris."
           }
         }
       }
@@ -3991,7 +4416,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tes scans du jour sont Ã©puisÃ©s. Reviens demain, ou passe Pro pour scanner sans limite."
+            "value": "Tes scans du jour sont épuisés. Reviens demain, ou passe Pro pour scanner sans limite."
           }
         }
       }
@@ -4161,7 +4586,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DonnÃ©es"
+            "value": "Données"
           }
         }
       }
@@ -4450,7 +4875,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aider Ã  reconnaÃ®tre les voitures"
+            "value": "Aider à reconnaître les voitures"
           }
         }
       }
@@ -4467,7 +4892,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tes photos servent seulement Ã  identifier la voiture, puis ne sont pas conservÃ©es."
+            "value": "Tes photos servent seulement à identifier la voiture, puis ne sont pas conservées."
           }
         }
       }
@@ -4484,7 +4909,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les photos de tes prises sont conservÃ©es, plaques floutÃ©es, pour entraÃ®ner la reconnaissance sur l'iPhone. DÃ©sactiver efface toutes celles dÃ©jÃ  confiÃ©es."
+            "value": "Les photos de tes prises sont conservées, plaques floutées, pour entraîner la reconnaissance sur l'iPhone. Désactiver efface toutes celles déjà confiées."
           }
         }
       }
@@ -4501,7 +4926,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "RepÃ©reur anonyme"
+            "value": "Repéreur anonyme"
           }
         }
       }
@@ -4586,7 +5011,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "DÃ©fie un ami pendant sept jours : celui qui marque le plus de points gagne."
+            "value": "Défie un ami pendant sept jours : celui qui marque le plus de points gagne."
           }
         }
       }
@@ -5579,7 +6004,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avec ton accord, les photos de tes prises sont conservÃ©es, plaques floutÃ©es, pour entraÃ®ner une reconnaissance qui marchera directement sur ton iPhone : plus rapide, et mÃªme sans rÃ©seau. Aucune identitÃ© n'y est rattachÃ©e, et tu peux changer d'avis Ã  tout moment dans les rÃ©glages."
+            "value": "Avec ton accord, les photos de tes prises sont conservées, plaques floutées, pour entraîner une reconnaissance qui marchera directement sur ton iPhone : plus rapide, et même sans réseau. Aucune identité n'y est rattachée, et tu peux changer d'avis à tout moment dans les réglages."
           }
         }
       }
@@ -5596,7 +6021,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aider Spog Ã  reconnaÃ®tre les voitures ?"
+            "value": "Aider Spog à reconnaître les voitures ?"
           }
         }
       }

@@ -457,8 +457,9 @@ struct ScannerView: View {
     }
 }
 
-/// Quatre équerres lumineuses, repère de cadrage.
-private struct CornerBrackets: View {
+/// Quatre équerres lumineuses, repère de cadrage. Partagées avec la prise de démonstration
+/// de l'onboarding : le joueur doit y reconnaître le viseur qu'il retrouvera ensuite.
+struct CornerBrackets: View {
     let color: Color
     private let length: CGFloat = 26
 
