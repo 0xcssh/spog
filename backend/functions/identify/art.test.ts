@@ -1,29 +1,34 @@
-// Visuels des cibles du pack : seules les cibles de la semaine se génèrent, une seule fois
-// par modèle, et jamais sans cache.
+// Rendus studio des modèles : tout le catalogue, une seule fois par modèle, jamais sans
+// cache, et jamais plus que le plafond global du jour.
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { createHandler, type HandlerDeps, type Queryable } from "./handler";
+import { createHandler, hashKey, ART_GLOBAL_DAY_LIMIT, type HandlerDeps, type Queryable } from "./handler";
 import type { ArtStore } from "./storage";
 import { weeklyBounties, currentWeek } from "./bounty";
 import { vehicles } from "./catalog";
-import { artKey, artPrompt, paintFor, weeklyTargetIds, allowedArtVehicle, ART_PAINTS } from "./art";
+import { artKey, artPrompt, paintFor, allowedArtVehicle, ART_PAINTS, ART_ESTIMATED_USAGE } from "./art";
+import { developCost } from "./develop";
 
-// Un lundi fixe : le tirage du pack dépend de la semaine.
 const NOW = new Date("2026-10-07T12:00:00Z");
+// Une cible de la semaine, et surtout un modèle qui n'en est pas une : depuis le passage au
+// format carré, tout le catalogue a droit à son rendu, pas seulement le pack.
 const TARGET = weeklyBounties(currentWeek(NOW), "FR")[0].vehicle.id;
-const NOT_TARGET = vehicles.find((v) => !weeklyTargetIds(NOW).has(v.id))!.id;
+const ANY_MODEL = vehicles[vehicles.length - 1].id;
 
-/// Base factice : seuls les quotas anti-abus passent par elle ici.
-function fakeDb(allowed: boolean | "throw" = true) {
+/// Base factice : seuls les quotas anti-abus passent par elle ici. `globalAllowed` règle
+/// à part le plafond global des générations, reconnu à l'empreinte de sa clé.
+function fakeDb(allowed: boolean | "throw" = true, globalAllowed: boolean | "throw" = true) {
   const keys: unknown[] = [];
+  const global = hashKey("art-global");
   const db: Queryable = {
     async query(_text, values = []) {
       keys.push(values[0]);
-      if (allowed === "throw") throw new Error("connection timeout");
-      return { rows: [{ result: { allowed } }] };
+      const verdict = values[0] === global ? globalAllowed : allowed;
+      if (verdict === "throw") throw new Error("connection timeout");
+      return { rows: [{ result: { allowed: verdict } }] };
     },
   };
-  return { db, keys };
+  return { db, keys, globalChecks: () => keys.filter((k) => k === global).length };
 }
 
 function fakeArt(initial: Record<string, Buffer> = {}, failGet = false, failPut = false) {
@@ -44,10 +49,10 @@ function fakeArt(initial: Record<string, Buffer> = {}, failGet = false, failPut 
 }
 
 const jpeg = Buffer.from("fake-jpeg").toString("base64");
-function imageResponse(): Response {
+function imageResponse(withUsage = true): Response {
   return new Response(JSON.stringify({
     data: [{ b64_json: jpeg }],
-    usage: { input_tokens: 100, output_tokens: 1000, input_tokens_details: { text_tokens: 100, image_tokens: 0 } },
+    ...(withUsage ? { usage: { input_tokens: 300, output_tokens: 4160, input_tokens_details: { text_tokens: 300, image_tokens: 0 } } } : {}),
   }), { status: 200, headers: { "Content-Type": "application/json" } });
 }
 
@@ -84,57 +89,63 @@ function post(body: unknown) {
 }
 
 describe("vehicle_art", () => {
-  test("une cible de la semaine est générée une fois, puis servie depuis le cache", async () => {
+  test("un modèle est généré une fois, puis servi depuis le cache", async () => {
     const art = fakeArt();
     const ai = spyFetch();
     const h = handler({ art: art.store, fetch: ai.fn });
     const first = await h(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.equal(first.status, 200);
     assert.deepEqual(await first.json(), { image: jpeg, cached: false });
-    assert.ok(art.objects[`vehicles/${TARGET}.jpg`]);
+    assert.ok(art.objects[`vehicles/v2/${TARGET}.jpg`]);
 
     const second = await h(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.deepEqual(await second.json(), { image: jpeg, cached: true });
     assert.equal(ai.calls.length, 1);
   });
 
-  test("la requête OpenAI suit le contrat retenu", async () => {
+  test("n'importe quel modèle du catalogue est accepté, pas seulement les cibles", async () => {
+    const ai = spyFetch();
+    const res = await handler({ fetch: ai.fn })(post({ action: "vehicle_art", vehicle_id: ANY_MODEL }));
+    assert.equal(res.status, 200);
+    assert.equal(ai.calls.length, 1);
+  });
+
+  test("la requête OpenAI suit le contrat retenu : carré, haute qualité", async () => {
     const ai = spyFetch();
     await handler({ fetch: ai.fn })(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.equal(ai.calls[0].url, "https://api.openai.com/v1/images/generations");
     const body = ai.calls[0].body;
     assert.equal(body.model, "gpt-image-1-mini");
-    assert.equal(body.quality, "medium");
-    assert.equal(body.size, "1536x1024");
+    assert.equal(body.quality, "high");
+    assert.equal(body.size, "1024x1024");
     assert.equal(body.output_format, "jpeg");
-    assert.equal(body.output_compression, 85);
+    assert.equal(body.output_compression, 90);
+    assert.equal(body.n, 1);
     assert.match(body.prompt, /FACES LEFT/);
+    assert.match(body.prompt, /80% of the image width/);
     assert.match(body.prompt, /no licence plate/i);
   });
 
-  test("un modèle qui n'est la cible d'aucun pays est refusé, sans toucher au stockage", async () => {
+  test("les anciens bandeaux en cache ne sont plus resservis", async () => {
+    const art = fakeArt({ [`vehicles/${TARGET}.jpg`]: Buffer.from("old-banner") });
+    const ai = spyFetch();
+    const res = await handler({ art: art.store, fetch: ai.fn })(post({ action: "vehicle_art", vehicle_id: TARGET }));
+    assert.deepEqual(await res.json(), { image: jpeg, cached: false });
+    assert.equal(ai.calls.length, 1);
+  });
+
+  test("un identifiant hors catalogue est refusé, sans toucher au stockage ni à OpenAI", async () => {
     const art = fakeArt();
     const ai = spyFetch();
-    const res = await handler({ art: art.store, fetch: ai.fn })(post({ action: "vehicle_art", vehicle_id: NOT_TARGET }));
-    assert.equal(res.status, 403);
-    assert.equal((await res.json() as any).code, "not_a_target");
+    const h = handler({ art: art.store, fetch: ai.fn });
+    for (const id of ["../../etc/passwd", "renault-clio-inventee", "vehicles/v2/x"]) {
+      const res = await h(post({ action: "vehicle_art", vehicle_id: id }));
+      assert.equal(res.status, 403);
+      assert.equal((await res.json() as any).code, "unknown_vehicle");
+    }
+    assert.equal((await h(post({ action: "vehicle_art" }))).status, 400);
     assert.equal(ai.calls.length, 0);
     assert.equal(art.gets.length, 0);
-  });
-
-  test("un identifiant inventé ou absent est refusé", async () => {
-    const h = handler();
-    assert.equal((await h(post({ action: "vehicle_art", vehicle_id: "../../etc/passwd" }))).status, 403);
-    assert.equal((await h(post({ action: "vehicle_art" }))).status, 400);
-  });
-
-  test("la cible d'une autre semaine n'est plus acceptée", async () => {
-    const later = new Date("2026-10-21T12:00:00Z");
-    const ids = weeklyTargetIds(later);
-    const stale = [...weeklyTargetIds(NOW)].find((id) => !ids.has(id))!;
-    assert.ok(stale);
-    assert.equal(allowedArtVehicle(stale, later), undefined);
-    assert.ok(allowedArtVehicle(stale, NOW));
   });
 
   test("sans cache, rien n'est généré", async () => {
@@ -166,9 +177,16 @@ describe("vehicle_art", () => {
     assert.equal(ai.calls.length, 1);
   });
 
-  test("deux demandes simultanées du même modèle ne paient qu'un rendu", async () => {
+  test("une réponse sans usage reste servie (le coût est alors estimé)", async () => {
+    const ai = spyFetch([imageResponse(false)]);
+    const res = await handler({ fetch: ai.fn })(post({ action: "vehicle_art", vehicle_id: TARGET }));
+    assert.equal(res.status, 200);
+  });
+
+  test("deux demandes simultanées du même modèle ne paient qu'un rendu, et n'entament le plafond qu'une fois", async () => {
     const ai = spyFetch();
-    const h = handler({ fetch: ai.fn });
+    const quotas = fakeDb();
+    const h = handler({ fetch: ai.fn, db: quotas.db });
     const [a, b] = await Promise.all([
       h(post({ action: "vehicle_art", vehicle_id: TARGET })),
       h(post({ action: "vehicle_art", vehicle_id: TARGET })),
@@ -176,6 +194,7 @@ describe("vehicle_art", () => {
     assert.equal(a.status, 200);
     assert.equal(b.status, 200);
     assert.equal(ai.calls.length, 1);
+    assert.equal(quotas.globalChecks(), 1);
   });
 
   test("le quota de l'appareil s'applique, fail-closed", async () => {
@@ -188,11 +207,35 @@ describe("vehicle_art", () => {
       post({ action: "vehicle_art", vehicle_id: TARGET }))).status, 503);
     assert.equal(ai.calls.length, 0);
   });
+
+  test("le plafond global atteint bloque les générations, fail-closed", async () => {
+    const ai = spyFetch();
+    const blocked = await handler({ db: fakeDb(true, false).db, fetch: ai.fn })(
+      post({ action: "vehicle_art", vehicle_id: TARGET }));
+    assert.equal(blocked.status, 429);
+    assert.equal((await blocked.json() as any).code, "rate_limited");
+    const down = await handler({ db: fakeDb(true, "throw").db, fetch: ai.fn })(
+      post({ action: "vehicle_art", vehicle_id: TARGET }));
+    assert.equal(down.status, 503);
+    assert.equal(ai.calls.length, 0);
+  });
+
+  test("une demande servie par le cache ne compte pas dans le plafond global", async () => {
+    const ai = spyFetch();
+    const quotas = fakeDb(true, false);
+    const art = fakeArt({ [artKey(TARGET)]: Buffer.from("fake-jpeg") });
+    const res = await handler({ db: quotas.db, art: art.store, fetch: ai.fn })(
+      post({ action: "vehicle_art", vehicle_id: TARGET }));
+    assert.equal(res.status, 200);
+    assert.deepEqual(await res.json(), { image: jpeg, cached: true });
+    assert.equal(quotas.globalChecks(), 0);
+    assert.equal(ai.calls.length, 0);
+  });
 });
 
 describe("gabarit des rendus", () => {
-  test("la clé de cache est rangée sous vehicles/", () => {
-    assert.equal(artKey("renault-clio"), "vehicles/renault-clio.jpg");
+  test("la clé de cache est rangée sous vehicles/v2/", () => {
+    assert.equal(artKey("renault-clio"), "vehicles/v2/renault-clio.jpg");
   });
 
   test("la teinte est stable pour un modèle et varie d'un modèle à l'autre", () => {
@@ -201,15 +244,22 @@ describe("gabarit des rendus", () => {
     assert.ok(paints.size >= ART_PAINTS.length / 2);
   });
 
-  test("le prompt nomme le modèle et ne demande ni logo ni texte", () => {
+  test("le prompt nomme le modèle, le cadre au centre, et ne demande ni logo ni texte", () => {
     const prompt = artPrompt({ id: "renault-clio", make: "Renault", model: "Clio", body: "hatch" });
     assert.match(prompt, /Renault Clio, compact hatchback/);
+    assert.match(prompt, /perfectly centred/);
     assert.match(prompt, /No text, no badges, no logos/);
   });
 
-  test("chaque semaine a des cibles, toutes au catalogue", () => {
-    const ids = weeklyTargetIds(NOW);
-    assert.ok(ids.size >= 3);
-    for (const id of ids) assert.ok(allowedArtVehicle(id, NOW));
+  test("tout le catalogue est autorisé, rien d'autre", () => {
+    for (const v of vehicles) assert.ok(allowedArtVehicle(v.id));
+    assert.equal(allowedArtVehicle(""), undefined);
+    assert.equal(allowedArtVehicle("constructor"), undefined);
+  });
+
+  test("le coût estimé d'un rendu reste sous 4 centimes, et le pire jour sous 12 $", () => {
+    const cost = developCost("gpt-image-1-mini", ART_ESTIMATED_USAGE)!;
+    assert.ok(cost > 0.02 && cost < 0.04, `coût estimé ${cost}`);
+    assert.ok(cost * ART_GLOBAL_DAY_LIMIT < 12);
   });
 });
