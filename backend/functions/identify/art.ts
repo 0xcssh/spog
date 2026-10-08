@@ -20,7 +20,12 @@ import { createHash } from "node:crypto";
 import { vehicle, type Vehicle } from "./catalog";
 
 export const ART_MODEL = "gpt-image-1-mini";
-export const ART_URL = "https://api.openai.com/v1/images/generations";
+/// Édition, pas génération libre (09/10/2026) : la voiture est peinte DANS la plaque du
+/// studio unique (`studio-plate.ts`). Le décor est le même pour tout le catalogue, et la
+/// voiture y a sa vraie ombre et son vrai reflet. Détourer puis poser sur un décor dessiné
+/// donnait une voiture « en suspension » (retour testeur) : l'ombre inventée ne collait
+/// jamais à la perspective ni à la lumière du rendu.
+export const ART_URL = "https://api.openai.com/v1/images/edits";
 /// Carré : la zone image d'une carte l'est presque (rapport 1,02). Un bandeau 3:2 forçait
 /// l'app à choisir entre couper la voiture et la montrer en timbre-poste.
 export const ART_SIZE = "1024x1024";
@@ -30,18 +35,18 @@ export const ART_SIZE = "1024x1024";
 /// pâteuses, visibles dès que la carte occupe l'écran.
 export const ART_QUALITY = "high";
 /// Estimation journalisée quand OpenAI ne renvoie pas d'usage : jetons de sortie d'un
-/// rendu 1024² en qualité `high`, plus un prompt d'environ 300 jetons.
+/// rendu 1024² en qualité `high`, un prompt d'environ 300 jetons et la plaque en entrée.
 export const ART_ESTIMATED_USAGE = {
-  input_tokens: 300, output_tokens: 4160,
-  input_tokens_details: { text_tokens: 300, image_tokens: 0 },
+  input_tokens: 1600, output_tokens: 4160,
+  input_tokens_details: { text_tokens: 300, image_tokens: 1300 },
 };
 
 /// Clé de l'objet en cache. L'identifiant vient du catalogue (vérifié avant), jamais
 /// directement du client : pas de chemin arbitraire possible dans le compartiment.
-/// Préfixe `v2/` : les anciens rendus 1536 × 1024 restent dans le compartiment, mais ne
-/// sont plus jamais resservis — un bandeau dans un cadre carré, c'est le défaut à corriger.
+/// Préfixe `v3/` : rendus faits dans la plaque du studio unique. Les `v2/` (décors néon
+/// tous différents) et les bandeaux d'avant restent dans le compartiment, jamais resservis.
 export function artKey(vehicleId: string): string {
-  return `vehicles/v2/${vehicleId}.jpg`;
+  return `vehicles/v3/${vehicleId}.jpg`;
 }
 
 const BODY_WORDS: Record<string, string> = {
@@ -77,15 +82,14 @@ export function artPrompt(v: Pick<Vehicle, "id" | "make" | "model" | "body">): s
     "Square composition. The WHOLE car is in frame and perfectly centred, occupying about 80% " +
     "of the image width, with a small even margin of studio around it; nothing of the car is cropped. " +
     "Camera slightly below the beltline. " +
-    // Fond uni, sans décor (09/10/2026) : l'app détoure la voiture et la pose sur UN studio
-    // dessiné, identique pour tout le catalogue. Les néons et sols miroirs d'avant
-    // changeaient d'un rendu à l'autre (« les images sur le fond ne sont jamais les
-    // mêmes ») et gênaient le détourage. Les rendus déjà en cache gardent leur décor :
-    // l'app les détoure aussi, on ne paie pas pour les refaire.
-    "Plain seamless neutral dark grey studio background (charcoal, even tone), matte, " +
-    "with no neon, no coloured lights, no light strips, no wall details and no floor reflections. " +
-    "The car stands on an invisible matte floor with only a soft natural contact shadow under the tyres, " +
-    "clearly separated from the background. " +
+    // Le décor est l'image fournie, et doit le rester : c'est ce qui rend toutes les
+    // cartes du catalogue identiques en dehors de la voiture.
+    "Place the car INSIDE THE PROVIDED STUDIO IMAGE, parked on its floor. Keep the studio exactly " +
+    "as it is: same dark charcoal wall, same soft horizon, same floor, same soft overhead light and " +
+    "the same pool of light on the floor. Do not add anything to the background: no neon, no coloured " +
+    "lights, no light strips, no walls, no props. " +
+    "The tyres rest firmly ON the floor, in the pool of light, with a dark natural contact shadow " +
+    "right under each tyre, a soft ambient shadow under the body and a faint, soft reflection on the floor. " +
     "Crisp, clean key lighting that reveals the bodywork: every panel readable, " +
     "bright specular highlights along the shoulder line, detailed wheels and headlights. " +
     "High-end automotive product photography, extremely detailed, razor sharp, glossy paint. " +

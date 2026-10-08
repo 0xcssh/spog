@@ -38,8 +38,12 @@ enum VehicleArtService {
     /// resservir pour toujours.
     private static var directory: URL = {
         let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        try? FileManager.default.removeItem(at: base.appendingPathComponent("vehicle-art", isDirectory: true))
-        let folder = base.appendingPathComponent("vehicle-art-v2", isDirectory: true)
+        // `v3` : rendus générés dans la plaque du studio unique. Les dossiers d'avant
+        // (bandeaux, puis décors néon tous différents) sont supprimés une fois.
+        for old in ["vehicle-art", "vehicle-art-v2"] {
+            try? FileManager.default.removeItem(at: base.appendingPathComponent(old, isDirectory: true))
+        }
+        let folder = base.appendingPathComponent("vehicle-art-v3", isDirectory: true)
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         return folder
     }()
@@ -61,6 +65,11 @@ enum VehicleArtService {
 
     /// Le rendu HD seul, s'il est déjà sur l'appareil. Sert à `ModelArt`, qui doit savoir
     /// s'il tient le rendu définitif ou seulement le bandeau embarqué en attendant.
+    /// En mémoire seulement, sans disque : de quoi afficher dès la première image d'une vue.
+    static func memoryImage(for vehicleID: String) -> UIImage? {
+        vehicleID.isEmpty ? nil : memory.object(forKey: vehicleID as NSString)
+    }
+
     static func storedImage(for vehicleID: String) -> UIImage? {
         guard !vehicleID.isEmpty else { return nil }
         let key = vehicleID as NSString
@@ -100,12 +109,7 @@ enum VehicleArtService {
     /// partent en même temps plutôt qu'un par un au fil de l'affichage.
     static func prefetch(_ vehicleIDs: [String]) {
         for id in vehicleIDs where storedImage(for: id) == nil {
-            Task {
-                // Détourée dans la foulée : quand la carte s'affiche, la voiture est déjà
-                // prête à poser sur le studio, sans attendre Vision.
-                guard let render = await VehicleArtService.remoteImage(for: id) else { return }
-                _ = await ModelCutoutService.hdCutout(for: id, from: render)
-            }
+            Task { _ = await VehicleArtService.remoteImage(for: id) }
         }
     }
 

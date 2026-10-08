@@ -139,16 +139,8 @@ struct OnboardingView: View {
             guard let current = demo,
                   let sharper = await VehicleArtService.remoteImage(for: current.vehicle.id)
             else { return }
-            // Détourée et posée sur le studio unique ; si Vision n'y arrive pas, le rendu
-            // tel quel, recadré comme avant.
-            let cutout = await ModelCutoutService.hdCutout(for: current.vehicle.id, from: sharper)
-            let candidate: OnboardingDemo?
-            if let cutout {
-                candidate = current.upgraded(withCutout: cutout)
-            } else {
-                candidate = current.upgraded(with: sharper)
-            }
-            guard let upgraded = candidate else { return }
+            // Le rendu HD contient déjà le studio unique : il s'affiche tel quel.
+            guard let upgraded = current.upgraded(with: sharper) else { return }
             withAnimation(.easeInOut(duration: 0.3)) { demo = upgraded }
         }
     }

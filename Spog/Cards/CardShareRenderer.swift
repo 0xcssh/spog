@@ -35,12 +35,10 @@ enum CardShareRenderer {
         return fallback.map { .model($0) }
     }
 
-    /// La voiture détourée à poser sur le studio. Le rendu HD a priorité : s'il est là
-    /// sans découpe (Vision a échoué), on ne retombe pas sur le bandeau embarqué, plus
-    /// pauvre — c'est le rendu HD tel quel qui part, comme à l'écran.
+    /// La voiture détourée à poser sur le studio dessiné, faute de mieux. Le rendu HD a
+    /// priorité : il contient déjà le studio unique, et part tel quel, comme à l'écran.
     private static func shareCutout(for card: CardData) -> UIImage? {
         let id = card.vehicle.id
-        if let hd = ModelCutoutService.storedHDCutout(for: id) { return hd }
         if VehicleArtService.storedImage(for: id) != nil { return nil }
         return ModelCutoutService.embeddedCutoutNow(for: id, paint: card.paint)
     }

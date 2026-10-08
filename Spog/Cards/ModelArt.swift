@@ -3,19 +3,18 @@ import SwiftUI
 /// Le visuel d'un **modèle** du catalogue — jamais d'une photo du joueur : cible du pack,
 /// vitrine du garage, carte sans photo, Spogdex.
 ///
-/// La voiture est détourée de son rendu et posée sur **le studio unique** de l'app
-/// (`StudioStage`) : même fond, même sol, même lumière, même cadrage sous chaque modèle.
-/// Les rendus IA apportaient chacun leur décor, et trois cibles côte à côte semblaient
-/// venir de trois jeux (retour du testeur du 09/10/2026).
+/// Le rendu HD du serveur est généré **dans la plaque du studio unique** (voir
+/// backend/functions/identify/art.ts) : même fond, même sol, même lumière sous chaque
+/// modèle, et la voiture y a sa vraie ombre. Il s'affiche donc tel quel, en plein cadre.
+/// (Détourer la voiture et la poser sur un décor dessiné la faisait flotter : retour du
+/// testeur du 09/10/2026.)
 ///
 /// Ordre d'affichage, du plus immédiat au définitif :
-/// 1. la découpe du rendu embarqué `CarArt` (son masque est livré avec lui), tout de
-///    suite, hors ligne compris ;
-/// 2. la découpe du rendu HD du serveur (`VehicleArtService`, détouré par Vision), en
-///    fondu dès qu'il arrive — une trentaine de secondes pour le tout premier joueur qui
-///    demande un modèle, instantané ensuite ;
-/// 3. si Vision n'y arrive pas (simulateur, rendu bizarre) : le rendu HD tel quel, en
-///    plein cadre, comme avant le studio. Sans rendu du tout : la silhouette.
+/// 1. la découpe du rendu embarqué `CarArt` (son masque est livré avec lui) sur le décor
+///    dessiné, tout de suite, hors ligne compris — un aperçu, le temps du réseau ;
+/// 2. le rendu HD du serveur (`VehicleArtService`), en fondu dès qu'il arrive — une
+///    trentaine de secondes pour le tout premier joueur qui demande un modèle,
+///    instantané ensuite. Sans rendu du tout : la silhouette.
 struct ModelArt: View {
     let vehicleID: String
     let carBody: CarBody
@@ -64,7 +63,7 @@ struct ModelArt: View {
             // Le décor est déjà dessous : la voiture seule.
             StagedCar(cutout: cutout, cutoutKey: key, showsBackdrop: false)
         case .full(let render):
-            SharpFill(image: render, key: ModelCutoutService.hdKey(vehicleID))
+            SharpFill(image: render, key: "hd-" + vehicleID)
         case .banner(let art):
             StudioArt(image: art)
         case .silhouette:
@@ -108,8 +107,7 @@ struct ModelArt: View {
             VehicleArtService.storedImage(for: id)
         }.value
         if let stored {
-            let definitive = await Self.finalFace(id, render: stored)
-            show(definitive, animated: face.isVisible)
+            show(.full(stored), animated: face.isVisible)
             return
         }
 
@@ -125,17 +123,7 @@ struct ModelArt: View {
         try? await Task.sleep(for: .milliseconds(350))
         if Task.isCancelled { return }
         guard let remote = await VehicleArtService.remoteImage(for: id), !Task.isCancelled else { return }
-        let definitive = await Self.finalFace(id, render: remote)
-        if Task.isCancelled { return }
-        show(definitive)
-    }
-
-    /// Le visuel définitif : la découpe du rendu HD, ou le rendu tel quel si Vision échoue.
-    private static func finalFace(_ id: String, render: UIImage) async -> ModelFace {
-        if let cutout = await ModelCutoutService.hdCutout(for: id, from: render) {
-            return .staged(cutout, key: ModelCutoutService.hdKey(id), definitive: true)
-        }
-        return .full(render)
+        show(.full(remote))
     }
 
     /// Le visuel d'attente : la découpe du rendu embarqué, sinon le bandeau entier, sinon
@@ -153,9 +141,9 @@ struct ModelArt: View {
 private enum ModelFace {
     /// Rien encore : le studio vide, le temps d'une lecture sur le disque.
     case pending
-    /// La voiture détourée sur le studio. `definitive` : la découpe du rendu HD.
+    /// La voiture du rendu embarqué, détourée sur le décor dessiné : un aperçu.
     case staged(UIImage, key: String, definitive: Bool)
-    /// Le rendu HD non détouré, en plein cadre (repli).
+    /// Le rendu HD, studio compris, en plein cadre : le visuel définitif.
     case full(UIImage)
     /// Le rendu embarqué sans masque, en entier et fondu.
     case banner(UIImage)
@@ -191,10 +179,7 @@ private enum ModelFace {
 
     /// Ce qui est déjà en mémoire, sans disque ni calcul.
     static func immediate(_ id: String, paint: UInt32?) -> ModelFace {
-        let hd = ModelCutoutService.hdKey(id)
-        if let cutout = ModelCutoutService.memoryCutout(hd) {
-            return .staged(cutout, key: hd, definitive: true)
-        }
+        if let hd = VehicleArtService.memoryImage(for: id) { return .full(hd) }
         let embedded = ModelCutoutService.embeddedKey(id, paint: paint)
         if let cutout = ModelCutoutService.memoryCutout(embedded) {
             return .staged(cutout, key: embedded, definitive: false)

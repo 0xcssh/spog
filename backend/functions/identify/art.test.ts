@@ -59,7 +59,13 @@ function imageResponse(withUsage = true): Response {
 function spyFetch(responses: Array<Response | Error> = [imageResponse()]) {
   const calls: { url: string; body: any }[] = [];
   const fn = (async (url: unknown, init: RequestInit) => {
-    calls.push({ url: String(url), body: JSON.parse(String(init.body)) });
+    // Formulaire multipart (édition de la plaque) : champs texte, et le nom du fichier joint.
+    const raw = init.body;
+    const body: Record<string, unknown> = {};
+    if (raw instanceof FormData) {
+      raw.forEach((value, key) => { body[key] = typeof value === "string" ? value : (value as File).name; });
+    } else Object.assign(body, JSON.parse(String(raw)));
+    calls.push({ url: String(url), body });
     const next = responses[Math.min(calls.length - 1, responses.length - 1)];
     if (next instanceof Error) throw next;
     return next.clone();
@@ -96,7 +102,7 @@ describe("vehicle_art", () => {
     const first = await h(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.equal(first.status, 200);
     assert.deepEqual(await first.json(), { image: jpeg, cached: false });
-    assert.ok(art.objects[`vehicles/v2/${TARGET}.jpg`]);
+    assert.ok(art.objects[`vehicles/v3/${TARGET}.jpg`]);
 
     const second = await h(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.deepEqual(await second.json(), { image: jpeg, cached: true });
@@ -110,17 +116,18 @@ describe("vehicle_art", () => {
     assert.equal(ai.calls.length, 1);
   });
 
-  test("la requête OpenAI suit le contrat retenu : carré, haute qualité", async () => {
+  test("la requête OpenAI suit le contrat retenu : édition de la plaque, carré, haute qualité", async () => {
     const ai = spyFetch();
     await handler({ fetch: ai.fn })(post({ action: "vehicle_art", vehicle_id: TARGET }));
-    assert.equal(ai.calls[0].url, "https://api.openai.com/v1/images/generations");
+    assert.equal(ai.calls[0].url, "https://api.openai.com/v1/images/edits");
     const body = ai.calls[0].body;
     assert.equal(body.model, "gpt-image-1-mini");
     assert.equal(body.quality, "high");
     assert.equal(body.size, "1024x1024");
     assert.equal(body.output_format, "jpeg");
-    assert.equal(body.output_compression, 90);
-    assert.equal(body.n, 1);
+    assert.equal(body.output_compression, "90");
+    assert.equal(body.n, "1");
+    assert.equal(body.image, "studio.png");
     assert.match(body.prompt, /FACES LEFT/);
     assert.match(body.prompt, /80% of the image width/);
     assert.match(body.prompt, /no licence plate/i);
@@ -234,8 +241,8 @@ describe("vehicle_art", () => {
 });
 
 describe("gabarit des rendus", () => {
-  test("la clé de cache est rangée sous vehicles/v2/", () => {
-    assert.equal(artKey("renault-clio"), "vehicles/v2/renault-clio.jpg");
+  test("la clé de cache est rangée sous vehicles/v3/", () => {
+    assert.equal(artKey("renault-clio"), "vehicles/v3/renault-clio.jpg");
   });
 
   test("la teinte est stable pour un modèle et varie d'un modèle à l'autre", () => {
@@ -251,10 +258,11 @@ describe("gabarit des rendus", () => {
     assert.match(prompt, /No text, no badges, no logos/);
   });
 
-  test("le fond est uni et neutre, sans néons : l'app détoure et pose son propre studio", () => {
+  test("la voiture est posée dans la plaque du studio, sans néons, pneus au sol", () => {
     const prompt = artPrompt({ id: "renault-clio", make: "Renault", model: "Clio", body: "hatch" });
-    assert.match(prompt, /Plain seamless neutral dark grey studio background/);
+    assert.match(prompt, /INSIDE THE PROVIDED STUDIO IMAGE/);
     assert.match(prompt, /no neon/);
+    assert.match(prompt, /tyres rest firmly ON the floor/);
     assert.doesNotMatch(prompt, /violet|cyan|reflective/i);
   });
 

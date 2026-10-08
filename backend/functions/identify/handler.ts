@@ -51,6 +51,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { EntitlementResult } from "./entitlement";
 import type { ArtStore, SampleStore } from "./storage";
+import { STUDIO_PLATE_PNG } from "./studio-plate";
 import { ART_ESTIMATED_USAGE, ART_MODEL, ART_QUALITY, ART_SIZE, ART_URL, allowedArtVehicle, artKey, artPrompt } from "./art";
 import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
 import { candidates, expectedVehicleId } from "./catalog";
@@ -455,20 +456,19 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
   async function generateArt(target: Parameters<typeof artPrompt>[0], key: string): Promise<string | null> {
     let response: Response;
     try {
+      const form = new FormData();
+      form.append("model", ART_MODEL);
+      form.append("prompt", artPrompt(target));
+      form.append("size", ART_SIZE);
+      form.append("quality", ART_QUALITY);
+      // JPEG : ~250 Ko au lieu de 2 Mo, à stocker comme à télécharger sur mobile.
+      // 90 plutôt que 85 : en plein écran, les artefacts se voyaient sur les reflets du sol.
+      form.append("output_format", "jpeg");
+      form.append("output_compression", "90");
+      form.append("n", "1");
+      form.append("image", new Blob([Buffer.from(STUDIO_PLATE_PNG, "base64")], { type: "image/png" }), "studio.png");
       response = await deps.fetch(ART_URL, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${deps.openaiKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: ART_MODEL,
-          prompt: artPrompt(target),
-          size: ART_SIZE,
-          quality: ART_QUALITY,
-          // JPEG : ~250 Ko au lieu de 2 Mo, à stocker comme à télécharger sur mobile.
-          // 90 plutôt que 85 : en plein écran, les artefacts se voyaient sur les reflets du sol.
-          output_format: "jpeg",
-          output_compression: 90,
-          n: 1,
-        }),
+        method: "POST", headers: { "Authorization": `Bearer ${deps.openaiKey}` }, body: form,
       });
     } catch (error) {
       console.error("art unreachable", error instanceof Error ? error.message : error);
