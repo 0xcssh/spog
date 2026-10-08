@@ -3,11 +3,16 @@
 // les tests l'instancient avec des doublures.
 //
 // Contrat d'API :
-//   POST { imageBase64: string, entitlement?: string }
+//   POST { imageBase64: string, entitlement?: string, country?: string }
+//        `country` : pays de la prise, code ISO à 2 lettres. Facultatif (anciennes versions
+//        de l'app) : sans lui, pas de cote.
 //        en-têtes : x-install-id (identifiant d'installation, rangé dans le trousseau
 //        iOS, il survit à la désinstallation), x-device-id (identifierForVendor)
 //   → 200 { make, model, generation, body, color, confidence, is_screen, vehicle_present,
+//           price_min, price_max, price_currency,
 //           scans_left: number | null, resets_at }   (null = abonné, pas de plafond)
+//        Cote d'occasion en fourchette, dans la devise du pays (voir price.ts) ; 0/0 quand
+//        on ne sait pas, avec la devise du pays, ou "" si le pays manque ou est inconnu.
 //   → 402 { code: "daily_limit", error, scans_left: 0, resets_at }
 //        Avec `training_consent: true`, une vraie prise est conservée pour entraîner le
 //        classifieur embarqué, et la réponse porte `sample_id`.
@@ -50,6 +55,7 @@ import { ART_ESTIMATED_USAGE, ART_MODEL, ART_QUALITY, ART_SIZE, ART_URL, allowed
 import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
 import { candidates, expectedVehicleId } from "./catalog";
 import { createSocial, SOCIAL_ACTIONS } from "./social";
+import { currencyOf, marketHint, priceBracket } from "./price";
 import type { AppleResult } from "./apple";
 
 /** Sous-ensemble de pg.Pool utilisé ici. */
@@ -202,7 +208,8 @@ export function installIdFrom(headers: Headers, deviceId: string): string {
 
 // Identifiants techniques en anglais, jamais affichés tels quels : l'app traduit.
 // Aucune règle de jeu ici, et surtout aucune mention de pays — la même réponse
-// doit valoir partout.
+// doit valoir partout. Le marché de la cote arrive dans le message de l'utilisateur
+// (voir price.ts) : ce prompt reste le même pour tous les pays.
 export const SYSTEM_PROMPT = `You identify a car from a photograph taken in the street. Answer with JSON only.
 
 {
@@ -213,7 +220,10 @@ export const SYSTEM_PROMPT = `You identify a car from a photograph taken in the 
   "generation": string,
   "body": string,
   "color": string,
-  "confidence": number
+  "confidence": number,
+  "price_min": number,
+  "price_max": number,
+  "price_max_usd": number
 }
 
 Rules:
@@ -225,7 +235,9 @@ Rules:
 - "body": exactly one of ${BODIES.map((b) => `"${b}"`).join(", ")}. "hatch" covers superminis and hatchbacks, "van" covers minivans, MPVs and panel vans, "sport" is for coupés and sports cars.
 - "color": exactly one of ${COLORS.map((c) => `"${c}"`).join(", ")}. Pick the closest one for the body paint, ignoring wraps of shadow and reflections.
 - "confidence": how sure you are of make AND model, from 0 to 1. Be honest: a distant, dark or partial photo deserves a low value. Never inflate it — a wrong card is worse than a confirmation screen.
-- When vehicle_present is false or is_screen is true, still return every field, with empty strings and confidence 0.
+- "price_min" and "price_max": the typical second-hand resale value of this car today on the market named in the user message, in the currency named there, as a bracket of whole amounts. You cannot see mileage, service history or mechanical condition, so the bracket must be wide enough to be honest — a narrow one you cannot justify is worse than none. Use the visible age, trim and condition. Both 0 when no market is named, when you would be guessing, and whenever confidence is below 0.7: an empty bracket is a valid answer.
+- "price_max_usd": price_max expressed roughly in US dollars, 0 when price_max is 0. It is only a sanity check.
+- When vehicle_present is false or is_screen is true, still return every field, with empty strings, confidence 0 and every price 0.
 - Never add any text outside the JSON.`;
 
 export function json(payload: unknown, status = 200): Response {
@@ -593,7 +605,8 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       return json({ code: "server_misconfigured", error: "OPENAI_API_KEY manquante côté serveur" }, 500);
     }
 
-    let body: { imageBase64?: unknown; entitlement?: unknown; training_consent?: unknown; action?: unknown };
+    let body: { imageBase64?: unknown; entitlement?: unknown; training_consent?: unknown; action?: unknown;
+                country?: unknown };
     try {
       body = await req.json();
     } catch {
@@ -683,17 +696,24 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       }
     }
 
+    // Devise déduite du pays de la prise. Un pays absent ou inconnu ne bloque rien :
+    // l'identification part quand même, simplement sans marché, donc sans cote.
+    const currency = currencyOf(body.country);
+    const market = currency ? ` ${marketHint(String(body.country).trim().toUpperCase(), currency)}` : "";
+
     const openaiResponse = await callOpenAI({
       model,
       temperature: 0.2, // identification, pas création : on veut la réponse la plus probable
-      max_tokens: 200,
+      // 260 plutôt que 200 : les trois montants de la cote allongent la réponse d'une
+      // trentaine de jetons, et une réponse tronquée serait un JSON illisible.
+      max_tokens: 260,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         {
           role: "user",
           content: [
-            { type: "text", text: "Identify the car in this photo." },
+            { type: "text", text: `Identify the car in this photo.${market}` },
             { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}`, detail: "high" } },
           ],
         },
@@ -765,6 +785,8 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
         confidence,
         is_screen: isScreen,
         vehicle_present: vehiclePresent,
+        // Pas de cote sans vraie prise : une photo d'écran ou sans voiture n'a rien à coter.
+        ...priceBracket(realCatch ? parsed : {}, currency, confidence),
         scans_left: scansLeft,
         ...(scansLeft !== null ? { resets_at: nextResetAt() } : {}),
         ...(sampleId ? { sample_id: sampleId } : {}),
