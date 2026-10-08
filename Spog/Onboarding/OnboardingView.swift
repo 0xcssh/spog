@@ -1,11 +1,18 @@
 import SwiftUI
 
-/// Parcours d'entrée.
+/// Parcours d'entrée, en cinq écrans.
 ///
-/// **On joue avant de répondre.** Les quatre premiers écrans ne demandent rien : une prise
-/// de démonstration, son développement, le jeu, le modèle gratuit. Un joueur à qui l'on
-/// demande un pseudo avant de lui avoir montré ce que fait l'app n'a aucune raison d'en
-/// donner un. Les questions viennent ensuite.
+/// **On joue avant de répondre.** Le premier écran est une prise de démonstration qu'on
+/// passe aussitôt en studio, le deuxième montre le jeu. Un joueur à qui l'on demande un
+/// pseudo avant de lui avoir montré ce que fait l'app n'a aucune raison d'en donner un.
+/// Les questions viennent ensuite, regroupées : profil, terrain de chasse, départ.
+///
+/// Ce qui a été retiré, et pourquoi (testeur, 08/10/2026) : l'écran des scans offerts
+/// parlait de limites à quelqu'un qui n'avait pas encore joué — le décompte reste au
+/// scan, Pro au paywall ; l'attente « préparation » ne préparait rien qu'on ne voie
+/// ailleurs ; le code d'invitation, que presque personne n'a, occupait une étape entière
+/// et n'est plus qu'un lien sur l'écran de départ. Neuf segments de progression se
+/// lisaient comme un long formulaire.
 ///
 /// Règle tenue : **on ne demande rien qui ne serve nulle part.** Le pseudo apparaît
 /// au classement, la carrosserie préférée oriente la quête du jour, le pays et son mode
@@ -23,7 +30,12 @@ struct OnboardingView: View {
     @State private var locationRefused = false
     /// Code d'invitation en cours de saisie. Vide = le joueur n'en a pas, c'est permis.
     @State private var referralCode = ""
+    /// Le champ du code ne s'ouvre qu'à la demande : la plupart des joueurs n'en ont pas.
+    @State private var showsReferral = false
     @FocusState private var typing: Bool
+    /// Hauteur de l'écran hors clavier. Les visuels se dimensionnent sur elle : sans ça,
+    /// ouvrir le clavier rétrécissait la grille des goûts sous le doigt du joueur.
+    @State private var restingHeight: CGFloat = 0
 
     private let store = CatalogStore.shared
 
@@ -39,55 +51,68 @@ struct OnboardingView: View {
 
     enum DemoPhase { case aiming, scanning, caught }
 
+    /// Les noms des cas partent tels quels dans `.onboardingStep` : les renommer casse la
+    /// continuité des courbes d'analytics.
     enum Step: Int, CaseIterable {
-        case demo, develop, game, freePlan, nickname, taste, market, referral, preparing, recap
+        case demo, game, profile, location, ready
+    }
+
+    /// Place disponible pour le contenu d'une étape, gouttières et barres déduites.
+    /// Chaque écran répartit son contenu sur toute cette hauteur au lieu de s'empiler en
+    /// haut : sur les captures du testeur, la moitié basse de chaque écran était vide.
+    struct Metrics {
+        let width: CGFloat
+        let height: CGFloat
+        /// iPhone SE et mini : on retire le décor et le détail avant de faire défiler.
+        /// Seuil mesuré : un 6,1 pouces laisse ~600 pt au contenu, un mini ~570.
+        var compact: Bool { height < 590 }
+
+        func clamp(_ value: CGFloat, _ low: CGFloat, _ high: CGFloat) -> CGFloat {
+            min(max(value, low), high)
+        }
     }
 
     var body: some View {
         ZStack {
             backdrop
 
-            ScrollView {
-                Group {
-                    switch step {
-                    case .demo:      demoStep
-                    case .develop:   developStep
-                    case .game:      gameStep
-                    case .freePlan:  freePlanStep
-                    case .nickname:  nicknameStep
-                    case .taste:     tasteStep
-                    case .market:    market
-                    case .referral:  referralStep
-                    case .preparing: preparing
-                    case .recap:     recap
-                    }
+            GeometryReader { geo in
+                let sizing = typing && restingHeight > 0 ? restingHeight : geo.size.height
+                let metrics = Metrics(width: max(geo.size.width - 48, 220),
+                                      height: max(sizing - 24, 420))
+                ScrollView {
+                    stepContent(metrics)
+                        // Chaque étape entre par la droite et l'ancienne s'efface : sans `id`,
+                        // SwiftUI recycle la vue et l'écran change d'un bloc, sans transition.
+                        .id(step)
+                        .transition(.asymmetric(insertion: .opacity.combined(with: .offset(x: 28)),
+                                                removal: .opacity))
+                        // Hauteur minimale = l'écran : les `Spacer` des étapes s'étirent
+                        // jusqu'au bouton. Plus haut que l'écran (petit iPhone, clavier),
+                        // le contenu défile au lieu de déborder.
+                        .frame(maxWidth: .infinity, minHeight: max(geo.size.height - 24, 0),
+                               alignment: .top)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 8)
+                        .padding(.bottom, 16)
                 }
-                // Chaque étape entre par la droite et l'ancienne s'efface : sans `id`,
-                // SwiftUI recycle la vue et l'écran change d'un bloc, sans transition.
-                .id(step)
-                .transition(.asymmetric(insertion: .opacity.combined(with: .offset(x: 28)),
-                                        removal: .opacity))
-                .frame(maxWidth: .infinity, alignment: .top)
-                .padding(.horizontal, 24)
-                .padding(.top, 8)
-                .padding(.bottom, 24)
+                .scrollBounceBehavior(.basedOnSize)
+                .scrollDismissesKeyboard(.interactively)
+                .onChange(of: geo.size.height, initial: true) { _, height in
+                    if !typing { restingHeight = height }
+                }
             }
-            .scrollBounceBehavior(.basedOnSize)
-            .scrollDismissesKeyboard(.interactively)
             .safeAreaInset(edge: .top) { topBar }
             // `safeAreaInset` est la seule construction qui repousse reellement les
             // commandes au-dessus du clavier. Un simple VStack les laisse dessous. Le
             // bouton reste donc le même pendant la saisie : un second bouton accroché
             // à la barre du clavier faisait doublon et flottait à droite, bricolé.
             .safeAreaInset(edge: .bottom) {
-                if showsActionBar {
-                    action
-                        .padding(.horizontal, 24)
-                        .padding(.top, 22)
-                        .padding(.bottom, 10)
-                        .background(alignment: .top) { footerFade }
-                        .transition(.opacity)
-                }
+                action
+                    .padding(.horizontal, 24)
+                    .padding(.top, 18)
+                    .padding(.bottom, 10)
+                    .background(alignment: .top) { footerFade }
             }
         }
         .preferredColorScheme(.dark)
@@ -99,6 +124,23 @@ struct OnboardingView: View {
             // la voiture de démonstration. S'il change plus loin, la démonstration est
             // déjà jouée, et rien ne la contredit.
             if demo == nil { demo = OnboardingDemo.make(country: app.country) }
+            // Rendu haute définition s'il est déjà là ou s'il arrive : la démo commence
+            // toujours sur le rendu embarqué, qui marche hors ligne, et gagne en netteté
+            // ensuite sans changer de carte.
+            guard let current = demo,
+                  let sharper = await VehicleArtService.image(for: current.vehicle.id),
+                  let upgraded = current.upgraded(with: sharper) else { return }
+            withAnimation(.easeInOut(duration: 0.3)) { demo = upgraded }
+        }
+    }
+
+    @ViewBuilder private func stepContent(_ m: Metrics) -> some View {
+        switch step {
+        case .demo:     demoStep(m)
+        case .game:     gameStep(m)
+        case .profile:  profileStep(m)
+        case .location: locationStep(m)
+        case .ready:    readyStep(m)
         }
     }
 
@@ -132,73 +174,88 @@ struct OnboardingView: View {
             .allowsHitTesting(false)
     }
 
-    // MARK: 1 — Prise de démonstration
+    // MARK: 1 — Prise de démonstration et passage en studio
 
     /// L'accroche est une prise, pas un discours : une voiture est déjà dans le viseur,
     /// il reste à appuyer. Aucune caméra, aucune autorisation — on les demanderait à
-    /// quelqu'un qui ne sait pas encore pourquoi.
-    private var demoStep: some View {
-        VStack(spacing: 18) {
-            HStack(spacing: 10) {
-                Image("LogoMark")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                Text(verbatim: "SPOG")
-                    .font(Theme.display(17, .heavy)).tracking(5)
-                    .foregroundStyle(Theme.textPrimary)
-            }
-
-            VStack(spacing: 6) {
-                Text(demoPhase == .caught ? "onboarding.demo.caught" : "onboarding.demo.title")
-                    .font(Theme.display(30))
+    /// quelqu'un qui ne sait pas encore pourquoi. La carte obtenue passe en studio sur le
+    /// même écran : c'est le même geste, le couper en deux étapes l'allongeait pour rien.
+    private func demoStep(_ m: Metrics) -> some View {
+        // La scène garde la même hauteur du viseur à la carte : rien ne saute à la prise.
+        let stage = m.clamp(m.height - (m.compact ? 238 : 300), 210, 470)
+        return VStack(spacing: 0) {
+            VStack(spacing: m.compact ? 6 : 10) {
+                if !m.compact { brandRow }
+                Text(demoTitle)
+                    .font(Theme.display(m.compact ? 26 : 32))
                     .foregroundStyle(Theme.textPrimary)
                     .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(2, reservesSpace: true)
+                    .minimumScaleFactor(0.8)
+                    .contentTransition(.opacity)
                 Text("onboarding.tagline")
                     .font(Theme.mono(11))
                     .foregroundStyle(Theme.textSecondary)
                     .multilineTextAlignment(.center)
             }
 
+            Spacer(minLength: 14)
+
             ZStack {
                 if demoPhase == .caught, let demo {
-                    VStack(spacing: 12) {
-                        CollectibleCardView(card: demoCard(demo), showsShotToggle: false)
-                            .frame(maxWidth: 230)
-                        Overline(text: "onboarding.demo.caughtTier \(tierName(demo.tier)) \(store.countryName(app.country))",
-                                 color: demo.tier.color)
-                    }
-                    .transition(.scale(scale: 0.6).combined(with: .opacity))
+                    demoCard(demo)
+                        .frame(width: stage * 0.70)
+                        .transition(.scale(scale: 0.6).combined(with: .opacity))
                 } else {
-                    VStack(spacing: 18) {
-                        demoViewfinder
-                        demoShutter
-                    }
-                    .transition(.opacity)
+                    demoViewfinder(height: stage, maxWidth: m.width)
+                        .transition(.opacity)
                 }
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: stage)
 
-            Text("onboarding.demo.note")
-                .font(Theme.mono(10))
-                .foregroundStyle(Theme.textMuted)
-                .multilineTextAlignment(.center)
-                .opacity(demoPhase == .caught ? 1 : 0)
+            Spacer(minLength: 14)
+
+            demoFooter
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: m.compact ? 96 : 116, alignment: .top)
         }
     }
 
-    private var demoViewfinder: some View {
+    private var brandRow: some View {
+        HStack(spacing: 10) {
+            Image("LogoMark")
+                .resizable()
+                .frame(width: 28, height: 28)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            Text(verbatim: "SPOG")
+                .font(Theme.display(16, .heavy)).tracking(5)
+                .foregroundStyle(Theme.textPrimary)
+        }
+    }
+
+    private var demoTitle: LocalizedStringKey {
+        if developed { return "onboarding.develop.done" }
+        return demoPhase == .caught ? "onboarding.demo.caught" : "onboarding.demo.title"
+    }
+
+    private func demoViewfinder(height: CGFloat, maxWidth: CGFloat) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(Theme.surface)
                 .overlay(DotGrid(spacing: 18)
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous)))
+                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous)))
 
-            if let raw = demo?.raw {
-                // La voiture entière dans le viseur, fondue dans son fond : un rendu en
-                // bandeau rempli dans ce cadre presque carré perdait l'avant et l'arrière.
-                StudioArt(image: raw, zoom: 1.0)
-                    .padding(.horizontal, 6)
+            if let raw = demo?.raw ?? demo?.studio {
+                // Le cliché est déjà cadré presque carré : il remplit le viseur, la voiture
+                // au centre, sans bande vide au-dessus ni au-dessous.
+                Color.clear
+                    .overlay {
+                        Image(uiImage: raw)
+                            .resizable()
+                            .scaledToFill()
+                    }
+                    .clipped()
             }
 
             if demoPhase == .scanning {
@@ -207,7 +264,7 @@ struct OnboardingView: View {
                                          startPoint: .leading, endPoint: .trailing))
                     .frame(height: 2)
                     .shadow(color: Theme.accentBright, radius: 8)
-                    .offset(y: scanSweep ? 110 : -110)
+                    .offset(y: (scanSweep ? 0.4 : -0.4) * height)
             }
 
             CornerBrackets(color: demoPhase == .scanning ? Theme.accentBright : Theme.accent)
@@ -219,12 +276,44 @@ struct OnboardingView: View {
                 .allowsHitTesting(false)
         }
         .aspectRatio(0.95, contentMode: .fit)
-        .frame(maxWidth: 320)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .frame(maxWidth: maxWidth, maxHeight: height)
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .stroke(Theme.accent.opacity(0.4), lineWidth: 1))
-        .shadow(color: Theme.accent.opacity(0.3), radius: 20)
+        .shadow(color: Theme.accent.opacity(0.3), radius: 22)
+    }
+
+    /// Sous la scène : le déclencheur avant la prise, puis la rareté obtenue et ce qu'il
+    /// reste à faire. Le passage en studio se déclenche aussi par le bouton du bas.
+    @ViewBuilder private var demoFooter: some View {
+        if demoPhase == .caught, let demo {
+            VStack(spacing: 10) {
+                Overline(text: "onboarding.demo.caughtTier \(tierName(demo.tier)) \(store.countryName(app.country))",
+                         color: demo.tier.color)
+                if developed {
+                    Text("onboarding.demo.note")
+                        .font(Theme.mono(10))
+                        .foregroundStyle(Theme.textMuted)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "hand.tap.fill")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Theme.accentBright)
+                        Text("onboarding.develop.hint")
+                            .font(Theme.body(12))
+                            .foregroundStyle(Theme.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(.horizontal, 8)
+                }
+            }
+            .transition(.opacity)
+        } else {
+            demoShutter
+        }
     }
 
     private var demoShutter: some View {
@@ -233,14 +322,14 @@ struct OnboardingView: View {
                 ZStack {
                     Circle()
                         .stroke(Theme.accent.opacity(0.5), lineWidth: 2)
-                        .frame(width: 90, height: 90)
+                        .frame(width: 84, height: 84)
                     Circle()
                         .fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
                                              startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .frame(width: 76, height: 76)
+                        .frame(width: 70, height: 70)
                         .shadow(color: Theme.accent.opacity(0.7), radius: 18)
                     Image(systemName: "viewfinder")
-                        .font(.system(size: 28, weight: .semibold))
+                        .font(.system(size: 26, weight: .semibold))
                         .foregroundStyle(Theme.background)
                 }
                 .opacity(demoPhase == .aiming ? 1 : 0.5)
@@ -271,67 +360,31 @@ struct OnboardingView: View {
         }
     }
 
-    private func demoCard(_ demo: OnboardingDemo) -> CardData {
-        demo.card(developed: developed, place: store.countryName(app.country))
+    /// La carte attrapée. Toucher la carte la passe en studio : la même carte, d'abord le
+    /// cliché terne, puis le rendu net.
+    private func demoCard(_ demo: OnboardingDemo) -> some View {
+        CollectibleCardView(card: demo.card(developed: developed,
+                                            place: store.countryName(app.country)),
+                            interactive: developed, showsShotToggle: false)
+            .blur(radius: developing ? 5 : 0)
+            .brightness(developing ? 0.12 : 0)
+            .overlay { developLight }
+            .overlay {
+                // Par-dessus la carte, sinon sa propre zone d'image garderait le
+                // toucher pour elle et le passage en studio ne partirait jamais.
+                if !developed {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture { develop() }
+                }
+            }
     }
 
     private func tierName(_ tier: RarityTier) -> String {
         String(localized: String.LocalizationValue(tier.key))
     }
 
-    // MARK: 2 — Développement
-
-    /// Le développement se touche du doigt plutôt que de s'expliquer : la même carte,
-    /// d'abord le cliché terne, puis le rendu studio.
-    private var developStep: some View {
-        VStack(spacing: 18) {
-            Text(developed ? "onboarding.develop.done" : "onboarding.develop.title")
-                .font(Theme.display(30))
-                .foregroundStyle(Theme.textPrimary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-
-            if let demo {
-                CollectibleCardView(card: demoCard(demo), interactive: developed,
-                                    showsShotToggle: false)
-                    .frame(maxWidth: 250)
-                    .blur(radius: developing ? 5 : 0)
-                    .brightness(developing ? 0.12 : 0)
-                    .overlay { developLight }
-                    .overlay {
-                        // Par-dessus la carte, sinon sa propre zone d'image garderait le
-                        // toucher pour elle et le développement ne partirait jamais.
-                        if !developed {
-                            Color.clear
-                                .contentShape(Rectangle())
-                                .onTapGesture { develop() }
-                        }
-                    }
-            }
-
-            if developed {
-                Text("onboarding.develop.daily \(DailyAllowance.dailyDevelops)")
-                    .font(Theme.mono(11))
-                    .foregroundStyle(Theme.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .transition(.opacity)
-            } else {
-                HStack(spacing: 8) {
-                    Image(systemName: "hand.tap.fill")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Theme.accentBright)
-                    Text("onboarding.develop.hint")
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(.horizontal, 8)
-            }
-        }
-    }
-
-    /// Bande de lumière qui balaie la carte pendant le développement.
+    /// Bande de lumière qui balaie la carte pendant le passage en studio.
     private var developLight: some View {
         GeometryReader { geo in
             LinearGradient(colors: [.clear, Theme.accentBright.opacity(0.75), .clear],
@@ -360,66 +413,67 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: 3 — Le jeu
+    // MARK: 2 — Le jeu
 
-    private var gameStep: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Overline(text: "onboarding.game.overline", color: Theme.accentBright)
-            Text("onboarding.game.title")
-                .font(Theme.display(30))
-                .foregroundStyle(Theme.textPrimary)
-                .padding(.bottom, 4)
-
-            rarityContrast
-
-            principle(icon: "trophy.fill", title: "onboarding.game.league.title",
-                      body: "onboarding.game.league.body \(OnboardingRules.leagueSize) \(OnboardingRules.leaguePromote)")
-            principle(icon: "scope", title: "onboarding.game.bounty.title",
-                      body: "onboarding.game.bounty.body \(OnboardingRules.bountyTargets)")
-            principle(icon: "flag.checkered", title: "onboarding.game.first.title",
-                      body: "onboarding.game.first.body")
+    private func gameStep(_ m: Metrics) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            stepHeader(overline: "onboarding.game.overline", title: "onboarding.game.title",
+                       compact: m.compact)
+            Spacer(minLength: m.compact ? 12 : 16)
+            rarityContrast(m)
+            Spacer(minLength: m.compact ? 12 : 16)
+            rulesPanel(m)
+            Spacer(minLength: 0)
         }
     }
 
     /// La différence de Spog, montrée sur une vraie fiche du catalogue : le même modèle,
-    /// deux pays, deux paliers.
-    @ViewBuilder private var rarityContrast: some View {
+    /// deux pays, deux paliers. C'est le visuel de l'écran : le rendu prend la hauteur
+    /// qui reste, et c'est lui qui rétrécit en premier sur un petit iPhone.
+    @ViewBuilder private func rarityContrast(_ m: Metrics) -> some View {
         if let contrast = demo?.contrast {
-            NeonFrame(radius: 16, neon: true, spread: 0.6) {
+            NeonFrame(radius: 18, neon: true, spread: 0.6) {
                 VStack(alignment: .leading, spacing: 10) {
-                    Overline(text: "onboarding.game.rarity.overline", color: Theme.accentBright)
                     Text("onboarding.game.rarity.title")
-                        .font(Theme.display(17, .semibold))
+                        .font(Theme.display(m.compact ? 18 : 20, .bold))
                         .foregroundStyle(Theme.textPrimary)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                    HStack(spacing: 12) {
-                        if let art = CarArt.image(for: contrast.vehicle.id) {
-                            StudioArt(image: art, zoom: 1.0)
-                                .frame(width: 104, height: 52)
-                        }
-                        Text(contrast.vehicle.fullName)
-                            .font(Theme.mono(13, .bold))
-                            .foregroundStyle(Theme.textPrimary)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.7)
-                        Spacer(minLength: 0)
+                    if let art = VehicleArtService.cachedImage(for: contrast.vehicle.id) {
+                        StudioArt(image: art, zoom: 1.08)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: m.clamp(m.height - 540, 56, 130))
                     }
+                    Text(contrast.vehicle.fullName)
+                        .font(Theme.mono(13, .bold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity)
 
                     HStack(spacing: 8) {
                         tierChip(country: app.country, tier: contrast.here)
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(Theme.textMuted)
                         tierChip(country: contrast.elsewhereCountry, tier: contrast.elsewhere)
                     }
 
-                    Text("onboarding.game.rarity.body")
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
+                    // Sur petit écran, les deux paliers côte à côte disent déjà tout.
+                    if !m.compact {
+                        Text("onboarding.game.rarity.body")
+                            .font(Theme.body(12))
+                            .foregroundStyle(Theme.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
                 .padding(14)
             }
         } else {
-            principle(icon: "globe.europe.africa.fill", title: "onboarding.game.rarity.title",
-                      body: "onboarding.game.rarity.body")
+            NeonFrame(radius: 18) {
+                ruleRow(icon: "globe.europe.africa.fill", title: "onboarding.game.rarity.title",
+                        body: "onboarding.game.rarity.body", showsBody: true)
+            }
         }
     }
 
@@ -446,238 +500,75 @@ struct OnboardingView: View {
             .stroke(tier.color.opacity(0.4), lineWidth: 1))
     }
 
-    // MARK: 4 — Le modèle gratuit
-
-    /// Dit avant la première vraie photo, pas découvert au moment où le compteur tombe
-    /// à zéro. Aucune promesse de publicité : elle n'existe pas encore dans l'app.
-    private var freePlanStep: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Overline(text: "onboarding.free.overline", color: Theme.accentBright)
-            Text("onboarding.free.title")
-                .font(Theme.display(30))
-                .foregroundStyle(Theme.textPrimary)
-                .padding(.bottom, 4)
-
-            NeonFrame(radius: 16) {
-                HStack(alignment: .firstTextBaseline, spacing: 12) {
-                    Text(DailyAllowance.firstDayScans, format: .number)
-                        .font(Theme.display(54, .heavy))
-                        .foregroundStyle(Theme.accentBright)
-                    Text("onboarding.free.today")
-                        .font(Theme.display(16, .semibold))
-                        .foregroundStyle(Theme.textPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Spacer(minLength: 0)
-                }
-                .padding(.horizontal, 16).padding(.vertical, 10)
+    /// Les trois règles dans un seul panneau : trois cadres néon empilés faisaient une
+    /// colonne de boîtes identiques où l'œil ne savait où se poser. Sur petit écran, les
+    /// titres seuls : le détail se retrouve dans l'app, le premier lancement doit tenir
+    /// sans défiler.
+    private func rulesPanel(_ m: Metrics) -> some View {
+        NeonFrame(radius: 18) {
+            VStack(spacing: 0) {
+                ruleRow(icon: "trophy.fill", title: "onboarding.game.league.title",
+                        body: "onboarding.game.league.body \(OnboardingRules.leagueSize) \(OnboardingRules.leaguePromote)",
+                        showsBody: !m.compact)
+                rowDivider
+                ruleRow(icon: "scope", title: "onboarding.game.bounty.title",
+                        body: "onboarding.game.bounty.body \(OnboardingRules.bountyTargets)",
+                        showsBody: !m.compact)
+                rowDivider
+                ruleRow(icon: "flag.checkered", title: "onboarding.game.first.title",
+                        body: "onboarding.game.first.body", showsBody: !m.compact)
             }
-
-            principle(icon: "arrow.clockwise",
-                      title: "onboarding.free.daily.title \(DailyAllowance.dailyScans)",
-                      body: "onboarding.free.daily.body")
-            principle(icon: "sparkles",
-                      title: "onboarding.free.develop.title \(DailyAllowance.dailyDevelops)",
-                      body: "onboarding.free.develop.body")
-            principle(icon: "infinity", title: "onboarding.free.pro.title",
-                      body: "onboarding.free.pro.body")
-
-            // Sécurité routière : dit une fois, clairement, et tenu par le code —
-            // le scan se bloque vraiment au-delà du seuil.
-            HStack(alignment: .top, spacing: 9) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(RarityTier.trophyGold)
-                Text("onboarding.safety \(ScannerView.maxScanSpeedText)")
-                    .font(Theme.mono(10))
-                    .foregroundStyle(Theme.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 0)
-            }
-            .padding(.top, 2)
+            .padding(.vertical, 2)
         }
     }
 
-    // MARK: 5 — Pseudo
-
-    private var nicknameStep: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            @Bindable var player = profile
-            Overline(text: "onboarding.profile.overline", color: Theme.accentBright)
-            Text("onboarding.nickname.title")
-                .font(Theme.display(30))
-                .foregroundStyle(Theme.textPrimary)
-            Text("onboarding.nickname.why")
-                .font(Theme.mono(11))
-                .foregroundStyle(Theme.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            TextField(text: $player.nickname) {
-                Text("onboarding.nickname.placeholder")
-            }
-            .focused($typing)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-            .submitLabel(.next)
-            .onSubmit { next() }
-            .font(Theme.display(19, .semibold))
-            .foregroundStyle(Theme.textPrimary)
-            .padding(.horizontal, 16).padding(.vertical, 16)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(typing ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
-            .padding(.top, 4)
-            .onAppear { typing = true }
-        }
-    }
-
-    // MARK: 6 — Goûts
-
-    private var tasteStep: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Overline(text: "onboarding.profile.overline", color: Theme.accentBright)
-            Text("onboarding.taste.title")
-                .font(Theme.display(30))
-                .foregroundStyle(Theme.textPrimary)
-            Text("onboarding.taste.why")
-                .font(Theme.mono(11))
-                .foregroundStyle(Theme.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Text("onboarding.taste.multi")
-                .font(Theme.label(10)).tracking(0.8)
-                .foregroundStyle(Theme.accent)
-
-            // Plusieurs réponses : toucher n'enchaîne plus, sinon le premier choix
-            // fermerait la question. C'est le bouton du bas qui avance.
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 9),
-                                GridItem(.flexible(), spacing: 9)], spacing: 9) {
-                ForEach(PlayerProfile.choices, id: \.body) { choice in
-                    tasteCard(choice.body, icon: choice.icon)
-                }
-            }
-            .padding(.top, 4)
-        }
-    }
-
-    private func tasteCard(_ body: String, icon: String) -> some View {
-        let selected = profile.favouriteBodies.contains(body)
-        return Button {
-            @Bindable var player = profile
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
-                if selected { player.favouriteBodies.remove(body) }
-                else        { player.favouriteBodies.insert(body) }
-            }
-        } label: {
-            VStack(spacing: 8) {
-                ZStack(alignment: .topTrailing) {
-                    Image(systemName: icon)
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundStyle(selected ? Theme.accentBright : Theme.textSecondary)
-                    if selected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Theme.accentBright)
-                            .offset(x: 16, y: -4)
-                    }
-                }
-                Text(LocalizedStringKey("taste." + body))
-                    .font(Theme.display(13, .semibold))
+    private func ruleRow(icon: String, title: LocalizedStringKey,
+                         body: LocalizedStringKey, showsBody: Bool) -> some View {
+        HStack(alignment: showsBody ? .top : .center, spacing: 13) {
+            Image(systemName: icon)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Theme.accentBright)
+                .frame(width: 34, height: 34)
+                .background(Theme.accent.opacity(0.14), in: Circle())
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(Theme.display(15, .semibold))
                     .foregroundStyle(Theme.textPrimary)
-                    .lineLimit(1).minimumScaleFactor(0.7)
+                if showsBody {
+                    Text(body)
+                        .font(Theme.body(12))
+                        .foregroundStyle(Theme.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 18)
-            .background(selected ? Theme.accent.opacity(0.12) : Theme.surface,
-                        in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(selected ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
+            Spacer(minLength: 0)
         }
-        .buttonStyle(.plain)
+        .padding(.horizontal, 14).padding(.vertical, 10)
+    }
+
+    private var rowDivider: some View {
+        Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 61)
     }
 
     // MARK: Briques communes
 
-    private func principle(icon: String, title: LocalizedStringKey,
-                           body: LocalizedStringKey) -> some View {
-        NeonFrame(radius: 16) {
-            HStack(alignment: .top, spacing: 13) {
-                Image(systemName: icon)
-                    .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(Theme.accentBright)
-                    .frame(width: 26)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(Theme.display(15, .semibold))
-                        .foregroundStyle(Theme.textPrimary)
-                    Text(body)
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 0)
-            }
-            .padding(14)
-        }
-    }
-
-    // MARK: 7 — Pays et mode
-
-    private var market: some View {
-        VStack(alignment: .leading, spacing: 13) {
-            Overline(text: "onboarding.market.overline", color: Theme.accentBright)
-            Text("onboarding.market.title")
-                .font(Theme.display(30))
+    /// En-tête des écrans de questions : une étiquette, un titre fort, une raison.
+    private func stepHeader(overline: LocalizedStringKey, title: LocalizedStringKey,
+                            why: LocalizedStringKey? = nil, compact: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Overline(text: overline, color: Theme.accentBright)
+            Text(title)
+                .font(Theme.display(compact ? 26 : 30))
                 .foregroundStyle(Theme.textPrimary)
-            Text("onboarding.market.why")
-                .font(Theme.mono(11))
-                .foregroundStyle(Theme.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.bottom, 2)
-
-            modeCard(.automatic, icon: "location.fill",
-                     title: "onboarding.auto.title", body: "onboarding.auto.body")
-            modeCard(.manual, icon: "mappin",
-                     title: "onboarding.manual.title", body: "onboarding.manual.body")
-
-            autoStatus
-
-            if app.locationMode == .manual {
-                Button { pickingCountry = true } label: {
-                    HStack {
-                        Text(store.countryName(app.country))
-                            .font(Theme.display(15, .semibold))
-                            .foregroundStyle(Theme.textPrimary)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundStyle(Theme.textMuted)
-                    }
-                    .padding(.horizontal, 15).padding(.vertical, 14)
-                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Theme.stroke, lineWidth: 1))
-                }
-                .buttonStyle(.plain)
+            if let why {
+                Text(why)
+                    .font(Theme.body(12))
+                    .foregroundStyle(Theme.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-    }
-
-    /// Ce que la position donne, en direct. Sans ça le joueur choisit « automatique »,
-    /// ne voit rien changer, et découvre au récapitulatif un pays qui n'est pas le sien.
-    @ViewBuilder private var autoStatus: some View {
-        if locationRefused {
-            statusLine("exclamationmark.triangle.fill", "onboarding.location.denied",
-                       color: RarityTier.trophyGold)
-        } else if app.locationMode == .automatic {
-            if location.isResolving {
-                statusLine("location.circle", "onboarding.locating", color: Theme.textMuted)
-            } else if location.countryCode != nil {
-                statusLine("checkmark.circle.fill",
-                           LocalizedStringKey("onboarding.location.found \(placeText)"),
-                           color: Theme.accent)
-            }
-        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func statusLine(_ icon: String, _ text: LocalizedStringKey,
@@ -695,7 +586,204 @@ struct OnboardingView: View {
         .padding(.horizontal, 4)
     }
 
-    /// Résout le pays **tout de suite**, pas au moment de terminer : le récapitulatif
+    // MARK: 3 — Profil : pseudo et goûts
+
+    /// Deux questions courtes sur un seul écran : chacune seule laissait un écran presque
+    /// vide, et doublait la longueur apparente du parcours.
+    private func profileStep(_ m: Metrics) -> some View {
+        // Les cases des goûts prennent la hauteur qui reste : grandes sur un grand écran,
+        // jamais sous la taille d'un doigt sur un petit.
+        let cell = m.clamp((m.height - 400) / 3, 56, 104)
+        return VStack(alignment: .leading, spacing: 0) {
+            stepHeader(overline: "onboarding.profile.overline", title: "onboarding.nickname.title",
+                       why: "onboarding.nickname.why", compact: m.compact)
+            nicknameField
+                .padding(.top, 14)
+
+            Spacer(minLength: m.compact ? 18 : 22)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("onboarding.taste.title")
+                    .font(Theme.display(20))
+                    .foregroundStyle(Theme.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+                if !m.compact {
+                    Text("onboarding.taste.why")
+                        .font(Theme.body(12))
+                        .foregroundStyle(Theme.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Text("onboarding.taste.multi")
+                    .font(Theme.label(10)).tracking(0.8)
+                    .foregroundStyle(Theme.accent)
+            }
+
+            // Plusieurs réponses : toucher n'enchaîne pas, sinon le premier choix fermerait
+            // la question. C'est le bouton du bas qui avance.
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
+                                GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                ForEach(PlayerProfile.choices, id: \.body) { choice in
+                    tasteCard(choice.body, icon: choice.icon, height: cell)
+                }
+            }
+            .padding(.top, 12)
+
+            Spacer(minLength: 0)
+        }
+    }
+
+    /// Pas de clavier ouvert d'office : il cacherait la moitié de l'écran, goûts compris.
+    private var nicknameField: some View {
+        @Bindable var player = profile
+        return TextField(text: $player.nickname) {
+            Text("onboarding.nickname.placeholder")
+        }
+        .focused($typing)
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled()
+        .submitLabel(.done)
+        .onSubmit { typing = false }
+        .font(Theme.display(19, .semibold))
+        .foregroundStyle(Theme.textPrimary)
+        .padding(.horizontal, 16).padding(.vertical, 15)
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(typing ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
+    }
+
+    private func tasteCard(_ body: String, icon: String, height: CGFloat) -> some View {
+        let selected = profile.favouriteBodies.contains(body)
+        return Button {
+            @Bindable var player = profile
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                if selected { player.favouriteBodies.remove(body) }
+                else        { player.favouriteBodies.insert(body) }
+            }
+        } label: {
+            VStack(spacing: height > 80 ? 10 : 6) {
+                Image(systemName: icon)
+                    .font(.system(size: height > 80 ? 24 : 19, weight: .medium))
+                    .foregroundStyle(selected ? Theme.accentBright : Theme.textSecondary)
+                Text(LocalizedStringKey("taste." + body))
+                    .font(Theme.display(13, .semibold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.7)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .overlay(alignment: .topTrailing) {
+                if selected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(Theme.accentBright)
+                        .padding(9)
+                        .transition(.scale.combined(with: .opacity))
+                }
+            }
+            .background(selected ? Theme.accent.opacity(0.14) : Theme.surface,
+                        in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(selected ? Theme.accent.opacity(0.7) : Theme.stroke, lineWidth: 1))
+            .shadow(color: selected ? Theme.accent.opacity(0.3) : .clear, radius: 10)
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: 4 — Pays et mode
+
+    private func locationStep(_ m: Metrics) -> some View {
+        // Le visuel n'apparaît que s'il reste vraiment de la place : sur un petit iPhone,
+        // les deux modes et l'avertissement passent avant le décor.
+        let beacon = min(m.height - 510, 170)
+        return VStack(alignment: .leading, spacing: 0) {
+            stepHeader(overline: "onboarding.market.overline", title: "onboarding.market.title",
+                       why: "onboarding.market.why", compact: m.compact)
+
+            Spacer(minLength: 14)
+
+            if beacon >= 80 {
+                LocationBeacon(icon: app.locationMode == .automatic ? "location.fill" : "mappin",
+                               searching: app.locationMode == .automatic && location.isResolving)
+                    .frame(width: beacon, height: beacon)
+                    .frame(maxWidth: .infinity)
+                Spacer(minLength: 14)
+            }
+
+            VStack(spacing: 10) {
+                modeCard(.automatic, icon: "location.fill",
+                         title: "onboarding.auto.title", body: "onboarding.auto.body")
+                modeCard(.manual, icon: "mappin",
+                         title: "onboarding.manual.title", body: "onboarding.manual.body")
+
+                autoStatus
+
+                if app.locationMode == .manual {
+                    Button { pickingCountry = true } label: {
+                        HStack {
+                            Text(store.countryName(app.country))
+                                .font(Theme.display(15, .semibold))
+                                .foregroundStyle(Theme.textPrimary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundStyle(Theme.textMuted)
+                        }
+                        .padding(.horizontal, 15).padding(.vertical, 14)
+                        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(Theme.stroke, lineWidth: 1))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            Spacer(minLength: 16)
+
+            safetyNote
+        }
+    }
+
+    /// Sécurité routière : dite ici parce que c'est la position qui permet au scan de se
+    /// bloquer vraiment au-delà du seuil. Elle avait migré sur l'écran des scans offerts,
+    /// supprimé : sans elle, rien ne l'annonçait plus avant la première prise.
+    private var safetyNote: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(RarityTier.trophyGold)
+            Text("onboarding.safety \(ScannerView.maxScanSpeedText)")
+                .font(Theme.body(11))
+                .foregroundStyle(Theme.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(12)
+        .background(RarityTier.trophyGold.opacity(0.08),
+                    in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .stroke(RarityTier.trophyGold.opacity(0.25), lineWidth: 1))
+    }
+
+    /// Ce que la position donne, en direct. Sans ça le joueur choisit « automatique »,
+    /// ne voit rien changer, et découvre à la fin un pays qui n'est pas le sien.
+    @ViewBuilder private var autoStatus: some View {
+        if locationRefused {
+            statusLine("exclamationmark.triangle.fill", "onboarding.location.denied",
+                       color: RarityTier.trophyGold)
+        } else if app.locationMode == .automatic {
+            if location.isResolving {
+                statusLine("location.circle", "onboarding.locating", color: Theme.textMuted)
+            } else if location.countryCode != nil {
+                statusLine("checkmark.circle.fill",
+                           LocalizedStringKey("onboarding.location.found \(placeText)"),
+                           color: Theme.accent)
+            }
+        }
+    }
+
+    /// Résout le pays **tout de suite**, pas au moment de terminer : l'écran de départ
     /// doit montrer ce qui est vrai. Un refus fait retomber en mode manuel, sinon les
     /// prises seraient marquées vérifiables alors que le pays est déclaré à la main.
     private func resolveAutomatically() {
@@ -726,80 +814,154 @@ struct OnboardingView: View {
                     .frame(width: 22)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
-                        .font(Theme.display(14, .semibold))
+                        .font(Theme.display(15, .semibold))
                         .foregroundStyle(Theme.textPrimary)
                     Text(body)
-                        .font(Theme.mono(10))
+                        .font(Theme.body(12))
                         .foregroundStyle(Theme.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 0)
                 Image(systemName: selected ? "largecircle.fill.circle" : "circle")
-                    .font(.system(size: 15))
+                    .font(.system(size: 16))
                     .foregroundStyle(selected ? Theme.accent : Theme.textMuted)
             }
-            .padding(14)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .padding(15)
+            .background(selected ? Theme.accent.opacity(0.1) : Theme.surface,
+                        in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(selected ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
         }
         .buttonStyle(.plain)
     }
 
-    // MARK: 8 — Code d'invitation
+    // MARK: 5 — Départ
 
-    /// Derniere question, et la seule qu'on peut laisser vide sans rien perdre.
-    /// Elle est posee ici plutot qu'au premier ecran : demander un code a quelqu'un
-    /// qui ne sait pas encore ce qu'est l'app n'a aucun sens.
-    private var referralStep: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Overline(text: "onboarding.profile.overline", color: Theme.accentBright)
-            Text("onboarding.referral.title")
-                .font(Theme.display(30))
-                .foregroundStyle(Theme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-            Text("onboarding.referral.why")
-                .font(Theme.mono(11))
-                .foregroundStyle(Theme.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Text("onboarding.referral.optional")
-                .font(Theme.label(10)).tracking(0.8)
-                .foregroundStyle(Theme.accent)
+    /// Une seule fin, forte : le récapitulatif et l'écran d'attente « préparation » se
+    /// succédaient sans rien apprendre de plus au joueur. Le code d'invitation vit ici,
+    /// replié : un lien pour ceux qui en ont un, rien pour les autres.
+    private func readyStep(_ m: Metrics) -> some View {
+        let logo = m.clamp(m.height * 0.19, 72, 124)
+        return VStack(spacing: 0) {
+            Spacer(minLength: 6)
 
-            TextField(text: $referralCode) {
-                Text("referral.placeholder")
+            Image("LogoMark")
+                .resizable()
+                .frame(width: logo, height: logo)
+                .clipShape(RoundedRectangle(cornerRadius: logo * 0.25, style: .continuous))
+                .neonBorder(color: Theme.accent, radius: logo * 0.25, intensity: 0.9,
+                            breathing: true)
+
+            VStack(spacing: 8) {
+                Text("onboarding.recap.title \(profile.displayName)")
+                    .font(Theme.display(m.compact ? 26 : 30))
+                    .foregroundStyle(Theme.textPrimary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("onboarding.ready.subtitle")
+                    .font(Theme.mono(12))
+                    .foregroundStyle(Theme.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .focused($typing)
-            .textInputAutocapitalization(.characters)
-            .autocorrectionDisabled()
-            .submitLabel(.done)
-            .onSubmit { next() }
-            .font(Theme.mono(22, .bold))
-            .tracking(6)
-            .foregroundStyle(Theme.textPrimary)
-            .padding(.horizontal, 16).padding(.vertical, 16)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(typing ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
-            // Le code est remis en forme pendant la frappe : minuscules, tirets et
-            // confusions O/0 ou I/1 corriges a la volee plutot que refuses a l'envoi.
-            .onChange(of: referralCode) { _, typed in
-                let cleaned = ReferralStore.normalize(typed)
-                if cleaned != typed { referralCode = cleaned }
+            .padding(.top, m.compact ? 16 : 24)
+
+            Spacer(minLength: 18)
+
+            VStack(alignment: .leading, spacing: 8) {
+                NeonFrame(radius: 16) {
+                    VStack(spacing: 0) {
+                        recapRow("mappin", "onboarding.recap.place", placeText)
+                        rowDivider
+                        recapRow(app.locationMode == .automatic ? "location.fill" : "hand.tap.fill",
+                                 "onboarding.recap.mode",
+                                 String(localized: app.locationMode == .automatic
+                                        ? "onboarding.auto.title" : "onboarding.manual.title"))
+                        if !profile.favouriteBodies.isEmpty {
+                            rowDivider
+                            recapRow("heart.fill", "onboarding.recap.taste", favouritesText)
+                        }
+                    }
+                }
+                Text("onboarding.recap.editable")
+                    .font(Theme.mono(10))
+                    .foregroundStyle(Theme.textMuted)
+                    .padding(.horizontal, 4)
             }
 
-            referralFeedback
+            Spacer(minLength: 18)
+
+            referralSection
         }
         .onAppear {
-            // Code recu par un lien : on le propose deja rempli, jamais applique en douce.
+            // Code reçu par un lien : on le montre déjà rempli, jamais appliqué en douce.
             if referralCode.isEmpty, let pending = referral.pendingFromLink {
                 referralCode = pending
+                showsReferral = true
             }
         }
     }
 
-    /// Reponse pendant la frappe. Un message d'erreur decouvert apres coup arrive trop tard.
+    @ViewBuilder private var referralSection: some View {
+        if showsReferral {
+            VStack(alignment: .leading, spacing: 8) {
+                TextField(text: $referralCode) {
+                    Text("referral.placeholder")
+                }
+                .focused($typing)
+                .textInputAutocapitalization(.characters)
+                .autocorrectionDisabled()
+                .submitLabel(.done)
+                .onSubmit { typing = false }
+                .font(Theme.mono(20, .bold))
+                .tracking(6)
+                .foregroundStyle(Theme.textPrimary)
+                .padding(.horizontal, 16).padding(.vertical, 14)
+                .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(typing ? Theme.accent.opacity(0.6) : Theme.stroke, lineWidth: 1))
+                // Le code est remis en forme pendant la frappe : minuscules, tirets et
+                // confusions O/0 ou I/1 corrigés à la volée plutôt que refusés à l'envoi.
+                .onChange(of: referralCode) { _, typed in
+                    let cleaned = ReferralStore.normalize(typed)
+                    if cleaned != typed { referralCode = cleaned }
+                }
+
+                referralFeedback
+
+                Text("onboarding.referral.why")
+                    .font(Theme.body(11))
+                    .foregroundStyle(Theme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .transition(.opacity.combined(with: .move(edge: .bottom)))
+        } else {
+            Button {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { showsReferral = true }
+                // Le champ n'existe qu'après l'animation : lui donner le focus dans le même
+                // instant ne ferait rien.
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(350))
+                    typing = true
+                }
+            } label: {
+                HStack(spacing: 7) {
+                    Image(systemName: "person.2.fill")
+                        .font(.system(size: 11, weight: .semibold))
+                    Text("onboarding.referral.link")
+                        .font(Theme.mono(11, .semibold))
+                }
+                .foregroundStyle(Theme.accentBright)
+                .padding(.vertical, 10).padding(.horizontal, 14)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    /// Réponse pendant la frappe. Un message d'erreur découvert après coup arrive trop tard.
     @ViewBuilder private var referralFeedback: some View {
         switch referral.check(referralCode) {
         case .ready:
@@ -811,92 +973,6 @@ struct OnboardingView: View {
             statusLine("ellipsis.circle", "referral.tooShort", color: Theme.textMuted)
         case .empty:
             EmptyView()
-        }
-    }
-
-    // MARK: 9 — Préparation
-
-    @State private var readySteps = 0
-
-    private var preparing: some View {
-        VStack(spacing: 24) {
-            Image("LogoMark")
-                .resizable()
-                .frame(width: 96, height: 96)
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                .neonBorder(color: Theme.accent, radius: 24, intensity: 0.9, breathing: true)
-
-            Text("onboarding.preparing.title")
-                .font(Theme.display(22))
-                .foregroundStyle(Theme.textPrimary)
-
-            VStack(alignment: .leading, spacing: 11) {
-                readyLine(0, "onboarding.preparing.catalog")
-                readyLine(1, "onboarding.preparing.market")
-                readyLine(2, "onboarding.preparing.quest")
-                readyLine(3, "onboarding.preparing.garage")
-            }
-        }
-        .task {
-            // Une attente courte et honnête : chaque ligne correspond à une préparation réelle.
-            for index in 0..<4 {
-                try? await Task.sleep(for: .milliseconds(index == 0 ? 400 : 520))
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.8)) { readySteps = index + 1 }
-            }
-            try? await Task.sleep(for: .milliseconds(420))
-            advance()
-        }
-    }
-
-    private func readyLine(_ index: Int, _ text: LocalizedStringKey) -> some View {
-        let done = readySteps > index
-        return HStack(spacing: 11) {
-            Image(systemName: done ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 15))
-                .foregroundStyle(done ? Theme.accent : Theme.textMuted.opacity(0.4))
-            Text(text)
-                .font(Theme.mono(12))
-                .foregroundStyle(done ? Theme.textPrimary : Theme.textMuted)
-            Spacer(minLength: 0)
-        }
-        .opacity(done ? 1 : 0.5)
-    }
-
-    // MARK: 10 — Récapitulatif
-
-    private var recap: some View {
-        VStack(alignment: .leading, spacing: 13) {
-            Text("onboarding.recap.title \(profile.displayName)")
-                .font(Theme.display(26))
-                .foregroundStyle(Theme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            NeonFrame(radius: 16) {
-                VStack(spacing: 0) {
-                    recapRow("mappin", "onboarding.recap.place", placeText)
-                    Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
-                    recapRow(app.locationMode == .automatic ? "location.fill" : "hand.tap.fill",
-                             "onboarding.recap.mode",
-                             String(localized: app.locationMode == .automatic
-                                    ? "onboarding.auto.title" : "onboarding.manual.title"))
-                    if !profile.favouriteBodies.isEmpty {
-                        Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
-                        recapRow("heart.fill", "onboarding.recap.taste", favouritesText)
-                    }
-                    if let code = referral.enteredCode {
-                        Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
-                        recapRow("person.2.fill", "onboarding.recap.referral", code)
-                    }
-                    Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
-                    recapRow("gift.fill", "onboarding.recap.free",
-                             String(localized: "onboarding.recap.freeValue \(DailyAllowance.firstDayScans) \(DailyAllowance.dailyScans)"))
-                }
-            }
-
-            Text("onboarding.recap.editable")
-                .font(Theme.mono(10))
-                .foregroundStyle(Theme.textMuted)
-                .padding(.horizontal, 4)
         }
     }
 
@@ -925,34 +1001,32 @@ struct OnboardingView: View {
             Image(systemName: icon)
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(Theme.accentBright)
-                .frame(width: 22)
+                .frame(width: 34)
             Text(label)
                 .font(Theme.display(14, .medium))
                 .foregroundStyle(Theme.textPrimary)
             Spacer(minLength: 8)
             Text(value)
                 .font(Theme.mono(11))
-                .foregroundStyle(Theme.textMuted)
+                .foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.trailing)
                 .lineLimit(2)
         }
-        .padding(.horizontal, 14).padding(.vertical, 14)
+        .padding(.horizontal, 14).padding(.vertical, 13)
     }
 
     // MARK: Navigation
 
     /// Barre du haut : retour et progression. La progression vit ici, loin du bouton :
     /// collée au-dessus de lui, elle se lisait comme une partie du bouton.
-    @ViewBuilder private var topBar: some View {
-        if step != .preparing {
-            HStack(spacing: 14) {
-                backButton
-                progress
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 4)
-            .padding(.bottom, 10)
+    private var topBar: some View {
+        HStack(spacing: 14) {
+            backButton
+            progress
         }
+        .padding(.horizontal, 20)
+        .padding(.top, 4)
+        .padding(.bottom, 10)
     }
 
     /// Marche arrière. Un parcours d'entrée sans retour est une impasse : une faute de
@@ -973,11 +1047,9 @@ struct OnboardingView: View {
         .disabled(step == .demo)
     }
 
-    private var progressSteps: [Step] { Step.allCases.filter { $0 != .preparing } }
-
     private var progress: some View {
-        HStack(spacing: 5) {
-            ForEach(progressSteps, id: \.self) { item in
+        HStack(spacing: 6) {
+            ForEach(Step.allCases, id: \.self) { item in
                 Capsule()
                     .fill(item.rawValue <= step.rawValue ? Theme.accent : Theme.textMuted.opacity(0.25))
                     .frame(height: 4)
@@ -985,20 +1057,27 @@ struct OnboardingView: View {
             }
         }
         .frame(maxWidth: .infinity)
+        .animation(.easeInOut(duration: 0.3), value: step)
     }
 
-    /// Le bouton du bas disparaît là où une autre action le remplace : avant la prise de
-    /// démonstration, c'est le déclencheur qui doit attirer le doigt, et la préparation
-    /// n'attend aucune réponse.
-    private var showsActionBar: Bool {
-        if step == .preparing { return false }
-        if step == .demo && demoPhase != .caught { return false }
-        return true
+    /// Avant la prise de démonstration, c'est le déclencheur qui doit attirer le doigt :
+    /// le bouton du bas est là mais invisible, pour que la scène ne change pas de hauteur
+    /// au moment où il apparaît.
+    private var actionVisible: Bool {
+        !(step == .demo && demoPhase != .caught)
+    }
+
+    private var actionTitle: LocalizedStringKey {
+        switch step {
+        case .demo:  return developed ? "onboarding.next" : "onboarding.develop.action"
+        case .ready: return "onboarding.start"
+        default:     return "onboarding.next"
+        }
     }
 
     private var action: some View {
         Button { next() } label: {
-            Text(step == .recap ? "onboarding.start" : "onboarding.next")
+            Text(actionTitle)
                 .font(Theme.label(13)).tracking(1.4)
                 .foregroundStyle(Theme.background)
                 .frame(maxWidth: .infinity)
@@ -1008,16 +1087,29 @@ struct OnboardingView: View {
                                    startPoint: .topLeading, endPoint: .bottomTrailing),
                     in: Capsule())
                 .shadow(color: Theme.accent.opacity(0.45), radius: 16, y: 6)
+                .contentTransition(.opacity)
         }
         .buttonStyle(.plain)
+        .opacity(actionVisible ? 1 : 0)
+        .disabled(!actionVisible || developing)
+        .animation(.easeOut(duration: 0.25), value: actionVisible)
     }
 
-    /// Quitte l'etape courante. Le code d'invitation est enregistre ici, au moment de
-    /// passer a la suite : un champ laisse vide ou incomplet n'empeche jamais d'avancer.
+    /// Quitte l'étape courante. Sur la prise de démonstration, le bouton fait d'abord
+    /// passer la carte en studio : sans ça, le joueur pressé sautait le seul moment qui
+    /// montre ce que devient une photo. Le code d'invitation est enregistré au départ :
+    /// un champ laissé vide ou incomplet n'empêche jamais d'avancer.
     private func next() {
         typing = false
-        if step == .referral { referral.apply(referralCode) }
-        if step == .recap { finish() } else { advance() }
+        switch step {
+        case .demo where !developed:
+            develop()
+        case .ready:
+            referral.apply(referralCode)
+            finish()
+        default:
+            advance()
+        }
     }
 
     private func advance() {
@@ -1028,10 +1120,7 @@ struct OnboardingView: View {
 
     private func back() {
         typing = false
-        // La préparation ne se rejoue pas : depuis le récapitulatif, on remonte
-        // directement à la dernière vraie question.
-        let previous = step == .recap ? .referral : Step(rawValue: step.rawValue - 1)
-        guard let previous else { return }
+        guard let previous = Step(rawValue: step.rawValue - 1) else { return }
         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = previous }
     }
 
@@ -1042,5 +1131,62 @@ struct OnboardingView: View {
         // n'immobilise pas le joueur devant un écran d'attente.
         state.hasOnboarded = true
         Analytics.track(.onboardingCompleted)
+    }
+}
+
+/// Le visuel de l'écran de localisation : un repère au centre d'ondes concentriques, qui
+/// émet tant que la position est recherchée. Il donne une forme à un choix abstrait
+/// (« automatique » ou « je choisis ») et occupe le haut de l'écran avec intention.
+private struct LocationBeacon: View {
+    let icon: String
+    let searching: Bool
+    @State private var pulse = false
+
+    /// Écrit à la main : avec un `@State` privé, l'initialiseur implicite peut devenir
+    /// privé lui aussi, et l'écran qui l'utilise ne pourrait plus l'appeler.
+    init(icon: String, searching: Bool) {
+        self.icon = icon
+        self.searching = searching
+    }
+
+    var body: some View {
+        GeometryReader { geo in
+            let side = min(geo.size.width, geo.size.height)
+            ZStack {
+                Circle()
+                    .fill(RadialGradient(colors: [Theme.accent.opacity(0.32), .clear],
+                                         center: .center, startRadius: 2, endRadius: side / 2))
+                ForEach(0..<3, id: \.self) { ring in
+                    Circle()
+                        .stroke(Theme.accent.opacity(0.42 - Double(ring) * 0.12), lineWidth: 1)
+                        .frame(width: side * (0.46 + CGFloat(ring) * 0.27),
+                               height: side * (0.46 + CGFloat(ring) * 0.27))
+                }
+                // L'onde qui part du centre : plus rapide pendant la recherche, pour que
+                // l'attente se voie sans qu'il faille lire la ligne d'état.
+                Circle()
+                    .stroke(Theme.accentBright, lineWidth: 2)
+                    .frame(width: side, height: side)
+                    .scaleEffect(pulse ? 1 : 0.3)
+                    .opacity(pulse ? 0 : (searching ? 0.9 : 0.5))
+                Circle()
+                    .fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
+                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: side * 0.3, height: side * 0.3)
+                    .shadow(color: Theme.accent.opacity(0.7), radius: 16)
+                Image(systemName: icon)
+                    .font(.system(size: side * 0.12, weight: .bold))
+                    .foregroundStyle(Theme.background)
+                    .contentTransition(.symbolEffect(.replace))
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        .onAppear {
+            withAnimation(.easeOut(duration: searching ? 1.4 : 2.4).repeatForever(autoreverses: false)) {
+                pulse = true
+            }
+        }
     }
 }

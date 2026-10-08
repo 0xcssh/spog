@@ -1911,13 +1911,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Demo catch: it won't go into your garage."
+            "value": "Demo catch: it won't join your collection."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prise de démonstration : elle ne rejoint pas ton garage."
+            "value": "Prise de démonstration : elle ne rejoint pas ta collection."
           }
         }
       }
@@ -1956,19 +1956,19 @@
         }
       }
     },
-    "onboarding.develop.daily %lld": {
+    "onboarding.develop.action": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Free studio renders every day: %lld. Save them for your best catches."
+            "value": "Render in studio"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rendus studio offerts chaque jour : %lld. Garde-les pour tes plus belles prises."
+            "value": "Passer en studio"
           }
         }
       }
@@ -2007,189 +2007,19 @@
         }
       }
     },
-    "onboarding.develop.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap your card"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Touche ta carte"
-          }
-        }
-      }
-    },
-    "onboarding.free.daily.body": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your counter refills every day, free of charge."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton compteur se recharge chaque jour, sans rien payer."
-          }
-        }
-      }
-    },
-    "onboarding.free.daily.title %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Then %lld a day"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puis %lld par jour"
-          }
-        }
-      }
-    },
-    "onboarding.free.develop.body": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For the card you're proudest of."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pour la carte dont tu es le plus fier."
-          }
-        }
-      }
-    },
-    "onboarding.free.develop.title %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Studio renders: %lld a day"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rendus studio : %lld par jour"
-          }
-        }
-      }
-    },
-    "onboarding.free.overline": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gratuit"
-          }
-        }
-      }
-    },
-    "onboarding.free.pro.body": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scan without limits, every car you come across."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scanne sans limite, chaque voiture que tu croises."
-          }
-        }
-      }
-    },
-    "onboarding.free.pro.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spog Pro"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spog Pro"
-          }
-        }
-      }
-    },
-    "onboarding.free.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enough to start hunting today"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De quoi chasser dès aujourd'hui"
-          }
-        }
-      }
-    },
-    "onboarding.free.today": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "free scans today"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "scans offerts aujourd'hui"
-          }
-        }
-      }
-    },
     "onboarding.game.bounty.body %lld": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every Monday, a sealed pack reveals %lld cars to hunt, the same for the whole country. The first to find one takes the big bonus."
+            "value": "Every Monday, %lld cars to hunt across the country. The first to find one takes the bonus."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chaque lundi, un pack scellé révèle %lld voitures à chasser, les mêmes pour tout le pays. Le premier qui en trouve une rafle le gros bonus."
+            "value": "Chaque lundi, %lld voitures à chasser pour tout le pays. Le premier qui en trouve une rafle le bonus."
           }
         }
       }
@@ -2217,13 +2047,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Be the first in your country to catch a model: your catch counts double, and the mark stays on your card forever."
+            "value": "First in your country on a model: your catch counts double, and the mark stays for good."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sois le premier de ton pays à attraper un modèle : ta prise compte double, et la marque reste sur ta carte pour toujours."
+            "value": "Premier de ton pays sur un modèle : ta prise compte double, et la marque reste à vie."
           }
         }
       }
@@ -2251,13 +2081,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Groups of %1$lld players, reset every Monday. The top %2$lld move up a league."
+            "value": "Groups of %1$lld players, reset every Monday. The top %2$lld move up."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Des groupes de %1$lld joueurs, remis à zéro chaque lundi. Les %2$lld premiers montent d'une ligue."
+            "value": "Des groupes de %1$lld joueurs, remis à zéro chaque lundi. Les %2$lld premiers montent."
           }
         }
       }
@@ -2302,30 +2132,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every country has its own rarities: a car that's everyday where you live can be a trophy elsewhere, and the other way round."
+            "value": "A car that's everyday where you live can be a trophy elsewhere, and the other way round."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chaque pays a ses propres raretés : une voiture banale chez toi peut être un trophée ailleurs, et l'inverse."
-          }
-        }
-      }
-    },
-    "onboarding.game.rarity.overline": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Spog difference"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La différence Spog"
+            "value": "Une voiture banale chez toi peut être un trophée ailleurs, et l'inverse."
           }
         }
       }
@@ -2568,91 +2381,6 @@
         }
       }
     },
-    "onboarding.preparing.catalog": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading 510 vehicles"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chargement des 510 véhicules"
-          }
-        }
-      }
-    },
-    "onboarding.preparing.garage": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opening your garage"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouverture de ton garage"
-          }
-        }
-      }
-    },
-    "onboarding.preparing.market": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Setting rarity for your country"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calibrage des raretés pour ton pays"
-          }
-        }
-      }
-    },
-    "onboarding.preparing.quest": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Picking today's quest"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choix de la quête du jour"
-          }
-        }
-      }
-    },
-    "onboarding.preparing.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Setting up your garage"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "On prépare ton garage"
-          }
-        }
-      }
-    },
     "onboarding.profile.overline": {
       "extractionState": "manual",
       "localizations": {
@@ -2670,6 +2398,23 @@
         }
       }
     },
+    "onboarding.ready.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first real catch is waiting outside."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta première vraie prise t'attend dehors."
+          }
+        }
+      }
+    },
     "onboarding.recap.editable": {
       "extractionState": "manual",
       "localizations": {
@@ -2683,40 +2428,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tout cela se modifie plus tard dans les Réglages."
-          }
-        }
-      }
-    },
-    "onboarding.recap.free": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free scans"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scans offerts"
-          }
-        }
-      }
-    },
-    "onboarding.recap.freeValue %lld %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld today, then %2$lld a day"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld aujourd'hui, puis %2$lld par jour"
           }
         }
       }
@@ -2755,23 +2466,6 @@
         }
       }
     },
-    "onboarding.recap.referral": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Invited by"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Parrainé par"
-          }
-        }
-      }
-    },
     "onboarding.recap.taste": {
       "extractionState": "manual",
       "localizations": {
@@ -2806,36 +2500,19 @@
         }
       }
     },
-    "onboarding.referral.optional": {
+    "onboarding.referral.link": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Optional"
+            "value": "I have an invite code"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Facultatif"
-          }
-        }
-      }
-    },
-    "onboarding.referral.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Invited by a friend?"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un ami t'a invité ?"
+            "value": "J'ai un code d'invitation"
           }
         }
       }
@@ -2880,13 +2557,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open my garage"
+            "value": "Start hunting"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvrir mon garage"
+            "value": "C'est parti"
           }
         }
       }
