@@ -44,10 +44,10 @@ enum Analytics {
         case scanFailed = "Scan.failed"                      // reason
         case cardCreated = "Card.created"                    // tier
         case cardShared = "Card.shared"                      // tier
-        case cardDeveloped = "Card.developed"                // tier
+        case cardDeveloped = "Card.developed"                // tier, from: detail|reveal
 
         // Argent
-        case paywallShown = "Paywall.shown"                  // from: scan|settings
+        case paywallShown = "Paywall.shown"                  // from: scan|settings|garage|server|studio
         case purchaseResult = "Purchase.result"              // plan, result: success|cancelled
         case restoreResult = "Purchase.restore"              // result
     }

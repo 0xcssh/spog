@@ -14,15 +14,25 @@ enum DevelopService {
         case failed
     }
 
+    /// Le rendu, et le décompte du jour que le serveur renvoie avec lui : de quoi tenir à
+    /// jour le miroir affiché sous le bouton (« 1 gratuit aujourd'hui »).
+    struct Developed {
+        let image: UIImage
+        /// Rendus restants aujourd'hui ; nil pour un abonné, qui n'a pas de quota.
+        let left: Int?
+        let resetsAt: Date?
+    }
+
     private struct Payload: Decodable {
         let image: String?
         let code: String?
+        let develops_left: Int?
         let resets_at: String?
     }
 
     /// - Parameter photo: le cliché du joueur (plaques déjà floutées), pas la version
     ///   mise en scène : le modèle d'image a besoin de la vraie lumière pour rester fidèle.
-    static func develop(_ photo: UIImage, entitlement: String?) async -> Result<UIImage, Failure> {
+    static func develop(_ photo: UIImage, entitlement: String?) async -> Result<Developed, Failure> {
         guard let jpeg = resized(photo, maxSide: 1024).jpegData(compressionQuality: 0.85) else {
             return .failure(.failed)
         }
@@ -38,7 +48,8 @@ enum DevelopService {
               let data = Data(base64Encoded: base64), let image = UIImage(data: data) else {
             return .failure(.failed)
         }
-        return .success(image)
+        let reset = result.value?.resets_at.flatMap { ISO8601DateFormatter.withFractions.date(from: $0) }
+        return .success(Developed(image: image, left: result.value?.develops_left, resetsAt: reset))
     }
 
     private static func resized(_ image: UIImage, maxSide: CGFloat) -> UIImage {

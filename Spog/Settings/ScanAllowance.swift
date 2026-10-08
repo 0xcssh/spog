@@ -27,6 +27,16 @@ enum DailyAllowance {
         return everScanned ? dailyScans : firstDayScans
     }
 
+    /// Rendus studio restants aujourd'hui. Nil pour un abonné, qui n'a pas de quota affiché.
+    /// Même logique que les scans, sans premier jour à part : un décompte périmé redonne
+    /// le rendu du jour.
+    static func developsLeft(serverLeft: Int?, resetsAt: Date?, now: Date = Date(),
+                             hasAccess: Bool) -> Int? {
+        guard !hasAccess else { return nil }
+        if let serverLeft, let resetsAt, now < resetsAt { return max(0, serverLeft) }
+        return dailyDevelops
+    }
+
     /// Faut-il présenter Pro avant même la photo ?
     static func mustWait(serverLeft: Int?, resetsAt: Date?, now: Date = Date(),
                          everScanned: Bool, hasAccess: Bool) -> Bool {

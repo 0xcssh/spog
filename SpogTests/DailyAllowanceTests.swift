@@ -55,6 +55,15 @@ struct DailyAllowanceTests {
                                          everScanned: true, hasAccess: false) == 0)
     }
 
+    @Test("Le rendu studio du jour : un par défaut, le serveur fait foi, minuit le rend")
+    func studioAllowance() {
+        let later = now.addingTimeInterval(3_600), past = now.addingTimeInterval(-1)
+        #expect(DailyAllowance.developsLeft(serverLeft: nil, resetsAt: nil, now: now, hasAccess: false) == 1)
+        #expect(DailyAllowance.developsLeft(serverLeft: 0, resetsAt: later, now: now, hasAccess: false) == 0)
+        #expect(DailyAllowance.developsLeft(serverLeft: 0, resetsAt: past, now: now, hasAccess: false) == 1)
+        #expect(DailyAllowance.developsLeft(serverLeft: 0, resetsAt: later, now: now, hasAccess: true) == nil)
+    }
+
     @Test("Les quotas annoncés sont ceux du serveur")
     func matchesServer() {
         // FREE_ALLOWANCE dans backend/functions/identify/handler.ts : les deux listes
