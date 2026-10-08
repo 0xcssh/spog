@@ -247,15 +247,6 @@ final class GarageStore {
         return item
     }
 
-    /// Couleur du palier pour un vehicule, dans un pays donne. Sert a teinter
-    /// la mise en scene de la photo avant meme que la carte existe.
-    func glowColor(vehicleID: String, country: String) -> UIColor {
-        guard let vehicle = catalog.vehicles.first(where: { $0.id == vehicleID }) else {
-            return UIColor(Theme.accent)
-        }
-        return UIColor(catalog.resolve(vehicle, in: country).tier.color)
-    }
-
 #if DEBUG
     /// Garage de demonstration. Reserve au developpement : voir `init`.
     private func seedDemo(in country: String) {

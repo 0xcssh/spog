@@ -20,14 +20,17 @@ enum PlateBlurrer {
 
     /// - Returns: la photo avec les plaques masquées, et le nombre de zones traitées.
     static func mask(_ photo: UIImage) async -> (image: UIImage, masked: Int) {
-        guard let cgImage = photo.cgImage else { return (photo, 0) }
+        // Vision lit les pixels bruts : sur une photo encore étiquetée « tournée », il
+        // chercherait des plaques couchées. La capture les a déjà redressés ; ceci ne
+        // coûte rien dans ce cas et protège les autres sources.
+        let upright = UprightPhoto.normalize(photo)
+        guard let cgImage = upright.cgImage else { return (upright, 0) }
 
         let boxes = await detect(in: cgImage)
-        guard !boxes.isEmpty else { return (photo, 0) }
+        guard !boxes.isEmpty else { return (upright, 0) }
 
-        guard let result = apply(boxes, to: cgImage) else { return (photo, 0) }
-        return (UIImage(cgImage: result, scale: photo.scale, orientation: photo.imageOrientation),
-                boxes.count)
+        guard let result = apply(boxes, to: cgImage) else { return (upright, 0) }
+        return (UIImage(cgImage: result), boxes.count)
     }
 
     // MARK: Détection

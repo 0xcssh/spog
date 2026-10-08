@@ -22,6 +22,10 @@ final class CameraController: NSObject {
     private let output = AVCapturePhotoOutput()
     private let queue = DispatchQueue(label: "spog.camera")
     private var captureContinuation: CheckedContinuation<UIImage?, Never>?
+    /// Sait comment le téléphone est tenu, d'après la gravité, même quand l'interface
+    /// reste verrouillée en portrait. Sans lui, la connexion garde sa rotation par
+    /// défaut et une photo prise en paysage sort étiquetée comme un portrait.
+    @ObservationIgnored private var rotation: AVCaptureDevice.RotationCoordinator?
 
     // MARK: Démarrage
 
@@ -51,6 +55,11 @@ final class CameraController: NSObject {
         session.addOutput(output)
         session.commitConfiguration()
 
+        // Créé sur le fil principal par prudence : il observe l'orientation de l'appareil.
+        await MainActor.run {
+            rotation = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: nil)
+        }
+
         resume()
     }
 
@@ -75,6 +84,17 @@ final class CameraController: NSObject {
         guard state == .running else { return nil }
         let settings = AVCapturePhotoSettings()
         settings.flashMode = .off
+
+        // L'angle « horizon de niveau » : celui qui remet le ciel en haut, que le
+        // téléphone soit tenu en portrait, en paysage d'un côté ou de l'autre, ou à
+        // l'envers. Il est lu au moment du déclenchement, pas au démarrage : le joueur
+        // tourne son téléphone pendant qu'il vise.
+        let angle = await MainActor.run { rotation?.videoRotationAngleForHorizonLevelCapture }
+        if let angle, let connection = output.connection(with: .video),
+           connection.isVideoRotationAngleSupported(angle) {
+            connection.videoRotationAngle = angle
+        }
+
         return await withCheckedContinuation { continuation in
             captureContinuation = continuation
             output.capturePhoto(with: settings, delegate: self)
@@ -92,6 +112,8 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
               let image = UIImage(data: data) else {
             continuation?.resume(returning: nil); return
         }
-        continuation?.resume(returning: image)
+        // La rotation n'est qu'une étiquette dans le fichier : on l'applique aux pixels
+        // ici, une fois pour toutes, avant que CoreImage ou Vision ne l'ignorent.
+        continuation?.resume(returning: UprightPhoto.normalize(image))
     }
 }

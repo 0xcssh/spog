@@ -39,7 +39,10 @@ propres teintes dans `CatalogModels.swift`, et elles servent aussi d'éclairage 
 
 Ordre de priorité, identique dans la fiche, la grille et l'image de partage :
 
-1. la photo du joueur, mise en scène par `CardArtStylizer` ;
+1. la photo du joueur, redressée et cadrée sur la voiture par `CardArtStylizer` — **une
+   vraie photo**, à peine étalonnée : ni teinte du palier, ni scène de néons (décision du
+   08/10/2026, la mise en scène rendait les photos méconnaissables). Toute photo passe par
+   `UprightPhoto` dès la capture : CoreImage et Vision ignorent l'orientation EXIF ;
 2. à défaut, le rendu studio du modèle, affiché par `ModelArt` : le rendu carré haute
    définition du serveur (`VehicleArtService`, action `vehicle_art`) en plein cadre, et en
    attendant qu'il arrive le bandeau embarqué `CarArt` (660 × 290, trop petit pour une
@@ -184,14 +187,14 @@ xcodebuild ... SYMROOT=/tmp/spogbuild/sym OBJROOT=/tmp/spogbuild/obj
 ## Deux pièges du simulateur
 
 **Vision ne détoure pas.** `VNGenerateForegroundInstanceMaskRequest` n'y trouve pas de
-modèle d'inférence, `SubjectLifter` rend `nil`, et toute carte scannée tombe sur le repli.
-On juge alors le repli en croyant juger la mise en scène. Un test le constate
+modèle d'inférence, `SubjectLifter` rend `nil`, et toute carte scannée est cadrée au
+centre, sans décor adouci. On juge alors ce repli en croyant juger la chaîne complète. Un test le constate
 (`SubjectLifterTests`) et préviendra le jour où ça changera.
 
 Pour voir la vraie mise en scène sans iPhone :
 
 ```bash
-swift tools/preview-stylizer.swift test-photos/peugeot-3008.webp --glow 4C7DF0
+swift tools/preview-stylizer.swift test-photos/peugeot-3008.webp
 ```
 
 Cet outil **recopie** la chaîne de `CardArtStylizer` parce que celui-ci importe UIKit.
