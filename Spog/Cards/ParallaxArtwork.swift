@@ -57,11 +57,11 @@ struct ParallaxArtwork: View {
                     filled(shot.stylized, depth: 0.9, scale: 1.06)
                 }
             } else if !vehicleID.isEmpty {
-                // Aucune photo (Spogdex, carte de démonstration) : le rendu carré haute
-                // définition du modèle, en plein cadre. Le grossissement (4 % de marge par
-                // côté, plus que les 10 points du décalage maximal) laisse jouer la parallaxe
-                // sans découvrir de bord ; avec une voiture sur ~80 % de la largeur, il reste
-                // encore une dizaine de points de studio devant le pare-chocs.
+                // Aucune photo (Spogdex, carte de démonstration) : le modèle détouré sur le
+                // studio unique (voir ModelArt). Le grossissement (4 % de marge par côté,
+                // plus que les 10 points du décalage maximal) laisse jouer la parallaxe sans
+                // découvrir de bord ; avec une voiture sur 80 % de la largeur au plus, il
+                // reste encore une dizaine de points de studio devant le pare-chocs.
                 Color.clear
                     .overlay {
                         ModelArt(vehicleID: vehicleID, body: carBody, tint: tint, paint: paint)

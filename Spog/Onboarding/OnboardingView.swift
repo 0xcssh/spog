@@ -137,8 +137,18 @@ struct OnboardingView: View {
             // toujours sur le rendu embarqué, qui marche hors ligne, et gagne en netteté
             // ensuite sans changer de carte.
             guard let current = demo,
-                  let sharper = await VehicleArtService.remoteImage(for: current.vehicle.id),
-                  let upgraded = current.upgraded(with: sharper) else { return }
+                  let sharper = await VehicleArtService.remoteImage(for: current.vehicle.id)
+            else { return }
+            // Détourée et posée sur le studio unique ; si Vision n'y arrive pas, le rendu
+            // tel quel, recadré comme avant.
+            let cutout = await ModelCutoutService.hdCutout(for: current.vehicle.id, from: sharper)
+            let candidate: OnboardingDemo?
+            if let cutout {
+                candidate = current.upgraded(withCutout: cutout)
+            } else {
+                candidate = current.upgraded(with: sharper)
+            }
+            guard let upgraded = candidate else { return }
             withAnimation(.easeInOut(duration: 0.3)) { demo = upgraded }
         }
     }
@@ -433,11 +443,13 @@ struct OnboardingView: View {
                         .foregroundStyle(Theme.textPrimary)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    if let art = VehicleArtService.storedImage(for: contrast.vehicle.id) ?? VehicleArtService.cachedImage(for: contrast.vehicle.id) {
-                        StudioArt(image: art, zoom: 1.08)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: m.clamp(m.height - 540, 56, 130))
-                    }
+                    // Le studio unique, comme partout : rendu HD détouré dès qu'il est là,
+                    // découpe du rendu embarqué en attendant (le modèle en a toujours un).
+                    ModelArt(vehicleID: contrast.vehicle.id, body: CarBody(contrast.vehicle.body),
+                             tint: contrast.elsewhere.color)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: m.clamp(m.height - 540, 56, 130))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     Text(contrast.vehicle.fullName)
                         .font(Theme.mono(13, .bold))
                         .foregroundStyle(Theme.textPrimary)

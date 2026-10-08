@@ -22,10 +22,27 @@ enum CardShareRenderer {
     private static func flatArtwork(for card: CardData) -> ShareArtwork? {
         if let developed = card.shot?.developed { return .developed(developed) }
         if let stylized = card.shot?.stylized { return .photo(stylized) }
+        // Le studio unique, comme à l'écran : la découpe du rendu HD si elle est déjà
+        // faite, sinon celle du rendu embarqué (immédiate, par son masque).
+        if let cutout = shareCutout(for: card),
+           let staged = StudioStage.render(cutout, size: ShareCardView.artSize, scale: 3) {
+            // Rendu au format exact de la zone : il la remplit, comme une photo.
+            return .photo(staged)
+        }
         if let hd = VehicleArtService.storedImage(for: card.vehicle.id) { return .model(hd) }
         let fallback = CarArt.image(for: card.vehicle.id, paint: card.paint)
             ?? VehicleArtService.cachedImage(for: card.vehicle.id)
         return fallback.map { .model($0) }
+    }
+
+    /// La voiture détourée à poser sur le studio. Le rendu HD a priorité : s'il est là
+    /// sans découpe (Vision a échoué), on ne retombe pas sur le bandeau embarqué, plus
+    /// pauvre — c'est le rendu HD tel quel qui part, comme à l'écran.
+    private static func shareCutout(for card: CardData) -> UIImage? {
+        let id = card.vehicle.id
+        if let hd = ModelCutoutService.storedHDCutout(for: id) { return hd }
+        if VehicleArtService.storedImage(for: id) != nil { return nil }
+        return ModelCutoutService.embeddedCutoutNow(for: id, paint: card.paint)
     }
 }
 
@@ -45,6 +62,9 @@ private enum ShareArtwork {
 private struct ShareCardView: View {
     let card: CardData
     let artwork: ShareArtwork?
+
+    /// Taille de la zone image : le studio y est rendu au pixel près.
+    static let artSize = CGSize(width: 340, height: 334)
 
     var body: some View {
         VStack(spacing: 0) {
@@ -72,7 +92,7 @@ private struct ShareCardView: View {
                     .foregroundStyle(Theme.textSecondary)
                     .padding(12)
             }
-            .frame(width: 340, height: 334)
+            .frame(width: Self.artSize.width, height: Self.artSize.height)
             .clipped()
 
             HStack {

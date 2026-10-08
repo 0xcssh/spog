@@ -143,8 +143,9 @@ enum CarArt {
     }
 
     /// Le masque livre avec l'illustration. Absent : la voiture reste dans sa teinte
-    /// de reference, ce qui vaut mieux qu'une carte sans image.
-    private static func loadMask(_ vehicleID: String) -> UIImage? {
+    /// de reference, ce qui vaut mieux qu'une carte sans image. Sert aussi a detourer la
+    /// voiture pour le studio des modeles (`ModelCutoutService`), sans Vision.
+    static func loadMask(_ vehicleID: String) -> UIImage? {
         let key = "mask:" + vehicleID
         lock.lock()
         if let hit = cache[key] { lock.unlock(); return hit }

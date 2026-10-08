@@ -77,8 +77,15 @@ export function artPrompt(v: Pick<Vehicle, "id" | "make" | "model" | "body">): s
     "Square composition. The WHOLE car is in frame and perfectly centred, occupying about 80% " +
     "of the image width, with a small even margin of studio around it; nothing of the car is cropped. " +
     "Camera slightly below the beltline. " +
-    "Dark premium studio: subtle violet and cyan neon light strips glow softly on the wall far behind, " +
-    "mirrored on a polished reflective dark floor, staying in the background and never outshining the car. " +
+    // Fond uni, sans décor (09/10/2026) : l'app détoure la voiture et la pose sur UN studio
+    // dessiné, identique pour tout le catalogue. Les néons et sols miroirs d'avant
+    // changeaient d'un rendu à l'autre (« les images sur le fond ne sont jamais les
+    // mêmes ») et gênaient le détourage. Les rendus déjà en cache gardent leur décor :
+    // l'app les détoure aussi, on ne paie pas pour les refaire.
+    "Plain seamless neutral dark grey studio background (charcoal, even tone), matte, " +
+    "with no neon, no coloured lights, no light strips, no wall details and no floor reflections. " +
+    "The car stands on an invisible matte floor with only a soft natural contact shadow under the tyres, " +
+    "clearly separated from the background. " +
     "Crisp, clean key lighting that reveals the bodywork: every panel readable, " +
     "bright specular highlights along the shoulder line, detailed wheels and headlights. " +
     "High-end automotive product photography, extremely detailed, razor sharp, glossy paint. " +
