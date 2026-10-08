@@ -66,10 +66,19 @@ enum PriceFormat {
 
     /// Un montant abrégé dans sa devise : « 18 k€ », « $24K », « ¥3.5M ».
     static func amount(_ value: Double, currency: String, locale: Locale = .autoupdatingCurrent) -> String {
-        let style = FloatingPointFormatStyle<Double>.Currency(code: currency, locale: locale)
-            .notation(.compactName)
-            .precision(.significantDigits(1...3))
-        return value.formatted(style)
+        if #available(iOS 18, *) {
+            let style = FloatingPointFormatStyle<Double>.Currency(code: currency, locale: locale)
+                .notation(.compactName)
+                .precision(.significantDigits(1...3))
+            return value.formatted(style)
+        }
+        // iOS 17 n'abrège pas les devises : on abrège le nombre seul et on le glisse à la
+        // place du « 0 » d'un montant nul formaté dans la devise (« 0 € » → « 18 k € »).
+        let number = value.formatted(.number.notation(.compactName)
+            .precision(.significantDigits(1...3)).locale(locale))
+        let zero = 0.0.formatted(.currency(code: currency).precision(.fractionLength(0)).locale(locale))
+        guard let range = zero.range(of: "0") else { return number }
+        return zero.replacingCharacters(in: range, with: number)
     }
 
     /// La fourchette d'une prise : « 18–24 k€ ».
