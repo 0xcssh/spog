@@ -10,14 +10,24 @@ struct DuelsBlock: View {
     @State private var createFailed = false
 
     var body: some View {
-        NeonFrame(radius: 16) {
-            VStack(alignment: .leading, spacing: 12) {
-                Overline(text: "social.duels")
+        GlassCard(radius: 22, padding: 16) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(spacing: 8) {
+                    Image(systemName: "figure.fencing")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(Theme.accentBright)
+                    Overline(text: "social.duels", color: Theme.accentBright)
+                }
                 if duels.duels.isEmpty {
-                    Text("social.duelsEmpty")
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.textMuted)
-                        .fixedSize(horizontal: false, vertical: true)
+                    // Un état vide qui montre le duel avant de le décrire : deux joueurs
+                    // face à face, et la règle en une phrase.
+                    HStack(spacing: 14) {
+                        versusBadge
+                        Text("social.duelsEmpty")
+                            .font(Theme.body(13))
+                            .foregroundStyle(Theme.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 } else {
                     VStack(spacing: 8) {
                         ForEach(duels.duels) { duel in DuelRow(duel: duel) }
@@ -35,7 +45,6 @@ struct DuelsBlock: View {
                     actionButton("number", "duel.haveCode", primary: false) { joining = true }
                 }
             }
-            .padding(14)
         }
         .task { await duels.refresh() }
         .sheet(item: Binding(get: { shareCode.map(ShareCode.init) }, set: { _ in shareCode = nil })) { item in
@@ -56,21 +65,25 @@ struct DuelsBlock: View {
         Button(action: action) {
             HStack(spacing: 7) {
                 Image(systemName: icon).font(.system(size: 11, weight: .semibold))
-                Text(label).font(Theme.label(11)).tracking(0.8).lineLimit(1)
-            }
-            .foregroundStyle(primary ? Theme.background : Theme.textSecondary)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background {
-                if primary {
-                    Capsule().fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                                  startPoint: .topLeading, endPoint: .bottomTrailing))
-                } else {
-                    Capsule().fill(Theme.surfaceRaised)
-                }
+                Text(label).lineLimit(1).minimumScaleFactor(0.8)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(NeonButtonStyle(prominent: primary))
+    }
+
+    /// Deux pastilles qui se font face : le duel en image.
+    private var versusBadge: some View {
+        HStack(spacing: -10) {
+            Circle().fill(Theme.accentGradient)
+                .frame(width: 34, height: 34)
+                .overlay(Image(systemName: "person.fill").font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Theme.background))
+            Circle().fill(Theme.surfaceRaised)
+                .frame(width: 34, height: 34)
+                .overlay(Circle().strokeBorder(Theme.cyan.opacity(0.6), lineWidth: 1.2))
+                .overlay(Image(systemName: "questionmark").font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(Theme.cyan))
+        }
     }
 
     private struct ShareCode: Identifiable {
@@ -84,6 +97,17 @@ private struct DuelRow: View {
     let duel: DuelStore.Duel
 
     var body: some View {
+        VStack(spacing: 9) {
+            scoreLine
+            if duel.joined { balanceBar }
+        }
+        .padding(.horizontal, 12).padding(.vertical, 11)
+        .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .strokeBorder(Theme.stroke, lineWidth: 1))
+    }
+
+    private var scoreLine: some View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 3) {
                 if duel.joined {
@@ -109,12 +133,26 @@ private struct DuelRow: View {
             Spacer(minLength: 6)
             if duel.joined {
                 Text(verbatim: "\(duel.my_points.formatted()) – \(duel.their_points.formatted())")
-                    .font(Theme.mono(14, .bold))
+                    .font(Theme.hero(17))
+                    .monospacedDigit()
                     .foregroundStyle(duel.my_points >= duel.their_points ? Theme.accentBright : Theme.textSecondary)
             }
         }
-        .padding(.horizontal, 11).padding(.vertical, 10)
-        .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    /// Rapport de force du duel : la part du joueur en violet, celle de l'adversaire en
+    /// cyan. Un score « 120 – 95 » se lit ; une barre se voit.
+    private var balanceBar: some View {
+        let total = duel.my_points + duel.their_points
+        let mine = total > 0 ? Double(duel.my_points) / Double(total) : 0.5
+        return GeometryReader { geo in
+            HStack(spacing: 2) {
+                Capsule().fill(Theme.accentGradient)
+                    .frame(width: max(4, (geo.size.width - 2) * mine))
+                Capsule().fill(Theme.cyan.opacity(0.7))
+            }
+        }
+        .frame(height: 3)
     }
 
     private var subtitle: String {

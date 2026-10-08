@@ -7,7 +7,7 @@ import { attachDatabasePool } from "@neon/functions";
 import { Pool } from "pg";
 import { verifyEntitlement } from "./entitlement";
 import { createHandler } from "./handler";
-import { createSampleStore } from "./storage";
+import { createArtStore, createSampleStore } from "./storage";
 import { testersFrom } from "./develop";
 import { createAppleVerifier } from "./apple";
 
@@ -40,6 +40,9 @@ const handle = createHandler({
   developTesters: testersFrom(process.env.DEVELOP_TESTERS),
   verifyApple: createAppleVerifier((input, init) => fetch(input, init)),
   model: process.env.OPENAI_MODEL,
+  // Rendus des cibles du pack, mis en cache dans le compartiment privé `art`. Coupable
+  // sans redéployer le code : ART_ENABLED=false au déploiement.
+  art: process.env.ART_ENABLED === "false" ? null : createArtStore(),
 });
 
 export default { fetch: handle };

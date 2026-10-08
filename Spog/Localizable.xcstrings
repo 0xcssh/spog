@@ -239,6 +239,23 @@
         }
       }
     },
+    "bounty.progress %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld found"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld sur %2$lld trouvées"
+          }
+        }
+      }
+    },
     "bounty.reveal.done": {
       "extractionState": "manual",
       "localizations": {
@@ -286,6 +303,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ton pack de la semaine est arrivé : trois voitures à trouver dans la rue."
+          }
+        }
+      }
+    },
+    "bounty.sealed.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New pack"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau pack"
           }
         }
       }
@@ -381,13 +415,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Develop the card"
+            "value": "Studio shot"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Développer la carte"
+            "value": "Passer en studio"
           }
         }
       }
@@ -398,13 +432,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Developing…"
+            "value": "In the studio…"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Développement en cours…"
+            "value": "Mise en studio…"
           }
         }
       }
@@ -806,13 +840,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One card a day can be developed into a studio render. Come back tomorrow, or go Pro to develop them all."
+            "value": "One card a day gets a studio shot. Come back tomorrow, or go Pro to give every card one."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Une carte par jour se développe en rendu studio. Reviens demain, ou passe Pro pour toutes les développer."
+            "value": "Une carte par jour passe en studio. Reviens demain, ou passe Pro pour toutes les y passer."
           }
         }
       }
@@ -1259,6 +1293,91 @@
         }
       }
     },
+    "garage.cards.unit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in your collection"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans ta collection"
+          }
+        }
+      }
+    },
+    "garage.collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your collection"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta collection"
+          }
+        }
+      }
+    },
+    "garage.dex %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spogdex · %1$lld / %2$lld models"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spogdex · %1$lld / %2$lld modèles"
+          }
+        }
+      }
+    },
+    "garage.discover": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most wanted here"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les plus convoitées ici"
+          }
+        }
+      }
+    },
+    "garage.discover.all": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See all"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout voir"
+          }
+        }
+      }
+    },
     "garage.empty.action": {
       "extractionState": "manual",
       "localizations": {
@@ -1323,6 +1442,108 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voitures attrapées"
+          }
+        }
+      }
+    },
+    "garage.stat.models": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Models"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modèles"
+          }
+        }
+      }
+    },
+    "garage.stat.points": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        }
+      }
+    },
+    "garage.stat.today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aujourd'hui"
+          }
+        }
+      }
+    },
+    "garage.step.collect": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collectionne"
+          }
+        }
+      }
+    },
+    "garage.step.identify": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identify"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifie"
+          }
+        }
+      }
+    },
+    "garage.step.spot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repère"
           }
         }
       }
@@ -3152,13 +3373,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scan as much as you like and develop every card into a studio render, without waiting for tomorrow."
+            "value": "Scan as much as you like and give every card a studio shot, without waiting for tomorrow."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scanne autant que tu veux et développe chaque carte en rendu studio, sans attendre le lendemain."
+            "value": "Scanne autant que tu veux et passe chaque carte en studio, sans attendre le lendemain."
           }
         }
       }
@@ -3339,13 +3560,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. When you develop a card, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree — you are asked once, and the \"Help recognize cars\" setting lets you change your mind — the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. When you switch a card to studio, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree — you are asked once, and the \"Help recognize cars\" setting lets you change your mind — the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Quand tu développes une carte, sa photo est envoyée de la même façon pour en générer le rendu studio, qui est ensuite rangé sur ton appareil. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Par défaut, les photos transmises ne sont pas conservées une fois la réponse rendue. Si tu l'acceptes — la question t'est posée une fois, et le réglage « Aider à reconnaître les voitures » permet de changer d'avis —, les photos de tes prises sont conservées sur notre serveur, plaques déjà floutées, avec le modèle identifié et celui que tu as éventuellement corrigé, pour entraîner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachées à aucune identité, et ne sont jamais publiées, vendues ni partagées."
+            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Quand tu passes une carte en studio, sa photo est envoyée de la même façon pour en générer le rendu studio, qui est ensuite rangé sur ton appareil. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Par défaut, les photos transmises ne sont pas conservées une fois la réponse rendue. Si tu l'acceptes — la question t'est posée une fois, et le réglage « Aider à reconnaître les voitures » permet de changer d'avis —, les photos de tes prises sont conservées sur notre serveur, plaques déjà floutées, avec le modèle identifié et celui que tu as éventuellement corrigé, pour entraîner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachées à aucune identité, et ne sont jamais publiées, vendues ni partagées."
           }
         }
       }
@@ -4121,13 +4342,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Developing…"
+            "value": "In the studio…"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Développement…"
+            "value": "Mise en studio…"
           }
         }
       }
@@ -4268,6 +4489,40 @@
         }
       }
     },
+    "scan.leftToday": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scans today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scans aujourd'hui"
+          }
+        }
+      }
+    },
+    "scan.live": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En direct"
+          }
+        }
+      }
+    },
     "scan.noCamera": {
       "extractionState": "manual",
       "localizations": {
@@ -4315,6 +4570,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plaque masquée"
+          }
+        }
+      }
+    },
+    "scan.platesHidden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plates blurred"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plaques floutées"
           }
         }
       }
@@ -5260,13 +5532,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "League & rivals"
+            "value": "League & duels"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ligue et rivaux"
+            "value": "Ligue et duels"
           }
         }
       }
@@ -5522,13 +5794,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Garage"
+            "value": "Collection"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Garage"
+            "value": "Collection"
           }
         }
       }

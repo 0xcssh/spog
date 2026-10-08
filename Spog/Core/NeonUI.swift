@@ -189,11 +189,14 @@ struct SectionHeader: View {
 
     var body: some View {
         HStack(alignment: .center) {
-            VStack(alignment: .leading, spacing: 3) {
-                Overline(text: overline)
+            // Titre plus grand et plus gras qu'à l'origine : à 24 points, la hiérarchie de
+            // l'écran ne se lisait pas, tout avait à peu près la même taille.
+            VStack(alignment: .leading, spacing: 4) {
+                Overline(text: overline, color: Theme.accentBright)
                 Text(title)
-                    .font(Theme.display(24))
+                    .font(Theme.display(32, .heavy))
                     .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.7)
             }
             Spacer()
             if let trailing { trailing }
@@ -277,6 +280,203 @@ private extension Color {
                      green: Double(g1 + (g2 - g1) * t),
                      blue: Double(b1 + (b2 - b1) * t),
                      opacity: 1)
+    }
+}
+
+// MARK: - Matières premium
+
+/// Panneau de verre fumé : dégradé vertical, reflet en haut, arête qui accroche la lumière
+/// et ombre portée. Remplace l'aplat gris des premières versions, que le testeur trouvait
+/// plat et « cheap ». `tint` pose une lueur colorée dans un coin, pour signaler sans crier.
+struct GlassCard<Content: View>: View {
+    var radius: CGFloat = 20
+    var tint: Color? = nil
+    var padding: CGFloat = 16
+    @ViewBuilder var content: Content
+
+    private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: radius, style: .continuous) }
+
+    var body: some View {
+        content
+            .padding(padding)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background {
+                ZStack {
+                    shape.fill(Theme.glassFill)
+                    if let tint {
+                        RadialGradient(colors: [tint.opacity(0.22), .clear],
+                                       center: .topTrailing, startRadius: 4, endRadius: 220)
+                            .clipShape(shape)
+                    }
+                    shape.fill(Theme.sheen)
+                }
+                .shadow(color: Theme.dropShadow, radius: 18, y: 10)
+            }
+            .overlay(shape.strokeBorder(Theme.glassEdge, lineWidth: 1))
+    }
+}
+
+/// Bouton principal : capsule au dégradé violet, reflet, lueur, et un léger enfoncement
+/// sous le doigt. Un seul style pour toutes les actions principales de l'app, pour
+/// qu'elles se reconnaissent d'un écran à l'autre.
+struct NeonButtonStyle: ButtonStyle {
+    /// Faux : variante secondaire, verre et filet violet, pour l'action d'à côté.
+    var prominent: Bool = true
+    var fullWidth: Bool = true
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Theme.label(12)).tracking(1.2)
+            .textCase(.uppercase)
+            .foregroundStyle(prominent ? Theme.background : Theme.accentBright)
+            .frame(maxWidth: fullWidth ? .infinity : nil)
+            .padding(.horizontal, 22)
+            .padding(.vertical, 15)
+            .background {
+                if prominent {
+                    Capsule().fill(Theme.accentGradient)
+                        .overlay(Capsule().fill(Theme.sheen))
+                        .shadow(color: Theme.accent.opacity(configuration.isPressed ? 0.25 : 0.55), radius: 16, y: 6)
+                } else {
+                    Capsule().fill(Theme.accent.opacity(0.10))
+                        .overlay(Capsule().strokeBorder(Theme.accent.opacity(0.5), lineWidth: 1))
+                }
+            }
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.spring(response: 0.25, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+}
+
+/// Enfoncement léger d'une carte ou d'une tuile sous le doigt : le retour visuel qui
+/// manquait aux boutons `.plain`.
+struct PressScaleStyle: ButtonStyle {
+    var scale: CGFloat = 0.96
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? scale : 1)
+            .brightness(configuration.isPressed ? 0.04 : 0)
+            .animation(.spring(response: 0.25, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+}
+
+/// Fond d'ambiance des écrans principaux : deux lueurs qui dérivent très lentement.
+/// Un noir uni faisait paraître l'écran vide dès que le contenu ne le remplissait pas.
+struct AmbientBackground: View {
+    @State private var drift = false
+
+    var body: some View {
+        // Les lueurs sont des surcouches et non des enfants d'une pile : plus larges que
+        // l'écran, elles élargiraient la pile, et tout l'écran avec elle.
+        Theme.background
+            .overlay {
+                RadialGradient(colors: [Theme.ambientViolet.opacity(0.32), .clear],
+                               center: .center, startRadius: 4, endRadius: 280)
+                    .frame(width: 560, height: 560)
+                    .offset(x: drift ? 70 : -90, y: -300)
+            }
+            .overlay {
+                RadialGradient(colors: [Theme.ambientCyan.opacity(0.20), .clear],
+                               center: .center, startRadius: 4, endRadius: 240)
+                    .frame(width: 480, height: 480)
+                    .offset(x: drift ? -110 : 80, y: 360)
+            }
+            .overlay { DotGrid(spacing: 22).opacity(0.6) }
+            .clipped()
+            .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 14).repeatForever(autoreverses: true)) { drift = true }
+        }
+    }
+}
+
+/// Bande de lumière qui balaie la vue en diagonale, à intervalle régulier. Réservée à ce
+/// qui attend un geste (le pack scellé, un emplacement vide) : partout, elle fatiguerait.
+struct ShimmerSweep: ViewModifier {
+    var active: Bool = true
+    var duration: Double = 2.8
+    @State private var phase: CGFloat = -1
+
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if active {
+                    GeometryReader { geo in
+                        LinearGradient(colors: [.clear, Theme.highlight.opacity(0.22), .clear],
+                                       startPoint: .leading, endPoint: .trailing)
+                            .frame(width: geo.size.width * 0.45, height: geo.size.height * 1.6)
+                            .rotationEffect(.degrees(18))
+                            .offset(x: phase * geo.size.width * 1.4, y: -geo.size.height * 0.3)
+                    }
+                    .mask { content }
+                    .allowsHitTesting(false)
+                }
+            }
+            .onAppear {
+                guard active else { return }
+                withAnimation(.linear(duration: duration).delay(0.6).repeatForever(autoreverses: false)) {
+                    phase = 1.2
+                }
+            }
+    }
+}
+
+extension View {
+    /// Balayage lumineux (voir ShimmerSweep).
+    func shimmer(_ active: Bool = true, duration: Double = 2.8) -> some View {
+        modifier(ShimmerSweep(active: active, duration: duration))
+    }
+}
+
+/// Puce en capsule : une icône, un texte court. Compte à rebours, pays, état.
+struct InfoChip: View {
+    let icon: String
+    let text: Text
+    var color: Color = Theme.textSecondary
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: icon).font(.system(size: 9, weight: .bold))
+            text.font(Theme.mono(10, .semibold)).lineLimit(1)
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, 9).padding(.vertical, 5)
+        .background(color.opacity(0.12), in: Capsule())
+        .overlay(Capsule().strokeBorder(color.opacity(0.28), lineWidth: 1))
+    }
+}
+
+/// Cellule de statistique : un chiffre fort, un libellé discret. Le chiffre s'anime quand
+/// il change — une prise de plus se voit.
+struct MetricCell: View {
+    let value: Int
+    let label: LocalizedStringKey
+    var color: Color = Theme.textPrimary
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(value.formatted())
+                .font(Theme.hero(20))
+                .monospacedDigit()
+                .foregroundStyle(color)
+                .contentTransition(.numericText(value: Double(value)))
+                .lineLimit(1).minimumScaleFactor(0.6)
+            Text(label)
+                .font(Theme.label(9)).tracking(1.1)
+                .textCase(.uppercase)
+                .foregroundStyle(Theme.textMuted)
+                .lineLimit(1).minimumScaleFactor(0.7)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// Fin séparateur vertical entre deux cellules d'une même rangée.
+struct HairlineDivider: View {
+    var body: some View {
+        Rectangle()
+            .fill(Theme.strokeStrong)
+            .frame(width: 1, height: 30)
     }
 }
 

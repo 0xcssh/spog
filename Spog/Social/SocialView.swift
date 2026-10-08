@@ -22,7 +22,7 @@ struct SocialView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
+            VStack(spacing: 18) {
                 SectionHeader(overline: "social.section",
                               title: String(localized: "social.title"))
                 identityBlock
@@ -33,8 +33,9 @@ struct SocialView: View {
                 crewBlock
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 16)
+            .padding(.bottom, 24)
         }
+        .scrollIndicators(.hidden)
         .refreshable { await account.refresh() }
         .task { await account.refresh() }
         .sheet(isPresented: $enteringCode) { ReferralEntrySheet() }
@@ -49,66 +50,86 @@ struct SocialView: View {
     /// Le pseudo, et ce que le serveur sait du joueur. Sans pseudo, le joueur figure au
     /// classement sous un nom générique : le choisir n'est jamais obligatoire.
     private var identityBlock: some View {
-        NeonFrame(radius: 16) {
-            VStack(alignment: .leading, spacing: 12) {
-                Overline(text: "social.you.overline")
+        GlassCard(radius: 22, tint: Theme.accent, padding: 16) {
+            VStack(alignment: .leading, spacing: 16) {
                 Button { choosingPseudo = true } label: {
-                    HStack(spacing: 10) {
-                        Text(account.profile?.pseudo.map { "@\($0)" } ?? String(localized: "social.pseudo.choose"))
-                            .font(Theme.mono(18, .bold))
-                            .foregroundStyle(account.profile?.pseudo == nil ? Theme.accentBright : Theme.textPrimary)
-                            .lineLimit(1).minimumScaleFactor(0.6)
+                    HStack(spacing: 14) {
+                        avatar
+                        VStack(alignment: .leading, spacing: 3) {
+                            Overline(text: "social.you.overline", color: Theme.accentBright)
+                            Text(account.profile?.pseudo.map { "@\($0)" } ?? String(localized: "social.pseudo.choose"))
+                                .font(Theme.display(22))
+                                .foregroundStyle(account.profile?.pseudo == nil ? Theme.accentBright : Theme.textPrimary)
+                                .lineLimit(1).minimumScaleFactor(0.6)
+                        }
                         Spacer(minLength: 6)
                         Image(systemName: "pencil")
                             .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Theme.textMuted)
+                            .foregroundStyle(Theme.textSecondary)
+                            .frame(width: 32, height: 32)
+                            .background(Theme.surfaceRaised, in: Circle())
                     }
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PressScaleStyle(scale: 0.98))
 
-                HStack(spacing: 0) {
-                    stat(value: account.profile?.catches ?? garage.catches.count, label: "social.stat.catches")
-                    stat(value: account.profile?.points ?? garage.totalPoints, label: "social.stat.points")
-                    stat(value: account.profile?.first_spots ?? 0, label: "social.stat.firstSpots")
+                HStack(spacing: 12) {
+                    MetricCell(value: account.profile?.catches ?? garage.catches.count, label: "social.stat.catches")
+                    HairlineDivider()
+                    MetricCell(value: account.profile?.points ?? garage.totalPoints, label: "social.stat.points",
+                               color: Theme.accentBright)
+                    HairlineDivider()
+                    MetricCell(value: account.profile?.first_spots ?? 0, label: "social.stat.firstSpots",
+                               color: RarityTier.trophyGold)
                 }
             }
-            .padding(14)
         }
     }
 
-    private func stat(value: Int, label: LocalizedStringKey) -> some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(value.formatted())
-                .font(Theme.mono(17, .bold))
-                .foregroundStyle(Theme.textPrimary)
-            Text(label)
-                .font(Theme.mono(9))
-                .foregroundStyle(Theme.textMuted)
-                .textCase(.uppercase)
+    /// Pastille du joueur : l'initiale de son pseudo dans un anneau néon, ou une
+    /// silhouette tant qu'il n'en a pas choisi.
+    private var avatar: some View {
+        ZStack {
+            Circle().fill(Theme.surfaceRaised)
+            if let initial = account.profile?.pseudo?.first {
+                Text(String(initial).uppercased())
+                    .font(Theme.hero(24))
+                    .foregroundStyle(Theme.accentGradient)
+            } else {
+                Image(systemName: "person.fill")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(Theme.textMuted)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(width: 56, height: 56)
+        .overlay(Circle().strokeBorder(Theme.accentGradient, lineWidth: 2))
+        .shadow(color: Theme.accent.opacity(0.5), radius: 12)
     }
 
     // MARK: Ligue
 
     private var leagueBlock: some View {
-        NeonFrame(radius: 16) {
+        GlassCard(radius: 22, padding: 16) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Overline(text: "league.overline")
+                    Overline(text: "league.overline", color: Theme.accentBright)
                     Spacer()
                     if let ends = account.league?.endsAt {
                         // Le compte à rebours fait partie du jeu : il pousse à sortir avant lundi.
-                        Text("league.endsIn \(ends.formatted(.relative(presentation: .numeric)))")
-                            .font(Theme.mono(9))
-                            .foregroundStyle(Theme.textMuted)
+                        InfoChip(icon: "clock",
+                                 text: Text("league.endsIn \(ends.formatted(.relative(presentation: .numeric)))"))
                     }
                 }
 
                 if let league = account.league {
-                    Text(LocalizedStringKey("league.tier.\(league.tier)"))
-                        .font(Theme.display(22))
-                        .foregroundStyle(Theme.textPrimary)
+                    HStack(spacing: 12) {
+                        Image(systemName: "shield.lefthalf.filled")
+                            .font(.system(size: 22, weight: .semibold))
+                            .foregroundStyle(Theme.leagueColor(league.tier))
+                            .shadow(color: Theme.leagueColor(league.tier).opacity(0.7), radius: 10)
+                        Text(LocalizedStringKey("league.tier.\(league.tier)"))
+                            .font(Theme.display(26))
+                            .foregroundStyle(Theme.textPrimary)
+                    }
 
                     if league.joined {
                         VStack(spacing: 6) {
@@ -127,7 +148,6 @@ struct SocialView: View {
                     EmptySlot(icon: "wifi.slash", message: "league.offline")
                 }
             }
-            .padding(14)
         }
     }
 
@@ -139,8 +159,7 @@ struct SocialView: View {
                 .frame(width: 26, height: 26)
                 .background {
                     if member.me {
-                        Circle().fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                                     startPoint: .topLeading, endPoint: .bottomTrailing))
+                        Circle().fill(Theme.accentGradient)
                     } else {
                         Circle().fill(Theme.surfaceRaised)
                     }
@@ -162,9 +181,21 @@ struct SocialView: View {
                 .font(Theme.mono(13, .bold))
                 .foregroundStyle(member.me ? Theme.accentBright : Theme.textSecondary)
         }
-        .padding(.horizontal, 10).padding(.vertical, 7)
-        .background(member.me ? Theme.accent.opacity(0.10) : .clear,
-                    in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding(.horizontal, 10).padding(.vertical, 8)
+        .background(member.me ? Theme.accent.opacity(0.14) : .clear,
+                    in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay {
+            if member.me {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(Theme.accent.opacity(0.55), lineWidth: 1)
+            }
+        }
+        // La zone de montée se lit d'un trait à gauche, sans couleur criarde.
+        .overlay(alignment: .leading) {
+            if zone == .promotion {
+                Capsule().fill(Theme.cyan).frame(width: 2.5, height: 18).offset(x: -1)
+            }
+        }
     }
 
     // MARK: Compte Apple
@@ -172,11 +203,11 @@ struct SocialView: View {
     /// Facultatif : il ne sert qu'à retrouver sa collection et son rang sur un autre
     /// appareil. Rien d'autre n'est demandé à Apple — ni nom, ni e-mail.
     private var appleBlock: some View {
-        NeonFrame(radius: 16) {
+        GlassCard(radius: 22, padding: 16) {
             VStack(alignment: .leading, spacing: 12) {
                 Overline(text: "account.apple.overline")
                 Text("account.apple.why")
-                    .font(Theme.mono(11))
+                    .font(Theme.body(13))
                     .foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
                 SignInWithAppleButton(.signIn) { request in
@@ -193,26 +224,24 @@ struct SocialView: View {
                     Task { if !(await account.linkApple(identityToken: token)) { appleFailed = true } }
                 }
                 .signInWithAppleButtonStyle(.white)
-                .frame(height: 46)
+                .frame(height: 48)
                 .clipShape(Capsule())
             }
-            .padding(14)
         }
     }
 
     // MARK: Crew
 
     private var crewBlock: some View {
-        NeonFrame(color: Color(hex: 0x22D3EE), radius: 16, intensity: 0.7) {
+        GlassCard(radius: 22, tint: Theme.cyan, padding: 16) {
             VStack(alignment: .leading, spacing: 13) {
-                Overline(text: "social.crew")
+                Overline(text: "social.crew", color: Theme.cyan)
                 EmptySlot(icon: "flag.2.crossed", message: "social.crewEmpty")
                 HStack(spacing: 9) {
                     LockedButton(icon: "plus", label: "social.createCrew")
                     LockedButton(icon: "arrow.right.to.line", label: "social.joinCrew")
                 }
             }
-            .padding(14)
         }
     }
 
@@ -222,7 +251,7 @@ struct SocialView: View {
     /// partager un code et en saisir un ne demandent ni compte ni serveur. La recompense,
     /// elle, en demande un — elle est donc annoncee comme attendue, pas comme acquise.
     private var referralBlock: some View {
-        NeonFrame(radius: 16) {
+        GlassCard(radius: 22, padding: 16) {
             VStack(alignment: .leading, spacing: 13) {
                 Overline(text: "social.referral")
 
@@ -255,13 +284,12 @@ struct SocialView: View {
                     .stroke(Theme.accent.opacity(0.25), lineWidth: 1))
 
                 Text("social.referral.how")
-                    .font(Theme.mono(10))
+                    .font(Theme.body(11))
                     .foregroundStyle(Theme.textMuted)
                     .fixedSize(horizontal: false, vertical: true)
 
                 sponsorRow
             }
-            .padding(14)
         }
     }
 
@@ -436,11 +464,13 @@ private struct EmptySlot: View {
     var body: some View {
         HStack(spacing: 11) {
             Image(systemName: icon)
-                .font(.system(size: 16))
-                .foregroundStyle(Theme.textMuted)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Theme.accentBright)
+                .frame(width: 36, height: 36)
+                .background(Theme.accent.opacity(0.12), in: Circle())
             Text(message)
-                .font(Theme.mono(11))
-                .foregroundStyle(Theme.textMuted)
+                .font(Theme.body(12))
+                .foregroundStyle(Theme.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer()
         }
@@ -449,7 +479,7 @@ private struct EmptySlot: View {
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                .foregroundStyle(Theme.stroke)
+                .foregroundStyle(Theme.strokeStrong)
         )
     }
 }
