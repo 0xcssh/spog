@@ -11,8 +11,10 @@
 //
 // Actions (POST, en-tête x-install-id) :
 //   me · set_pseudo · apple_link · catch · reassign · delete_catch · league · garage · delete_account
+//   bounty · open_bounty   (pack de primes de la semaine, voir bounty.ts)
 
 import { resolve } from "./catalog";
+import { weeklyBounties, currentWeek } from "./bounty";
 import type { AppleResult } from "./apple";
 
 export interface Queryable {
@@ -40,7 +42,7 @@ const unavailable = () => reply({ code: "service_saturated", error: "Le service 
 const bad = (error: string) => reply({ code: "bad_request", error }, 400);
 
 export const SOCIAL_ACTIONS = ["me", "set_pseudo", "apple_link", "catch", "reassign", "delete_catch", "league", "garage",
-  "delete_account"];
+  "delete_account", "bounty", "open_bounty"];
 
 export function createSocial(deps: SocialDeps) {
   const now = deps.now ?? (() => new Date());
@@ -129,7 +131,21 @@ export function createSocial(deps: SocialDeps) {
          verified, scan, tier.id, tier.points, Math.round(tier.points * FIRST_SPOT_BONUS_RATIO)]);
       const result = rows[0].r;
       if (result.error === "not_owner") return reply({ code: "not_owner", error: "Prise inconnue" }, 403);
-      return reply({ ...result, vehicle_verified: verified,
+
+      // Une cible du pack de la semaine, trouvée pour de vrai : seulement si la prise compte
+      // au classement (même exigence de pays et de modèle vérifiés), et une fois par joueur.
+      let bounty: unknown = null;
+      if (!result.duplicate && result.counted_points > 0) {
+        const week = currentWeek(now());
+        const target = weeklyBounties(week, country).find((t) => t.vehicle.id === vehicleId);
+        if (target) {
+          const { rows: claim } = await deps.db!.query(
+            "select public.claim_bounty($1,$2,$3,$4,$5,$6,$7) as r",
+            [week, country, vehicleId, player, catchId, target.bonus, target.firstBonus]);
+          if (claim[0].r.claimed) bounty = claim[0].r;
+        }
+      }
+      return reply({ ...result, vehicle_verified: verified, bounty,
                      league_tier: result.league_tier == null ? null : LEAGUE_TIERS[result.league_tier] });
     },
 
@@ -206,6 +222,45 @@ export function createSocial(deps: SocialDeps) {
       const player = await playerOf(installHash);
       await deps.db!.query("delete from public.players where id = $1", [player]);
       return reply({ ok: true });
+    },
+
+    /// Le pack de la semaine du pays demandé. Scellé tant que le joueur ne l'a pas ouvert :
+    /// l'ouverture est un moment de l'app, les cibles n'en sont révélées qu'à ce moment-là.
+    async bounty(installHash, body) {
+      const country = typeof body.country === "string" ? body.country.trim().toUpperCase() : "";
+      if (!/^[A-Z]{2}$/.test(country)) return bad("Pays invalide");
+      const player = await playerOf(installHash);
+      const week = currentWeek(now());
+      const { rows: opened } = await deps.db!.query(
+        "select 1 from public.bounty_opens where week = $1 and player_id = $2", [week, player]);
+      const base = { week, ends_at: nextMonday(), country, opened: opened.length > 0 };
+      if (!base.opened) return reply({ ...base, targets: [] });
+      const { rows: claims } = await deps.db!.query(
+        `select c.vehicle_id, c.player_id, c.first, p.pseudo from public.bounty_claims c
+           join public.players p on p.id = c.player_id
+          where c.week = $1 and c.country = $2`, [week, country]);
+      return reply({
+        ...base,
+        targets: weeklyBounties(week, country).map((t) => {
+          const mine = claims.filter((c) => c.vehicle_id === t.vehicle.id);
+          const first = mine.find((c) => c.first);
+          return {
+            vehicle_id: t.vehicle.id, make: t.vehicle.make, model: t.vehicle.model, body: t.vehicle.body,
+            tier: t.tier.id, bonus: t.bonus, first_bonus: t.firstBonus,
+            found: mine.some((c) => c.player_id === player),
+            hunters: mine.length,
+            first_hunter: first ? (first.pseudo ?? null) : undefined,
+          };
+        }),
+      });
+    },
+
+    async open_bounty(installHash, body) {
+      const player = await playerOf(installHash);
+      await deps.db!.query(
+        "insert into public.bounty_opens (week, player_id) values ($1, $2) on conflict do nothing",
+        [currentWeek(now()), player]);
+      return handlers.bounty(installHash, body);
     },
 
     async garage(installHash) {

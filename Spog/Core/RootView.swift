@@ -12,6 +12,7 @@ struct RootView: View {
     @State private var referral = ReferralStore()
     @State private var training = TrainingConsent()
     @State private var account = AccountStore()
+    @State private var bounty = BountyStore()
     @State private var tab: Tab = .garage
 
     init() {
@@ -61,6 +62,7 @@ struct RootView: View {
         .environment(profile)
         .environment(training)
         .environment(account)
+        .environment(bounty)
         // Prises restées en attente, puis l'état du joueur : au lancement, et à chaque
         // nouvelle prise (le classement bouge).
         .task(id: garage.catches.count) {

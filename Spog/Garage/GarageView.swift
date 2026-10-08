@@ -8,6 +8,7 @@ struct GarageView: View {
 
     @Environment(AppState.self) private var app
     @Environment(GarageStore.self) private var garage
+    @Environment(BountyStore.self) private var bounty
     @State private var selected: CardData?
     @State private var browsingCatalog = false
     @State private var showingSettings = false
@@ -20,11 +21,14 @@ struct GarageView: View {
         ScrollView {
             VStack(spacing: 16) {
                 header
+                BountyPanel()
                 grid
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 16)
         }
+        // La chasse bouge à chaque prise (une cible trouvée, un premier chasseur désigné).
+        .task(id: "\(garage.catches.count)-\(app.country)") { await bounty.refresh(country: app.country) }
         .fullScreenCover(item: $selected) { card in
             CardDetailView(card: card)
         }
