@@ -84,9 +84,9 @@ enum Theme {
     /// Bas du mur, juste avant le sol : le point le plus sombre du fond.
     static let studioWall    = Color(hex: 0x111215)
     /// Sol au pied de la voiture, à peine éclairé par le projecteur.
-    static let studioGround  = Color(hex: 0x18191D)
+    static let studioGround  = Color(hex: 0x23242A)
     /// Sol au premier plan, qui se perd dans le noir.
-    static let studioFloor   = Color(hex: 0x070709)
+    static let studioFloor   = Color(hex: 0x0B0B0E)
     /// Lumière du projecteur : un blanc froid, toujours à très faible opacité.
     static let studioLight   = Color(hex: 0xE4ECFF)
 

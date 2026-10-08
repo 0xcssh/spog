@@ -29,17 +29,20 @@ enum StudioStage {
     static let layers: [Layer] = {
         let ground = StudioStageLayout.groundLine
         return [
-            // Le mur s'assombrit en descendant, puis le sol reprend un peu de lumière au
-            // pied de la voiture avant de se perdre au premier plan : un fond de studio
-            // sans arête, comme un cyclorama.
-            .vertical([(Theme.studioTop, 0), (Theme.studioWall, ground - 0.1),
-                       (Theme.studioGround, ground), (Theme.studioFloor, 1)]),
+            // Le mur s'assombrit en descendant ; le sol, lui, reprend de la lumière juste
+            // sous la voiture puis se perd au premier plan. Un sol plus clair que le bas du
+            // mur, c'est ce qui donne à l'ombre de contact quelque chose sur quoi se poser :
+            // sur un sol aussi sombre qu'elle, la voiture semblait flotter (retour testeur).
+            .vertical([(Theme.studioTop, 0), (Theme.studioWall, ground - 0.16),
+                       (Theme.studioGround, ground + 0.02), (Theme.studioFloor, 1)]),
             // Le projecteur, au-dessus du cadre : un blanc froid très faible.
             .halo(center: CGPoint(x: 0.5, y: -0.12), radiusX: 0.72, radiusY: 0.9,
                   stops: [(Theme.studioLight.opacity(0.14), 0), (Theme.studioLight.opacity(0), 1)]),
-            // La flaque de lumière au sol, sous la voiture.
-            .halo(center: CGPoint(x: 0.5, y: ground), radiusX: 0.55, radiusY: 0.13,
-                  stops: [(Theme.studioLight.opacity(0.07), 0), (Theme.studioLight.opacity(0), 1)]),
+            // La flaque de lumière au sol, sous la voiture : assez nette pour qu'on lise un
+            // plan horizontal.
+            .halo(center: CGPoint(x: 0.5, y: ground + 0.01), radiusX: 0.6, radiusY: 0.15,
+                  stops: [(Theme.studioLight.opacity(0.16), 0), (Theme.studioLight.opacity(0.06), 0.55),
+                          (Theme.studioLight.opacity(0), 1)]),
             // Vignettage : les bords tombent dans le noir, l'œil revient au centre.
             .halo(center: CGPoint(x: 0.5, y: 0.45), radiusX: 0.85, radiusY: 0.9,
                   stops: [(Color.black.opacity(0), 0.55), (Color.black.opacity(0.4), 1)]),
@@ -97,7 +100,7 @@ enum StudioStage {
     private static func drawReflection(_ cutout: UIImage, car: CGRect, in ctx: CGContext) {
         let area = StudioStageLayout.reflectionRect(for: car)
         let space = CGColorSpaceCreateDeviceRGB()
-        let fade = [UIColor.black.withAlphaComponent(0.2).cgColor,
+        let fade = [UIColor.black.withAlphaComponent(0.28).cgColor,
                     UIColor.black.withAlphaComponent(0).cgColor] as CFArray
         guard let gradient = CGGradient(colorsSpace: space, colors: fade, locations: [0, 1]) else { return }
 
@@ -119,22 +122,26 @@ enum StudioStage {
         ctx.restoreGState()
     }
 
-    /// Deux ombres : une large et diffuse qui pose la voiture, une serrée et dense sous
-    /// les pneus, sans laquelle elle semble flotter au-dessus du sol.
+    /// Trois ombres : une large et diffuse qui pose la voiture, une plus serrée sous la
+    /// caisse, et un trait presque noir pile sur la ligne des roues — l'occlusion de
+    /// contact, sans laquelle elle semble flotter au-dessus du sol.
     private static func drawContactShadow(car: CGRect, in ctx: CGContext) {
         let space = CGColorSpaceCreateDeviceRGB()
-        let shadows: [(rx: CGFloat, ry: CGFloat, alpha: CGFloat)] = [
-            (car.width * 0.56, car.height * 0.11, 0.55),
-            (car.width * 0.44, car.height * 0.035, 0.8),
+        let shadows: [(rx: CGFloat, ry: CGFloat, lift: CGFloat, alpha: CGFloat)] = [
+            (car.width * 0.62, car.height * 0.14, 0.15, 0.6),
+            (car.width * 0.5, car.height * 0.06, 0.25, 0.85),
+            (car.width * 0.44, car.height * 0.022, 0.1, 0.95),
         ]
         for shadow in shadows {
             let colors = [UIColor.black.withAlphaComponent(shadow.alpha).cgColor,
+                          UIColor.black.withAlphaComponent(shadow.alpha * 0.5).cgColor,
                           UIColor.black.withAlphaComponent(0).cgColor] as CFArray
-            guard let gradient = CGGradient(colorsSpace: space, colors: colors, locations: [0, 1]) else { continue }
+            guard let gradient = CGGradient(colorsSpace: space, colors: colors,
+                                            locations: [0, 0.5, 1]) else { continue }
             ctx.saveGState()
-            // Un peu au-dessus du bas de la boîte : c'est là que les roues du fond
-            // touchent le sol, sur une vue de trois quarts.
-            ctx.translateBy(x: car.midX, y: car.maxY - shadow.ry * 0.35)
+            // Centrée à peine au-dessus du bas de la boîte (recadré sur les roues, voir
+            // `ModelCutoutService.trimmedToGround`) : la moitié haute passe sous la caisse.
+            ctx.translateBy(x: car.midX, y: car.maxY - shadow.ry * shadow.lift)
             ctx.scaleBy(x: 1, y: shadow.ry / shadow.rx)
             ctx.drawRadialGradient(gradient, startCenter: .zero, startRadius: 0,
                                    endCenter: .zero, endRadius: shadow.rx, options: [])

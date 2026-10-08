@@ -88,4 +88,18 @@ struct StudioStageLayoutTests {
                                                      fill: 0.7, relativeWidth: 0.2))
         #expect(!StudioStageLayout.isPlausibleCutout(size: .zero, fill: 1, relativeWidth: 1))
     }
+
+    @Test("Le voile sous les pneus est retiré, la carrosserie jamais")
+    func groundRowTrimsShadowVeil() {
+        // 100 rangées : caisse pleine jusqu'à 79, deux pneus (10 % de la largeur) jusqu'à
+        // 89, puis un voile d'ombre semi-transparent, sans pixel franchement opaque.
+        let width = 400
+        let rows = (0..<100).map { y in y < 80 ? 380 : (y < 90 ? 40 : 2) }
+        #expect(StudioStageLayout.groundRow(solidPerRow: rows, width: width) == 89)
+        // Rien à retirer : la dernière rangée est déjà sur les roues.
+        #expect(StudioStageLayout.groundRow(solidPerRow: Array(repeating: 300, count: 50), width: width) == 49)
+        // Jamais plus d'un quart de la hauteur, même si tout le bas paraît vide.
+        let sparse = (0..<100).map { y in y < 20 ? 300 : 0 }
+        #expect(StudioStageLayout.groundRow(solidPerRow: sparse, width: width) == 74)
+    }
 }

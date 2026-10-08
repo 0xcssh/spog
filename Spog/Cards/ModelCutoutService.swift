@@ -32,11 +32,13 @@ enum ModelCutoutService {
     private static let failures = FailureMemo()
 
     /// Dossier des caches : tout se recalcule à partir des rendus, iOS peut l'effacer.
-    /// `v1` : changer la méthode de découpe, c'est changer de dossier — les anciennes
-    /// découpes ne doivent pas être resservies, ni les échecs qu'elle a notés.
+    /// `v2` : changer la méthode de découpe, c'est changer de dossier — les anciennes
+    /// découpes ne doivent pas être resservies, ni les échecs qu'elle a notés. (v2 : bas
+    /// recadré sur les roues, voir `trimmedToGround`.)
     private static let directory: URL = {
         let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        let folder = base.appendingPathComponent("model-cutouts-v1", isDirectory: true)
+        try? FileManager.default.removeItem(at: base.appendingPathComponent("model-cutouts-v1", isDirectory: true))
+        let folder = base.appendingPathComponent("model-cutouts-v2", isDirectory: true)
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         return folder
     }()
@@ -152,7 +154,7 @@ enum ModelCutoutService {
                                                   relativeWidth: found.bounds.width) else {
             return .rejected
         }
-        return .cutout(found.image)
+        return .cutout(trimmedToGround(found.image))
     }
 
     /// Vision a besoin d'un bitmap : un rendu décodé autrement (sans `cgImage`) est
@@ -215,7 +217,37 @@ enum ModelCutoutService {
                           width: box.bounds.width * CGFloat(width),
                           height: box.bounds.height * CGFloat(height)).integral
         guard let cropped = composed.cropping(to: crop) else { return nil }
-        return UIImage(cgImage: cropped)
+        return trimmedToGround(UIImage(cgImage: cropped))
+    }
+
+    // MARK: Sol
+
+    /// Recadre le bas de la découpe sur les roues.
+    ///
+    /// Retour du testeur : « on dirait que la voiture est en suspension ». Vision garde
+    /// souvent sous les pneus un voile à moitié transparent (l'ombre et le reflet du sol
+    /// miroir des anciens rendus) : la boîte descend plus bas que les roues, et le studio
+    /// pose ce voile sur sa ligne de sol, la voiture quelques pixels au-dessus. On remonte
+    /// le bas jusqu'à la dernière rangée franchement opaque.
+    static func trimmedToGround(_ image: UIImage) -> UIImage {
+        guard let cg = image.cgImage, cg.width > 0, cg.height > 0,
+              let ctx = CGContext(data: nil, width: cg.width, height: cg.height, bitsPerComponent: 8,
+                                  bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        else { return image }
+        ctx.draw(cg, in: CGRect(x: 0, y: 0, width: cg.width, height: cg.height))
+        guard let base = ctx.data else { return image }
+        let row = ctx.bytesPerRow
+        let pixels = base.assumingMemoryBound(to: UInt8.self)
+        // Rangées du haut vers le bas, comme l'image : le contexte bitmap a la même mémoire.
+        let solid = (0..<cg.height).map { y in
+            (0..<cg.width).reduce(0) { $0 + (pixels[y * row + $1 * 4 + 3] >= 200 ? 1 : 0) }
+        }
+        let bottom = StudioStageLayout.groundRow(solidPerRow: solid, width: cg.width)
+        guard bottom < cg.height - 1,
+              let cropped = cg.cropping(to: CGRect(x: 0, y: 0, width: cg.width, height: bottom + 1))
+        else { return image }
+        return UIImage(cgImage: cropped, scale: image.scale, orientation: .up)
     }
 
     // MARK: Stockage

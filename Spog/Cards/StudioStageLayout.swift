@@ -63,4 +63,18 @@ enum StudioStageLayout {
         let aspect = size.width / size.height
         return (1.15...4.2).contains(aspect) && fill >= 0.35 && relativeWidth >= 0.35
     }
+
+    /// La rangée où les roues touchent le sol : la plus basse dont les pixels opaques
+    /// couvrent au moins 4 % de la largeur (deux pneus vus de trois quarts y suffisent ;
+    /// un voile d'ombre semi-transparent, non). On ne remonte jamais de plus d'un quart de
+    /// la hauteur : au-delà, ce n'est plus un voile, c'est la carrosserie qu'on couperait.
+    static func groundRow(solidPerRow: [Int], width: Int) -> Int {
+        let last = solidPerRow.count - 1
+        guard last >= 0, width > 0 else { return max(0, last) }
+        let needed = max(1, width * 4 / 100)
+        let floor = last - solidPerRow.count / 4
+        var y = last
+        while y > floor && solidPerRow[y] < needed { y -= 1 }
+        return y
+    }
 }
