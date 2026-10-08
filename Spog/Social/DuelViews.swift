@@ -29,17 +29,17 @@ struct DuelsBlock: View {
     private var wonCount: Int { duels.duels.filter { $0.outcome == .won }.count }
 
     var body: some View {
-        GlassCard(radius: 22, tint: Theme.cyan, padding: 16) {
+        GlassCard(radius: 22, tint: Theme.neutralAccent, padding: 16) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 8) {
                     Image(systemName: "figure.fencing")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Theme.accentBright)
-                    Overline(text: "social.duels", color: Theme.accentBright)
+                        .foregroundStyle(Theme.textPrimary)
+                    Overline(text: "social.duels")
                     Spacer(minLength: 6)
                     if !duels.duels.isEmpty {
                         InfoChip(icon: "bolt.fill", text: Text("duel.record \(liveCount) \(wonCount)"),
-                                 color: Theme.cyan)
+                                 color: Theme.neutralAccent)
                     }
                 }
                 if duels.duels.isEmpty {
@@ -119,15 +119,14 @@ struct DuelsBlock: View {
                 Circle().fill(Theme.accentGradient)
             } else {
                 Circle().fill(Theme.surfaceRaised)
-                Circle().strokeBorder(Theme.cyan.opacity(0.6),
+                Circle().strokeBorder(Theme.neutralAccent.opacity(0.6),
                                       style: StrokeStyle(lineWidth: 1.4, dash: [4, 3]))
             }
             Image(systemName: icon)
                 .font(.system(size: 19, weight: .bold))
-                .foregroundStyle(filled ? Theme.background : Theme.cyan)
+                .foregroundStyle(filled ? Theme.textPrimary : Theme.neutralAccent)
         }
         .frame(width: 54, height: 54)
-        .shadow(color: (filled ? Theme.accent : Theme.cyan).opacity(0.45), radius: 12)
     }
 
     private struct ShareCode: Identifiable {
@@ -173,7 +172,7 @@ private struct DuelRow: View {
                 .font(Theme.label(10)).tracking(1.5)
                 .foregroundStyle(Theme.textMuted)
             side(name: opponentName, points: duel.their_points,
-                 color: Theme.cyan, trailing: true)
+                 color: Theme.neutralAccent, trailing: true)
         }
     }
 
@@ -202,7 +201,7 @@ private struct DuelRow: View {
             HStack(spacing: 2) {
                 Capsule().fill(Theme.accentGradient)
                     .frame(width: max(4, (geo.size.width - 2) * mine))
-                Capsule().fill(Theme.cyan.opacity(0.7))
+                Capsule().fill(Theme.neutralAccent.opacity(0.7))
             }
         }
         .frame(height: 5)
@@ -253,9 +252,9 @@ private struct DuelRow: View {
         HStack(spacing: 11) {
             Image(systemName: "hourglass")
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(Theme.cyan)
+                .foregroundStyle(Theme.neutralAccent)
                 .frame(width: 34, height: 34)
-                .background(Theme.cyan.opacity(0.12), in: Circle())
+                .background(Theme.neutralAccent.opacity(0.12), in: Circle())
             VStack(alignment: .leading, spacing: 3) {
                 Text("duel.waiting")
                     .font(Theme.mono(12, .bold))
@@ -263,7 +262,7 @@ private struct DuelRow: View {
                 if let code = duel.code {
                     Text("duel.code \(code)")
                         .font(Theme.mono(10))
-                        .foregroundStyle(Theme.accentBright)
+                        .foregroundStyle(Theme.textPrimary)
                         .textSelection(.enabled)
                 }
                 Text("duel.shareHint")
@@ -322,17 +321,16 @@ struct DuelJoinSheet: View {
                 if let message {
                     Text(message)
                         .font(Theme.mono(11))
-                        .foregroundStyle(RarityTier.trophyGold)
+                        .foregroundStyle(Theme.warning)
                 }
                 Spacer()
                 Button { Task { await join() } } label: {
                     Text("duel.join")
                         .font(Theme.label(13)).tracking(1.2)
-                        .foregroundStyle(Theme.background)
+                        .foregroundStyle(Theme.textPrimary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .background(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                                   startPoint: .topLeading, endPoint: .bottomTrailing),
+                        .background(Theme.accentGradient,
                                     in: Capsule())
                 }
                 .buttonStyle(.plain)

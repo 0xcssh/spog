@@ -29,8 +29,10 @@ struct DotGrid: View {
 struct NeonFrame<Content: View>: View {
     var color: Color = Theme.accent
     var radius: CGFloat = 16
-    /// Opacite du filet. Zero : filet neutre, aucune couleur.
-    var intensity: Double = 1
+    /// Opacite du filet. Zero : filet neutre, aucune couleur. C'est le défaut depuis la
+    /// sobriété du 09/10/2026 : chaque panneau cerclé de violet faisait un écran violet.
+    /// Un appelant qui veut une couleur la demande en passant une intensité.
+    var intensity: Double = 0
     /// Vrai tube lumineux, avec debordement de lumiere.
     var neon: Bool = false
     /// Etalement du halo, de 0 a 1. A reduire dans une grille : deux halos larges
@@ -40,11 +42,11 @@ struct NeonFrame<Content: View>: View {
     @ViewBuilder var content: Content
 
     var body: some View {
+        // Plus de trame de points sous le cadre : un aplat anthracite, rien d'autre.
         content
             .background {
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
                     .fill(Theme.surface)
-                    .overlay(DotGrid().clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous)))
             }
             .modifier(FrameEdge(color: color, radius: radius, intensity: intensity,
                                 neon: neon, spread: spread))
@@ -68,12 +70,12 @@ private struct FrameEdge: ViewModifier {
         } else if neon {
             content.neonBorder(color: color, radius: radius, intensity: intensity, spread: spread)
         } else {
+            // Un filet teinté, sans lueur : la couleur signale, elle n'éclaire pas.
             content
                 .overlay {
                     RoundedRectangle(cornerRadius: radius, style: .continuous)
-                        .stroke(color.opacity(0.55 * intensity), lineWidth: 1)
+                        .stroke(color.opacity(0.35 * intensity), lineWidth: 1)
                 }
-                .shadow(color: color.opacity(0.26 * intensity), radius: 12 * spread)
         }
     }
 }
@@ -91,7 +93,6 @@ struct NeonTile: View {
                 Image(systemName: icon)
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(color)
-                    .shadow(color: color.opacity(0.8), radius: 6)
                 Text(value)
                     .font(Theme.display(19))
                     .foregroundStyle(Theme.textPrimary)
@@ -120,7 +121,6 @@ struct SegmentedBar: View {
                 let filled = Double(index) / Double(segments) < progress
                 RoundedRectangle(cornerRadius: 1.5)
                     .fill(filled ? color : Theme.textMuted.opacity(0.18))
-                    .shadow(color: filled ? color.opacity(0.9) : .clear, radius: 4)
             }
         }
         .frame(height: height)
@@ -148,10 +148,8 @@ struct StatRow: View {
                 ZStack(alignment: .leading) {
                     Capsule().fill(Theme.textMuted.opacity(0.14))
                     Capsule()
-                        .fill(LinearGradient(colors: [color.opacity(0.5), color],
-                                             startPoint: .leading, endPoint: .trailing))
+                        .fill(color.opacity(0.85))
                         .frame(width: max(value > 0 ? 6 : 0, geo.size.width * ratio))
-                        .shadow(color: color.opacity(0.7), radius: 5)
                 }
             }
             .frame(height: 7)
@@ -168,7 +166,8 @@ struct StatRow: View {
 struct BadgeChip: View {
     let icon: String
     let unlocked: Bool
-    var color: Color = Theme.accent
+    /// Blanc par défaut : six badges violets alignés faisaient une rangée de néons.
+    var color: Color = Theme.textPrimary
 
     var body: some View {
         Image(systemName: icon)
@@ -176,8 +175,7 @@ struct BadgeChip: View {
             .foregroundStyle(unlocked ? color : Theme.textMuted.opacity(0.5))
             .frame(width: 46, height: 46)
             .background(Circle().fill(Theme.surface))
-            .overlay(Circle().stroke(unlocked ? color.opacity(0.6) : Theme.stroke, lineWidth: 1))
-            .shadow(color: unlocked ? color.opacity(0.45) : .clear, radius: 9)
+            .overlay(Circle().stroke(unlocked ? color.opacity(0.45) : Theme.stroke, lineWidth: 1))
     }
 }
 
@@ -192,7 +190,7 @@ struct SectionHeader: View {
             // Titre plus grand et plus gras qu'à l'origine : à 24 points, la hiérarchie de
             // l'écran ne se lisait pas, tout avait à peu près la même taille.
             VStack(alignment: .leading, spacing: 4) {
-                Overline(text: overline, color: Theme.accentBright)
+                Overline(text: overline)
                 Text(title)
                     .font(Theme.display(32, .heavy))
                     .foregroundStyle(Theme.textPrimary)
@@ -226,25 +224,20 @@ struct NeonBorder: ViewModifier {
         RoundedRectangle(cornerRadius: radius, style: .continuous)
     }
     /// Le coeur d'un tube allumé tire vers le blanc, pas vers sa propre couleur.
-    private var core: Color { color.mix(with: .white, amount: 0.6) }
+    private var core: Color { color.mix(with: .white, amount: 0.3) }
 
     func body(content: Content) -> some View {
+        // Sobriété (09/10/2026) : le tube à trois couches et ses deux débordements de
+        // lumière faisaient de chaque carte rare une guirlande. Il reste un filet fin à la
+        // couleur du palier, éclairci au coeur, et une ombre très courte : la carte se
+        // distingue d'un coup d'oeil sans éclairer l'écran.
         let level = intensity * (breathing ? breath : 1)
         return content
             .overlay {
-                ZStack {
-                    shape.stroke(color.opacity(0.42 * level), lineWidth: 7).blur(radius: 11 * spread)
-                    shape.stroke(color.opacity(0.85 * level), lineWidth: 2.6).blur(radius: 3)
-                    // Le coeur du tube garde sa pleine intensité quel que soit
-                    // l'étalement : c'est lui qui dessine le contour, et il doit
-                    // faire le tour complet de la carte.
-                    shape.stroke(core.opacity(0.95 * level), lineWidth: 1.1)
-                }
-                .allowsHitTesting(false)
+                shape.stroke(core.opacity(0.55 * level), lineWidth: 1)
+                    .allowsHitTesting(false)
             }
-            // Débordement de lumière au-delà de la carte
-            .shadow(color: color.opacity(0.50 * level), radius: 16 * spread)
-            .shadow(color: color.opacity(0.26 * level), radius: 34 * spread)
+            .shadow(color: color.opacity(0.12 * level), radius: 6 * spread)
             .onAppear {
                 guard breathing else { return }
                 withAnimation(.easeInOut(duration: 2.8).repeatForever(autoreverses: true)) {
@@ -301,16 +294,17 @@ struct GlassCard<Content: View>: View {
             .padding(padding)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
+                // La lueur de coin (`tint`) est réduite à un soupçon : avec un panneau
+                // violet, un cyan et un doré sur le même écran, rien ne se hiérarchisait.
                 ZStack {
                     shape.fill(Theme.glassFill)
                     if let tint {
-                        RadialGradient(colors: [tint.opacity(0.22), .clear],
-                                       center: .topTrailing, startRadius: 4, endRadius: 220)
+                        RadialGradient(colors: [tint.opacity(0.05), .clear],
+                                       center: .topTrailing, startRadius: 4, endRadius: 200)
                             .clipShape(shape)
                     }
-                    shape.fill(Theme.sheen)
                 }
-                .shadow(color: Theme.dropShadow, radius: 18, y: 10)
+                .shadow(color: Theme.dropShadow, radius: 10, y: 6)
             }
             .overlay(shape.strokeBorder(Theme.glassEdge, lineWidth: 1))
     }
@@ -328,18 +322,19 @@ struct NeonButtonStyle: ButtonStyle {
         configuration.label
             .font(Theme.label(12)).tracking(1.2)
             .textCase(.uppercase)
-            .foregroundStyle(prominent ? Theme.background : Theme.accentBright)
+            // Le violet est réservé au bouton principal ; le secondaire passe au neutre,
+            // filet fin et texte clair, pour que l'œil sache tout de suite où appuyer.
+            .foregroundStyle(Theme.textPrimary)
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, 22)
             .padding(.vertical, 15)
             .background {
                 if prominent {
                     Capsule().fill(Theme.accentGradient)
-                        .overlay(Capsule().fill(Theme.sheen))
-                        .shadow(color: Theme.accent.opacity(configuration.isPressed ? 0.25 : 0.55), radius: 16, y: 6)
+                        .opacity(configuration.isPressed ? 0.85 : 1)
                 } else {
-                    Capsule().fill(Theme.accent.opacity(0.10))
-                        .overlay(Capsule().strokeBorder(Theme.accent.opacity(0.5), lineWidth: 1))
+                    Capsule().fill(Theme.surface)
+                        .overlay(Capsule().strokeBorder(Theme.strokeStrong, lineWidth: 1))
                 }
             }
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
@@ -359,34 +354,19 @@ struct PressScaleStyle: ButtonStyle {
     }
 }
 
-/// Fond d'ambiance des écrans principaux : deux lueurs qui dérivent très lentement.
-/// Un noir uni faisait paraître l'écran vide dès que le contenu ne le remplissait pas.
+/// Fond des écrans principaux. Il portait deux lueurs dérivantes, violette et cyan, et une
+/// trame de points : c'est la première chose que le testeur citait dans « trop de
+/// couleurs ». Il reste un noir neutre, éclairci d'un rien vers le haut pour que l'écran
+/// ne paraisse pas mort quand le contenu ne le remplit pas.
 struct AmbientBackground: View {
-    @State private var drift = false
-
     var body: some View {
-        // Les lueurs sont des surcouches et non des enfants d'une pile : plus larges que
-        // l'écran, elles élargiraient la pile, et tout l'écran avec elle.
         Theme.background
             .overlay {
-                RadialGradient(colors: [Theme.ambientViolet.opacity(0.32), .clear],
-                               center: .center, startRadius: 4, endRadius: 280)
-                    .frame(width: 560, height: 560)
-                    .offset(x: drift ? 70 : -90, y: -300)
+                LinearGradient(colors: [Theme.highlight.opacity(0.025), .clear],
+                               startPoint: .top, endPoint: .center)
             }
-            .overlay {
-                RadialGradient(colors: [Theme.ambientCyan.opacity(0.20), .clear],
-                               center: .center, startRadius: 4, endRadius: 240)
-                    .frame(width: 480, height: 480)
-                    .offset(x: drift ? -110 : 80, y: 360)
-            }
-            .overlay { DotGrid(spacing: 22).opacity(0.6) }
-            .clipped()
             .ignoresSafeArea()
-        .allowsHitTesting(false)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 14).repeatForever(autoreverses: true)) { drift = true }
-        }
+            .allowsHitTesting(false)
     }
 }
 
@@ -402,7 +382,7 @@ struct ShimmerSweep: ViewModifier {
             .overlay {
                 if active {
                     GeometryReader { geo in
-                        LinearGradient(colors: [.clear, Theme.highlight.opacity(0.22), .clear],
+                        LinearGradient(colors: [.clear, Theme.highlight.opacity(0.10), .clear],
                                        startPoint: .leading, endPoint: .trailing)
                             .frame(width: geo.size.width * 0.45, height: geo.size.height * 1.6)
                             .rotationEffect(.degrees(18))
@@ -441,8 +421,9 @@ struct InfoChip: View {
         }
         .foregroundStyle(color)
         .padding(.horizontal, 9).padding(.vertical, 5)
-        .background(color.opacity(0.12), in: Capsule())
-        .overlay(Capsule().strokeBorder(color.opacity(0.28), lineWidth: 1))
+        // Fond neutre et filet fin : la couleur reste dans le texte, la capsule ne s'allume pas.
+        .background(Theme.surface, in: Capsule())
+        .overlay(Capsule().strokeBorder(Theme.stroke, lineWidth: 1))
     }
 }
 

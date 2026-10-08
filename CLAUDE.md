@@ -29,9 +29,20 @@ tests reprennent les mêmes cas que les tests Swift.
 
 ## Direction artistique
 
-Noir et violet, néon, épuré. **Toutes les couleurs vivent dans `Core/Theme.swift`**, jamais
-ailleurs — pas de `Color(hex:)` dispersé dans les vues. Les paliers de rareté portent leurs
-propres teintes dans `CatalogModels.swift`, et elles servent aussi d'éclairage aux cartes.
+Noir neutre, anthracite, filets fins, **un seul accent violet**. **Toutes les couleurs vivent
+dans `Core/Theme.swift`**, jamais ailleurs — pas de `Color(hex:)` dispersé dans les vues. Les
+paliers de rareté portent leurs propres teintes dans `CatalogModels.swift`.
+
+Sobriété décidée le 09/10/2026 (« trop de couleurs, ça part dans tous les sens ») : le violet
+sert au bouton principal, au déclencheur, à la jauge de niveau, et presque à rien d'autre ;
+les couleurs de rareté ne vont que sur de petits marqueurs (bande et jauge de la carte,
+pastille de filtre) ; pas de halo coloré, de lueur portée ni de dégradé multicolore. Les
+alertes prennent l'ambre `Theme.warning`, pas l'or des trophées. Labels en capitales
+espacées (`Overline`), chiffres en monospace.
+
+L'écran d'accueil (« Ton garage ») a une structure de tableau de bord inspirée du genre ;
+comme pour toute la mécanique empruntée à Revlo, **jamais son vocabulaire** (voir
+REFONTE.md, règle 4.3).
 
 ## Ce que le visuel d'une carte doit montrer
 

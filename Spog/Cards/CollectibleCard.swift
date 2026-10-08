@@ -90,23 +90,18 @@ struct CollectibleCardView: View {
 
     private var cardBody: some View {
         ZStack {
+            // Plus de halo doré peint dans le fond de la carte (sobriété, 09/10/2026) :
+            // le filet du palier et la jauge suffisent à dire qu'elle est rare.
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(Theme.surface)
 
-            // Halo dore, reserve aux cartes remarquables
-            if let frame = card.tier.frameColor {
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .fill(
-                        RadialGradient(colors: [frame.opacity(0.22 * card.tier.frameIntensity), .clear],
-                                       center: .topLeading, startRadius: 8, endRadius: 340)
-                    )
-            }
-
             content
 
-            // Reflet holographique, decale par l'inclinaison
+            // Reflet décalé par l'inclinaison. Il reste le seul effet de matière de la
+            // carte, et ne prend plus de couleur : un arc-en-ciel bleu-rose-or sur chaque
+            // carte faisait partie de ce qui « partait dans tous les sens ».
             holographicSheen
-                .opacity(0.20 + 0.55 * shine)
+                .opacity(0.10 + 0.30 * shine)
                 .blendMode(.plusLighter)
                 .allowsHitTesting(false)
 
@@ -126,9 +121,9 @@ struct CollectibleCardView: View {
             let shift = CGFloat(rotY / maxAngle)
             LinearGradient(
                 colors: [.clear,
-                         Color(hex: 0x8FD4FF).opacity(0.35),
-                         Color(hex: 0xE79BFF).opacity(0.45),
-                         Color(hex: 0xFFD59B).opacity(0.30),
+                         Theme.highlight.opacity(0.18),
+                         Theme.highlight.opacity(0.32),
+                         Theme.highlight.opacity(0.18),
                          .clear],
                 startPoint: UnitPoint(x: -0.4 + shift, y: 0),
                 endPoint: UnitPoint(x: 0.9 + shift, y: 1)
@@ -183,25 +178,30 @@ struct CollectibleCardView: View {
     }
 
     /// Bandeau de rarete : le palier a gauche, sa position sur l'echelle a droite.
+    /// La couleur du palier ne tient plus que dans la jauge et le filet du haut : le
+    /// bandeau entier teinté, puis le bloc du bas teinté aussi, coloraient toute la carte.
     private var rarityBand: some View {
         HStack {
             Text(card.tier.label)
                 .font(Theme.mono(10, .bold))
                 .tracking(2)
                 .textCase(.uppercase)
+                .foregroundStyle(Theme.textSecondary)
             Spacer()
             HStack(spacing: 3) {
                 ForEach(0..<6, id: \.self) { index in
                     RoundedRectangle(cornerRadius: 1)
-                        .fill(index <= card.tier.rank ? card.tier.color : card.tier.color.opacity(0.22))
+                        .fill(index <= card.tier.rank ? card.tier.color : Theme.highlight.opacity(0.10))
                         .frame(width: 11, height: 4)
                 }
             }
         }
-        .foregroundStyle(card.tier.color)
         .padding(.horizontal, 13)
         .padding(.vertical, 9)
-        .background(card.tier.color.opacity(0.16))
+        .background(Theme.surfaceRaised)
+        .overlay(alignment: .top) {
+            Rectangle().fill(card.tier.color.opacity(0.8)).frame(height: 1)
+        }
     }
 
     private var infoBlock: some View {
@@ -236,7 +236,7 @@ struct CollectibleCardView: View {
                 if card.verified {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: 9))
-                        .foregroundStyle(card.tier.color)
+                        .foregroundStyle(Theme.textSecondary)
                 }
                 if card.firstSpot {
                     Image(systemName: "flag.checkered")
@@ -256,7 +256,6 @@ struct CollectibleCardView: View {
         .padding(.top, 11)
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(card.tier.color.opacity(0.07))
     }
 }
 

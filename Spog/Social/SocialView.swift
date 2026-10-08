@@ -100,7 +100,7 @@ struct SocialView: View {
                 } else if account.isRefreshing {
                     HStack {
                         Spacer()
-                        ProgressView().tint(Theme.accentBright)
+                        ProgressView().tint(Theme.textSecondary)
                         Spacer()
                     }
                     .padding(.vertical, 24)
@@ -118,7 +118,7 @@ struct SocialView: View {
             LeagueCrest(color: account.league.map { Theme.leagueColor($0.tier) } ?? Theme.accent)
                 .frame(width: 50, height: 54)
             VStack(alignment: .leading, spacing: 2) {
-                Overline(text: "league.overline", color: Theme.accentBright)
+                Overline(text: "league.overline")
                 if let league = account.league {
                     Text(LocalizedStringKey("league.tier.\(league.tier)"))
                         .font(Theme.display(26, .heavy))
@@ -146,8 +146,7 @@ struct SocialView: View {
                     Text(verbatim: LeagueFormat.ordinal(me.rank))
                         .font(Theme.hero(50))
                         .monospacedDigit()
-                        .foregroundStyle(Theme.accentGradient)
-                        .shadow(color: Theme.accent.opacity(0.45), radius: 12)
+                        .foregroundStyle(Theme.textPrimary)
                         .contentTransition(.numericText(value: Double(me.rank)))
                         .lineLimit(1).minimumScaleFactor(0.6)
                 }
@@ -183,7 +182,7 @@ struct SocialView: View {
                     let gap = max(1, above.points - me.points + 1)
                     chaseRow(icon: "arrow.up.right",
                              text: Text("league.gap \(gap) \(LeagueFormat.ordinal(above.rank))"),
-                             color: Theme.accentBright)
+                             color: Theme.textSecondary)
                 } else if ranked.count > 1 {
                     let lead = me.points - ranked[1].points
                     chaseRow(icon: "crown.fill",
@@ -201,7 +200,7 @@ struct SocialView: View {
                    let cutoff = ranked.first(where: { $0.rank == league.promote }) {
                     let gap = max(1, cutoff.points - me.points + 1)
                     chaseRow(icon: "arrow.up.to.line", text: Text("league.toPromotion \(gap)"),
-                             color: Theme.cyan)
+                             color: Theme.neutralAccent)
                 }
             }
         }
@@ -230,7 +229,7 @@ struct SocialView: View {
     private func zoneChip(_ zone: League.Zone) -> some View {
         switch zone {
         case .promotion:
-            return InfoChip(icon: "arrow.up", text: Text("league.zone.promotion"), color: Theme.cyan)
+            return InfoChip(icon: "arrow.up", text: Text("league.zone.promotion"), color: Theme.neutralAccent)
         case .demotion:
             return InfoChip(icon: "arrow.down", text: Text("league.zone.demotion"), color: Theme.warning)
         case .safe:
@@ -245,7 +244,7 @@ struct SocialView: View {
             HStack(spacing: 9) {
                 Image(systemName: "at")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(Theme.accentBright)
+                    .foregroundStyle(Theme.textPrimary)
                 Text("league.anonymousHint")
                     .font(Theme.body(12))
                     .foregroundStyle(Theme.textSecondary)
@@ -257,9 +256,9 @@ struct SocialView: View {
                     .foregroundStyle(Theme.textMuted)
             }
             .padding(.horizontal, 12).padding(.vertical, 10)
-            .background(Theme.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(Theme.accent.opacity(0.3), lineWidth: 1))
+                .strokeBorder(Theme.stroke, lineWidth: 1))
         }
         .buttonStyle(PressScaleStyle(scale: 0.98))
     }
@@ -293,13 +292,11 @@ struct SocialView: View {
             .frame(width: side, height: side)
             .overlay(Circle().strokeBorder(member.me ? Theme.accentBright : color,
                                            lineWidth: member.me ? 2.5 : 1.5))
-            .shadow(color: color.opacity(0.5), radius: 9)
             .overlay(alignment: .top) {
                 if place == 1 {
                     Image(systemName: "crown.fill")
                         .font(.system(size: 13, weight: .bold))
                         .foregroundStyle(color)
-                        .shadow(color: color.opacity(0.8), radius: 5)
                         .offset(y: -14)
                 }
             }
@@ -317,8 +314,9 @@ struct SocialView: View {
                 UnevenRoundedRectangle(topLeadingRadius: 10, bottomLeadingRadius: 0,
                                        bottomTrailingRadius: 0, topTrailingRadius: 10,
                                        style: .continuous)
-                    .fill(LinearGradient(colors: [color.opacity(0.34), color.opacity(0.04)],
-                                         startPoint: .top, endPoint: .bottom))
+                    // Marche du podium en anthracite : la médaille garde sa teinte dans
+                    // le chiffre et le contour, la marche n'a pas besoin de s'allumer.
+                    .fill(Theme.surfaceRaised)
                 Text(verbatim: "\(place)")
                     .font(Theme.hero(18))
                     .foregroundStyle(color)
@@ -351,7 +349,7 @@ struct SocialView: View {
                 }
                 leagueRow(member, zone: zone)
                 if member.rank == league.promote && member.rank < ranked.count {
-                    zoneDivider(icon: "arrow.up", text: "league.zone.promotion", color: Theme.cyan)
+                    zoneDivider(icon: "arrow.up", text: "league.zone.promotion", color: Theme.neutralAccent)
                 }
             }
         }
@@ -376,7 +374,7 @@ struct SocialView: View {
         HStack(spacing: 11) {
             Text(verbatim: "\(member.rank)")
                 .font(Theme.mono(13, .bold))
-                .foregroundStyle(member.me ? Theme.background : Theme.textMuted)
+                .foregroundStyle(member.me ? Theme.textPrimary : Theme.textMuted)
                 .frame(width: 26, height: 26)
                 .background {
                     if member.me {
@@ -393,22 +391,22 @@ struct SocialView: View {
             Text(member.points.formatted())
                 .font(Theme.mono(13, .bold))
                 .monospacedDigit()
-                .foregroundStyle(member.me ? Theme.accentBright : Theme.textSecondary)
+                .foregroundStyle(member.me ? Theme.textPrimary : Theme.textSecondary)
         }
         .padding(.horizontal, 10).padding(.vertical, 8)
-        .background(member.me ? Theme.accent.opacity(0.14) : .clear,
+        .background(member.me ? Theme.surfaceRaised : .clear,
                     in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay {
             if member.me {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(Theme.accent.opacity(0.55), lineWidth: 1)
+                    .strokeBorder(Theme.strokeStrong, lineWidth: 1)
             }
         }
         // La zone se lit aussi d'un trait à gauche, sans couleur criarde.
         .overlay(alignment: .leading) {
             switch zone {
             case .promotion:
-                Capsule().fill(Theme.cyan).frame(width: 2.5, height: 18).offset(x: -1)
+                Capsule().fill(Theme.neutralAccent).frame(width: 2.5, height: 18).offset(x: -1)
             case .demotion:
                 Capsule().fill(Theme.warning.opacity(0.7)).frame(width: 2.5, height: 18).offset(x: -1)
             case .safe:
@@ -424,9 +422,9 @@ struct SocialView: View {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "trophy.fill")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(Theme.accentBright)
+                    .foregroundStyle(Theme.textPrimary)
                     .frame(width: 40, height: 40)
-                    .background(Theme.accent.opacity(0.14), in: Circle())
+                    .background(Theme.surfaceRaised, in: Circle())
                 VStack(alignment: .leading, spacing: 4) {
                     Text("league.notJoined.title")
                         .font(Theme.display(18))
@@ -454,17 +452,17 @@ struct SocialView: View {
     /// garage. Ici, on rappelle ce qui reste à chasser et le gros bonus encore libre.
     @ViewBuilder private var huntBlock: some View {
         if let pack = bounty.pack {
-            GlassCard(radius: 22, tint: Theme.cyan, padding: 16) {
+            GlassCard(radius: 22, tint: Theme.neutralAccent, padding: 16) {
                 VStack(alignment: .leading, spacing: 13) {
                     HStack(alignment: .center, spacing: 11) {
                         Image(systemName: "scope")
                             .font(.system(size: 13, weight: .bold))
-                            .foregroundStyle(Theme.background)
+                            .foregroundStyle(Theme.textPrimary)
                             .frame(width: 30, height: 30)
-                            .background(Theme.accentGradient, in: Circle())
-                            .shadow(color: Theme.accent.opacity(0.6), radius: 8)
+                            .background(Theme.surfaceRaised, in: Circle())
+                            .overlay(Circle().strokeBorder(Theme.stroke, lineWidth: 1))
                         VStack(alignment: .leading, spacing: 2) {
-                            Overline(text: "bounty.overline", color: Theme.accentBright)
+                            Overline(text: "bounty.overline")
                             Group {
                                 if pack.opened {
                                     Text("bounty.progress \(pack.foundCount) \(pack.targets.count)")
@@ -486,7 +484,7 @@ struct SocialView: View {
                     if pack.opened {
                         if !pack.targets.isEmpty {
                             SegmentedBar(progress: Double(pack.foundCount) / Double(pack.targets.count),
-                                         color: Theme.cyan, segments: pack.targets.count, height: 5)
+                                         color: Theme.neutralAccent, segments: pack.targets.count, height: 5)
                         }
                         VStack(spacing: 7) {
                             ForEach(pack.targets) { target in huntRow(target) }
@@ -576,11 +574,11 @@ struct SocialView: View {
                         avatar
                         VStack(alignment: .leading, spacing: 3) {
                             HStack(spacing: 6) {
-                                Overline(text: "social.you.overline", color: Theme.accentBright)
+                                Overline(text: "social.you.overline")
                                 if account.profile?.apple_linked == true {
                                     Image(systemName: "checkmark.shield.fill")
                                         .font(.system(size: 10, weight: .bold))
-                                        .foregroundStyle(Theme.cyan)
+                                        .foregroundStyle(Theme.neutralAccent)
                                         .accessibilityLabel(Text("account.linked"))
                                 }
                             }
@@ -603,10 +601,10 @@ struct SocialView: View {
                     MetricCell(value: account.profile?.catches ?? garage.catches.count, label: "social.stat.catches")
                     HairlineDivider()
                     MetricCell(value: account.profile?.points ?? garage.totalPoints, label: "social.stat.points",
-                               color: Theme.accentBright)
+                               color: Theme.textSecondary)
                     HairlineDivider()
                     MetricCell(value: account.profile?.first_spots ?? 0, label: "social.stat.firstSpots",
-                               color: RarityTier.trophyGold)
+                               color: Theme.textPrimary)
                 }
             }
         }
@@ -620,7 +618,7 @@ struct SocialView: View {
             if let initial = account.profile?.pseudo?.first {
                 Text(String(initial).uppercased())
                     .font(Theme.hero(24))
-                    .foregroundStyle(Theme.accentGradient)
+                    .foregroundStyle(Theme.textPrimary)
             } else {
                 Image(systemName: "person.fill")
                     .font(.system(size: 22, weight: .semibold))
@@ -628,8 +626,7 @@ struct SocialView: View {
             }
         }
         .frame(width: 56, height: 56)
-        .overlay(Circle().strokeBorder(Theme.accentGradient, lineWidth: 2))
-        .shadow(color: Theme.accent.opacity(0.5), radius: 12)
+        .overlay(Circle().strokeBorder(Theme.strokeStrong, lineWidth: 1))
     }
 
     // MARK: Compte Apple
@@ -640,7 +637,7 @@ struct SocialView: View {
         GlassCard(radius: 22, tint: Theme.accent, padding: 16) {
             VStack(alignment: .leading, spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Overline(text: "account.apple.overline", color: Theme.accentBright)
+                    Overline(text: "account.apple.overline")
                     Text("account.apple.title")
                         .font(Theme.display(20))
                         .foregroundStyle(Theme.textPrimary)
@@ -658,9 +655,9 @@ struct SocialView: View {
     // MARK: Crew
 
     private var crewBlock: some View {
-        GlassCard(radius: 22, tint: Theme.cyan, padding: 16) {
+        GlassCard(radius: 22, tint: Theme.neutralAccent, padding: 16) {
             VStack(alignment: .leading, spacing: 13) {
-                Overline(text: "social.crew", color: Theme.cyan)
+                Overline(text: "social.crew", color: Theme.neutralAccent)
                 EmptySlot(icon: "flag.2.crossed", message: "social.crewEmpty")
                 HStack(spacing: 9) {
                     LockedButton(icon: "plus", label: "social.createCrew")
@@ -706,7 +703,7 @@ struct SocialView: View {
                 .frame(maxWidth: .infinity)
                 .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(Theme.accent.opacity(0.25), lineWidth: 1))
+                    .stroke(Theme.stroke, lineWidth: 1))
 
                 Text("social.referral.how")
                     .font(Theme.body(11))
@@ -817,7 +814,6 @@ private struct LeagueCrest: View {
                 .foregroundStyle(Theme.background.opacity(0.75))
                 .offset(y: -2)
         }
-        .shadow(color: color.opacity(0.7), radius: 12)
         .accessibilityHidden(true)
     }
 }
@@ -893,12 +889,11 @@ struct ReferralEntrySheet: View {
                 Button { save() } label: {
                     Text("social.referral.save")
                         .font(Theme.label(13)).tracking(1.2)
-                        .foregroundStyle(Theme.background)
+                        .foregroundStyle(Theme.textPrimary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
                         .background(
-                            LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                           startPoint: .topLeading, endPoint: .bottomTrailing),
+                            Theme.accentGradient,
                             in: Capsule())
                 }
                 .buttonStyle(.plain)
@@ -930,7 +925,7 @@ struct ReferralEntrySheet: View {
         case .ready:
             line("checkmark.circle.fill", "referral.valid", Theme.accent)
         case .ownCode:
-            line("exclamationmark.triangle.fill", "referral.ownCode", RarityTier.trophyGold)
+            line("exclamationmark.triangle.fill", "referral.ownCode", Theme.warning)
         case .tooShort:
             line("ellipsis.circle", "referral.tooShort", Theme.textMuted)
         case .empty:
@@ -966,9 +961,9 @@ private struct EmptySlot: View {
         HStack(spacing: 11) {
             Image(systemName: icon)
                 .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(Theme.accentBright)
+                .foregroundStyle(Theme.textPrimary)
                 .frame(width: 36, height: 36)
-                .background(Theme.accent.opacity(0.12), in: Circle())
+                .background(Theme.surfaceRaised, in: Circle())
             Text(message)
                 .font(Theme.body(12))
                 .foregroundStyle(Theme.textSecondary)

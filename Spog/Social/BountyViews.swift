@@ -35,12 +35,12 @@ struct BountyPanel: View {
         HStack(alignment: .center, spacing: 11) {
             Image(systemName: "scope")
                 .font(.system(size: 14, weight: .bold))
-                .foregroundStyle(Theme.background)
+                .foregroundStyle(Theme.textPrimary)
                 .frame(width: 32, height: 32)
-                .background(Theme.accentGradient, in: Circle())
-                .shadow(color: Theme.accent.opacity(0.6), radius: 8)
+                .background(Theme.surfaceRaised, in: Circle())
+                .overlay(Circle().strokeBorder(Theme.stroke, lineWidth: 1))
             VStack(alignment: .leading, spacing: 2) {
-                Overline(text: "bounty.overline", color: Theme.accentBright)
+                Overline(text: "bounty.overline")
                 Group {
                     if pack.opened {
                         Text("bounty.progress \(pack.foundCount) \(pack.targets.count)")
@@ -137,14 +137,12 @@ struct BountyTargetCard: View {
         .background {
             ZStack {
                 shape.fill(Theme.glassFill)
-                shape.fill(tier.color.opacity(target.found ? 0.16 : 0.06))
             }
         }
         // Le rendu va jusqu'aux bords : c'est la découpe de la carte, et non une vignette
         // posée dedans, qui lui donne ses coins arrondis.
         .clipShape(shape)
-        .overlay(shape.strokeBorder(tier.color.opacity(target.found ? 0.75 : 0.32), lineWidth: 1))
-        .shadow(color: tier.color.opacity(target.found ? 0.45 : 0.18), radius: target.found ? 14 : 8)
+        .overlay(shape.strokeBorder(target.found ? tier.color.opacity(0.6) : Theme.stroke, lineWidth: 1))
     }
 
     private var art: some View {
@@ -160,7 +158,6 @@ struct BountyTargetCard: View {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: compact ? 13 : 18))
                         .foregroundStyle(tier.color)
-                        .shadow(color: tier.color.opacity(0.8), radius: 6)
                         .padding(compact ? 6 : 10)
                 }
             }
@@ -265,8 +262,7 @@ private struct SealedPack: View {
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 14, style: .continuous)
         shape
-            .fill(LinearGradient(colors: [Theme.accent.opacity(0.75), Theme.accentDeep, Theme.surfaceRaised],
-                                 startPoint: .topLeading, endPoint: .bottomTrailing))
+            .fill(Theme.surfaceRaised)
             .overlay(DotGrid(spacing: 8).clipShape(shape))
             .overlay {
                 VStack(spacing: 8) {
@@ -284,8 +280,7 @@ private struct SealedPack: View {
             }
             .overlay(shape.fill(Theme.sheen))
             .shimmer()
-            .overlay(shape.strokeBorder(Theme.accentBright.opacity(glow ? 0.95 : 0.45), lineWidth: 1.2))
-            .shadow(color: Theme.accent.opacity(glow ? 0.75 : 0.3), radius: glow ? 18 : 8)
+            .overlay(shape.strokeBorder(Theme.accent.opacity(glow ? 0.7 : 0.35), lineWidth: 1))
             .rotationEffect(.degrees(glow ? -2 : 2))
             .offset(y: glow ? -3 : 3)
             .onAppear {
@@ -315,7 +310,7 @@ struct BountyOpeningView: View {
     var body: some View {
         ZStack {
             AmbientBackground()
-            RadialGradient(colors: [burst.opacity(0.32), .clear],
+            RadialGradient(colors: [burst.opacity(0.06), .clear],
                            center: .center, startRadius: 10, endRadius: 380)
                 .ignoresSafeArea()
                 .animation(.easeInOut(duration: 0.6), value: revealed)
@@ -324,7 +319,7 @@ struct BountyOpeningView: View {
                 ScrollView {
                     VStack(spacing: 22) {
                         VStack(spacing: 8) {
-                            Overline(text: "bounty.overline", color: Theme.accentBright)
+                            Overline(text: "bounty.overline")
                             Text("bounty.reveal.title")
                                 .font(Theme.display(30))
                                 .foregroundStyle(Theme.textPrimary)

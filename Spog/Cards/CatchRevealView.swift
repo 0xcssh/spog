@@ -20,18 +20,14 @@ struct CatchRevealView: View {
 
     var body: some View {
         ZStack {
+            // Fond neutre, sans halo doré à la révélation (sobriété, 09/10/2026) : la
+            // secousse, la carte qui se dévoile et les points qui montent font le moment.
             Theme.background.ignoresSafeArea()
-            if phase == .revealed, let glow = card.tier.frameColor {
-                RadialGradient(colors: [glow.opacity(0.18), .clear],
-                               center: .center, startRadius: 20, endRadius: 380)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-            }
 
             VStack(spacing: 0) {
                 Spacer(minLength: 20)
                 Overline(text: phase == .developing ? "reveal.developing" : "reveal.caught",
-                         color: phase == .developing ? Theme.textMuted : card.tier.color)
+                         color: phase == .developing ? Theme.textMuted : Theme.textSecondary)
                 Spacer(minLength: 14)
 
                 cardStage
@@ -61,10 +57,9 @@ struct CatchRevealView: View {
             if phase == .developing {
                 // Ligne de développement, comme un tirage qui apparaît.
                 Rectangle()
-                    .fill(LinearGradient(colors: [.clear, Theme.accentBright, .clear],
+                    .fill(LinearGradient(colors: [.clear, Theme.highlight.opacity(0.7), .clear],
                                          startPoint: .leading, endPoint: .trailing))
-                    .frame(height: 2)
-                    .shadow(color: Theme.accentBright, radius: 10)
+                    .frame(height: 1.5)
                     .offset(y: scanLine ? 150 : -150)
                     .allowsHitTesting(false)
             }
@@ -78,15 +73,17 @@ struct CatchRevealView: View {
                     Image(systemName: "sparkles").font(.system(size: 11, weight: .bold))
                     Text("reveal.newModel").font(Theme.label(11)).tracking(1)
                 }
-                .foregroundStyle(Color(hex: 0x22D3EE))
+                .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 12).padding(.vertical, 7)
-                .background(Color(hex: 0x22D3EE).opacity(0.13), in: Capsule())
+                .background(Theme.surface, in: Capsule())
+                .overlay(Capsule().strokeBorder(Theme.strokeStrong, lineWidth: 1))
             }
 
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(verbatim: "+\(shownPoints)")
                     .font(Theme.display(34, .heavy))
-                    .foregroundStyle(card.tier.color)
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.textPrimary)
                     .contentTransition(.numericText())
                 Text("stat.points")
                     .font(Theme.label(12)).tracking(1.4).textCase(.uppercase)
@@ -99,27 +96,21 @@ struct CatchRevealView: View {
                     Text("reveal.questDone \(questReward)")
                         .font(Theme.mono(11, .semibold))
                 }
-                .foregroundStyle(RarityTier.trophyGold)
+                .foregroundStyle(Theme.textSecondary)
                 .padding(.horizontal, 12).padding(.vertical, 8)
-                .background(RarityTier.trophyGold.opacity(0.13), in: Capsule())
+                .background(Theme.surface, in: Capsule())
+                .overlay(Capsule().strokeBorder(Theme.stroke, lineWidth: 1))
             }
         }
     }
 
     private var actions: some View {
         VStack(spacing: 10) {
+            // Le bouton principal commun : le même violet que partout ailleurs.
             Button { onScanAgain(); dismiss() } label: {
                 Text("reveal.again")
-                    .font(Theme.label(13)).tracking(1.2)
-                    .foregroundStyle(Theme.background)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                       startPoint: .topLeading, endPoint: .bottomTrailing),
-                        in: Capsule())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(NeonButtonStyle())
 
             Button { dismiss() } label: {
                 Text("reveal.toGarage")

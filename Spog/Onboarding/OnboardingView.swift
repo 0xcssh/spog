@@ -154,23 +154,10 @@ struct OnboardingView: View {
         }
     }
 
-    /// Fond de tout le parcours : noir profond, une lueur violette en haut, une autre,
-    /// plus sourde, en bas. Deux sources donnent de la profondeur ; une seule laissait le
-    /// bas de l'écran en aplat noir.
+    /// Fond de tout le parcours : le même noir neutre que le reste de l'app. Les deux
+    /// lueurs violettes et la trame de points sont parties avec la sobriété du 09/10/2026.
     private var backdrop: some View {
-        ZStack {
-            Theme.background
-            DotGrid(spacing: 22)
-                .opacity(0.6)
-            Theme.glow
-                .frame(height: 520)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .offset(y: -150)
-            RadialGradient(colors: [Theme.accentDeep.opacity(0.28), .clear],
-                           center: .bottom, startRadius: 4, endRadius: 360)
-        }
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
+        AmbientBackground()
     }
 
     /// Fondu vers le fond de l'écran, jamais une bande opaque : le contenu qui défile
@@ -270,14 +257,14 @@ struct OnboardingView: View {
 
             if demoPhase == .scanning {
                 Rectangle()
-                    .fill(LinearGradient(colors: [.clear, Theme.accentBright, .clear],
+                    .fill(LinearGradient(colors: [.clear, Theme.highlight.opacity(0.7), .clear],
                                          startPoint: .leading, endPoint: .trailing))
-                    .frame(height: 2)
-                    .shadow(color: Theme.accentBright, radius: 8)
+                    .frame(height: 1.5)
                     .offset(y: (scanSweep ? 0.4 : -0.4) * height)
             }
 
-            CornerBrackets(color: demoPhase == .scanning ? Theme.accentBright : Theme.accent)
+            // Mêmes équerres blanches que le vrai viseur.
+            CornerBrackets(color: demoPhase == .scanning ? Theme.textPrimary : Theme.textPrimary.opacity(0.8))
                 .padding(18)
 
             // L'éclair du déclenchement : sans lui, rien ne dit que la photo est prise.
@@ -290,8 +277,7 @@ struct OnboardingView: View {
         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .stroke(Theme.accent.opacity(0.4), lineWidth: 1))
-        .shadow(color: Theme.accent.opacity(0.3), radius: 22)
+                .stroke(Theme.strokeStrong, lineWidth: 1))
     }
 
     /// Sous la scène : le déclencheur avant la prise, puis la rareté obtenue et ce qu'il
@@ -311,7 +297,7 @@ struct OnboardingView: View {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: "hand.tap.fill")
                             .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(Theme.accentBright)
+                            .foregroundStyle(Theme.textPrimary)
                         Text("onboarding.develop.hint")
                             .font(Theme.body(12))
                             .foregroundStyle(Theme.textSecondary)
@@ -331,16 +317,14 @@ struct OnboardingView: View {
             Button { shootDemo() } label: {
                 ZStack {
                     Circle()
-                        .stroke(Theme.accent.opacity(0.5), lineWidth: 2)
+                        .stroke(Theme.highlight.opacity(0.35), lineWidth: 2)
                         .frame(width: 84, height: 84)
                     Circle()
-                        .fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                             startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .fill(Theme.accentGradient)
                         .frame(width: 70, height: 70)
-                        .shadow(color: Theme.accent.opacity(0.7), radius: 18)
                     Image(systemName: "viewfinder")
                         .font(.system(size: 26, weight: .semibold))
-                        .foregroundStyle(Theme.background)
+                        .foregroundStyle(Theme.textPrimary)
                 }
                 .opacity(demoPhase == .aiming ? 1 : 0.5)
             }
@@ -349,7 +333,7 @@ struct OnboardingView: View {
             .accessibilityLabel(Text("onboarding.demo.shutter"))
 
             Overline(text: demoPhase == .scanning ? "scan.working" : "onboarding.demo.hint",
-                     color: demoPhase == .scanning ? Theme.accentBright : Theme.textMuted)
+                     color: demoPhase == .scanning ? Theme.textSecondary : Theme.textMuted)
         }
     }
 
@@ -397,7 +381,7 @@ struct OnboardingView: View {
     /// Bande de lumière qui balaie la carte pendant le passage en studio.
     private var developLight: some View {
         GeometryReader { geo in
-            LinearGradient(colors: [.clear, Theme.accentBright.opacity(0.75), .clear],
+            LinearGradient(colors: [.clear, Theme.highlight.opacity(0.35), .clear],
                            startPoint: .top, endPoint: .bottom)
                 .frame(height: geo.size.height * 0.4)
                 .offset(y: developSweep * geo.size.height)
@@ -566,7 +550,7 @@ struct OnboardingView: View {
     private func stepHeader(overline: LocalizedStringKey, title: LocalizedStringKey,
                             why: LocalizedStringKey? = nil, compact: Bool) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Overline(text: overline, color: Theme.accentBright)
+            Overline(text: overline)
             Text(title)
                 .font(Theme.display(compact ? 26 : 30))
                 .foregroundStyle(Theme.textPrimary)
@@ -696,7 +680,6 @@ struct OnboardingView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .stroke(selected ? Theme.accent.opacity(0.7) : Theme.stroke, lineWidth: 1))
-            .shadow(color: selected ? Theme.accent.opacity(0.3) : .clear, radius: 10)
         }
         .buttonStyle(.plain)
     }
@@ -737,7 +720,7 @@ struct OnboardingView: View {
                     AppleLinkButton { outcome in handleApple(outcome) }
                     if appleLink == .failed {
                         statusLine("exclamationmark.triangle.fill", "onboarding.account.failed",
-                                   color: RarityTier.trophyGold)
+                                   color: Theme.warning)
                     }
                     AccountPrivacyNote()
                 }
@@ -758,17 +741,16 @@ struct OnboardingView: View {
         let handle = nickname.isEmpty ? profile.displayName : "@\(nickname)"
         let initial = String(profile.displayName.prefix(1)).uppercased()
         let chip: LocalizedStringKey = appleLinked ? "onboarding.account.saved" : "onboarding.account.unsaved"
-        return GlassCard(radius: 18, tint: Theme.accent, padding: 14) {
+        return GlassCard(radius: 18, padding: 14) {
             HStack(spacing: 13) {
                 ZStack {
                     Circle().fill(Theme.surfaceRaised)
                     Text(verbatim: initial)
                         .font(Theme.hero(20))
-                        .foregroundStyle(Theme.accentGradient)
+                        .foregroundStyle(Theme.textPrimary)
                 }
                 .frame(width: 46, height: 46)
-                .overlay(Circle().strokeBorder(Theme.accentGradient, lineWidth: 2))
-                .shadow(color: Theme.accent.opacity(0.45), radius: 10)
+                .overlay(Circle().strokeBorder(Theme.strokeStrong, lineWidth: 1))
                 VStack(alignment: .leading, spacing: 5) {
                     Text(verbatim: handle)
                         .font(Theme.display(18))
@@ -776,7 +758,7 @@ struct OnboardingView: View {
                         .lineLimit(1).minimumScaleFactor(0.7)
                     InfoChip(icon: appleLinked ? "checkmark.shield.fill" : "exclamationmark.shield",
                              text: Text(chip),
-                             color: appleLinked ? Theme.cyan : Theme.textMuted)
+                             color: appleLinked ? Theme.neutralAccent : Theme.textMuted)
                 }
                 Spacer(minLength: 0)
             }
@@ -788,8 +770,7 @@ struct OnboardingView: View {
         HStack(spacing: 12) {
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 24, weight: .semibold))
-                .foregroundStyle(Theme.accentGradient)
-                .shadow(color: Theme.accent.opacity(0.7), radius: 8)
+                .foregroundStyle(Theme.textPrimary)
             Text("onboarding.account.done")
                 .font(Theme.display(15, .semibold))
                 .foregroundStyle(Theme.textPrimary)
@@ -798,9 +779,9 @@ struct OnboardingView: View {
         }
         .padding(.horizontal, 14).padding(.vertical, 12)
         .frame(minHeight: 50)
-        .background(Theme.accent.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .stroke(Theme.accent.opacity(0.5), lineWidth: 1))
+            .stroke(Theme.strokeStrong, lineWidth: 1))
     }
 
     private func handleApple(_ outcome: AppleLinkButton.Outcome) {
@@ -893,7 +874,7 @@ struct OnboardingView: View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(RarityTier.trophyGold)
+                .foregroundStyle(Theme.warning)
             Text("onboarding.safety \(ScannerView.maxScanSpeedText)")
                 .font(Theme.body(11))
                 .foregroundStyle(Theme.textSecondary)
@@ -901,10 +882,11 @@ struct OnboardingView: View {
             Spacer(minLength: 0)
         }
         .padding(12)
-        .background(RarityTier.trophyGold.opacity(0.08),
-                    in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        // L'ambre ne reste que sur l'icône : un encadré doré entier criait plus fort que
+        // le bouton principal de l'écran.
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .stroke(RarityTier.trophyGold.opacity(0.25), lineWidth: 1))
+            .stroke(Theme.stroke, lineWidth: 1))
     }
 
     /// Ce que la position donne, en direct. Sans ça le joueur choisit « automatique »,
@@ -912,7 +894,7 @@ struct OnboardingView: View {
     @ViewBuilder private var autoStatus: some View {
         if locationRefused {
             statusLine("exclamationmark.triangle.fill", "onboarding.location.denied",
-                       color: RarityTier.trophyGold)
+                       color: Theme.warning)
         } else if app.locationMode == .automatic {
             if location.isResolving {
                 statusLine("location.circle", "onboarding.locating", color: Theme.textMuted)
@@ -990,8 +972,8 @@ struct OnboardingView: View {
                 .resizable()
                 .frame(width: logo, height: logo)
                 .clipShape(RoundedRectangle(cornerRadius: logo * 0.25, style: .continuous))
-                .neonBorder(color: Theme.accent, radius: logo * 0.25, intensity: 0.9,
-                            breathing: true)
+                .overlay(RoundedRectangle(cornerRadius: logo * 0.25, style: .continuous)
+                    .strokeBorder(Theme.strokeStrong, lineWidth: 1))
 
             VStack(spacing: 8) {
                 Text("onboarding.recap.title \(profile.displayName)")
@@ -1109,7 +1091,7 @@ struct OnboardingView: View {
             statusLine("checkmark.circle.fill", "referral.valid", color: Theme.accent)
         case .ownCode:
             statusLine("exclamationmark.triangle.fill", "referral.ownCode",
-                       color: RarityTier.trophyGold)
+                       color: Theme.warning)
         case .tooShort:
             statusLine("ellipsis.circle", "referral.tooShort", color: Theme.textMuted)
         case .empty:
@@ -1194,7 +1176,6 @@ struct OnboardingView: View {
                 Capsule()
                     .fill(item.rawValue <= step.rawValue ? Theme.accent : Theme.textMuted.opacity(0.25))
                     .frame(height: 4)
-                    .shadow(color: item == step ? Theme.accent.opacity(0.8) : .clear, radius: 5)
             }
         }
         .frame(maxWidth: .infinity)
@@ -1228,7 +1209,7 @@ struct OnboardingView: View {
         Button { next() } label: {
             Text(actionTitle)
                 .font(Theme.label(13)).tracking(1.4)
-                .foregroundStyle(actionIsQuiet ? Theme.textSecondary : Theme.background)
+                .foregroundStyle(actionIsQuiet ? Theme.textSecondary : Theme.textPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
                 .background {
@@ -1236,11 +1217,9 @@ struct OnboardingView: View {
                         Capsule().fill(Theme.surface)
                             .overlay(Capsule().strokeBorder(Theme.strokeStrong, lineWidth: 1))
                     } else {
-                        Capsule().fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                                      startPoint: .topLeading, endPoint: .bottomTrailing))
+                        Capsule().fill(Theme.accentGradient)
                     }
                 }
-                .shadow(color: Theme.accent.opacity(actionIsQuiet ? 0 : 0.45), radius: 16, y: 6)
                 .contentTransition(.opacity)
         }
         .buttonStyle(.plain)
@@ -1307,30 +1286,26 @@ private struct LocationBeacon: View {
         GeometryReader { geo in
             let side = min(geo.size.width, geo.size.height)
             ZStack {
-                Circle()
-                    .fill(RadialGradient(colors: [Theme.accent.opacity(0.32), .clear],
-                                         center: .center, startRadius: 2, endRadius: side / 2))
+                // Anneaux en filets blancs ; le disque central garde seul le violet.
                 ForEach(0..<3, id: \.self) { ring in
                     Circle()
-                        .stroke(Theme.accent.opacity(0.42 - Double(ring) * 0.12), lineWidth: 1)
+                        .stroke(Theme.highlight.opacity(0.16 - Double(ring) * 0.04), lineWidth: 1)
                         .frame(width: side * (0.46 + CGFloat(ring) * 0.27),
                                height: side * (0.46 + CGFloat(ring) * 0.27))
                 }
                 // L'onde qui part du centre : plus rapide pendant la recherche, pour que
                 // l'attente se voie sans qu'il faille lire la ligne d'état.
                 Circle()
-                    .stroke(Theme.accentBright, lineWidth: 2)
+                    .stroke(Theme.highlight.opacity(0.5), lineWidth: 1.5)
                     .frame(width: side, height: side)
                     .scaleEffect(pulse ? 1 : 0.3)
                     .opacity(pulse ? 0 : (searching ? 0.9 : 0.5))
                 Circle()
-                    .fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .fill(Theme.accentGradient)
                     .frame(width: side * 0.3, height: side * 0.3)
-                    .shadow(color: Theme.accent.opacity(0.7), radius: 16)
                 Image(systemName: icon)
                     .font(.system(size: side * 0.12, weight: .bold))
-                    .foregroundStyle(Theme.background)
+                    .foregroundStyle(Theme.textPrimary)
                     .contentTransition(.symbolEffect(.replace))
             }
             .frame(width: geo.size.width, height: geo.size.height)

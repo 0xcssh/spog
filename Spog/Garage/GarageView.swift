@@ -1,6 +1,13 @@
 import SwiftUI
 
 /// Le garage : la collection, en grille. Ecran d'accueil de l'app.
+///
+/// Refait le 09/10/2026 : le testeur ne trouvait « toujours pas un vrai garage » en
+/// arrivant. L'écran se lit maintenant de haut en bas comme un tableau de bord — titre,
+/// niveau et chiffres du garage, chasse de la semaine, outils, puis les cartes, avec des
+/// emplacements à remplir pour que la grille ait toujours l'air d'un garage et non d'une
+/// liste. La structure s'inspire de ce qui se fait dans le genre ; le vocabulaire, la
+/// typographie et la chasse restent les nôtres (règle App Store 4.3, voir REFONTE.md).
 struct GarageView: View {
     /// Emmene le joueur vers le scan depuis le garage vide. Le garage ne connait
     /// pas les onglets : c'est la vue racine qui sait ou aller.
@@ -9,15 +16,18 @@ struct GarageView: View {
     @Environment(AppState.self) private var app
     @Environment(GarageStore.self) private var garage
     @Environment(BountyStore.self) private var bounty
+    @Environment(SubscriptionStore.self) private var subscriptions
     @State private var selected: CardData?
     @State private var browsingCatalog = false
     @State private var showingSettings = false
+    @State private var showingPaywall = false
+    @State private var query = GarageQuery()
+    @State private var searching = false
+    @FocusState private var searchFocused: Bool
     /// Modèles à faire désirer tant que la collection est maigre (voir `discoverStrip`).
     @State private var teasers: [Teaser] = []
 
-    /// L'écart doit être plus large que le débordement du néon doré, sinon le halo d'une
-    /// carte mord sur sa voisine et les deux paraissent encadrées ensemble.
-    private let columns = [GridItem(.flexible(), spacing: 18), GridItem(.flexible(), spacing: 18)]
+    private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
 
     /// En dessous de ce nombre de cartes, la grille ne remplit pas l'écran : on montre
     /// sous elle ce qu'il reste de beau à trouver, plutôt qu'un grand vide noir.
@@ -25,12 +35,16 @@ struct GarageView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 18) {
+            VStack(spacing: 16) {
                 header
-                statsPanel
+                HomeStatsCard(onOpenPro: openPro)
                 BountyPanel()
-                collection
-                if garage.cards.count < Self.teaserThreshold && !teasers.isEmpty {
+                if garage.cardCount == 0 {
+                    emptyState
+                } else {
+                    collection(garage.cards)
+                }
+                if garage.cardCount < Self.teaserThreshold && !teasers.isEmpty {
                     discoverStrip
                 }
             }
@@ -38,12 +52,16 @@ struct GarageView: View {
             .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.immediately)
         // La chasse bouge à chaque prise (une cible trouvée, un premier chasseur désigné).
         .task(id: "\(garage.catches.count)-\(app.country)") { await bounty.refresh(country: app.country) }
         .task(id: app.country) { teasers = Self.rankedTeasers(country: app.country) }
+        // Le prix de la ligne Spog Pro : chargé une fois, sans attendre le paywall.
+        .task { if subscriptions.monthly == nil { await subscriptions.load() } }
         .fullScreenCover(item: $selected) { card in
             CardDetailView(card: card)
         }
+        .fullScreenCover(isPresented: $showingPaywall) { PaywallView() }
         .sheet(isPresented: $showingSettings) { SettingsView() }
         .sheet(isPresented: $browsingCatalog) {
             NavigationStack {
@@ -54,226 +72,116 @@ struct GarageView: View {
         }
     }
 
+    private func openPro() {
+        Analytics.track(.paywallShown, ["from": "garage"])
+        showingPaywall = true
+    }
+
     // MARK: En-tête
 
-    /// Le compteur est le héros de l'écran : un « 0 » perdu en 24 points faisait un
-    /// en-tête maigre. En grand, avec le reste du Spogdex à côté, il dit où on en est.
-    ///
-    /// Au-dessus, le titre « Ton garage » : l'onglet s'appelle « Collection », et un
-    /// testeur cherchait son garage sans comprendre qu'il était déjà dedans.
+    /// Le logo S et « Ton garage » : l'onglet s'appelle « Collection », et un testeur
+    /// cherchait son garage sans comprendre qu'il était déjà dedans. À droite, le Spogdex
+    /// (le catalogue n'a plus d'onglet) et les réglages.
     private var header: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(alignment: .center) {
-                Text("garage.title")
-                    .font(Theme.display(28))
-                    .foregroundStyle(Theme.textPrimary)
-                    .lineLimit(1).minimumScaleFactor(0.7)
-                    .accessibilityAddTraits(.isHeader)
-                Spacer()
-                HStack(spacing: 9) {
-                    // Le catalogue n'a plus d'onglet : on y accede d'ici.
-                    circleButton("list.bullet") { browsingCatalog = true }
-                    circleButton("gearshape.fill") { showingSettings = true }
-                }
-            }
-            VStack(alignment: .leading, spacing: 0) {
-                Overline(text: "garage.section", color: Theme.accentBright)
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(garage.cards.count.formatted())
-                        .font(Theme.hero(64))
-                        .monospacedDigit()
-                        .foregroundStyle(LinearGradient(colors: [Theme.textPrimary, Theme.accentBright],
-                                                        startPoint: .top, endPoint: .bottom))
-                        .contentTransition(.numericText(value: Double(garage.cards.count)))
-                        .shadow(color: Theme.accent.opacity(0.45), radius: 18)
-                    Text("garage.cards.unit")
-                        .font(Theme.display(15, .semibold))
-                        .foregroundStyle(Theme.textSecondary)
-                }
-            }
-        }
-    }
-
-    private func circleButton(_ icon: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: icon)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Theme.accentBright)
-                .frame(width: 40, height: 40)
-                .background(Theme.glassFill, in: Circle())
-                .overlay(Circle().strokeBorder(Theme.glassEdge, lineWidth: 1))
-                .shadow(color: Theme.dropShadow, radius: 8, y: 4)
-        }
-        .buttonStyle(PressScaleStyle(scale: 0.9))
-    }
-
-    /// Points, modèles, prises du jour, et la progression du Spogdex : de quoi savoir où
-    /// on en est sans quitter l'écran d'accueil.
-    private var statsPanel: some View {
-        GlassCard(radius: 20, padding: 14) {
-            VStack(spacing: 14) {
-                if let value = garage.estimatedValue {
-                    valueRow(value)
-                    Rectangle().fill(Theme.stroke).frame(height: 1)
-                }
-                HStack(spacing: 12) {
-                    MetricCell(value: garage.totalPoints, label: "garage.stat.points", color: Theme.accentBright)
-                    HairlineDivider()
-                    MetricCell(value: garage.uniqueModels, label: "garage.stat.models")
-                    HairlineDivider()
-                    MetricCell(value: garage.todayCount, label: "garage.stat.today")
-                }
-                Button { browsingCatalog = true } label: {
-                    VStack(alignment: .leading, spacing: 7) {
-                        HStack {
-                            Image(systemName: "square.grid.3x3.fill")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundStyle(Theme.accent)
-                            Text("garage.dex \(garage.dexCaught) \(garage.dexTotal)")
-                                .font(Theme.mono(10, .semibold))
-                                .foregroundStyle(Theme.textSecondary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundStyle(Theme.textMuted)
-                        }
-                        dexBar
-                    }
-                }
-                .buttonStyle(PressScaleStyle(scale: 0.98))
-            }
-        }
-    }
-
-    /// Valeur estimée du garage, en tête du panneau : la somme des milieux de fourchette
-    /// des cartes cotées. Absente tant qu'aucune carte n'a de cote (démonstration,
-    /// anciennes prises) : un « 0 € » dirait que la collection ne vaut rien.
-    ///
-    /// Une seule devise est additionnée. Les autres sont nommées, jamais converties : l'app
-    /// n'a pas de taux de change, et en inventer un fausserait le seul chiffre qu'on montre.
-    private func valueRow(_ value: GarageValue) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Overline(text: "garage.value.title", color: Theme.accentBright)
-            Text(verbatim: PriceFormat.total(value))
-                .font(Theme.hero(34))
-                .monospacedDigit()
+        HStack(spacing: 10) {
+            Image("LogoMark")
+                .resizable()
+                .frame(width: 30, height: 30)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .accessibilityHidden(true)
+            Text("garage.title")
+                .font(Theme.display(24))
                 .foregroundStyle(Theme.textPrimary)
-                .contentTransition(.numericText(value: value.total))
-                .lineLimit(1).minimumScaleFactor(0.6)
-            Text("garage.value.note")
-                .font(Theme.body(11))
-                .foregroundStyle(Theme.textMuted)
-                .fixedSize(horizontal: false, vertical: true)
-            if !value.otherCurrencies.isEmpty {
-                Text("garage.value.others \(value.otherCurrencies.joined(separator: ", "))")
-                    .font(Theme.body(11))
-                    .foregroundStyle(Theme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+                .lineLimit(1).minimumScaleFactor(0.7)
+                .accessibilityAddTraits(.isHeader)
+            Spacer()
+            HomeIconButton(icon: "square.grid.3x3", label: "home.a11y.dex") { browsingCatalog = true }
+            HomeIconButton(icon: "gearshape", label: "home.a11y.settings") { showingSettings = true }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
-    }
-
-    private var dexBar: some View {
-        let ratio = garage.dexTotal > 0 ? Double(garage.dexCaught) / Double(garage.dexTotal) : 0
-        return GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Capsule().fill(Theme.textMuted.opacity(0.18))
-                Capsule()
-                    .fill(Theme.accentGradient)
-                    // Un minimum visible : 1 modèle sur 867 doit déjà se voir.
-                    .frame(width: max(ratio > 0 ? 8 : 0, geo.size.width * ratio))
-                    .shadow(color: Theme.accent.opacity(0.7), radius: 5)
-            }
-        }
-        .frame(height: 5)
+        .padding(.top, 2)
     }
 
     // MARK: Collection
 
-    @ViewBuilder private var collection: some View {
-        if garage.cards.isEmpty {
-            emptyState
-        } else {
-            VStack(alignment: .leading, spacing: 12) {
-                Overline(text: "garage.collection")
-                LazyVGrid(columns: columns, spacing: 18) {
-                    ForEach(garage.cards) { card in
+    /// Outils puis grille. Les cartes sont lues une seule fois par rafraîchissement :
+    /// `garage.cards` relit chaque photo depuis le disque.
+    private func collection(_ all: [CardData]) -> some View {
+        let shown = query.apply(to: all, mainCurrency: garage.estimatedValue?.currency)
+        return VStack(alignment: .leading, spacing: 12) {
+            GarageToolbar(query: $query, searching: $searching, searchFocused: $searchFocused,
+                          shown: shown.count, total: all.count)
+            if shown.isEmpty {
+                noResults
+            } else {
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(shown) { card in
                         Button { selected = card } label: { MiniCard(card: card) }
                             .buttonStyle(PressScaleStyle())
                     }
-                }
-            }
-        }
-    }
-
-    /// Premier lancement : la grille est vide pour de vrai. Plutot qu'un ecran mort, on
-    /// montre l'emplacement de la première carte, les trois gestes qui la remplissent, et
-    /// le bouton qui y mène.
-    private var emptyState: some View {
-        GlassCard(radius: 24, tint: Theme.accent, padding: 20) {
-            VStack(spacing: 18) {
-                GhostCardSlot()
-                    .frame(width: 128, height: 172)
-                    .padding(.top, 4)
-
-                VStack(spacing: 8) {
-                    Text("garage.empty.title")
-                        .font(Theme.display(24))
-                        .foregroundStyle(Theme.textPrimary)
-                        .multilineTextAlignment(.center)
-                    Text("garage.empty.body")
-                        .font(Theme.body(14))
-                        .foregroundStyle(Theme.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                HStack(spacing: 0) {
-                    step("viewfinder", "garage.step.spot")
-                    stepConnector
-                    step("sparkles", "garage.step.identify")
-                    stepConnector
-                    step("rectangle.stack.fill", "garage.step.collect")
-                }
-
-                if let onScan {
-                    Button(action: onScan) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "viewfinder").font(.system(size: 13, weight: .bold))
-                            Text("garage.empty.action")
+                    // Les emplacements ne complètent que la grille entière : sous un
+                    // filtre, ils diraient qu'il manque des cartes là où il n'en manque pas.
+                    if !query.isFiltering {
+                        ForEach(0..<GarageQuery.emptySlots(after: shown.count), id: \.self) { _ in
+                            EmptySlot(action: onScan)
                         }
                     }
-                    .buttonStyle(NeonButtonStyle())
                 }
             }
-            .frame(maxWidth: .infinity)
         }
     }
 
-    private func step(_ icon: String, _ label: LocalizedStringKey) -> some View {
-        VStack(spacing: 7) {
-            Image(systemName: icon)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(Theme.accentBright)
-                .frame(width: 40, height: 40)
-                .background(Theme.accent.opacity(0.12), in: Circle())
-                .overlay(Circle().strokeBorder(Theme.accent.opacity(0.35), lineWidth: 1))
-            Text(label)
-                .font(Theme.label(9)).tracking(1).textCase(.uppercase)
+    private var noResults: some View {
+        VStack(spacing: 10) {
+            Text("home.noResults")
+                .font(Theme.body(13))
                 .foregroundStyle(Theme.textSecondary)
-                .lineLimit(1).minimumScaleFactor(0.7)
+            Button {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    query.text = ""
+                    query.tierID = nil
+                }
+            } label: {
+                Text("home.clearFilters")
+                    .font(Theme.label(10)).tracking(1.2).textCase(.uppercase)
+                    .foregroundStyle(Theme.textPrimary)
+            }
+            .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity)
+        .padding(.vertical, 28)
     }
 
-    private var stepConnector: some View {
-        Rectangle()
-            .fill(LinearGradient(colors: [Theme.accent.opacity(0.1), Theme.accent.opacity(0.5), Theme.accent.opacity(0.1)],
-                                 startPoint: .leading, endPoint: .trailing))
-            .frame(width: 22, height: 1)
-            .padding(.bottom, 22)
+    /// Premier lancement : la grille est vide pour de vrai. Une phrase, le bouton qui mène
+    /// au scan, et les quatre emplacements qui attendent leurs cartes.
+    private var emptyState: some View {
+        VStack(spacing: 16) {
+            VStack(spacing: 8) {
+                Text("garage.empty.title")
+                    .font(Theme.display(22))
+                    .foregroundStyle(Theme.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text("garage.empty.body")
+                    .font(Theme.body(14))
+                    .foregroundStyle(Theme.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.top, 6)
+
+            if let onScan {
+                Button(action: onScan) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "viewfinder").font(.system(size: 13, weight: .bold))
+                        Text("garage.empty.action")
+                    }
+                }
+                .buttonStyle(NeonButtonStyle())
+            }
+
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(0..<4, id: \.self) { _ in EmptySlot(action: onScan) }
+            }
+        }
     }
 
     // MARK: À découvrir
@@ -289,7 +197,7 @@ struct GarageView: View {
                 Button { browsingCatalog = true } label: {
                     Text("garage.discover.all")
                         .font(Theme.label(10)).tracking(1).textCase(.uppercase)
-                        .foregroundStyle(Theme.accentBright)
+                        .foregroundStyle(Theme.textSecondary)
                 }
                 .buttonStyle(.plain)
             }
@@ -310,6 +218,7 @@ struct GarageView: View {
             .padding(.horizontal, -20)
             .contentMargins(.horizontal, 20, for: .scrollContent)
         }
+        .padding(.top, 8)
     }
 
     /// Les modèles qui ont un rendu embarqué, du plus rare au plus courant dans ce pays.
@@ -329,50 +238,193 @@ struct GarageView: View {
     }
 }
 
+// MARK: - Outils
+
+/// Rangée d'outils au-dessus de la grille : recherche, filtre par rareté, tri, et le
+/// compte des cartes affichées quand un filtre en retire.
+private struct GarageToolbar: View {
+    @Binding var query: GarageQuery
+    @Binding var searching: Bool
+    var searchFocused: FocusState<Bool>.Binding
+    let shown: Int
+    let total: Int
+
+    private var tiers: [RarityTier] { CatalogStore.shared.tiers }
+
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 8) {
+                HomeIconButton(icon: searching ? "xmark" : "magnifyingglass",
+                               label: "home.a11y.search", action: toggleSearch)
+                rarityMenu
+                sortMenu
+                Spacer(minLength: 0)
+                if query.isFiltering {
+                    Text(verbatim: "\(shown)/\(total)")
+                        .font(Theme.mono(10, .semibold))
+                        .foregroundStyle(Theme.textMuted)
+                }
+            }
+            if searching {
+                searchField
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
+        }
+    }
+
+    private func toggleSearch() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            searching.toggle()
+            if !searching { query.text = "" }
+        }
+        searchFocused.wrappedValue = searching
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Theme.textMuted)
+            TextField(String(localized: "home.search.placeholder"), text: $query.text)
+                .font(Theme.body(14))
+                .foregroundStyle(Theme.textPrimary)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .submitLabel(.search)
+                .focused(searchFocused)
+        }
+        .padding(.horizontal, 14).padding(.vertical, 11)
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .strokeBorder(Theme.stroke, lineWidth: 1))
+    }
+
+    private var rarityMenu: some View {
+        Menu {
+            Picker(selection: $query.tierID) {
+                Text("home.filter.all").tag(String?.none)
+                ForEach(tiers) { tier in
+                    Text(tier.label).tag(Optional(tier.id))
+                }
+            } label: { EmptyView() }
+        } label: {
+            ToolChip(dot: selectedTier?.color) {
+                if let tier = selectedTier { Text(tier.label) } else { Text("home.filter.all") }
+            }
+        }
+        .accessibilityLabel(Text("home.a11y.filter"))
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            Picker(selection: $query.sort) {
+                ForEach(GarageQuery.Sort.allCases) { sort in
+                    Text(LocalizedStringKey(sort.labelKey)).tag(sort)
+                }
+            } label: { EmptyView() }
+        } label: {
+            ToolChip(icon: "arrow.up.arrow.down") {
+                Text(LocalizedStringKey(query.sort.labelKey))
+            }
+        }
+        .accessibilityLabel(Text("home.a11y.sort"))
+    }
+
+    private var selectedTier: RarityTier? {
+        guard let id = query.tierID else { return nil }
+        return tiers.first { $0.id == id }
+    }
+}
+
+/// Capsule d'outil à filet fin. La pastille, quand il y en a une, est le seul endroit où
+/// la couleur du palier filtré apparaît.
+private struct ToolChip<Title: View>: View {
+    var icon: String? = nil
+    var dot: Color? = nil
+    @ViewBuilder var title: Title
+
+    var body: some View {
+        HStack(spacing: 6) {
+            if let icon {
+                Image(systemName: icon).font(.system(size: 10, weight: .semibold))
+            }
+            if let dot {
+                Circle().fill(dot).frame(width: 6, height: 6)
+            }
+            title
+                .font(Theme.label(10)).tracking(1.1)
+                .textCase(.uppercase)
+                .lineLimit(1)
+            Image(systemName: "chevron.down").font(.system(size: 8, weight: .bold))
+        }
+        .foregroundStyle(Theme.textSecondary)
+        .padding(.horizontal, 12)
+        .frame(height: 36)
+        .background(Theme.surface, in: Capsule())
+        .overlay(Capsule().strokeBorder(Theme.stroke, lineWidth: 1))
+    }
+}
+
+/// Bouton rond à filet fin, pour les icônes de l'en-tête et des outils.
+private struct HomeIconButton: View {
+    let icon: String
+    let label: LocalizedStringKey
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
+                .frame(width: 36, height: 36)
+                .background(Theme.surface, in: Circle())
+                .overlay(Circle().strokeBorder(Theme.stroke, lineWidth: 1))
+        }
+        .buttonStyle(PressScaleStyle(scale: 0.9))
+        .accessibilityLabel(Text(label))
+    }
+}
+
+// MARK: - Cases de la grille
+
+/// Hauteur commune des cases : une vignette et un emplacement vide côte à côte doivent
+/// s'aligner, sinon la rangée boite.
+private enum GridCell {
+    static let height: CGFloat = 214
+    static let artHeight: CGFloat = 124
+    static let radius: CGFloat = 14
+}
+
+/// Emplacement à remplir : un cadre en pointillés, un plus, « À repérer ». Il mène au scan.
+private struct EmptySlot: View {
+    var action: (() -> Void)?
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: GridCell.radius, style: .continuous)
+        Button { action?() } label: {
+            VStack(spacing: 8) {
+                Image(systemName: "plus")
+                    .font(.system(size: 14, weight: .semibold))
+                Text("home.slot.empty")
+                    .font(Theme.label(9)).tracking(1.4).textCase(.uppercase)
+            }
+            .foregroundStyle(Theme.textMuted)
+            .frame(maxWidth: .infinity)
+            .frame(height: GridCell.height)
+            .background(Theme.surface.opacity(0.4), in: shape)
+            .overlay(shape.strokeBorder(Theme.strokeStrong, style: StrokeStyle(lineWidth: 1, dash: [5, 4])))
+            .contentShape(shape)
+        }
+        .buttonStyle(PressScaleStyle())
+        .disabled(action == nil)
+    }
+}
+
 /// Un modèle à faire désirer, avec sa rareté dans le pays du joueur.
 private struct Teaser: Identifiable {
     let vehicle: Vehicle
     let tier: RarityTier
     var id: String { vehicle.id }
-}
-
-/// Emplacement de la première carte : un cadre en pointillés lumineux, une silhouette, et
-/// un reflet qui passe. Il montre la forme exacte de ce que le joueur va obtenir.
-private struct GhostCardSlot: View {
-    @State private var float = false
-
-    var body: some View {
-        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
-        shape
-            .fill(LinearGradient(colors: [Theme.accent.opacity(0.18), Theme.surface],
-                                 startPoint: .top, endPoint: .bottom))
-            .overlay(DotGrid(spacing: 9).clipShape(shape))
-            .overlay {
-                VStack(spacing: 10) {
-                    Text(verbatim: "#001")
-                        .font(Theme.mono(10, .bold))
-                        .foregroundStyle(Theme.textMuted)
-                    Image(systemName: "car.side.fill")
-                        .font(.system(size: 40, weight: .regular))
-                        .foregroundStyle(LinearGradient(colors: [Theme.textPrimary.opacity(0.55), Theme.accent.opacity(0.4)],
-                                                        startPoint: .top, endPoint: .bottom))
-                    Image(systemName: "plus")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(Theme.accentBright)
-                        .frame(width: 28, height: 28)
-                        .background(Theme.accent.opacity(0.18), in: Circle())
-                }
-            }
-            .shimmer(duration: 3.2)
-            .overlay(shape.strokeBorder(Theme.accentBright.opacity(0.7),
-                                        style: StrokeStyle(lineWidth: 1.4, dash: [6, 5])))
-            .shadow(color: Theme.accent.opacity(0.45), radius: 16)
-            .rotationEffect(.degrees(float ? -3 : 3))
-            .offset(y: float ? -4 : 4)
-            .onAppear {
-                withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) { float = true }
-            }
-    }
 }
 
 /// Aperçu d'un modèle du Spogdex pas encore attrapé : son rendu studio, sa rareté locale.
@@ -381,110 +433,136 @@ private struct TeaserCard: View {
     let tier: RarityTier
 
     var body: some View {
-        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: GridCell.radius, style: .continuous)
         VStack(alignment: .leading, spacing: 0) {
             // Bord à bord : le rendu carré du modèle remplit tout le haut de la carte. Le
             // rapport 1,4 ne rogne que du studio au-dessus et au-dessous de la voiture.
             ModelArt(vehicleID: vehicle.id, body: CarBody(vehicle.body), tint: tier.color)
                 .aspectRatio(1.4, contentMode: .fit)
-                .overlay(alignment: .bottom) {
-                    LinearGradient(colors: [.clear, Theme.surface.opacity(0.55)],
-                                   startPoint: .center, endPoint: .bottom)
-                        .allowsHitTesting(false)
-                }
-            VStack(alignment: .leading, spacing: 4) {
+            RarityStrip(tier: tier)
+            VStack(alignment: .leading, spacing: 3) {
                 Text(vehicle.make.uppercased())
                     .font(Theme.label(8)).tracking(1.2)
-                    .foregroundStyle(tier.color)
+                    .foregroundStyle(Theme.textMuted)
                     .lineLimit(1)
                 Text(vehicle.model)
                     .font(Theme.display(14, .semibold))
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1).minimumScaleFactor(0.7)
-                HStack {
-                    Text(tier.label)
-                        .font(Theme.label(8)).tracking(1).textCase(.uppercase)
-                        .foregroundStyle(Theme.textMuted)
-                    Spacer()
-                    Text(verbatim: "+\(tier.points)")
-                        .font(Theme.mono(10, .bold))
-                        .foregroundStyle(tier.color)
-                }
+                Text(verbatim: "+\(tier.points)")
+                    .font(Theme.mono(10, .semibold))
+                    .foregroundStyle(Theme.textSecondary)
             }
-            .padding(.horizontal, 9)
-            .padding(.top, 7)
-            .padding(.bottom, 9)
+            .padding(.horizontal, 10)
+            .padding(.top, 8)
+            .padding(.bottom, 10)
         }
         .frame(width: 148)
-        .background(Theme.glassFill, in: shape)
+        .background(Theme.surface, in: shape)
         .clipShape(shape)
-        .overlay(shape.strokeBorder(tier.color.opacity(0.35), lineWidth: 1))
+        .overlay(shape.strokeBorder(Theme.stroke, lineWidth: 1))
     }
 }
 
-/// Vignette du garage. Reprend le vocabulaire de la vraie carte en plus compact.
+/// Bande de rareté des vignettes : le palier en petites capitales neutres, et une jauge
+/// de six crans à la couleur du palier. C'est le seul endroit coloré de la vignette.
+private struct RarityStrip: View {
+    let tier: RarityTier
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Text(tier.label)
+                .font(Theme.label(8)).tracking(1.3).textCase(.uppercase)
+                .foregroundStyle(Theme.textSecondary)
+                .lineLimit(1)
+            Spacer(minLength: 4)
+            HStack(spacing: 2) {
+                ForEach(0..<6, id: \.self) { index in
+                    Capsule()
+                        .fill(index <= tier.rank ? tier.color : Theme.surfaceRaised)
+                        .frame(width: 7, height: 3)
+                }
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Theme.surfaceRaised.opacity(0.6))
+        .overlay(alignment: .top) {
+            Rectangle().fill(tier.color.opacity(0.8)).frame(height: 1)
+        }
+    }
+}
+
+/// Vignette du garage : la photo plein cadre en haut, la bande de rareté, la marque, le
+/// modèle, et la date de la prise. Reprend le vocabulaire de la vraie carte en plus compact.
 struct MiniCard: View {
     let card: CardData
 
     var body: some View {
-        // Chaque carte porte **son** contour. Deux réglages distincts :
-        // — un trophée reçoit le néon doré, mais avec un halo resserré, sinon deux
-        //   cartes voisines fusionnent en un seul cadre autour de la rangée ;
-        // — une carte ordinaire reçoit un filet à la couleur de son palier, franchement
-        //   visible. Le filet neutre d'origine était à 7 % de blanc : invisible, la
-        //   carte flottait sans contour.
-        NeonFrame(color: card.tier.frameColor ?? card.tier.color, radius: 18,
-                  intensity: card.tier.isTrophy ? card.tier.frameIntensity : 0.7,
-                  neon: card.tier.isTrophy, spread: 0.28) {
-            VStack(alignment: .leading, spacing: 0) {
-                artwork
-                    .frame(height: 104)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(alignment: .topLeading) {
-                        Text(String(format: "%03d", card.serial))
-                            .font(Theme.mono(9, .bold))
-                            .foregroundStyle(Theme.textPrimary)
-                            .padding(.horizontal, 7).padding(.vertical, 3)
-                            .background(.ultraThinMaterial, in: Capsule())
-                            .padding(6)
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        if card.firstSpot || card.verified {
-                            Image(systemName: card.firstSpot ? "flag.fill" : "checkmark.seal.fill")
-                                .font(.system(size: 9, weight: .bold))
-                                .foregroundStyle(card.firstSpot ? RarityTier.trophyGold : Theme.textPrimary)
-                                .frame(width: 20, height: 20)
-                                .background(.ultraThinMaterial, in: Circle())
-                                .padding(6)
-                        }
-                    }
+        let shape = RoundedRectangle(cornerRadius: GridCell.radius, style: .continuous)
+        VStack(alignment: .leading, spacing: 0) {
+            artwork
+                .frame(height: GridCell.artHeight)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .overlay(alignment: .topLeading) { serialTag }
+                .overlay(alignment: .topTrailing) { markTag }
+            RarityStrip(tier: card.tier)
+            info
+            Spacer(minLength: 0)
+        }
+        .frame(height: GridCell.height)
+        .background(Theme.surface, in: shape)
+        .clipShape(shape)
+        // Un trophée garde un filet doré, fin et sans halo : il se repère dans la grille
+        // sans transformer la rangée en guirlande.
+        .overlay(shape.strokeBorder(card.tier.frameColor?.opacity(0.45) ?? Theme.stroke, lineWidth: 1))
+    }
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(card.vehicle.make.uppercased())
-                        .font(Theme.label(8)).tracking(1.4)
-                        .foregroundStyle(card.tier.color)
-                        .lineLimit(1)
-                    Text(card.vehicle.model)
-                        .font(Theme.display(15, .semibold))
-                        .foregroundStyle(Theme.textPrimary)
-                        .lineLimit(1).minimumScaleFactor(0.7)
-                    HStack {
-                        Text(card.tier.label)
-                            .font(Theme.label(8)).tracking(1).textCase(.uppercase)
-                            .foregroundStyle(card.tier.color)
-                            .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(card.tier.color.opacity(0.14), in: Capsule())
-                        Spacer()
-                        Text("\(card.tier.points)")
-                            .font(Theme.mono(11, .bold))
-                            .foregroundStyle(Theme.textPrimary)
-                    }
-                    .padding(.top, 4)
-                }
-                .padding(.horizontal, 4)
-                .padding(.top, 9)
+    private var info: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(card.vehicle.make.uppercased())
+                .font(Theme.label(8)).tracking(1.4)
+                .foregroundStyle(Theme.textMuted)
+                .lineLimit(1)
+            Text(card.vehicle.model)
+                .font(Theme.display(16, .semibold))
+                .foregroundStyle(Theme.textPrimary)
+                .lineLimit(1).minimumScaleFactor(0.7)
+            HStack(spacing: 4) {
+                Text(card.caughtAt, format: .dateTime.day().month(.abbreviated).year(.twoDigits))
+                    .font(Theme.mono(9))
+                    .textCase(.uppercase)
+                    .foregroundStyle(Theme.textMuted)
+                    .lineLimit(1)
+                Spacer(minLength: 2)
+                Text(verbatim: "+\(card.tier.points)")
+                    .font(Theme.mono(10, .semibold))
+                    .foregroundStyle(Theme.textSecondary)
             }
-            .padding(7)
+            .padding(.top, 5)
+        }
+        .padding(.horizontal, 10)
+        .padding(.top, 8)
+    }
+
+    private var serialTag: some View {
+        Text(String(format: "%03d", card.serial))
+            .font(Theme.mono(9, .bold))
+            .foregroundStyle(Theme.textPrimary)
+            .padding(.horizontal, 7).padding(.vertical, 3)
+            .background(.ultraThinMaterial, in: Capsule())
+            .padding(6)
+    }
+
+    @ViewBuilder private var markTag: some View {
+        if card.firstSpot || card.verified {
+            Image(systemName: card.firstSpot ? "flag.fill" : "checkmark.seal.fill")
+                .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(card.firstSpot ? RarityTier.trophyGold : Theme.textPrimary)
+                .frame(width: 20, height: 20)
+                .background(.ultraThinMaterial, in: Circle())
+                .padding(6)
         }
     }
 
@@ -492,8 +570,7 @@ struct MiniCard: View {
     /// dans une pile la ferait grandir au-delà de la vignette.
     private var artwork: some View {
         Rectangle()
-            .fill(RadialGradient(colors: [card.tier.color.opacity(0.38), Theme.surface],
-                                 center: .center, startRadius: 2, endRadius: 90))
+            .fill(Theme.surfaceRaised)
             .overlay {
                 if let developed = card.shot?.developed {
                     // Passée en studio : la même voiture, en rendu, montrée en entier sur
@@ -513,11 +590,6 @@ struct MiniCard: View {
                     ModelArt(vehicleID: card.vehicle.id, body: CarBody(card.vehicle.body),
                              tint: card.tier.color, paint: card.paint)
                 }
-            }
-            .overlay(alignment: .bottom) {
-                // Fondu vers la carte : l'image s'y enfonce au lieu de s'arrêter net.
-                LinearGradient(colors: [.clear, Theme.surface.opacity(0.55)],
-                               startPoint: .center, endPoint: .bottom)
             }
             .clipped()
     }

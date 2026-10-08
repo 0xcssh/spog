@@ -4,66 +4,71 @@ import SwiftUI
 enum Theme {
 
     // MARK: Fonds
-    static let background    = Color(hex: 0x07060B)
-    static let surface       = Color(hex: 0x100E17)
-    static let surfaceRaised = Color(hex: 0x171523)
+    // Sobriété (09/10/2026) : le testeur trouvait que « ça part dans tous les sens ». Les
+    // fonds tiraient vers le violet et chaque panneau portait sa lueur. Désormais un noir
+    // neutre et des gris anthracite : la couleur ne sert plus qu'à signaler quelque chose.
+    static let background    = Color(hex: 0x0A0A0C)
+    static let surface       = Color(hex: 0x141417)
+    static let surfaceRaised = Color(hex: 0x1C1C20)
 
     // MARK: Contours
-    static let stroke       = Color.white.opacity(0.07)
+    static let stroke       = Color.white.opacity(0.08)
     static let strokeStrong = Color.white.opacity(0.14)
 
     // MARK: Texte
-    static let textPrimary   = Color(hex: 0xF3F1F8)
-    static let textSecondary = Color(hex: 0x9A94AE)
-    static let textMuted     = Color(hex: 0x5D5872)
+    static let textPrimary   = Color(hex: 0xF2F2F4)
+    static let textSecondary = Color(hex: 0x9C9CA6)
+    static let textMuted     = Color(hex: 0x5F5F69)
 
     // MARK: Accent
+    // **Une seule couleur d'accent**, et rare : le bouton principal, l'onglet actif, la
+    // jauge de niveau. Si tout est violet, plus rien ne l'est.
     static let accent       = Color(hex: 0xA75CF9)
     static let accentBright = Color(hex: 0xC98BFF)
     static let accentDeep   = Color(hex: 0x5B21B6)
 
-    // MARK: Accents secondaires
-    // Le cyan et l'or existaient déjà, mais écrits en dur dans les vues (crew, scans
-    // épuisés) : ils deviennent des jetons, pour que l'écran reste une seule palette.
-    static let cyan    = Color(hex: 0x22D3EE)
+    // MARK: Signaux
+    /// Second ton, neutre : l'adversaire d'un duel, la zone de montée, le crew. C'était un
+    /// cyan, qui faisait une deuxième couleur d'accent à côté du violet ; un gris clair
+    /// distingue tout aussi bien sans ajouter de teinte.
+    static let neutralAccent = Color(hex: 0xC9CCD3)
+    /// Ambre des alertes (scans épuisés, zone de descente). Une alerte, pas une décoration.
     static let warning = Color(hex: 0xF5B942)
     /// Lumière blanche des reflets : jamais un aplat, toujours à faible opacité.
     static let highlight = Color.white
 
-    // MARK: Matières premium
-    // Le testeur trouvait l'app « cheap » : des aplats gris sur du noir, sans relief.
-    // Trois matières, utilisées avec parcimonie, donnent la profondeur qui manquait.
+    // MARK: Matières
+    // Les « matières premium » de la version précédente (dégradés, arêtes violettes,
+    // reflets) sont ramenées à presque rien : elles gardent leur nom pour ne pas toucher
+    // chaque écran, mais rendent maintenant des aplats discrets.
 
-    /// Dégradé de l'action principale : un violet qui s'allume vers le haut.
+    /// Remplissage de l'action principale : un violet presque uni, à peine éclairé en haut.
     static let accentGradient = LinearGradient(
-        colors: [Color(hex: 0xD3A1FF), Color(hex: 0xA75CF9), Color(hex: 0x7C3AED)],
-        startPoint: .topLeading, endPoint: .bottomTrailing
-    )
-    /// Verre fumé des panneaux : un peu plus clair en haut, comme éclairé d'au-dessus.
-    static let glassFill = LinearGradient(
-        colors: [Color(hex: 0x1B1828), Color(hex: 0x0E0C16)],
+        colors: [Color(hex: 0xB070FA), Color(hex: 0xA75CF9)],
         startPoint: .top, endPoint: .bottom
     )
-    /// Arête du verre : le bord supérieur accroche la lumière, le bas prend l'accent.
-    static let glassEdge = LinearGradient(
-        colors: [Color.white.opacity(0.20), Color.white.opacity(0.05), Color(hex: 0xA75CF9).opacity(0.22)],
-        startPoint: .topLeading, endPoint: .bottomTrailing
+    /// Fond des panneaux : un anthracite uni, sans dégradé visible.
+    static let glassFill = LinearGradient(
+        colors: [Color(hex: 0x161619), Color(hex: 0x131316)],
+        startPoint: .top, endPoint: .bottom
     )
-    /// Reflet du haut d'une surface, posé par-dessus le contenu.
+    /// Bord des panneaux : un filet blanc fin, neutre. Plus de violet dans l'arête.
+    static let glassEdge = LinearGradient(
+        colors: [Color.white.opacity(0.11), Color.white.opacity(0.07)],
+        startPoint: .top, endPoint: .bottom
+    )
+    /// Reflet du haut d'une surface : à peine perceptible.
     static let sheen = LinearGradient(
-        colors: [Color.white.opacity(0.09), .clear],
+        colors: [Color.white.opacity(0.03), .clear],
         startPoint: .top, endPoint: .center
     )
-    /// Ombre portée des panneaux : ils flottent au-dessus du fond au lieu d'y être collés.
-    static let dropShadow = Color.black.opacity(0.55)
+    /// Ombre portée des panneaux : courte et sombre, elle détache sans faire flotter.
+    static let dropShadow = Color.black.opacity(0.35)
 
-    /// Lueurs d'ambiance du fond, l'une violette en haut, l'autre cyan en bas.
-    static let ambientViolet = Color(hex: 0x7C3AED)
-    static let ambientCyan   = Color(hex: 0x0E7490)
-
-    /// Lueur violette diffuse posee derriere les elements mis en avant.
+    /// Lueur derrière un élément mis en avant (logo, paywall). Très faible : un relief,
+    /// pas un halo.
     static let glow = RadialGradient(
-        colors: [Color(hex: 0xA75CF9).opacity(0.30), .clear],
+        colors: [Color(hex: 0xA75CF9).opacity(0.08), .clear],
         center: .center, startRadius: 2, endRadius: 260
     )
 

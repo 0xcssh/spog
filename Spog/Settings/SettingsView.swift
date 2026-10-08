@@ -147,7 +147,7 @@ struct SettingsView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "brain.head.profile")
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(Theme.accentBright)
+                        .foregroundStyle(Theme.textSecondary)
                         .frame(width: 22)
                     Text("settings.training")
                         .font(Theme.display(14, .medium))
@@ -247,7 +247,7 @@ struct SettingsView: View {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Theme.accentBright)
+                    .foregroundStyle(Theme.textSecondary)
                     .frame(width: 22)
                 Text(label)
                     .font(Theme.display(14, .medium))

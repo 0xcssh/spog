@@ -35,9 +35,8 @@ struct QuestsView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: 26, style: .continuous)
-                        .stroke(Theme.accent.opacity(0.55), lineWidth: 1)
+                        .stroke(Theme.strokeStrong, lineWidth: 1)
                 )
-                .shadow(color: Theme.accent.opacity(glow ? 0.75 : 0.35), radius: glow ? 30 : 16)
                 .onAppear {
                     withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) { glow = true }
                 }
@@ -46,7 +45,8 @@ struct QuestsView: View {
                 Overline(text: "profile.level")
                 Text("\(Progression.level(for: totalPoints))")
                     .font(Theme.display(20))
-                    .foregroundStyle(Theme.accentBright)
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.textPrimary)
             }
         }
         .padding(.top, 4)
@@ -75,8 +75,7 @@ struct QuestsView: View {
         let quest = QuestFactory.quest(for: Date(), country: app.country,
                                         favourites: profile.favouriteList)
         let done = progress.isDone(quest)
-        return NeonFrame(color: done ? Theme.accent : Color(hex: 0xF5B942),
-                         radius: 16, intensity: done ? 0.7 : 1) {
+        return NeonFrame(radius: 16) {
             HStack(alignment: .center, spacing: 12) {
                 VStack(alignment: .leading, spacing: 5) {
                     Overline(text: "quest.section")
@@ -92,16 +91,16 @@ struct QuestsView: View {
                         Image(systemName: "checkmark").font(.system(size: 10, weight: .bold))
                         Text("quest.done").font(Theme.label(10)).tracking(1)
                     }
-                    .foregroundStyle(Theme.accent)
+                    .foregroundStyle(Theme.textSecondary)
                     .padding(.horizontal, 10).padding(.vertical, 7)
-                    .background(Theme.accent.opacity(0.15), in: Capsule())
+                    .background(Theme.surfaceRaised, in: Capsule())
                 } else {
                     Text("+\(quest.reward)")
                         .font(Theme.mono(13, .bold))
-                        .foregroundStyle(Color(hex: 0xF5B942))
+                        .foregroundStyle(Theme.textPrimary)
                         .padding(.horizontal, 11).padding(.vertical, 7)
-                        .background(Color(hex: 0xF5B942).opacity(0.14), in: Capsule())
-                        .overlay(Capsule().stroke(Color(hex: 0xF5B942).opacity(0.4), lineWidth: 1))
+                        .background(Theme.surfaceRaised, in: Capsule())
+                        .overlay(Capsule().stroke(Theme.strokeStrong, lineWidth: 1))
                 }
             }
             .padding(14)
@@ -111,14 +110,13 @@ struct QuestsView: View {
     /// La serie en cours, mise en avant : c'est elle qui fait revenir tous les jours.
     private var streakStrip: some View {
         let alive = progress.currentStreak > 0
-        let gold = Color(hex: 0xF5B942)
-        return NeonFrame(color: alive ? gold : Theme.stroke, radius: 16,
-                         intensity: alive ? 1 : 0.4) {
+        // La flamme seule garde l'ambre quand la série est vivante : un petit signal, pas
+        // un cadre doré de plus.
+        return NeonFrame(radius: 16) {
             HStack(spacing: 13) {
                 Image(systemName: "flame.fill")
                     .font(.system(size: 21))
-                    .foregroundStyle(alive ? gold : Theme.textMuted)
-                    .shadow(color: alive ? gold.opacity(0.7) : .clear, radius: 9)
+                    .foregroundStyle(alive ? Theme.warning : Theme.textMuted)
                 VStack(alignment: .leading, spacing: 3) {
                     Overline(text: "stat.streak")
                     Text(alive ? String(localized: "streak.days \(progress.currentStreak)")
@@ -146,20 +144,20 @@ struct QuestsView: View {
         VStack(spacing: 10) {
             HStack(spacing: 10) {
                 NeonTile(icon: "square.stack.3d.up.fill", value: "\(garage.cards.count)",
-                         label: "stat.catches")
+                         label: "stat.catches", color: Theme.textSecondary)
                 NeonTile(icon: "car.2.fill", value: "\(garage.uniqueModels)",
-                         label: "stat.models", color: Color(hex: 0x22D3EE))
+                         label: "stat.models", color: Theme.textSecondary)
                 NeonTile(icon: "building.2.fill", value: "\(garage.uniqueBrands)",
-                         label: "stat.brands", color: Color(hex: 0x22D3EE))
+                         label: "stat.brands", color: Theme.textSecondary)
             }
             HStack(spacing: 10) {
                 NeonTile(icon: "crown.fill",
                          value: garage.bestCard.map { "\($0.tier.points)" } ?? "—",
-                         label: "stat.best", color: Color(hex: 0xF5B942))
+                         label: "stat.best", color: Theme.textSecondary)
                 NeonTile(icon: "bolt.fill", value: progress.bonusPoints.formatted(),
-                         label: "stat.bonus", color: Color(hex: 0xF5B942))
+                         label: "stat.bonus", color: Theme.textSecondary)
                 NeonTile(icon: "checkmark.seal.fill", value: "\(garage.verifiedCount)",
-                         label: "stat.verified", color: Color(hex: 0xF43F9D))
+                         label: "stat.verified", color: Theme.textSecondary)
             }
         }
     }

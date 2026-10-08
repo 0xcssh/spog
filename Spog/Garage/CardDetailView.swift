@@ -24,20 +24,12 @@ struct CardDetailView: View {
     /// carte de demonstration n'a rien a developper.
     private var canDevelop: Bool { card.shot != nil && card.shot?.developed == nil }
 
-    private var ambientGlow: Color {
-        let base: Color = card.tier.frameColor ?? card.tier.color
-        let strength: Double = card.tier.isTrophy ? 0.22 * card.tier.frameIntensity + 0.08 : 0.16
-        return base.opacity(strength)
-    }
-
     var body: some View {
         ZStack {
+            // Fond neutre (sobriété, 09/10/2026). La carte baignait dans la lumière de son
+            // palier, par-dessus le fond violet et cyan : halo violet, puis rose ou bleu
+            // selon la rareté. La carte porte déjà sa couleur dans sa jauge ; le fond se tait.
             AmbientBackground()
-            // La carte baigne dans la lumière de son palier, trophée ou non : une Clio a
-            // sa lueur bleue, plus discrète que l'or d'une exotique, mais elle en a une.
-            RadialGradient(colors: [ambientGlow, Color.clear],
-                           center: .center, startRadius: 10, endRadius: 340)
-                .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 HStack {
@@ -46,15 +38,15 @@ struct CardDetailView: View {
                             .font(.system(size: 13, weight: .bold))
                             .foregroundStyle(Theme.textPrimary)
                             .frame(width: 40, height: 40)
-                            .background(Theme.glassFill, in: Circle())
-                            .overlay(Circle().strokeBorder(Theme.glassEdge, lineWidth: 1))
+                            .background(Theme.surface, in: Circle())
+                            .overlay(Circle().strokeBorder(Theme.stroke, lineWidth: 1))
                     }
                     .buttonStyle(PressScaleStyle(scale: 0.9))
                     Spacer()
                     InfoChip(icon: card.verified ? "checkmark.seal.fill" : "hand.raised.fill",
                              text: Text(card.verified ? LocalizedStringKey("card.verified")
                                                       : LocalizedStringKey("card.declared")),
-                             color: card.verified ? Theme.accentBright : Theme.textMuted)
+                             color: card.verified ? Theme.textSecondary : Theme.textMuted)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
@@ -168,7 +160,7 @@ extension CardDetailView {
             VStack(alignment: .leading, spacing: 4) {
                 Text(card.tier.label)
                     .font(Theme.label(10)).tracking(1.2).textCase(.uppercase)
-                    .foregroundStyle(card.tier.color)
+                    .foregroundStyle(Theme.textSecondary)
                 Text(verbatim: "+\(card.tier.points)")
                     .font(Theme.hero(20))
                     .monospacedDigit()
@@ -197,9 +189,9 @@ extension CardDetailView {
             }
         }
         .padding(.horizontal, 14).padding(.vertical, 11)
-        .background(Theme.glassFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(Theme.glassEdge, lineWidth: 1))
+            .strokeBorder(Theme.stroke, lineWidth: 1))
     }
 
     /// La cote de la prise, en fourchette dans la devise du pays où elle a été faite.
@@ -250,7 +242,7 @@ private struct DevelopingVeil: View {
         RoundedRectangle(cornerRadius: 22, style: .continuous)
             .fill(Theme.background.opacity(phase ? 0.25 : 0.6))
             .overlay {
-                LinearGradient(colors: [.clear, Theme.accentBright.opacity(0.35), .clear],
+                LinearGradient(colors: [.clear, Theme.highlight.opacity(0.18), .clear],
                                startPoint: .top, endPoint: .bottom)
                     .frame(height: 120)
                     .offset(y: phase ? 160 : -160)

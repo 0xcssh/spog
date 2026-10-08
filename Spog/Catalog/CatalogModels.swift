@@ -29,7 +29,7 @@ struct RarityTier: Decodable, Identifiable, Hashable {
     /// Elle reste distincte par palier : c'est elle qui donne le violet de la Taycan.
     var color: Color {
         switch id {
-        case "common":    return Color(hex: 0x7A7590)
+        case "common":    return Color(hex: 0x7C7C86)
         case "regular":   return Color(hex: 0x4C7DF0)
         case "notable":   return Color(hex: 0x22D3EE)
         case "rare":      return Theme.accent
