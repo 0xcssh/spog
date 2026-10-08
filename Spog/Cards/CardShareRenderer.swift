@@ -15,30 +15,51 @@ enum CardShareRenderer {
     /// Le visuel de la carte, dans le meme ordre de priorite que l'affichage :
     /// la voiture reellement croisee passe avant le rendu du modele. Une carte
     /// partagee doit montrer ce que le joueur a trouve, pas un exemplaire de catalogue.
-    private static func flatArtwork(for card: CardData) -> (image: UIImage, studio: Bool)? {
-        if let developed = card.shot?.developed { return (developed, true) }
-        if let stylized = card.shot?.stylized { return (stylized, false) }
-        return CarArt.image(for: card.vehicle.id, paint: card.paint).map { ($0, true) }
+    ///
+    /// Synchrone : le partage part tout de suite, on ne télécharge rien ici. Sans photo,
+    /// le rendu carré haute définition s'il est déjà sur l'appareil (la carte affichée
+    /// l'a presque toujours demandé), sinon le rendu embarqué à la teinte de la carte.
+    private static func flatArtwork(for card: CardData) -> ShareArtwork? {
+        if let developed = card.shot?.developed { return .developed(developed) }
+        if let stylized = card.shot?.stylized { return .photo(stylized) }
+        if let hd = VehicleArtService.storedImage(for: card.vehicle.id) { return .model(hd) }
+        let fallback = CarArt.image(for: card.vehicle.id, paint: card.paint)
+            ?? VehicleArtService.cachedImage(for: card.vehicle.id)
+        return fallback.map { .model($0) }
     }
+}
+
+/// Ce que montre le haut de l'image partagée, et donc comment le cadrer.
+private enum ShareArtwork {
+    /// La photo mise en scène du joueur : elle remplit son cadre.
+    case photo(UIImage)
+    /// Le rendu « passé en studio » (3:2) : en entier, sur son propre studio flouté.
+    case developed(UIImage)
+    /// Le rendu d'un modèle : plein cadre s'il est carré, en entier et fondu si c'est
+    /// un bandeau embarqué (`StudioArt` reconnaît l'un et l'autre).
+    case model(UIImage)
 }
 
 /// Version figee de la carte, destinee au partage. Pas d'animation, pas de reflet
 /// mobile : une image que l'on peut poster.
 private struct ShareCardView: View {
     let card: CardData
-    let artwork: (image: UIImage, studio: Bool)?
+    let artwork: ShareArtwork?
 
     var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topLeading) {
-                if let artwork, artwork.studio {
+                switch artwork {
+                case .some(.model(let image)):
                     ZStack {
                         Theme.surfaceRaised
-                        StudioArt(image: artwork.image)
+                        StudioArt(image: image)
                     }
-                } else if let artwork {
-                    Image(uiImage: artwork.image).resizable().scaledToFill()
-                } else {
+                case .some(.developed(let image)):
+                    DevelopedArt(image: image)
+                case .some(.photo(let image)):
+                    Image(uiImage: image).resizable().scaledToFill()
+                case .none:
                     // Ni photo ni rendu : la silhouette, comme sur la carte affichee.
                     ZStack {
                         Theme.surfaceRaised

@@ -40,7 +40,10 @@ propres teintes dans `CatalogModels.swift`, et elles servent aussi d'éclairage 
 Ordre de priorité, identique dans la fiche, la grille et l'image de partage :
 
 1. la photo du joueur, mise en scène par `CardArtStylizer` ;
-2. à défaut, le rendu studio du modèle (`CarArt`) ;
+2. à défaut, le rendu studio du modèle, affiché par `ModelArt` : le rendu carré haute
+   définition du serveur (`VehicleArtService`, action `vehicle_art`) en plein cadre, et en
+   attendant qu'il arrive le bandeau embarqué `CarArt` (660 × 290, trop petit pour une
+   carte, décision du 08/10/2026) ;
 3. à défaut, la silhouette de la carrosserie (`CarSilhouette`). Le volume 3D SceneKit a été
    retiré le 07/10/2026.
 
@@ -81,6 +84,12 @@ marketing réussie le heurterait et renverrait « service saturé » à tout le 
 
 Les 5 scans offerts coûtent **2,2 centimes par installation**. C'est un coût d'acquisition,
 pas un coût de service : budgète-le à côté de la publicité.
+
+Les **rendus des modèles** (`vehicle_art`, 1024 × 1024, `gpt-image-1-mini` en qualité
+`high`) coûtent ≈3,3 centimes de dollar, **une fois par modèle** pour tous les joueurs :
+≈30 $ pour les 867 modèles, puis plus rien. Seuls les modèles du catalogue embarqué sont
+acceptés, et `ART_GLOBAL_DAY_LIMIT` (300 générations par jour, cache non compté) empêche
+une boucle de tout payer d'un coup.
 
 **Le serveur est l'autorité sur les scans offerts** (`free_scans`, par installation) et sur
 l'abonnement (transaction StoreKit 2 vérifiée côté serveur, `entitlement.ts`). Le compteur de

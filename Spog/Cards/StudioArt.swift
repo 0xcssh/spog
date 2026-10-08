@@ -1,13 +1,18 @@
 import SwiftUI
 
-/// Un rendu studio (catalogue `CarArt`, visuel d'une cible du pack, carte passée en studio),
-/// montré **en entier** et fondu dans le fond de la carte.
+/// Un rendu studio du catalogue, montré **en entier** et fondu dans le fond de la carte —
+/// ou en plein cadre s'il est carré.
 ///
-/// Ces rendus sont des bandeaux : 660 × 290 pour le catalogue, 1536 × 1024 pour les rendus
-/// générés. Affichés en remplissage dans une vignette presque carrée, ils perdaient l'avant
-/// et l'arrière de la voiture — exactement ce qui la fait reconnaître. Affichés en entier
-/// sans précaution, leur fond de studio s'arrêtait net sur celui de la carte, en rectangle
-/// visible. Le fondu des bords règle les deux : la voiture entière, sans couture.
+/// Les rendus embarqués (`CarArt`) sont des bandeaux de 660 × 290. Affichés en
+/// remplissage dans une vignette presque carrée, ils perdaient l'avant et l'arrière de la
+/// voiture — exactement ce qui la fait reconnaître. Affichés en entier sans précaution,
+/// leur fond de studio s'arrêtait net sur celui de la carte, en rectangle visible. Le
+/// fondu des bords règle les deux : la voiture entière, sans couture. Ce n'est plus qu'un
+/// repli, le temps que le rendu carré haute définition arrive (voir `ModelArt`).
+///
+/// Un rendu **carré** (celui du serveur, 1024 × 1024, voiture centrée) n'a pas besoin de
+/// cette rustine : le remplissage ne rogne que du studio. On le reconnaît à ses
+/// proportions, pour que tout appelant qui passe un tel rendu obtienne le cadrage plein.
 ///
 /// La **photo du joueur**, elle, continue de remplir son cadre : c'est un cliché, il est
 /// cadré pour ça, et le rogner un peu ne coûte rien.
@@ -17,7 +22,26 @@ struct StudioArt: View {
     /// sacrifier sans jamais couper la carrosserie.
     var zoom: CGFloat = 1.12
 
+    /// Carré ou presque : au-delà de 1,25 de large pour 1 de haut, c'est un bandeau.
+    private var isSquare: Bool {
+        image.size.height > 0 && image.size.width / image.size.height < 1.25
+    }
+
     var body: some View {
+        if isSquare {
+            Color.clear
+                .overlay {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                }
+                .clipped()
+        } else {
+            banner
+        }
+    }
+
+    private var banner: some View {
         Color.clear
             .overlay {
                 Image(uiImage: image)

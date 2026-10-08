@@ -115,13 +115,20 @@ struct BountyPanel: View {
 }
 
 /// Une cible du pack : son rendu studio, le modèle, la rareté locale, le bonus, et l'état
-/// de la course. Compacte dans le garage (trois de front), en rangée à l'ouverture.
+/// de la course. Compacte dans le garage (trois de front), en grand à l'ouverture ; dans les
+/// deux cas, le rendu occupe tout le haut de la carte, bord à bord.
 struct BountyTargetCard: View {
     let target: BountyStore.Target
     var compact: Bool = false
 
     private var tier: RarityTier { CatalogStore.shared.tier(target.tier) }
     private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: compact ? 14 : 18, style: .continuous) }
+
+    /// Proportions de la zone image, largeur sur hauteur. Le rendu est carré, voiture
+    /// centrée sur ~80 % de la largeur : on peut rogner jusqu'à un sixième du haut et du
+    /// bas (rapport 1,5) sans toucher au toit ni aux roues — il n'y a là que du studio.
+    static let compactArtRatio: CGFloat = 1.1
+    static let wideArtRatio: CGFloat = 1.5
 
     var body: some View {
         Group {
@@ -133,75 +140,89 @@ struct BountyTargetCard: View {
                 shape.fill(tier.color.opacity(target.found ? 0.16 : 0.06))
             }
         }
+        // Le rendu va jusqu'aux bords : c'est la découpe de la carte, et non une vignette
+        // posée dedans, qui lui donne ses coins arrondis.
+        .clipShape(shape)
         .overlay(shape.strokeBorder(tier.color.opacity(target.found ? 0.75 : 0.32), lineWidth: 1))
         .shadow(color: tier.color.opacity(target.found ? 0.45 : 0.18), radius: target.found ? 14 : 8)
     }
 
     private var art: some View {
-        BountyArtView(vehicleID: target.vehicle_id, carBody: CarBody(target.body), tint: tier.color)
+        ModelArt(vehicleID: target.vehicle_id, body: CarBody(target.body), tint: tier.color)
+            .overlay(alignment: .bottom) {
+                // Fondu vers le bloc de texte : l'image s'y enfonce au lieu de s'arrêter net.
+                LinearGradient(colors: [.clear, Theme.surface.opacity(0.6)],
+                               startPoint: .center, endPoint: .bottom)
+                    .allowsHitTesting(false)
+            }
             .overlay(alignment: .topTrailing) {
                 if target.found {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: compact ? 13 : 18))
                         .foregroundStyle(tier.color)
                         .shadow(color: tier.color.opacity(0.8), radius: 6)
-                        .padding(6)
+                        .padding(compact ? 6 : 10)
                 }
             }
     }
 
     private var compactLayout: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 0) {
             art
-                .frame(height: 62)
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                .padding(.bottom, 3)
-            Text(target.make.uppercased())
-                .font(Theme.label(8)).tracking(1.2)
-                .foregroundStyle(tier.color)
-                .lineLimit(1)
-            Text(target.model)
-                .font(Theme.display(13, .semibold))
-                .foregroundStyle(Theme.textPrimary)
-                .lineLimit(1).minimumScaleFactor(0.6)
-            Text(status)
-                .font(Theme.mono(8, .semibold))
-                .foregroundStyle(target.found ? tier.color : Theme.textSecondary)
-                .lineLimit(2).minimumScaleFactor(0.8)
-                .fixedSize(horizontal: false, vertical: true)
+                .aspectRatio(Self.compactArtRatio, contentMode: .fit)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(target.make.uppercased())
+                    .font(Theme.label(8)).tracking(1.2)
+                    .foregroundStyle(tier.color)
+                    .lineLimit(1)
+                Text(target.model)
+                    .font(Theme.display(13, .semibold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.6)
+                Text(status)
+                    .font(Theme.mono(8, .semibold))
+                    .foregroundStyle(target.found ? tier.color : Theme.textSecondary)
+                    .lineLimit(2).minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.horizontal, 7)
+            .padding(.top, 6)
+            .padding(.bottom, 8)
         }
-        .padding(7)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var wideLayout: some View {
-        HStack(spacing: 14) {
+        VStack(alignment: .leading, spacing: 0) {
             art
-                .frame(width: 132, height: 90)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            VStack(alignment: .leading, spacing: 4) {
-                Text(target.make.uppercased())
-                    .font(Theme.label(9)).tracking(1.4)
-                    .foregroundStyle(tier.color)
-                    .lineLimit(1)
-                Text(target.model)
-                    .font(Theme.display(18))
-                    .foregroundStyle(Theme.textPrimary)
-                    .lineLimit(1).minimumScaleFactor(0.6)
+                .aspectRatio(Self.wideArtRatio, contentMode: .fit)
+            HStack(alignment: .top, spacing: 10) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(target.make.uppercased())
+                        .font(Theme.label(9)).tracking(1.4)
+                        .foregroundStyle(tier.color)
+                        .lineLimit(1)
+                    Text(target.model)
+                        .font(Theme.display(20))
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1).minimumScaleFactor(0.6)
+                    Text(status)
+                        .font(Theme.mono(10, .medium))
+                        .foregroundStyle(target.found ? tier.color : Theme.textSecondary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
                 Text(tier.label)
                     .font(Theme.label(9)).tracking(1).textCase(.uppercase)
                     .foregroundStyle(tier.color)
                     .padding(.horizontal, 8).padding(.vertical, 3)
                     .background(tier.color.opacity(0.14), in: Capsule())
-                Text(status)
-                    .font(Theme.mono(10, .medium))
-                    .foregroundStyle(target.found ? tier.color : Theme.textSecondary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
             }
-            Spacer(minLength: 0)
+            .padding(.horizontal, 14)
+            .padding(.top, 10)
+            .padding(.bottom, 13)
         }
-        .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -219,55 +240,21 @@ struct BountyTargetCard: View {
     }
 }
 
-/// Le visuel d'une cible : la silhouette tout de suite, puis le rendu studio en fondu dès
-/// qu'il arrive (embarqué, en cache, ou généré par le serveur à la première demande).
+/// Ancien nom du visuel d'une cible, gardé pour les appelants qui l'utilisent encore :
+/// tout passe désormais par `ModelArt` (rendu carré haute définition, plein cadre).
 struct BountyArtView: View {
     let vehicleID: String
     let carBody: CarBody
     let tint: Color
-    @State private var image: UIImage?
 
     init(vehicleID: String, carBody: CarBody, tint: Color) {
         self.vehicleID = vehicleID
         self.carBody = carBody
         self.tint = tint
-        // Ce qui est déjà sur l'appareil s'affiche dès la première image, sans fondu :
-        // un rendu connu qui « arrive » à chaque ouverture ferait croire à un chargement.
-        _image = State(initialValue: VehicleArtService.cachedImage(for: vehicleID))
     }
 
     var body: some View {
-        // Le fond donne la taille ; l'image se pose dessus. Une image en remplissage posée
-        // directement dans une pile la ferait grandir au-delà du cadre prévu.
-        Rectangle()
-            .fill(LinearGradient(colors: [tint.opacity(0.26), Theme.surface],
-                                 startPoint: .top, endPoint: .bottom))
-            .overlay {
-                RadialGradient(colors: [tint.opacity(0.35), .clear],
-                               center: .bottom, startRadius: 2, endRadius: 110)
-            }
-            .overlay {
-                if let image {
-                    StudioArt(image: image)
-                        .transition(.opacity)
-                } else {
-                    Image(systemName: carBody.symbol)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundStyle(LinearGradient(colors: [Theme.textPrimary.opacity(0.75), tint.opacity(0.45)],
-                                                        startPoint: .top, endPoint: .bottom))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .shimmer()
-                        .transition(.opacity)
-                }
-            }
-            .clipped()
-            .task(id: vehicleID) {
-                guard image == nil else { return }
-                guard let loaded = await VehicleArtService.image(for: vehicleID) else { return }
-                withAnimation(.easeInOut(duration: 0.7)) { image = loaded }
-            }
+        ModelArt(vehicleID: vehicleID, body: carBody, tint: tint)
     }
 }
 
@@ -333,61 +320,77 @@ struct BountyOpeningView: View {
                 .ignoresSafeArea()
                 .animation(.easeInOut(duration: 0.6), value: revealed)
 
-            ScrollView {
-                VStack(spacing: 22) {
-                    VStack(spacing: 8) {
-                        Overline(text: "bounty.overline", color: Theme.accentBright)
-                        Text("bounty.reveal.title")
-                            .font(Theme.display(30))
-                            .foregroundStyle(Theme.textPrimary)
-                            .multilineTextAlignment(.center)
-                        if let ends = pack.endsAt {
-                            InfoChip(icon: "clock",
-                                     text: Text("bounty.endsIn \(ends.formatted(.relative(presentation: .numeric)))"))
-                        }
-                    }
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 12)
-
-                    VStack(spacing: 12) {
-                        ForEach(Array(pack.targets.enumerated()), id: \.element.id) { index, target in
-                            ZStack {
-                                if index < revealed {
-                                    BountyTargetCard(target: target)
-                                        .transition(.asymmetric(
-                                            insertion: .modifier(active: FlipIn(angle: -90), identity: FlipIn(angle: 0)),
-                                            removal: .opacity))
-                                } else {
-                                    CardBack()
-                                        .transition(.opacity)
-                                }
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 22) {
+                        VStack(spacing: 8) {
+                            Overline(text: "bounty.overline", color: Theme.accentBright)
+                            Text("bounty.reveal.title")
+                                .font(Theme.display(30))
+                                .foregroundStyle(Theme.textPrimary)
+                                .multilineTextAlignment(.center)
+                            if let ends = pack.endsAt {
+                                InfoChip(icon: "clock",
+                                         text: Text("bounty.endsIn \(ends.formatted(.relative(presentation: .numeric)))"))
                             }
+                        }
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 12)
+
+                        VStack(spacing: 12) {
+                            ForEach(Array(pack.targets.enumerated()), id: \.element.id) { index, target in
+                                ZStack {
+                                    if index < revealed {
+                                        BountyTargetCard(target: target)
+                                            .transition(.asymmetric(
+                                                insertion: .modifier(active: FlipIn(angle: -90), identity: FlipIn(angle: 0)),
+                                                removal: .opacity))
+                                    } else {
+                                        CardBack()
+                                            .transition(.opacity)
+                                    }
+                                }
+                                .frame(maxWidth: 360)
+                                .id(index)
+                            }
+                        }
+
+                        VStack(spacing: 16) {
+                            Text("bounty.hint")
+                                .font(Theme.body(13))
+                                .foregroundStyle(Theme.textSecondary)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            Button(action: onDone) {
+                                Text("bounty.reveal.done")
+                            }
+                            .buttonStyle(NeonButtonStyle())
                             .frame(maxWidth: 360)
                         }
+                        .opacity(allRevealed ? 1 : 0)
+                        .offset(y: allRevealed ? 0 : 16)
+                        .animation(.easeOut(duration: 0.45), value: allRevealed)
+                        .id("done")
                     }
-
-                    VStack(spacing: 16) {
-                        Text("bounty.hint")
-                            .font(Theme.body(13))
-                            .foregroundStyle(Theme.textSecondary)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        Button(action: onDone) {
-                            Text("bounty.reveal.done")
-                        }
-                        .buttonStyle(NeonButtonStyle())
-                        .frame(maxWidth: 360)
-                    }
-                    .opacity(allRevealed ? 1 : 0)
-                    .offset(y: allRevealed ? 0 : 16)
-                    .animation(.easeOut(duration: 0.45), value: allRevealed)
+                    .padding(.horizontal, 22)
+                    .padding(.top, 36)
+                    .padding(.bottom, 24)
                 }
-                .padding(.horizontal, 22)
-                .padding(.top, 36)
-                .padding(.bottom, 24)
+                .scrollBounceBehavior(.basedOnSize)
+                // Les cartes ont désormais leur rendu en grand : les trois ne tiennent plus
+                // dans l'écran. On suit chaque retournement, pour que la plus rare — la
+                // dernière — ne se retourne pas hors de vue.
+                .onChange(of: revealed) { _, value in
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        if value >= pack.targets.count {
+                            proxy.scrollTo("done", anchor: .bottom)
+                        } else if value > 0 {
+                            proxy.scrollTo(value - 1, anchor: .center)
+                        }
+                    }
+                }
             }
-            .scrollBounceBehavior(.basedOnSize)
         }
         .preferredColorScheme(.dark)
         .sensoryFeedback(.impact(weight: .medium), trigger: revealed)
@@ -409,20 +412,26 @@ struct BountyOpeningView: View {
 private struct CardBack: View {
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
-        shape
-            .fill(LinearGradient(colors: [Theme.surfaceRaised, Theme.surface],
-                                 startPoint: .topLeading, endPoint: .bottomTrailing))
-            .overlay(DotGrid(spacing: 10).clipShape(shape))
+        // Même gabarit que la carte qu'il cache (le rendu en 3:2, puis environ 92 points de
+        // texte) : sans ça, chaque retournement ferait sauter toute la colonne.
+        Color.clear
+            .aspectRatio(BountyTargetCard.wideArtRatio, contentMode: .fit)
+            .padding(.bottom, 92)
             .overlay {
-                Image("LogoMark")
-                    .resizable().scaledToFit()
-                    .frame(width: 34, height: 34)
-                    .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
-                    .opacity(0.55)
+                shape
+                    .fill(LinearGradient(colors: [Theme.surfaceRaised, Theme.surface],
+                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .overlay(DotGrid(spacing: 10).clipShape(shape))
+                    .overlay {
+                        Image("LogoMark")
+                            .resizable().scaledToFit()
+                            .frame(width: 34, height: 34)
+                            .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                            .opacity(0.55)
+                    }
+                    .shimmer(duration: 2.2)
+                    .overlay(shape.strokeBorder(Theme.glassEdge, lineWidth: 1))
             }
-            .shimmer(duration: 2.2)
-            .overlay(shape.strokeBorder(Theme.glassEdge, lineWidth: 1))
-            .frame(height: 110)
     }
 }
 
