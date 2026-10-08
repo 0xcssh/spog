@@ -23,6 +23,11 @@
 //   → 402 { code: "develop_limit", develops_left: 0, resets_at }
 //        Rendu studio de la voiture photographiée (voir develop.ts) : 1 par jour en gratuit,
 //        plafond anti-abus seulement pour Pro et pour DEVELOP_TESTERS.
+//   POST { action: "vehicle_art", vehicle_id }
+//   → 200 { image: "<jpeg base64>", cached: boolean }
+//   → 403 { code: "not_a_target" }   (le modèle n'est la cible d'aucun pack cette semaine)
+//        Rendu studio d'un modèle du catalogue, pour le pack de primes (voir art.ts) :
+//        généré une fois par modèle, puis servi depuis le compartiment `art`.
 //   → 4xx/5xx { code: string, error: string }
 //     `code` est stable et traduit côté app ; `error` n'est qu'un repli lisible.
 //
@@ -38,7 +43,8 @@
 
 import { createHash, randomUUID } from "node:crypto";
 import type { EntitlementResult } from "./entitlement";
-import type { SampleStore } from "./storage";
+import type { ArtStore, SampleStore } from "./storage";
+import { ART_MODEL, ART_URL, allowedArtVehicle, artKey, artPrompt } from "./art";
 import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
 import { candidates, expectedVehicleId } from "./catalog";
 import { createSocial, SOCIAL_ACTIONS } from "./social";
@@ -66,7 +72,16 @@ export interface HandlerDeps {
   /** Attente entre deux tentatives OpenAI (remplaçable en test). */
   sleep?: (ms: number) => Promise<void>;
   model?: string;
+  /** Cache des rendus des cibles du pack ; null = action indisponible (jamais sans cache). */
+  art?: ArtStore | null;
+  /** Horloge (remplaçable en test, pour fixer la semaine du pack). */
+  now?: () => Date;
 }
+
+/// Requêtes `vehicle_art` par appareil : un pack, c'est trois images, rouvertes de temps
+/// en temps. Ce plafond ne gêne personne et casse une boucle.
+export const ART_DAY_LIMIT = 300;
+export const ART_WINDOW_LIMIT = 30;
 
 /// Quotas du joueur gratuit. Dix scans le premier jour pour accrocher, puis trois par jour
 /// pour faire revenir chaque jour ; un rendu par jour. Au-delà viendra la pub récompensée
@@ -217,6 +232,10 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
   const model = deps.model || DEFAULT_MODEL;
   const allowance = deps.allowance ?? FREE_ALLOWANCE;
   const newId = deps.newId ?? randomUUID;
+  const now = deps.now ?? (() => new Date());
+  /// Générations en cours, par modèle : deux joueurs qui ouvrent le même pack à la même
+  /// seconde ne doivent pas payer deux fois le même rendu.
+  const artInFlight = new Map<string, Promise<string | null>>();
   const social = createSocial({
     db: deps.db,
     verifyApple: deps.verifyApple ?? (async () => ({ ok: false, reason: "disabled" })),
@@ -350,6 +369,84 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
                   resets_at: nextResetAt() });
   }
 
+  /// Rendu studio d'une cible du pack. Le cache d'abord ; sinon une génération, une seule
+  /// tentative (comme `develop` : rejouer une image pourrait la facturer deux fois).
+  async function handleVehicleArt(req: Request, body: Record<string, unknown>): Promise<Response> {
+    const vehicleId = typeof body.vehicle_id === "string" ? body.vehicle_id.trim().slice(0, MAX_VEHICLE_ID) : "";
+    if (!vehicleId) return json({ code: "bad_request", error: "Modèle manquant" }, 400);
+    // La vérification de cible passe avant tout accès au stockage : c'est elle qui borne
+    // ce que l'URL publique peut faire générer.
+    const target = allowedArtVehicle(vehicleId, now());
+    if (!target) return json({ code: "not_a_target", error: "Ce modèle n'est pas une cible cette semaine." }, 403);
+    // Sans cache, chaque ouverture de pack paierait une image : on refuse plutôt.
+    if (!deps.art) return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+
+    const ip = clientIPFrom(req.headers);
+    const quota = await checkQuota(`art:${deviceIdFrom(req.headers, ip)}`, ART_DAY_LIMIT, ART_WINDOW_LIMIT);
+    if (quota === "unavailable") return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    if (quota === "blocked") return json({ code: "rate_limited", error: "Trop de requêtes. Réessaie un peu plus tard." }, 429);
+
+    const key = artKey(target.id);
+    let cached: Buffer | null;
+    try {
+      cached = await deps.art.get(key);
+    } catch (error) {
+      // Stockage en panne : surtout ne pas regénérer, ce serait payer à chaque appel.
+      console.error("art cache unavailable", error instanceof Error ? error.message : error);
+      return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    }
+    if (cached) return json({ image: cached.toString("base64"), cached: true });
+
+    let pending = artInFlight.get(key);
+    if (!pending) {
+      pending = generateArt(target, key).finally(() => artInFlight.delete(key));
+      artInFlight.set(key, pending);
+    }
+    const image = await pending;
+    if (!image) return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
+    return json({ image, cached: false });
+  }
+
+  async function generateArt(target: Parameters<typeof artPrompt>[0], key: string): Promise<string | null> {
+    let response: Response;
+    try {
+      response = await deps.fetch(ART_URL, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${deps.openaiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: ART_MODEL,
+          prompt: artPrompt(target),
+          size: "1536x1024",
+          quality: "medium",
+          // JPEG : 300 Ko au lieu de 3 Mo, à stocker comme à télécharger sur mobile.
+          output_format: "jpeg",
+          output_compression: 85,
+          n: 1,
+        }),
+      });
+    } catch (error) {
+      console.error("art unreachable", error instanceof Error ? error.message : error);
+      return null;
+    }
+    if (!response.ok) {
+      console.error("art error", response.status, (await response.text()).slice(0, 400));
+      return null;
+    }
+    const result = await response.json() as { data?: { b64_json?: string }[]; usage?: ImageUsage };
+    const image = result.data?.[0]?.b64_json;
+    if (!image) return null;
+    const cost = developCost(ART_MODEL, result.usage ?? {});
+    console.log(`art ${target.id}: ${JSON.stringify(result.usage ?? {})}, ` +
+                (cost === null ? "coût inconnu" : `$${cost.toFixed(4)}`));
+    try {
+      await deps.art!.put(key, Buffer.from(image, "base64"));
+    } catch (error) {
+      // Le joueur a son image quand même ; le prochain la regénérera, c'est le seul coût.
+      console.error("art not cached", error instanceof Error ? error.message : error);
+    }
+    return image;
+  }
+
   /// Retrait de l'accord : tout ce que cette installation a confié disparaît, images
   /// comprises. Les lignes ne sont effacées qu'une fois les images supprimées, pour ne
   /// jamais laisser une image orpheline qu'aucune ligne ne permettrait plus de retrouver.
@@ -480,6 +577,7 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       return social(body.action, hashKey(installIdFrom(req.headers, deviceIdFrom(req.headers, ip))),
                     body as Record<string, unknown>);
     }
+    if (body.action === "vehicle_art") return handleVehicleArt(req, body as Record<string, unknown>);
     if (body.action === "develop") {
       if (!deps.openaiKey) return json({ code: "server_misconfigured", error: "OPENAI_API_KEY manquante côté serveur" }, 500);
       return handleDevelop(req, body as Record<string, unknown>);
