@@ -128,7 +128,7 @@ struct OnboardingView: View {
             // toujours sur le rendu embarqué, qui marche hors ligne, et gagne en netteté
             // ensuite sans changer de carte.
             guard let current = demo,
-                  let sharper = await VehicleArtService.image(for: current.vehicle.id),
+                  let sharper = await VehicleArtService.remoteImage(for: current.vehicle.id),
                   let upgraded = current.upgraded(with: sharper) else { return }
             withAnimation(.easeInOut(duration: 0.3)) { demo = upgraded }
         }
@@ -439,7 +439,7 @@ struct OnboardingView: View {
                         .foregroundStyle(Theme.textPrimary)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    if let art = VehicleArtService.cachedImage(for: contrast.vehicle.id) {
+                    if let art = VehicleArtService.storedImage(for: contrast.vehicle.id) ?? VehicleArtService.cachedImage(for: contrast.vehicle.id) {
                         StudioArt(image: art, zoom: 1.08)
                             .frame(maxWidth: .infinity)
                             .frame(height: m.clamp(m.height - 540, 56, 130))
