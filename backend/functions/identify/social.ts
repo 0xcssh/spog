@@ -12,6 +12,7 @@
 // Actions (POST, en-tête x-install-id) :
 //   me · set_pseudo · apple_link · catch · reassign · delete_catch · league · garage · delete_account
 //   bounty · open_bounty   (pack de primes de la semaine, voir bounty.ts)
+//   duel_create · duel_join · duels   (duels de sept jours entre amis)
 
 import { resolve } from "./catalog";
 import { weeklyBounties, currentWeek } from "./bounty";
@@ -42,7 +43,21 @@ const unavailable = () => reply({ code: "service_saturated", error: "Le service 
 const bad = (error: string) => reply({ code: "bad_request", error }, 400);
 
 export const SOCIAL_ACTIONS = ["me", "set_pseudo", "apple_link", "catch", "reassign", "delete_catch", "league", "garage",
-  "delete_account", "bounty", "open_bounty"];
+  "delete_account", "bounty", "open_bounty", "duel_create", "duel_join", "duels"];
+
+/// Un duel dure une semaine : assez pour que chacun sorte plusieurs fois.
+export const DUEL_DAYS = 7;
+/// Défis en cours par joueur (en attente compris) : au-delà, le classement des duels
+/// devient une corvée, et la création en masse un moyen de spammer des codes.
+export const MAX_OPEN_DUELS = 5;
+/// Alphabet des codes : sans 0/O ni 1/I/L, qu'on confond en les dictant.
+const DUEL_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+
+export function duelCode(random: () => number = Math.random): string {
+  let code = "";
+  for (let i = 0; i < 6; i++) code += DUEL_ALPHABET[Math.floor(random() * DUEL_ALPHABET.length)];
+  return code;
+}
 
 export function createSocial(deps: SocialDeps) {
   const now = deps.now ?? (() => new Date());
@@ -261,6 +276,67 @@ export function createSocial(deps: SocialDeps) {
         "insert into public.bounty_opens (week, player_id) values ($1, $2) on conflict do nothing",
         [currentWeek(now()), player]);
       return handlers.bounty(installHash, body);
+    },
+
+    async duel_create(installHash) {
+      const player = await playerOf(installHash);
+      const { rows: open } = await deps.db!.query(
+        `select count(*)::int as n from public.duels
+          where (challenger_id = $1 or opponent_id = $1) and (ends_at is null or ends_at > now())`, [player]);
+      if (open[0].n >= MAX_OPEN_DUELS) {
+        return reply({ code: "too_many_duels", error: "Trop de duels en cours" }, 409);
+      }
+      // Un code déjà pris (rarissime : 31^6 combinaisons) se retente.
+      for (let attempt = 0; attempt < 5; attempt++) {
+        try {
+          const code = duelCode();
+          await deps.db!.query("insert into public.duels (code, challenger_id) values ($1, $2)", [code, player]);
+          return reply({ code });
+        } catch (error: any) {
+          if (error?.code !== "23505") throw error;
+        }
+      }
+      return unavailable();
+    },
+
+    async duel_join(installHash, body) {
+      const code = typeof body.code === "string" ? body.code.trim().toUpperCase() : "";
+      if (!/^[A-Z0-9]{6}$/.test(code)) return reply({ code: "duel_unknown", error: "Code inconnu" }, 404);
+      const player = await playerOf(installHash);
+      const { rows } = await deps.db!.query("select public.join_duel($1, $2, $3) as r", [code, player, DUEL_DAYS]);
+      const r = rows[0].r;
+      if (r.error === "unknown") return reply({ code: "duel_unknown", error: "Code inconnu" }, 404);
+      if (r.error === "own") return reply({ code: "duel_own", error: "C'est ton propre défi" }, 409);
+      if (r.error === "taken") return reply({ code: "duel_taken", error: "Ce duel a déjà un adversaire" }, 409);
+      return handlers.duels(installHash, body);
+    },
+
+    /// Les duels du joueur, du plus récent au plus ancien, avec les scores du moment.
+    async duels(installHash) {
+      const player = await playerOf(installHash);
+      const { rows } = await deps.db!.query(
+        `select d.id, d.code, d.starts_at, d.ends_at, d.challenger_id = $1 as mine,
+                case when d.challenger_id = $1 then po.pseudo else pc.pseudo end as opponent,
+                d.opponent_id is not null as joined,
+                case when d.starts_at is null then 0 else public.points_between($1, d.starts_at, d.ends_at) end as my_points,
+                case when d.starts_at is null then 0 else public.points_between(
+                  case when d.challenger_id = $1 then d.opponent_id else d.challenger_id end,
+                  d.starts_at, d.ends_at) end as their_points
+           from public.duels d
+           join public.players pc on pc.id = d.challenger_id
+           left join public.players po on po.id = d.opponent_id
+          where d.challenger_id = $1 or d.opponent_id = $1
+          order by d.created_at desc limit 20`, [player]);
+      const nowMs = now().getTime();
+      return reply({
+        duels: rows.map((d) => ({
+          id: d.id, code: d.joined ? null : d.code, joined: d.joined,
+          opponent: d.opponent ?? null, my_points: d.my_points, their_points: d.their_points,
+          starts_at: d.starts_at ? new Date(d.starts_at).toISOString() : null,
+          ends_at: d.ends_at ? new Date(d.ends_at).toISOString() : null,
+          finished: d.ends_at ? new Date(d.ends_at).getTime() <= nowMs : false,
+        })),
+      });
     },
 
     async garage(installHash) {

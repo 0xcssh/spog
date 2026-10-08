@@ -13,6 +13,7 @@ struct RootView: View {
     @State private var training = TrainingConsent()
     @State private var account = AccountStore()
     @State private var bounty = BountyStore()
+    @State private var duels = DuelStore()
     @State private var tab: Tab = .garage
 
     init() {
@@ -63,6 +64,7 @@ struct RootView: View {
         .environment(training)
         .environment(account)
         .environment(bounty)
+        .environment(duels)
         // Prises restées en attente, puis l'état du joueur : au lancement, et à chaque
         // nouvelle prise (le classement bouge).
         .task(id: garage.catches.count) {
@@ -73,6 +75,12 @@ struct RootView: View {
         // on n'accepte pas un parrainage à la place du joueur, un lien s'ouvre par accident.
         .onOpenURL { url in
             if let code = ReferralStore.code(from: url) { referral.pendingFromLink = code }
+            // Défi reçu `spog://duel/XXXXXX` : l'onglet Social s'ouvre et propose de le
+            // rejoindre, sans le faire à la place du joueur.
+            if let code = DuelStore.code(from: url) {
+                duels.pendingFromLink = code
+                tab = .social
+            }
         }
         .preferredColorScheme(.dark)
         // Les teintes sont calculées hors du fil principal : sinon la première ouverture

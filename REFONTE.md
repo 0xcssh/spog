@@ -195,7 +195,7 @@ le compte Mandalore est déjà sous avertissement 4.3 « copie » (voir Risques)
 Ce qu'on garde comme différence : **la rareté qui dépend du pays**. Une Clio ne vaut rien à
 Paris : chaque ville a ses propres trophées, et les classements locaux ont un sens.
 
-## Économie — décidée le 08/10/2026, pas encore codée
+## Économie — décidée le 08/10/2026, codée sauf la pub
 
 Remplace « 5 scans offerts puis abonnement ».
 
@@ -246,10 +246,12 @@ Ordre retenu :
 1. **Comptes** (sans friction, Sign in with Apple facultatif) et prises enregistrées côté
    serveur — **fait**.
 2. **Ligues hebdomadaires** et **premier repéreur** — **faits**.
-3. **Pack de primes de la semaine** : chaque lundi, un pack scellé à ouvrir révèle 3 voitures
-   à chasser dans la rue ; **le même pack pour toute une ville**, la première personne qui
-   trouve la cible prend le gros bonus. Les packs ne se vendent pas.
-4. **Duels entre amis** (7 jours, le plus de points gagne).
+3. **Pack de primes de la semaine** — **fait** : chaque lundi, un pack scellé à ouvrir révèle
+   3 voitures à chasser dans la rue ; **le même pack pour tout un pays** (la ville viendra
+   quand le serveur la connaîtra), le premier qui trouve une cible prend le gros bonus. Les
+   packs ne se vendent pas.
+4. **Duels entre amis** — **faits** : un code ou un lien `spog://duel/CODE`, sept jours, les
+   points des prises qui comptent au classement (primes comprises).
 5. Ensuite : **territoires** (le « roi » d'un quartier sur la semaine) et **crews**.
 
 ## Ordre des travaux
@@ -260,8 +262,8 @@ Ordre retenu :
 | **1. Argent (serveur)** | Scans offerts et abonnement vérifiés par le serveur | Fait, sauf App Attest |
 | **2. Refonte de l'app** | Silhouette, analytics, onboarding jouable | En partie |
 | **3. Collecte et classifieur** | Consentement, `training_samples`, classifieur | Collecte faite |
-| **4. Social** | Comptes, ligues, premier repéreur → pack de la semaine → duels → territoires, crews | Ligues faites |
-| **5. Économie** | 3 scans/jour, Develop, pub récompensée, nouveau Pro | À faire |
+| **4. Social** | Comptes, ligues, premier repéreur → pack de la semaine → duels → territoires, crews | Faits jusqu'aux duels |
+| **5. Économie** | 3 scans/jour, Develop, pub récompensée, nouveau Pro | Fait sauf la pub (attend la régie) |
 
 ## Où on en est — 08/10/2026
 
@@ -315,8 +317,16 @@ photo. L'app appelle Neon ; l'ancienne fonction Supabase `identify` est retirée
 - Politique de confidentialité mise à jour pour les comptes et les classements.
 - Reste : pack de primes, duels, territoires, crews.
 
-**Develop — mesuré, pas encore ouvert aux joueurs.** L'action `develop` existe côté serveur,
-réservée aux installations de `DEVELOP_TESTERS` (vide en production).
+**Économie — codée le 08/10/2026, sauf la pub.** Le serveur tient les quotas du joueur
+gratuit par installation et par jour UTC (`usage_days`) : 10 scans le premier jour, 3 ensuite,
+1 rendu par jour ; Pro n'a qu'un plafond anti-abus. L'app affiche « N scans aujourd'hui »,
+présente Pro avant la photo quand il n'en reste plus, et propose « Développer la carte » sur
+la fiche : le rendu (JPEG, ~20 s, voile de développement à l'écran) remplace alors la photo
+mise en scène partout. **La pub récompensée attend le choix de la régie** ; elle se logera
+là où Pro se présente aujourd'hui. Pas encore fait : rendu préparé en arrière-plan dès la
+prise, démo jouable à l'onboarding.
+
+**Pack de primes et duels — faits le 08/10/2026**, serveur et app, 152 tests backend.
 
 ## Prérequis hors code
 

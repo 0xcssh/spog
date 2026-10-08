@@ -193,3 +193,46 @@ describe("jeton Sign in with Apple", () => {
     assert.equal((await verify(forged)).ok, false);
   });
 });
+
+describe("duels", () => {
+  test("défier, rejoindre, puis chacun marque les points de ses prises pendant le duel", async () => {
+    await call("set_pseudo", "b", { pseudo: "Bob" });
+    const created = await call("duel_create", "a");
+    assert.match(created.body.code, /^[A-Z2-9]{6}$/);
+    const joined = await call("duel_join", "b", { code: created.body.code.toLowerCase() });
+    assert.equal(joined.status, 200);
+    await caught("a", "porsche-macan");
+    const view = await call("duels", "a");
+    const d = view.body.duels[0];
+    assert.equal(d.joined, true);
+    assert.equal(d.opponent, "Bob");
+    assert.ok(d.my_points > 0);
+    assert.equal(d.their_points, 0);
+    assert.equal(d.code, null);   // plus besoin de partager un code déjà utilisé
+  });
+
+  test("les prises d'avant le duel ne comptent pas", async () => {
+    await caught("a", "porsche-macan");
+    const { body } = await call("duel_create", "a");
+    await call("duel_join", "b", { code: body.code });
+    assert.equal((await call("duels", "a")).body.duels[0].my_points, 0);
+  });
+
+  test("on ne rejoint ni son propre défi, ni un défi déjà pris, ni un code inconnu", async () => {
+    const { body } = await call("duel_create", "a");
+    assert.equal((await call("duel_join", "a", { code: body.code })).body.code, "duel_own");
+    await call("duel_join", "b", { code: body.code });
+    assert.equal((await call("duel_join", "c", { code: body.code })).body.code, "duel_taken");
+    assert.equal((await call("duel_join", "c", { code: "ZZZZZZ" })).status, 404);
+  });
+
+  test("cinq duels en cours au plus", async () => {
+    for (let i = 0; i < 5; i++) assert.equal((await call("duel_create", "a")).status, 200);
+    assert.equal((await call("duel_create", "a")).body.code, "too_many_duels");
+  });
+
+  test("les codes évitent les caractères qu'on confond", async () => {
+    const { duelCode } = await import("./social");
+    for (let i = 0; i < 200; i++) assert.doesNotMatch(duelCode(), /[01OIL]/);
+  });
+});

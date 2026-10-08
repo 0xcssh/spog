@@ -28,7 +28,7 @@ struct SocialView: View {
                 identityBlock
                 leagueBlock
                 if account.profile?.apple_linked == false { appleBlock }
-                duelsBlock
+                DuelsBlock()
                 referralBlock
                 crewBlock
             }
@@ -195,19 +195,6 @@ struct SocialView: View {
                 .signInWithAppleButtonStyle(.white)
                 .frame(height: 46)
                 .clipShape(Capsule())
-            }
-            .padding(14)
-        }
-    }
-
-    // MARK: Duels
-
-    private var duelsBlock: some View {
-        NeonFrame(radius: 16) {
-            VStack(alignment: .leading, spacing: 13) {
-                Overline(text: "social.duels")
-                EmptySlot(icon: "figure.fencing", message: "social.duelsEmpty")
-                LockedButton(icon: "person.badge.plus", label: "social.invite")
             }
             .padding(14)
         }
