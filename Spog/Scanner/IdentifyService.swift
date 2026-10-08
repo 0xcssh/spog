@@ -14,9 +14,10 @@ struct Identification {
     /// Teinte en anglais, prise dans une liste fermee. Rapprochee de la palette par CarPaint.
     let color: String
     let confidence: Double
-    /// Scans offerts restants selon le serveur, qui en est l'autorite. Nil pour un
-    /// abonne, ou face a un serveur plus ancien qui ne le renvoie pas.
-    var freeScansLeft: Int? = nil
+    /// Scans du jour restants selon le serveur, qui en est l'autorite, et l'heure de
+    /// remise a zero. Nil pour un abonne.
+    var scansLeft: Int? = nil
+    var scansResetAt: Date? = nil
     /// Photo conservée pour l'entraînement, si le joueur l'a accepté : sert à y attacher
     /// son étiquette quand il confirme ou corrige le modèle.
     var sampleID: String? = nil
@@ -45,9 +46,9 @@ enum IdentifyService {
         /// Photo d'un ecran, d'une affiche ou d'une miniature : la regle du jeu
         /// est la camera en direct sur une vraie voiture.
         case notLive
-        /// Scans offerts epuises, constate par le serveur : le paywall doit s'interposer,
-        /// meme si le compteur local croyait qu'il en restait (reinstallation, autre appareil).
-        case paywall
+        /// Scans du jour epuises, constate par le serveur : Pro doit s'interposer, meme si
+        /// le miroir local croyait qu'il en restait (autre appareil, reinstallation).
+        case dailyLimit(resetsAt: Date?)
 
         var errorDescription: String? {
             switch self {
@@ -55,7 +56,7 @@ enum IdentifyService {
             case .unreadableImage: String(localized: "scanError.unreadableImage")
             case .noVehicle:       String(localized: "scanError.noVehicle")
             case .notLive:         String(localized: "scanError.notLive")
-            case .paywall:         String(localized: "scanError.paywall")
+            case .dailyLimit:      String(localized: "scanError.dailyLimit")
             case .server(let code, let fallback):
                 Self.message(for: code) ?? fallback ?? String(localized: "scanError.failed")
             }
@@ -111,10 +112,12 @@ enum IdentifyService {
         }
         guard let http = response as? HTTPURLResponse else { throw IdentifyError.network }
 
-        struct ErrorPayload: Decodable { let code: String?; let error: String? }
+        struct ErrorPayload: Decodable { let code: String?; let error: String?; let resets_at: String? }
         guard http.statusCode == 200 else {
             let payload = try? JSONDecoder().decode(ErrorPayload.self, from: data)
-            if payload?.code == "paywall_required" { throw IdentifyError.paywall }
+            if payload?.code == "daily_limit" {
+                throw IdentifyError.dailyLimit(resetsAt: payload?.resets_at.flatMap(Self.date))
+            }
             throw IdentifyError.server(code: payload?.code, fallback: payload?.error)
         }
 
@@ -123,7 +126,8 @@ enum IdentifyService {
             let body: String?
             let confidence: Double
             let is_screen: Bool, vehicle_present: Bool
-            let free_scans_left: Int?
+            let scans_left: Int?
+            let resets_at: String?
             let sample_id: String?
             let scan_id: String?
         }
@@ -143,9 +147,15 @@ enum IdentifyService {
                               body: payload.body ?? "sedan",
                               color: payload.color,
                               confidence: payload.confidence,
-                              freeScansLeft: payload.free_scans_left,
+                              scansLeft: payload.scans_left,
+                              scansResetAt: payload.resets_at.flatMap(Self.date),
                               sampleID: payload.sample_id,
                               scanID: payload.scan_id)
+    }
+
+    /// Dates du serveur : `toISOString`, avec les millisecondes.
+    static func date(_ text: String) -> Date? {
+        ISO8601DateFormatter.withFractions.date(from: text) ?? ISO8601DateFormatter().date(from: text)
     }
 
     // MARK: Entraînement

@@ -148,7 +148,7 @@ struct MiniCard: View {
                 ZStack {
                     RadialGradient(colors: [card.tier.color.opacity(0.35), .clear],
                                    center: .center, startRadius: 2, endRadius: 70)
-                    if let stylized = card.shot?.stylized {
+                    if let stylized = card.shot?.face {
                         // **La voiture reellement croisee, pas le modele.** Meme ordre de
                         // priorite que la fiche detaillee : un covering zebre, une livree
                         // de taxi ou un kit large n'existent que sur la photo du joueur.

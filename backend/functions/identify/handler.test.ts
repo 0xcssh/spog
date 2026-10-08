@@ -2,16 +2,18 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import {
   createHandler, hashKey, clientIPFrom, deviceIdFrom, installIdFrom, COLORS, BODIES, MAX_IMAGE_BASE64,
-  FREE_SCANS, type HandlerDeps, type Queryable,
+  FREE_ALLOWANCE, PRO_DAILY_DEVELOPS, nextResetAt, type HandlerDeps, type Queryable,
 } from "./handler";
 import type { EntitlementResult } from "./entitlement";
 import type { SampleStore } from "./storage";
 
 // ---------- Doublures ----------
 
-/// Base factice : quotas décidés par `decide`, scans offerts tenus en mémoire.
+/// Base factice : quotas anti-abus décidés par `decide`, quotas du jour tenus en mémoire
+/// (`freeUsed` : scans du jour par empreinte d'installation ; `<empreinte>:develop` pour
+/// les rendus). `firstDay` : l'installation en est-elle à son premier jour ?
 function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUsed: Record<string, number> = {},
-                sampleKeys: string[] = []) {
+                sampleKeys: string[] = [], firstDay = true) {
   const keys: unknown[] = [];
   const queries: { text: string; values: unknown[] }[] = [];
   let consumed = 0;
@@ -26,14 +28,16 @@ function fakeDb(decide: (key: unknown) => boolean | "throw" = () => true, freeUs
       }
       keys.push(values[0]);
       const key = String(values[0]);
-      if (text.includes("from public.free_scans")) {
-        if (decide("free-scans") === "throw") throw new Error("connection timeout");
-        return { rows: key in freeUsed ? [{ used: freeUsed[key] }] : [] };
+      const slot = values[1] === "develop" ? `${key}:develop` : key;
+      if (text.includes("allowance_left")) {
+        if (decide("allowance") === "throw") throw new Error("connection timeout");
+        const limit = Number(firstDay ? values[2] : values[3]);
+        return { rows: [{ left: Math.max(0, limit - (freeUsed[slot] ?? 0)) }] };
       }
-      if (text.includes("consume_free_scan")) {
+      if (text.includes("consume_allowance")) {
         consumed++;
-        freeUsed[key] = (freeUsed[key] ?? 0) + 1;
-        return { rows: [{ used: freeUsed[key] }] };
+        freeUsed[slot] = (freeUsed[slot] ?? 0) + 1;
+        return { rows: [{ used: freeUsed[slot] }] };
       }
       const d = decide(values[0]);
       if (d === "throw") throw new Error("connection timeout");
@@ -95,7 +99,7 @@ describe("contrat de réponse", () => {
     const res = await handler()(post({ imageBase64: "abc" }));
     assert.equal(res.status, 200);
     const { scan_id, ...rest } = await res.json() as any;
-    assert.deepEqual(rest, { ...goodCar, free_scans_left: FREE_SCANS - 1 });
+    assert.deepEqual(rest, { ...goodCar, scans_left: FREE_ALLOWANCE.firstDayScans - 1, resets_at: nextResetAt() });
     assert.match(scan_id, /^[0-9a-f-]{36}$/);
   });
 
@@ -213,50 +217,65 @@ describe("OpenAI", () => {
   });
 });
 
-describe("scans offerts et abonnement", () => {
+describe("quotas du jour et abonnement", () => {
   const installKey = hashKey("install-1");
 
-  test("chaque vraie prise consomme un scan offert", async () => {
+  test("premier jour : dix scans, chaque vraie prise en consomme un", async () => {
     const store = fakeDb(() => true, { [installKey]: 2 });
     const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
-    assert.equal((await res.json() as any).free_scans_left, FREE_SCANS - 3);
+    assert.equal((await res.json() as any).scans_left, FREE_ALLOWANCE.firstDayScans - 3);
     assert.equal(store.freeUsed[installKey], 3);
   });
 
-  test("scans épuisés : 402 paywall_required, sans appel OpenAI", async () => {
+  test("les jours suivants : trois scans", async () => {
+    const store = fakeDb(() => true, { [installKey]: 1 }, [], false);
+    const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
+    assert.equal((await res.json() as any).scans_left, FREE_ALLOWANCE.dailyScans - 2);
+  });
+
+  test("scans du jour épuisés : 402 daily_limit avec l'heure de remise à zéro, sans appel OpenAI", async () => {
     const ai = fakeFetch([aiResponse(goodCar)]);
-    const store = fakeDb(() => true, { [installKey]: FREE_SCANS });
+    const store = fakeDb(() => true, { [installKey]: FREE_ALLOWANCE.dailyScans }, [], false);
     const res = await handler({ db: store.db, fetch: ai.fn })(post({ imageBase64: "abc" }));
     assert.equal(res.status, 402);
-    assert.deepEqual(await res.json(), { code: "paywall_required", error: "Les scans offerts sont épuisés.", free_scans_left: 0 });
+    const out = await res.json() as any;
+    assert.equal(out.code, "daily_limit");
+    assert.equal(out.scans_left, 0);
+    assert.equal(out.resets_at, nextResetAt());
     assert.equal(ai.count(), 0);
   });
 
-  test("une photo sans voiture ne coûte pas de scan offert", async () => {
+  test("la remise à zéro tombe à minuit UTC", () => {
+    assert.equal(nextResetAt(new Date("2026-10-08T23:59:00Z")), "2026-10-09T00:00:00.000Z");
+  });
+
+  test("une photo sans voiture ne coûte pas de scan", async () => {
     const store = fakeDb(() => true, { [installKey]: 1 });
     const empty = { ...goodCar, vehicle_present: false, make: "", model: "", confidence: 0 };
     const res = await handler({ db: store.db, fetch: fakeFetch([aiResponse(empty)]).fn })(post({ imageBase64: "abc" }));
-    assert.equal((await res.json() as any).free_scans_left, FREE_SCANS - 1);
+    assert.equal((await res.json() as any).scans_left, FREE_ALLOWANCE.firstDayScans - 1);
     assert.equal(store.consumed(), 0);
   });
 
-  test("une photo d'écran ne coûte pas de scan offert", async () => {
+  test("une photo d'écran ne coûte pas de scan", async () => {
     const store = fakeDb();
     const screen = { ...goodCar, is_screen: true };
     await handler({ db: store.db, fetch: fakeFetch([aiResponse(screen)]).fn })(post({ imageBase64: "abc" }));
     assert.equal(store.consumed(), 0);
   });
 
-  test("abonné : pas de plafond de scans offerts, free_scans_left nul", async () => {
-    const store = fakeDb(() => true, { [installKey]: 99 });
+  test("abonné : pas de quota du jour, scans_left nul", async () => {
+    const store = fakeDb(() => true, { [installKey]: 99 }, [], false);
     const res = await handler({ db: store.db, verifyEntitlement: activeSubscription })(
       post({ imageBase64: "abc", entitlement: "jws" }));
     assert.equal(res.status, 200);
-    assert.equal((await res.json() as any).free_scans_left, null);
+    const out = await res.json() as any;
+    assert.equal(out.scans_left, null);
+    assert.equal(out.resets_at, undefined);
     assert.equal(store.consumed(), 0);
   });
 
-  test("abonné : quota par transaction d'origine", async () => {
+  test("abonné : quota anti-abus par transaction d'origine", async () => {
     const subKey = hashKey("sub:2000000999");
     const store = fakeDb((k) => k !== subKey);
     const res = await handler({ db: store.db, verifyEntitlement: activeSubscription })(
@@ -264,19 +283,19 @@ describe("scans offerts et abonnement", () => {
     assert.equal(res.status, 429);
   });
 
-  test("transaction invalide : retour aux scans offerts", async () => {
-    const store = fakeDb(() => true, { [installKey]: FREE_SCANS });
+  test("transaction invalide : retour aux quotas gratuits", async () => {
+    const store = fakeDb(() => true, { [installKey]: 3 }, [], false);
     const res = await handler({ db: store.db })(post({ imageBase64: "abc", entitlement: "forged" }));
     assert.equal(res.status, 402);
   });
 
-  test("base des scans offerts injoignable : refus", async () => {
-    const store = fakeDb((k) => (k === "free-scans" ? "throw" : true));
+  test("base des quotas injoignable : refus", async () => {
+    const store = fakeDb((k) => (k === "allowance" ? "throw" : true));
     const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
     assert.equal(res.status, 503);
   });
 
-  test("plafond de scans offerts par IP", async () => {
+  test("plafond de scans gratuits par IP", async () => {
     const freeIPKey = hashKey("free-ip:1.2.3.4");
     const store = fakeDb((k) => k !== freeIPKey);
     const res = await handler({ db: store.db })(post({ imageBase64: "abc" }));
@@ -396,11 +415,33 @@ describe("développement", () => {
     usage: { input_tokens: 1300, output_tokens: 1000, input_tokens_details: { text_tokens: 100, image_tokens: 1200 } },
   }), { status: 200, headers: { "Content-Type": "application/json" } });
 
-  test("fermé à qui n'est pas testeur, sans appel OpenAI", async () => {
+  test("gratuit : un rendu par jour, le second refusé sans appel OpenAI", async () => {
     const ai = fakeFetch([imageResponse()]);
-    const res = await handler({ fetch: ai.fn })(post({ action: "develop", imageBase64: "abc" }));
-    assert.equal(res.status, 403);
-    assert.equal(ai.count(), 0);
+    const store = fakeDb();
+    const first = await handler({ db: store.db, fetch: ai.fn })(post({ action: "develop", imageBase64: "abc" }));
+    assert.equal(first.status, 200);
+    assert.equal((await first.json() as any).develops_left, 0);
+    const second = await handler({ db: store.db, fetch: ai.fn })(post({ action: "develop", imageBase64: "abc" }));
+    assert.equal(second.status, 402);
+    assert.equal((await second.json() as any).code, "develop_limit");
+    assert.equal(ai.count(), 1);
+  });
+
+  test("abonné : plafond anti-abus seulement", async () => {
+    const store = fakeDb(() => true, { [`${hashKey("install-1")}:develop`]: 5 });
+    const res = await handler({ db: store.db, fetch: fakeFetch([imageResponse()]).fn,
+                                verifyEntitlement: activeSubscription })(
+      post({ action: "develop", imageBase64: "abc", entitlement: "jws" }));
+    assert.equal(res.status, 200);
+    assert.equal((await res.json() as any).develops_left, null);
+    assert.ok(PRO_DAILY_DEVELOPS > 5);
+  });
+
+  test("le rendu est demandé en JPEG", async () => {
+    let sent: FormData | null = null;
+    const fetchSpy = (async (_url: unknown, init: RequestInit) => { sent = init.body as FormData; return imageResponse(); }) as unknown as typeof fetch;
+    await handler({ fetch: fetchSpy })(post({ action: "develop", imageBase64: "abc" }));
+    assert.equal(sent!.get("output_format"), "jpeg");
   });
 
   test("un testeur reçoit le rendu et son coût", async () => {

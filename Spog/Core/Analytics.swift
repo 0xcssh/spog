@@ -44,6 +44,7 @@ enum Analytics {
         case scanFailed = "Scan.failed"                      // reason
         case cardCreated = "Card.created"                    // tier
         case cardShared = "Card.shared"                      // tier
+        case cardDeveloped = "Card.developed"                // tier
 
         // Argent
         case paywallShown = "Paywall.shown"                  // from: scan|settings

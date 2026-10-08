@@ -49,7 +49,7 @@ struct ParallaxArtwork: View {
                 // La photo mise en scene est donc le visuel de la carte des qu'il y en a
                 // une, et le rendu studio sert aux cartes qui n'en ont pas : le Spogdex,
                 // et les modeles pas encore attrapes.
-                filled(shot.stylized, depth: 0.9, scale: 1.06)
+                filled(shot.face, depth: 0.9, scale: 1.06)
             } else if let render = CarArt.image(for: vehicleID, paint: paint) {
                 // Rendu studio du modele. Affiche en entier, pas rogne : c'est la
                 // silhouette qui fait reconnaitre la voiture, un gros plan sur une aile

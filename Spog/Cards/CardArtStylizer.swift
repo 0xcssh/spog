@@ -6,6 +6,12 @@ import CoreImage.CIFilterBuiltins
 struct StyledShot {
     let stylized: UIImage   // la voiture detouree et mise en scene
     let original: UIImage   // le cliche brut, accessible d'un tap
+    /// Rendu studio genere a partir du cliche, une fois la carte « developpee ».
+    var developed: UIImage? = nil
+
+    /// Le visuel de la carte : le rendu developpe s'il existe — c'est la meme voiture,
+    /// teinte et jantes comprises, en studio —, sinon la photo mise en scene.
+    var face: UIImage { developed ?? stylized }
 }
 
 /// Transforme une photo de voiture en illustration de carte a collectionner :

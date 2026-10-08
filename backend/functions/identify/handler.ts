@@ -7,8 +7,8 @@
 //        en-têtes : x-install-id (identifiant d'installation, rangé dans le trousseau
 //        iOS, il survit à la désinstallation), x-device-id (identifierForVendor)
 //   → 200 { make, model, generation, body, color, confidence, is_screen, vehicle_present,
-//           free_scans_left: number | null }      (null = abonné, pas de plafond)
-//   → 402 { code: "paywall_required", error, free_scans_left: 0 }
+//           scans_left: number | null, resets_at }   (null = abonné, pas de plafond)
+//   → 402 { code: "daily_limit", error, scans_left: 0, resets_at }
 //        Avec `training_consent: true`, une vraie prise est conservée pour entraîner le
 //        classifieur embarqué, et la réponse porte `sample_id`.
 //   POST { action: "label", sample_id, vehicle_id, source: "confirmed" | "corrected" }
@@ -18,18 +18,19 @@
 //   Une vraie prise renvoie aussi `scan_id` : la preuve, pour le classement, que le modèle
 //   déclaré ensuite correspond à une photo identifiée ici (voir social.ts).
 //   POST { action: "me" | "set_pseudo" | "apple_link" | "catch" | … } → voir social.ts
-//   POST { action: "develop", imageBase64, model?, quality? }
-//   → 200 { image: "<png base64>", model, quality, usage, cost_usd }
-//        Rendu studio de la voiture photographiée. Réservé aux installations de
-//        DEVELOP_TESTERS tant que la monnaie de développement n'existe pas (voir develop.ts).
+//   POST { action: "develop", imageBase64, entitlement?, model?, quality? }
+//   → 200 { image: "<jpeg base64>", develops_left: number | null, resets_at, … }
+//   → 402 { code: "develop_limit", develops_left: 0, resets_at }
+//        Rendu studio de la voiture photographiée (voir develop.ts) : 1 par jour en gratuit,
+//        plafond anti-abus seulement pour Pro et pour DEVELOP_TESTERS.
 //   → 4xx/5xx { code: string, error: string }
 //     `code` est stable et traduit côté app ; `error` n'est qu'un repli lisible.
 //
-// **Le serveur est l'autorité sur les scans offerts.** Tant que le décompte vivait
-// dans l'app, une réinstallation rendait les cinq scans et l'URL suffisait à scanner
-// gratuitement. Un abonné le prouve par sa transaction StoreKit 2 signée par Apple
-// (`entitlement`, vérifiée sans réseau, voir entitlement.ts) ; les autres consomment
-// leurs scans offerts, comptés en base par installation.
+// **Le serveur est l'autorité sur les quotas du joueur gratuit** : 10 scans le premier
+// jour, puis 3 par jour, et 1 rendu par jour (REFONTE.md, « Économie »). Tant que le
+// décompte vivait dans l'app, une réinstallation le remettait à zéro. Un abonné le prouve
+// par sa transaction StoreKit 2 signée par Apple (`entitlement`, vérifiée sans réseau,
+// voir entitlement.ts) ; les autres consomment leurs quotas, comptés par installation.
 //
 // Le serveur ne connaît NI la rareté, NI les points, NI les règles du jeu :
 // tout ça vit dans le catalogue embarqué de l'app, donc modifiable sans redéployer
@@ -54,8 +55,8 @@ export interface HandlerDeps {
   db: Queryable | null;
   fetch: typeof fetch;
   verifyEntitlement: (jws: unknown) => Promise<EntitlementResult>;
-  /** Scans offerts par installation (défaut : FREE_SCANS). */
-  freeScans?: number;
+  /** Quotas du joueur gratuit (défaut : FREE_ALLOWANCE). */
+  allowance?: typeof FREE_ALLOWANCE;
   /** Compartiment des photos d'entraînement ; null = collecte désactivée. */
   samples?: SampleStore | null;
   newId?: () => string;
@@ -67,10 +68,18 @@ export interface HandlerDeps {
   model?: string;
 }
 
-/// Scans offerts avant le paywall. Cinq : assez pour avoir vu plusieurs cartes et
-/// compris le jeu, trop peu pour se faire une collection. L'app affiche ce que le
-/// serveur lui renvoie ; sa propre constante ne sert plus qu'avant le premier scan.
-export const FREE_SCANS = 5;
+/// Quotas du joueur gratuit. Dix scans le premier jour pour accrocher, puis trois par jour
+/// pour faire revenir chaque jour ; un rendu par jour. Au-delà viendra la pub récompensée
+/// (une pub par scan, toujours après la photo) ; d'ici là, Pro.
+export const FREE_ALLOWANCE = { firstDayScans: 10, dailyScans: 3, dailyDevelops: 1 };
+/// Plafond anti-abus des rendus d'un abonné : illimité en pratique, borné en coût
+/// (50 rendus à 1,4 centime = 0,70 € par jour au pire).
+export const PRO_DAILY_DEVELOPS = 50;
+
+/// Prochaine remise à zéro des quotas : minuit UTC.
+export function nextResetAt(now = new Date()): string {
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)).toISOString();
+}
 
 // Un abonnement peut servir sur plusieurs appareils (Partage familial) : borné
 // par la transaction d'origine, infalsifiable, en plus du quota par appareil.
@@ -206,7 +215,7 @@ const MAX_VEHICLE_ID = 120;
 export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Response> {
   const sleep = deps.sleep ?? ((ms: number) => new Promise((r) => setTimeout(r, ms)));
   const model = deps.model || DEFAULT_MODEL;
-  const freeScans = deps.freeScans ?? FREE_SCANS;
+  const allowance = deps.allowance ?? FREE_ALLOWANCE;
   const newId = deps.newId ?? randomUUID;
   const social = createSocial({
     db: deps.db,
@@ -288,12 +297,21 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
   async function handleDevelop(req: Request, body: Record<string, unknown>): Promise<Response> {
     const clientIP = clientIPFrom(req.headers);
     const installId = installIdFrom(req.headers, deviceIdFrom(req.headers, clientIP));
-    if (!deps.developTesters?.has(installId)) {
-      return json({ code: "develop_unavailable", error: "Le développement n'est pas encore ouvert." }, 403);
-    }
     const image = typeof body.imageBase64 === "string" ? body.imageBase64 : "";
     if (!image) return json({ code: "missing_input", error: "Photo manquante" }, 400);
     if (image.length > MAX_IMAGE_BASE64) return json({ code: "image_too_large", error: "Cette photo est trop lourde" }, 413);
+
+    // Quota du jour : 1 rendu en gratuit, plafond anti-abus pour Pro et pour les testeurs.
+    const tester = deps.developTesters?.has(installId) === true;
+    const entitlement = !tester && body.entitlement ? await deps.verifyEntitlement(body.entitlement) : null;
+    const pro = tester || entitlement?.ok === true;
+    const limit = pro ? PRO_DAILY_DEVELOPS : allowance.dailyDevelops;
+    const left = await allowanceLeft(installId, "develop", limit, limit);
+    if (left === null) return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    if (left <= 0) {
+      return json({ code: "develop_limit", error: "Le rendu du jour est déjà utilisé.",
+                    develops_left: 0, resets_at: nextResetAt() }, 402);
+    }
     const imageModel = typeof body.model === "string" && DEVELOP_MODELS.includes(body.model) ? body.model : "gpt-image-1-mini";
     const quality = typeof body.quality === "string" && DEVELOP_QUALITIES.includes(body.quality) ? body.quality : "medium";
 
@@ -302,6 +320,9 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     form.append("prompt", DEVELOP_PROMPT);
     form.append("size", "1536x1024");
     form.append("quality", quality);
+    // JPEG plutôt que le PNG par défaut : 300 Ko au lieu de 3 Mo à télécharger sur mobile.
+    form.append("output_format", "jpeg");
+    form.append("output_compression", "85");
     form.append("image", new Blob([Buffer.from(image, "base64")], { type: "image/jpeg" }), "car.jpg");
     let response: Response;
     try {
@@ -323,7 +344,10 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     const cost = developCost(imageModel, usage);
     console.log(`develop ${imageModel} ${quality}: ${JSON.stringify(usage)}, ` +
                 (cost === null ? "coût inconnu" : `$${cost.toFixed(4)}`));
-    return json({ image: png, model: imageModel, quality, usage, cost_usd: cost });
+    const used = await consumeAllowance(installId, "develop");
+    return json({ image: png, model: imageModel, quality, usage, cost_usd: cost,
+                  develops_left: pro ? null : Math.max(0, limit - (used ?? limit)),
+                  resets_at: nextResetAt() });
   }
 
   /// Retrait de l'accord : tout ce que cette installation a confié disparaît, images
@@ -346,33 +370,32 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
   }
 
-  /// Scans offerts déjà consommés par cette installation ; null si la base ne répond pas.
-  async function freeScansUsed(installKey: string): Promise<number | null> {
+  /// Ce qui reste aujourd'hui à cette installation ; null si la base ne répond pas.
+  async function allowanceLeft(installKey: string, kind: "scan" | "develop",
+                               firstDay: number, daily: number): Promise<number | null> {
     if (!deps.db) return null;
     try {
       const { rows } = await deps.db.query(
-        "select used from public.free_scans where install_hash = $1",
-        [hashKey(installKey)],
+        "select public.allowance_left($1, $2, $3, $4) as left",
+        [hashKey(installKey), kind, firstDay, daily],
       );
-      return Number(rows[0]?.used ?? 0);
+      return Number(rows[0]?.left ?? 0);
     } catch (error) {
-      console.error("free scans unavailable", error instanceof Error ? error.message : error);
+      console.error("allowance unavailable", error instanceof Error ? error.message : error);
       return null;
     }
   }
 
-  /// Consomme un scan offert et renvoie le nouveau total. Un échec ici ne prive pas
+  /// Consomme une unité du jour et renvoie le total consommé. Un échec ici ne prive pas
   /// le joueur de sa carte : l'IA a déjà été payée, autant lui rendre le résultat.
-  async function consumeFreeScan(installKey: string): Promise<number | null> {
+  async function consumeAllowance(installKey: string, kind: "scan" | "develop"): Promise<number | null> {
     if (!deps.db) return null;
     try {
       const { rows } = await deps.db.query(
-        "select public.consume_free_scan($1) as used",
-        [hashKey(installKey)],
-      );
+        "select public.consume_allowance($1, $2) as used", [hashKey(installKey), kind]);
       return Number(rows[0]?.used ?? 0);
     } catch (error) {
-      console.error("free scan not recorded", error instanceof Error ? error.message : error);
+      console.error("allowance not recorded", error instanceof Error ? error.message : error);
       return null;
     }
   }
@@ -490,11 +513,11 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       return json({ code: "rate_limited", error: "Trop de scans d'affilée. Réessaie un peu plus tard." }, 429);
     }
 
-    // Abonné ou joueur sur ses scans offerts. Une transaction absente ou invalide
-    // n'est pas une erreur : c'est le cas normal des cinq premiers scans.
+    // Abonné ou joueur gratuit. Une transaction absente ou invalide n'est pas une erreur :
+    // c'est le cas normal du joueur gratuit.
     const entitlement = body.entitlement ? await deps.verifyEntitlement(body.entitlement) : null;
     const installKey = installIdFrom(req.headers, deviceId);
-    let freeUsed: number | null = null;
+    let scansLeft: number | null = null;
 
     if (entitlement?.ok) {
       const sub = await checkQuota(`sub:${entitlement.originalTransactionId}`,
@@ -507,12 +530,13 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       }
     } else {
       if (entitlement) console.warn("abonnement refusé:", entitlement.reason);
-      freeUsed = await freeScansUsed(installKey);
-      if (freeUsed === null) {
+      scansLeft = await allowanceLeft(installKey, "scan", allowance.firstDayScans, allowance.dailyScans);
+      if (scansLeft === null) {
         return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
       }
-      if (freeUsed >= freeScans) {
-        return json({ code: "paywall_required", error: "Les scans offerts sont épuisés.", free_scans_left: 0 }, 402);
+      if (scansLeft <= 0) {
+        return json({ code: "daily_limit", error: "Les scans du jour sont épuisés.",
+                      scans_left: 0, resets_at: nextResetAt() }, 402);
       }
       const freeIP = await checkQuota(`free-ip:${clientIP}`, FREE_IP_DAY_LIMIT, FREE_IP_WINDOW_LIMIT);
       if (freeIP === "unavailable") {
@@ -574,13 +598,12 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       const isScreen = parsed.is_screen === true;
       const vehiclePresent = parsed.vehicle_present !== false;
 
-      // Seule une vraie prise consomme un scan offert : une photo sans voiture ou
-      // d'un écran est refusée par l'app, la facturer au joueur serait injuste.
+      // Seule une vraie prise consomme un scan du jour : une photo sans voiture ou d'un
+      // écran est refusée par l'app, la facturer au joueur serait injuste.
       const realCatch = vehiclePresent && !isScreen && text(parsed.model) !== "";
-      let freeScansLeft: number | null = null;
-      if (freeUsed !== null) {
-        const used = realCatch ? (await consumeFreeScan(installKey)) ?? freeUsed + 1 : freeUsed;
-        freeScansLeft = Math.max(0, freeScans - used);
+      if (scansLeft !== null && realCatch) {
+        await consumeAllowance(installKey, "scan");
+        scansLeft = Math.max(0, scansLeft - 1);
       }
       const confidence = Math.max(0, Math.min(1, Number(parsed.confidence) || 0));
       const bodyValue = BODIES.includes(bodyType) ? bodyType : "sedan";
@@ -606,7 +629,8 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
         confidence,
         is_screen: isScreen,
         vehicle_present: vehiclePresent,
-        free_scans_left: freeScansLeft,
+        scans_left: scansLeft,
+        ...(scansLeft !== null ? { resets_at: nextResetAt() } : {}),
         ...(sampleId ? { sample_id: sampleId } : {}),
         ...(scanId ? { scan_id: scanId } : {}),
       });

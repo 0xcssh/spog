@@ -1,26 +1,36 @@
 import Foundation
 
-/// Décompte des prises offertes.
+/// Quotas du joueur gratuit, tels que l'app les affiche.
 ///
-/// Cette règle décide seule quand le paywall s'interpose : c'est la frontière entre
-/// ce que le joueur obtient gratuitement et ce qu'il paie. Elle vivait dans une
-/// propriété calculée de `ScannerView`, où aucun test ne pouvait l'atteindre — pour
-/// la règle de l'app qui touche le plus directement à l'argent, c'était l'endroit
-/// le moins défendable.
-enum ScanAllowance {
+/// Le serveur en est l'autorité (`allowance_left`, voir backend/functions/identify/handler.ts) :
+/// 10 scans le premier jour, puis 3 par jour, et 1 rendu par jour. L'app n'en garde qu'un
+/// miroir, pour afficher ce qui reste et présenter Pro *avant* que le joueur photographie
+/// une voiture pour rien. Le miroir peut se tromper (autre appareil, réinstallation) : le
+/// serveur tranche alors, et le miroir se recale sur sa réponse.
+enum DailyAllowance {
 
-    /// Prises restantes avant le paywall. Nil quand l'abonné n'a pas de plafond.
-    static func remaining(performed: Int, hasAccess: Bool,
-                          free: Int = SubscriptionStore.freeScans) -> Int? {
+    static let firstDayScans = 10
+    static let dailyScans = 3
+    static let dailyDevelops = 1
+
+    /// Scans restants aujourd'hui. Nil pour un abonné, qui n'a pas de quota.
+    /// - Parameters:
+    ///   - serverLeft: dernier décompte du serveur, et l'heure à laquelle il expire.
+    ///   - everScanned: le joueur a-t-il déjà fait un scan ? Sans décompte du serveur,
+    ///     c'est ce qui distingue le premier jour (10) des suivants (3).
+    static func scansLeft(serverLeft: Int?, resetsAt: Date?, now: Date = Date(),
+                          everScanned: Bool, hasAccess: Bool) -> Int? {
         guard !hasAccess else { return nil }
-        // Le maximum protège d'un compteur qui aurait dépassé le quota — un ancien
-        // joueur dont l'abonnement expire ne doit pas voir un nombre négatif.
-        return max(0, free - performed)
+        if let serverLeft, let resetsAt, now < resetsAt { return max(0, serverLeft) }
+        // Le décompte connu est périmé : un nouveau jour a commencé.
+        if resetsAt != nil { return dailyScans }
+        return everScanned ? dailyScans : firstDayScans
     }
 
-    /// Le paywall doit-il s'interposer avant cette prise ?
-    static func mustPay(performed: Int, hasAccess: Bool,
-                        free: Int = SubscriptionStore.freeScans) -> Bool {
-        remaining(performed: performed, hasAccess: hasAccess, free: free) == 0
+    /// Faut-il présenter Pro avant même la photo ?
+    static func mustWait(serverLeft: Int?, resetsAt: Date?, now: Date = Date(),
+                         everScanned: Bool, hasAccess: Bool) -> Bool {
+        scansLeft(serverLeft: serverLeft, resetsAt: resetsAt, now: now,
+                  everScanned: everScanned, hasAccess: hasAccess) == 0
     }
 }

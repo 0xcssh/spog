@@ -254,7 +254,7 @@ struct ScannerView: View {
             }
 
             if let left = freeScansLeft {
-                Overline(text: "scan.freeLeft \(left)",
+                Overline(text: "scan.todayLeft \(left)",
                          color: left == 0 ? Color(hex: 0xF5B942) : Theme.textMuted)
             } else {
                 Overline(text: "scan.cameraOnly")
@@ -281,10 +281,11 @@ struct ScannerView: View {
 
     // MARK: Prise
 
-    /// Prises restantes avant le paywall. Nil si l'utilisateur est abonne.
+    /// Scans restants aujourd'hui. Nil si l'utilisateur est abonne.
     private var freeScansLeft: Int? {
-        ScanAllowance.remaining(performed: app.scansPerformed,
-                                hasAccess: subscriptions.hasAccess)
+        DailyAllowance.scansLeft(serverLeft: app.scansLeftToday, resetsAt: app.scansResetAt,
+                                 everScanned: app.scansPerformed > 0,
+                                 hasAccess: subscriptions.hasAccess)
     }
 
     private func shoot() async {
@@ -292,10 +293,11 @@ struct ScannerView: View {
         // juste avant l'acceleration ne doit pas passer non plus.
         guard !tooFast else { return }
 
-        // Le paywall se presente ici, pas a l'ouverture de l'app :
-        // il arrive quand le joueur a deja vu ce qu'il achete.
-        if ScanAllowance.mustPay(performed: app.scansPerformed,
-                                 hasAccess: subscriptions.hasAccess) {
+        // Pro se presente ici, avant la photo et pas a l'ouverture de l'app : il arrive
+        // quand le joueur a deja vu ce qu'il achete, et ne lui fait pas perdre une prise.
+        if DailyAllowance.mustWait(serverLeft: app.scansLeftToday, resetsAt: app.scansResetAt,
+                                   everScanned: app.scansPerformed > 0,
+                                   hasAccess: subscriptions.hasAccess) {
             Analytics.track(.paywallShown, ["from": "scan"])
             await MainActor.run { showingPaywall = true }
             return
@@ -333,11 +335,12 @@ struct ScannerView: View {
             identification = try await IdentifyService.identify(
                 photo, entitlement: subscriptions.entitlementJWS,
                 trainingConsent: training.granted)
-        } catch IdentifyService.IdentifyError.paywall {
-            // Le serveur a le dernier mot : le compteur local se recale sur lui.
+        } catch IdentifyService.IdentifyError.dailyLimit(let resetsAt) {
+            // Le serveur a le dernier mot : le miroir local se recale sur lui.
             await MainActor.run {
                 @Bindable var state = app
-                state.scansPerformed = max(state.scansPerformed, SubscriptionStore.freeScans)
+                state.scansLeftToday = 0
+                state.scansResetAt = resetsAt
                 showingPaywall = true
             }
             Analytics.track(.paywallShown, ["from": "server"])
@@ -349,15 +352,13 @@ struct ScannerView: View {
         }
 
         // Le serveur a répondu : la prise est consommée, même si le joueur renonce
-        // à l'écran de confirmation. Le compteur local n'est qu'un miroir du serveur,
-        // qui seul décompte les scans offerts ; il sert à afficher le reste avant le scan.
+        // à l'écran de confirmation. Le décompte local n'est qu'un miroir du serveur,
+        // qui seul tient les quotas ; il sert à afficher le reste avant le scan.
         await MainActor.run {
             @Bindable var state = app
-            if let left = identification.freeScansLeft {
-                state.scansPerformed = max(0, SubscriptionStore.freeScans - left)
-            } else {
-                state.scansPerformed += 1
-            }
+            state.scansPerformed += 1
+            state.scansLeftToday = identification.scansLeft
+            state.scansResetAt = identification.scansResetAt
         }
 
         let paint = CarPaint.fromServer(identification.color)
@@ -419,7 +420,7 @@ struct ScannerView: View {
         case .unreadableImage:     return "unreadable_image"
         case .noVehicle:           return "no_vehicle"
         case .notLive:             return "not_live"
-        case .paywall:             return "paywall"
+        case .dailyLimit:          return "daily_limit"
         }
     }
 

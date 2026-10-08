@@ -188,6 +188,40 @@
         }
       }
     },
+    "card.develop": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Develop the card"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DÃ©velopper la carte"
+          }
+        }
+      }
+    },
+    "card.developing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developingâ€¦"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DÃ©veloppement en coursâ€¦"
+          }
+        }
+      }
+    },
     "card.firstSpot": {
       "extractionState": "manual",
       "localizations": {
@@ -558,6 +592,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "C'est laquelle ?"
+          }
+        }
+      }
+    },
+    "develop.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The render didn't go through. Check your connection and try again: nothing was counted."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le rendu n'a pas abouti. VÃ©rifie ta connexion et rÃ©essaie : rien n'a Ã©tÃ© dÃ©comptÃ©."
+          }
+        }
+      }
+    },
+    "develop.limit.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One card a day can be developed into a studio render. Come back tomorrow, or go Pro to develop them all."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une carte par jour se dÃ©veloppe en rendu studio. Reviens demain, ou passe Pro pour toutes les dÃ©velopper."
+          }
+        }
+      }
+    },
+    "develop.limit.pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See Pro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir Pro"
+          }
+        }
+      }
+    },
+    "develop.limit.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's render is used"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendu du jour dÃ©jÃ  utilisÃ©"
           }
         }
       }
@@ -1395,6 +1497,23 @@
         }
       }
     },
+    "onboarding.recap.freeValue %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld today, then %2$lld a day"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld aujourd'hui, puis %2$lld par jour"
+          }
+        }
+      }
+    },
     "onboarding.recap.mode": {
       "extractionState": "manual",
       "localizations": {
@@ -2081,13 +2200,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Five catches offered. Then no ceiling."
+            "value": "Three free scans every day. With Pro, no limits."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cinq prises offertes. Ensuite, plus de plafond."
+            "value": "Trois scans offerts chaque jour. Avec Pro, plus de limite."
           }
         }
       }
@@ -2115,13 +2234,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Past your five free catches, the counter disappears for good."
+            "value": "Scan as much as you like and develop every card into a studio render, without waiting for tomorrow."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Passé tes cinq prises offertes, le compteur disparaît pour de bon."
+            "value": "Scanne autant que tu veux et dÃ©veloppe chaque carte en rendu studio, sans attendre le lendemain."
           }
         }
       }
@@ -2132,13 +2251,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unlimited catches"
+            "value": "Unlimited scans and renders"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prises illimitées"
+            "value": "Scans et rendus illimitÃ©s"
           }
         }
       }
@@ -2200,13 +2319,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name if you turn location on. Each identification also carries two anonymous identifiers: the device identifier provided by Apple, and an installation identifier drawn at random by the app and stored in your iPhone's keychain, which survives a reinstall. They are used only to count your free scans, to cap how many scans can be made and to prevent abuse. They are tied to no identity, and our server keeps only a fingerprint of them, along with the number of free scans already used. Nothing else: no advertising identifier, no behavioral tracking, no third-party analytics."
+            "value": "Spog collects the photos you take in the app, the country you spot in, and the city name if you turn location on. Each identification also carries two anonymous identifiers: the device identifier provided by Apple, and an installation identifier drawn at random by the app and stored in your iPhone's keychain, which survives a reinstall. They are used only to count your scans and renders for the day, to cap how many requests can be made and to prevent abuse. They are tied to no identity, and our server keeps only a fingerprint of them, along with what you used that day. Nothing else: no advertising identifier, no behavioral tracking, no third-party analytics."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog collecte les photos que tu prends dans l'app, le pays oÃ¹ tu repÃ¨res tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi deux identifiants anonymes : celui de l'appareil, fourni par Apple, et un identifiant d'installation tirÃ© au sort par l'app et rangÃ© dans le trousseau de ton iPhone, qui survit Ã  une rÃ©installation. Ils servent uniquement Ã  dÃ©compter tes scans offerts, Ã  limiter le nombre de scans et Ã  prÃ©venir les abus. Ils ne sont rattachÃ©s Ã  aucune identitÃ©, et notre serveur n'en conserve qu'une empreinte, avec le nombre de scans offerts dÃ©jÃ  utilisÃ©s. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
+            "value": "Spog collecte les photos que tu prends dans l'app, le pays oÃ¹ tu repÃ¨res tes voitures, et le nom de la ville si tu actives la localisation. Chaque identification emporte aussi deux identifiants anonymes : celui de l'appareil, fourni par Apple, et un identifiant d'installation tirÃ© au sort par l'app et rangÃ© dans le trousseau de ton iPhone, qui survit Ã  une rÃ©installation. Ils servent uniquement Ã  dÃ©compter tes scans et tes rendus du jour, Ã  limiter le nombre de requÃªtes et Ã  prÃ©venir les abus. Ils ne sont rattachÃ©s Ã  aucune identitÃ©, et notre serveur n'en conserve qu'une empreinte, avec ce que tu as utilisÃ© dans la journÃ©e. Rien d'autre : aucun identifiant publicitaire, aucun pistage comportemental, aucun outil de mesure tiers."
           }
         }
       }
@@ -2302,13 +2421,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree â€” you are asked once, and the \"Help recognize cars\" setting lets you change your mind â€” the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. When you develop a card, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree â€” you are asked once, and the \"Help recognize cars\" setting lets you change your mind â€” the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les photos sont stockÃ©es sur ton appareil. Pour identifier un vÃ©hicule, une photo est envoyÃ©e Ã  notre serveur, qui la transmet Ã  un prestataire d'intelligence artificielle pour analyse, puis renvoie le rÃ©sultat. Avant toute transmission, les plaques d'immatriculation dÃ©tectÃ©es dans l'image sont floutÃ©es sur ton appareil. Par dÃ©faut, les photos transmises ne sont pas conservÃ©es une fois la rÃ©ponse rendue. Si tu l'acceptes â€” la question t'est posÃ©e une fois, et le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â» permet de changer d'avis â€”, les photos de tes prises sont conservÃ©es sur notre serveur, plaques dÃ©jÃ  floutÃ©es, avec le modÃ¨le identifiÃ© et celui que tu as Ã©ventuellement corrigÃ©, pour entraÃ®ner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachÃ©es Ã  aucune identitÃ©, et ne sont jamais publiÃ©es, vendues ni partagÃ©es."
+            "value": "Les photos sont stockÃ©es sur ton appareil. Pour identifier un vÃ©hicule, une photo est envoyÃ©e Ã  notre serveur, qui la transmet Ã  un prestataire d'intelligence artificielle pour analyse, puis renvoie le rÃ©sultat. Quand tu dÃ©veloppes une carte, sa photo est envoyÃ©e de la mÃªme faÃ§on pour en gÃ©nÃ©rer le rendu studio, qui est ensuite rangÃ© sur ton appareil. Avant toute transmission, les plaques d'immatriculation dÃ©tectÃ©es dans l'image sont floutÃ©es sur ton appareil. Par dÃ©faut, les photos transmises ne sont pas conservÃ©es une fois la rÃ©ponse rendue. Si tu l'acceptes â€” la question t'est posÃ©e une fois, et le rÃ©glage Â« Aider Ã  reconnaÃ®tre les voitures Â» permet de changer d'avis â€”, les photos de tes prises sont conservÃ©es sur notre serveur, plaques dÃ©jÃ  floutÃ©es, avec le modÃ¨le identifiÃ© et celui que tu as Ã©ventuellement corrigÃ©, pour entraÃ®ner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachÃ©es Ã  aucune identitÃ©, et ne sont jamais publiÃ©es, vendues ni partagÃ©es."
           }
         }
       }
@@ -3214,47 +3333,6 @@
         }
       }
     },
-    "scan.freeLeft %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld free scan left"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld free scans left"
-                }
-              }
-            }
-          }
-        },
-        "fr": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld scan offert restant"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld scans offerts restants"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "scan.hint": {
       "extractionState": "manual",
       "localizations": {
@@ -3357,6 +3435,23 @@
         }
       }
     },
+    "scan.todayLeft %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld scans today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld scans aujourd'hui"
+          }
+        }
+      }
+    },
     "scan.tooFast": {
       "extractionState": "manual",
       "localizations": {
@@ -3387,6 +3482,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Identification en cours…"
+          }
+        }
+      }
+    },
+    "scanError.dailyLimit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've used today's scans. Come back tomorrow, or go Pro to scan without limits."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes scans du jour sont Ã©puisÃ©s. Reviens demain, ou passe Pro pour scanner sans limite."
           }
         }
       }
@@ -3472,23 +3584,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Un écran, une affiche ou une miniature ne compte pas. Une vraie voiture, en direct."
-          }
-        }
-      }
-    },
-    "scanError.paywall": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your free scans are used up."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes scans offerts sont Ã©puisÃ©s."
           }
         }
       }

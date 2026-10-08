@@ -16,10 +16,20 @@ final class AppState {
         didSet { UserDefaults.standard.set(locationMode.rawValue, forKey: Keys.mode) }
     }
 
-    /// Nombre de prises reellement effectuees. Sert au quota gratuit ;
-    /// le garage de demonstration ne compte pas.
+    /// Nombre de prises reellement effectuees. Distingue le premier jour (10 scans) des
+    /// suivants tant que le serveur n'a pas encore repondu ; le garage de demonstration
+    /// ne compte pas.
     var scansPerformed: Int {
         didSet { UserDefaults.standard.set(scansPerformed, forKey: Keys.scans) }
+    }
+
+    /// Dernier decompte des scans du jour renvoye par le serveur, qui en est l'autorite,
+    /// et l'heure a laquelle il expire (minuit UTC). Voir DailyAllowance.
+    var scansLeftToday: Int? {
+        didSet { UserDefaults.standard.set(scansLeftToday, forKey: Keys.scansLeft) }
+    }
+    var scansResetAt: Date? {
+        didSet { UserDefaults.standard.set(scansResetAt, forKey: Keys.scansReset) }
     }
 
     /// L'onboarding a-t-il ete vu ?
@@ -36,6 +46,8 @@ final class AppState {
         static let mode = "state.locationMode"
         static let onboarded = "state.onboarded"
         static let scans = "state.scansPerformed"
+        static let scansLeft = "state.scansLeftToday"
+        static let scansReset = "state.scansResetAt"
     }
 
     init() {
@@ -45,6 +57,8 @@ final class AppState {
             ?? "FR"
         locationMode = LocationMode(rawValue: defaults.string(forKey: Keys.mode) ?? "") ?? .manual
         scansPerformed = defaults.integer(forKey: Keys.scans)
+        scansLeftToday = defaults.object(forKey: Keys.scansLeft) as? Int
+        scansResetAt = defaults.object(forKey: Keys.scansReset) as? Date
         hasOnboarded = defaults.bool(forKey: Keys.onboarded)
     }
 }

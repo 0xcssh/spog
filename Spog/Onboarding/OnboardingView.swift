@@ -544,7 +544,7 @@ struct OnboardingView: View {
                     }
                     Rectangle().fill(Theme.stroke).frame(height: 1).padding(.leading, 46)
                     recapRow("gift.fill", "onboarding.recap.free",
-                             "\(SubscriptionStore.freeScans)")
+                             String(localized: "onboarding.recap.freeValue \(DailyAllowance.firstDayScans) \(DailyAllowance.dailyScans)"))
                 }
             }
 

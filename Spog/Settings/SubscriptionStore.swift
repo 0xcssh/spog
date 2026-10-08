@@ -12,9 +12,6 @@ final class SubscriptionStore {
     static let monthlyID = "com.mandaloregroup.spog.premium.monthly"
     static let yearlyID  = "com.mandaloregroup.spog.premium.yearly"
     static let productIDs = [monthlyID, yearlyID]
-    /// Prises offertes avant que le paywall se présente. Cinq : assez pour avoir vu
-    /// plusieurs cartes et compris le jeu, trop peu pour se faire une collection.
-    static let freeScans = 5
 
     private(set) var monthly: Product?
     private(set) var yearly: Product?

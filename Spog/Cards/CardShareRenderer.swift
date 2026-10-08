@@ -16,7 +16,7 @@ enum CardShareRenderer {
     /// la voiture reellement croisee passe avant le rendu du modele. Une carte
     /// partagee doit montrer ce que le joueur a trouve, pas un exemplaire de catalogue.
     private static func flatArtwork(for card: CardData) -> UIImage? {
-        if let shot = card.shot { return shot.stylized }
+        if let shot = card.shot { return shot.face }
         return CarArt.image(for: card.vehicle.id, paint: card.paint)
     }
 }

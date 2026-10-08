@@ -169,3 +169,36 @@ describe("ligues", () => {
     assert.equal(r.league_tier, 1);
   });
 });
+
+describe("quotas du jour", () => {
+  beforeEach(fresh);
+
+  const left = async (install: string, kind = "scan") => (await db.query<{ n: number }>(
+    "select public.allowance_left($1, $2, 10, 3) as n", [install, kind])).rows[0].n;
+  const consume = (install: string, kind = "scan") =>
+    db.query("select public.consume_allowance($1, $2)", [install, kind]);
+
+  test("premier jour : 10, et chaque consommation en retire un", async () => {
+    assert.equal(await left("i1"), 10);
+    await consume("i1"); await consume("i1");
+    assert.equal(await left("i1"), 8);
+  });
+
+  test("les jours suivants : 3", async () => {
+    await left("i2");
+    await db.exec("update public.install_days set first_day = first_day - 1 where install_hash = 'i2'");
+    assert.equal(await left("i2"), 3);
+  });
+
+  test("hier ne compte plus aujourd'hui", async () => {
+    await left("i3");
+    await consume("i3");
+    await db.exec("update public.usage_days set day = day - 1 where install_hash = 'i3'");
+    assert.equal(await left("i3"), 10);
+  });
+
+  test("les rendus se comptent à part des scans", async () => {
+    await consume("i4", "scan");
+    assert.equal(await left("i4", "develop"), 10);
+  });
+});

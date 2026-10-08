@@ -27,11 +27,17 @@ enum ShotStore {
 
     static func load(_ id: UUID) -> StyledShot? {
         guard let original = image(id, "o"), let stylized = image(id, "s") else { return nil }
-        return StyledShot(stylized: stylized, original: original)
+        return StyledShot(stylized: stylized, original: original, developed: image(id, "d"))
+    }
+
+    /// Range le rendu studio d'une carte developpee, a cote de ses deux photos.
+    static func saveDeveloped(_ image: UIImage, for id: UUID) {
+        try? image.jpegData(compressionQuality: 0.88)?.write(to: url(id, "d"))
+        cache.removeObject(forKey: key(id, "d"))
     }
 
     static func delete(_ id: UUID) {
-        for kind in ["o", "s"] {
+        for kind in ["o", "s", "d"] {
             try? FileManager.default.removeItem(at: url(id, kind))
             cache.removeObject(forKey: key(id, kind))
         }
