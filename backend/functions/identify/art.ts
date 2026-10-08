@@ -1,30 +1,47 @@
-// Visuel stylisé d'une cible du pack de primes (action `vehicle_art`).
+// Rendu studio d'un modèle du catalogue (action `vehicle_art`).
 //
-// Pourquoi : le pack annonce trois voitures à chasser, mais montrait la même silhouette
-// pour les trois. Le joueur devait aller chercher ailleurs à quoi ressemble une
-// « Alfa 8C » avant de pouvoir la repérer dans la rue. Un rendu studio par cible règle ça.
+// Pourquoi : les rendus embarqués de l'app (`Spog/CarArt/*.jpg`) font 660 × 290. Dans une
+// carte presque carrée, la voiture n'occupait que la moitié haute, floue dès qu'on
+// l'agrandissait (retour du testeur du 08/10/2026 : « même le cadrage est nul »). Les
+// rendus d'ici sont carrés et haute définition, au format exact des cartes : l'app les
+// affiche en plein cadre, et seul le fond de studio est rogné, jamais la voiture.
 //
 // Le rendu est généré UNE fois par modèle, puis rangé dans le compartiment privé `art` :
-// tous les joueurs de tous les pays partagent la même image, le coût (≈1,4 centime) est
-// payé une fois par modèle et jamais par joueur.
+// tous les joueurs de tous les pays partagent la même image, le coût est payé une fois par
+// modèle et jamais par joueur.
 //
-// **Anti-abus.** L'URL de la fonction est publique. Sans garde, n'importe qui ferait
-// générer les 867 modèles du catalogue à nos frais. On n'accepte donc que les modèles qui
-// sont une cible de la semaine en cours pour au moins un pays connu de `markets.json` :
-// au pire quelques centaines de rendus par semaine, la plupart déjà en cache.
+// **Coût borné.** N'importe quel modèle du catalogue embarqué peut être demandé — le pack,
+// le garage, la fiche et le partage en ont besoin, pas seulement les cibles de la semaine.
+// 867 modèles × ≈3,4 centimes de dollar ≈ 30 $, payés une seule fois. Ce qui empêcherait
+// une boucle de tout générer d'un coup vit dans handler.ts : quota par appareil, et un
+// plafond GLOBAL de générations par jour (ART_GLOBAL_DAY_LIMIT).
 
 import { createHash } from "node:crypto";
-import { weeklyBounties, currentWeek } from "./bounty";
 import { vehicle, type Vehicle } from "./catalog";
-import marketsFile from "../../../Spog/Catalog/markets.json";
 
 export const ART_MODEL = "gpt-image-1-mini";
 export const ART_URL = "https://api.openai.com/v1/images/generations";
+/// Carré : la zone image d'une carte l'est presque (rapport 1,02). Un bandeau 3:2 forçait
+/// l'app à choisir entre couper la voiture et la montrer en timbre-poste.
+export const ART_SIZE = "1024x1024";
+/// `high` : 4 160 jetons de sortie en 1024², soit ≈3,3 centimes de dollar au tarif de
+/// `gpt-image-1-mini` (8 $ le million) — sous le plafond de 4 centimes fixé pour ces
+/// rendus. `medium` (1 056 jetons, ≈0,9 centime) laissait des jantes et des optiques
+/// pâteuses, visibles dès que la carte occupe l'écran.
+export const ART_QUALITY = "high";
+/// Estimation journalisée quand OpenAI ne renvoie pas d'usage : jetons de sortie d'un
+/// rendu 1024² en qualité `high`, plus un prompt d'environ 300 jetons.
+export const ART_ESTIMATED_USAGE = {
+  input_tokens: 300, output_tokens: 4160,
+  input_tokens_details: { text_tokens: 300, image_tokens: 0 },
+};
 
 /// Clé de l'objet en cache. L'identifiant vient du catalogue (vérifié avant), jamais
 /// directement du client : pas de chemin arbitraire possible dans le compartiment.
+/// Préfixe `v2/` : les anciens rendus 1536 × 1024 restent dans le compartiment, mais ne
+/// sont plus jamais resservis — un bandeau dans un cadre carré, c'est le défaut à corriger.
 export function artKey(vehicleId: string): string {
-  return `vehicles/${vehicleId}.jpg`;
+  return `vehicles/v2/${vehicleId}.jpg`;
 }
 
 const BODY_WORDS: Record<string, string> = {
@@ -45,9 +62,8 @@ export function paintFor(vehicleId: string): string {
   return ART_PAINTS[digest.readUInt32BE(0) % ART_PAINTS.length];
 }
 
-/// Même gabarit que les rendus studio de `CarArt` (supabase/functions/render) : c'est
-/// l'unité de style qui fait tenir la collection. Ni logo, ni plaque, ni texte — on ne
-/// reproduit pas de marque déposée.
+/// Gabarit unique pour tout le catalogue : c'est l'unité de style qui fait tenir la
+/// collection. Ni logo, ni plaque, ni texte — on ne reproduit pas de marque déposée.
 export function artPrompt(v: Pick<Vehicle, "id" | "make" | "model" | "body">): string {
   const shape = BODY_WORDS[v.body] ?? "car";
   // L'orientation d'abord, et répétée : enfouie en milieu de phrase, le modèle ne la
@@ -55,42 +71,22 @@ export function artPrompt(v: Pick<Vehicle, "id" | "make" | "model" | "body">): s
   return "IMPORTANT — ORIENTATION: the car FACES LEFT. Its front bumper, grille and headlights are " +
     "on the LEFT side of the frame; its rear is on the RIGHT side. " +
     `Photorealistic photograph of a ${paintFor(v.id)} ${v.make} ${v.model}, ${shape}, ` +
-    "in a dark studio, seen from the FRONT-LEFT three-quarter angle, front of the car on the LEFT. " +
-    "Camera slightly below the beltline, the whole car in frame with room around it. " +
-    "The car is brightly and evenly lit by a large soft key light, every panel readable, " +
-    "bright specular highlights along the shoulder line. " +
-    "Subtle violet and cyan neon strips glow on the wall behind, mirrored on a polished dark floor, " +
-    "staying in the background and never outshining the car. " +
-    "High-end automotive product photography, razor sharp, glossy paint. " +
-    "No text, no badges, no logos, no licence plate, no people, no props. " +
-    "Wide landscape composition, the car filling most of the width, front pointing LEFT.";
+    "seen from the FRONT-LEFT three-quarter angle, front of the car on the LEFT. " +
+    // Le cadrage est le reproche du testeur : la voiture doit être entière, centrée, et
+    // assez grande pour que l'app puisse remplir une carte sans rien couper.
+    "Square composition. The WHOLE car is in frame and perfectly centred, occupying about 80% " +
+    "of the image width, with a small even margin of studio around it; nothing of the car is cropped. " +
+    "Camera slightly below the beltline. " +
+    "Dark premium studio: subtle violet and cyan neon light strips glow softly on the wall far behind, " +
+    "mirrored on a polished reflective dark floor, staying in the background and never outshining the car. " +
+    "Crisp, clean key lighting that reveals the bodywork: every panel readable, " +
+    "bright specular highlights along the shoulder line, detailed wheels and headlights. " +
+    "High-end automotive product photography, extremely detailed, razor sharp, glossy paint. " +
+    "No text, no badges, no logos, no licence plate, no people, no props.";
 }
 
-/// Tous les pays connus de `markets.json`. Le pack accepte n'importe quel code pays, mais
-/// l'app ne propose que ceux-là : borner la vérification ici borne aussi le coût.
-export const ART_COUNTRIES: string[] = Object.values(
-  (marketsFile as { regions: Record<string, string[]> }).regions).flat();
-
-let cachedWeek = "";
-let cachedTargets = new Set<string>();
-
-/// Les modèles qui sont une cible cette semaine, quelque part. Recalculé une fois par
-/// semaine et par instance : le tirage est déterministe, il n'y a rien à stocker.
-export function weeklyTargetIds(now = new Date()): Set<string> {
-  const week = currentWeek(now);
-  if (week !== cachedWeek) {
-    const ids = new Set<string>();
-    for (const country of ART_COUNTRIES) {
-      for (const target of weeklyBounties(week, country)) ids.add(target.vehicle.id);
-    }
-    cachedTargets = ids;
-    cachedWeek = week;
-  }
-  return cachedTargets;
-}
-
-/// Le modèle demandé, s'il a le droit d'être rendu cette semaine ; sinon undefined.
-export function allowedArtVehicle(vehicleId: string, now = new Date()): Vehicle | undefined {
-  if (!weeklyTargetIds(now).has(vehicleId)) return undefined;
+/// Le modèle demandé s'il est au catalogue embarqué ; sinon undefined. Un identifiant
+/// inventé (ou un chemin) ne peut donc rien faire générer ni lire dans le compartiment.
+export function allowedArtVehicle(vehicleId: string): Vehicle | undefined {
   return vehicle(vehicleId);
 }

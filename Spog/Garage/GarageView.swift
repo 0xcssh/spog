@@ -270,7 +270,8 @@ struct GarageView: View {
     }
 
     /// Les modèles qui ont un rendu embarqué, du plus rare au plus courant dans ce pays.
-    /// Seuls les rendus embarqués : aucun appel réseau pour un simple aperçu.
+    /// Le rendu embarqué s'affiche tout de suite pendant que le rendu carré haute
+    /// définition arrive (huit modèles par pays au plus, payés une fois pour tous).
     private static func rankedTeasers(country: String) -> [Teaser] {
         let catalog = CatalogStore.shared
         let ranked = catalog.vehicles
@@ -337,41 +338,44 @@ private struct TeaserCard: View {
     let tier: RarityTier
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Rectangle()
-                .fill(RadialGradient(colors: [tier.color.opacity(0.35), Theme.surface],
-                                     center: .bottom, startRadius: 2, endRadius: 110))
-                .overlay {
-                    if let art = CarArt.image(for: vehicle.id) {
-                        StudioArt(image: art)
-                    }
+        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        VStack(alignment: .leading, spacing: 0) {
+            // Bord à bord : le rendu carré du modèle remplit tout le haut de la carte. Le
+            // rapport 1,4 ne rogne que du studio au-dessus et au-dessous de la voiture.
+            ModelArt(vehicleID: vehicle.id, body: CarBody(vehicle.body), tint: tier.color)
+                .aspectRatio(1.4, contentMode: .fit)
+                .overlay(alignment: .bottom) {
+                    LinearGradient(colors: [.clear, Theme.surface.opacity(0.55)],
+                                   startPoint: .center, endPoint: .bottom)
+                        .allowsHitTesting(false)
                 }
-                .frame(height: 84)
-                .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
-                .padding(.bottom, 4)
-            Text(vehicle.make.uppercased())
-                .font(Theme.label(8)).tracking(1.2)
-                .foregroundStyle(tier.color)
-                .lineLimit(1)
-            Text(vehicle.model)
-                .font(Theme.display(14, .semibold))
-                .foregroundStyle(Theme.textPrimary)
-                .lineLimit(1).minimumScaleFactor(0.7)
-            HStack {
-                Text(tier.label)
-                    .font(Theme.label(8)).tracking(1).textCase(.uppercase)
-                    .foregroundStyle(Theme.textMuted)
-                Spacer()
-                Text(verbatim: "+\(tier.points)")
-                    .font(Theme.mono(10, .bold))
+            VStack(alignment: .leading, spacing: 4) {
+                Text(vehicle.make.uppercased())
+                    .font(Theme.label(8)).tracking(1.2)
                     .foregroundStyle(tier.color)
+                    .lineLimit(1)
+                Text(vehicle.model)
+                    .font(Theme.display(14, .semibold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.7)
+                HStack {
+                    Text(tier.label)
+                        .font(Theme.label(8)).tracking(1).textCase(.uppercase)
+                        .foregroundStyle(Theme.textMuted)
+                    Spacer()
+                    Text(verbatim: "+\(tier.points)")
+                        .font(Theme.mono(10, .bold))
+                        .foregroundStyle(tier.color)
+                }
             }
+            .padding(.horizontal, 9)
+            .padding(.top, 7)
+            .padding(.bottom, 9)
         }
-        .padding(8)
         .frame(width: 148)
-        .background(Theme.glassFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(tier.color.opacity(0.35), lineWidth: 1))
+        .background(Theme.glassFill, in: shape)
+        .clipShape(shape)
+        .overlay(shape.strokeBorder(tier.color.opacity(0.35), lineWidth: 1))
     }
 }
 
@@ -449,8 +453,9 @@ struct MiniCard: View {
                                  center: .center, startRadius: 2, endRadius: 90))
             .overlay {
                 if let developed = card.shot?.developed {
-                    // Passée en studio : la même voiture, en rendu, montrée en entier.
-                    StudioArt(image: developed)
+                    // Passée en studio : la même voiture, en rendu, montrée en entier sur
+                    // son propre studio flouté.
+                    DevelopedArt(image: developed)
                 } else if let stylized = card.shot?.stylized {
                     // **La voiture reellement croisee, pas le modele.** Meme ordre de
                     // priorite que la fiche detaillee : un covering zebre, une livree
@@ -458,19 +463,12 @@ struct MiniCard: View {
                     // Le rendu studio les remplacerait par un exemplaire de catalogue.
                     Image(uiImage: stylized)
                         .resizable().scaledToFill()
-                } else if let art = CarArt.image(for: card.vehicle.id, paint: card.paint) {
-                    // Aucune photo : une carte de demonstration, ou un modele du
-                    // Spogdex. Le rendu du modele fait alors reconnaitre la voiture.
-                    StudioArt(image: art)
                 } else {
-                    // Ni rendu, ni photo : la silhouette de la carrosserie.
-                    Image(systemName: CarBody(card.vehicle.body).symbol)
-                        .font(.system(size: 40))
-                        .foregroundStyle(
-                            LinearGradient(colors: [Theme.textPrimary.opacity(0.85),
-                                                    Theme.textSecondary.opacity(0.3)],
-                                           startPoint: .top, endPoint: .bottom)
-                        )
+                    // Aucune photo : une carte de demonstration, ou un modele du
+                    // Spogdex. Le rendu carré du modèle, en plein cadre ; en attendant,
+                    // le rendu embarqué ou la silhouette (voir ModelArt).
+                    ModelArt(vehicleID: card.vehicle.id, body: CarBody(card.vehicle.body),
+                             tint: card.tier.color, paint: card.paint)
                 }
             }
             .overlay(alignment: .bottom) {

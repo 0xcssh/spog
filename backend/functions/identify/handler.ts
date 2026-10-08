@@ -24,10 +24,12 @@
 //        Rendu studio de la voiture photographiée (voir develop.ts) : 1 par jour en gratuit,
 //        plafond anti-abus seulement pour Pro et pour DEVELOP_TESTERS.
 //   POST { action: "vehicle_art", vehicle_id }
-//   → 200 { image: "<jpeg base64>", cached: boolean }
-//   → 403 { code: "not_a_target" }   (le modèle n'est la cible d'aucun pack cette semaine)
-//        Rendu studio d'un modèle du catalogue, pour le pack de primes (voir art.ts) :
-//        généré une fois par modèle, puis servi depuis le compartiment `art`.
+//   → 200 { image: "<jpeg base64, 1024 × 1024>", cached: boolean }
+//   → 403 { code: "unknown_vehicle" }   (identifiant absent du catalogue embarqué)
+//   → 429 { code: "rate_limited" }       (quota de l'appareil, ou plafond global du jour)
+//        Rendu studio carré d'un modèle du catalogue, pour tout ce que l'app montre sans
+//        photo du joueur (voir art.ts) : généré une fois par modèle, puis servi depuis le
+//        compartiment `art`.
 //   → 4xx/5xx { code: string, error: string }
 //     `code` est stable et traduit côté app ; `error` n'est qu'un repli lisible.
 //
@@ -44,7 +46,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { EntitlementResult } from "./entitlement";
 import type { ArtStore, SampleStore } from "./storage";
-import { ART_MODEL, ART_URL, allowedArtVehicle, artKey, artPrompt } from "./art";
+import { ART_ESTIMATED_USAGE, ART_MODEL, ART_QUALITY, ART_SIZE, ART_URL, allowedArtVehicle, artKey, artPrompt } from "./art";
 import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
 import { candidates, expectedVehicleId } from "./catalog";
 import { createSocial, SOCIAL_ACTIONS } from "./social";
@@ -78,10 +80,21 @@ export interface HandlerDeps {
   now?: () => Date;
 }
 
-/// Requêtes `vehicle_art` par appareil : un pack, c'est trois images, rouvertes de temps
-/// en temps. Ce plafond ne gêne personne et casse une boucle.
+/// Requêtes `vehicle_art` par appareil, cache compris : le pack, le garage et la fiche
+/// demandent chacun leurs modèles, rouverts de temps en temps. Ce plafond ne gêne
+/// personne et casse une boucle.
 export const ART_DAY_LIMIT = 300;
 export const ART_WINDOW_LIMIT = 30;
+/// Plafond GLOBAL de générations payées par jour, tous appareils confondus. Le quota par
+/// appareil ne suffit pas : mille faux appareils feraient générer tout le catalogue dans
+/// l'heure. 300 rendus × ≈3,4 centimes ≈ 10 $ par jour au pire, et le catalogue entier se
+/// remplit quand même en trois jours d'usage. Une demande servie par le cache ne compte
+/// pas : elle ne coûte rien.
+export const ART_GLOBAL_DAY_LIMIT = 300;
+export const ART_GLOBAL_WINDOW_LIMIT = 40;
+
+/// Issue d'une génération : l'image, ou la raison pour laquelle on n'a rien payé.
+type ArtOutcome = { image: string | null; refusal?: "blocked" | "unavailable" };
 
 /// Quotas du joueur gratuit. Dix scans le premier jour pour accrocher, puis trois par jour
 /// pour faire revenir chaque jour ; un rendu par jour. Au-delà viendra la pub récompensée
@@ -232,10 +245,10 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
   const model = deps.model || DEFAULT_MODEL;
   const allowance = deps.allowance ?? FREE_ALLOWANCE;
   const newId = deps.newId ?? randomUUID;
-  const now = deps.now ?? (() => new Date());
   /// Générations en cours, par modèle : deux joueurs qui ouvrent le même pack à la même
-  /// seconde ne doivent pas payer deux fois le même rendu.
-  const artInFlight = new Map<string, Promise<string | null>>();
+  /// seconde ne doivent pas payer deux fois le même rendu, ni entamer deux fois le
+  /// plafond global.
+  const artInFlight = new Map<string, Promise<ArtOutcome>>();
   const social = createSocial({
     db: deps.db,
     verifyApple: deps.verifyApple ?? (async () => ({ ok: false, reason: "disabled" })),
@@ -369,16 +382,16 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
                   resets_at: nextResetAt() });
   }
 
-  /// Rendu studio d'une cible du pack. Le cache d'abord ; sinon une génération, une seule
-  /// tentative (comme `develop` : rejouer une image pourrait la facturer deux fois).
+  /// Rendu studio d'un modèle du catalogue. Le cache d'abord ; sinon une génération, une
+  /// seule tentative (comme `develop` : rejouer une image pourrait la facturer deux fois).
   async function handleVehicleArt(req: Request, body: Record<string, unknown>): Promise<Response> {
     const vehicleId = typeof body.vehicle_id === "string" ? body.vehicle_id.trim().slice(0, MAX_VEHICLE_ID) : "";
     if (!vehicleId) return json({ code: "bad_request", error: "Modèle manquant" }, 400);
-    // La vérification de cible passe avant tout accès au stockage : c'est elle qui borne
-    // ce que l'URL publique peut faire générer.
-    const target = allowedArtVehicle(vehicleId, now());
-    if (!target) return json({ code: "not_a_target", error: "Ce modèle n'est pas une cible cette semaine." }, 403);
-    // Sans cache, chaque ouverture de pack paierait une image : on refuse plutôt.
+    // La vérification du catalogue passe avant tout accès au stockage : c'est elle qui
+    // borne ce que l'URL publique peut faire générer (le catalogue embarqué, rien de plus).
+    const target = allowedArtVehicle(vehicleId);
+    if (!target) return json({ code: "unknown_vehicle", error: "Ce modèle n'est pas au catalogue." }, 403);
+    // Sans cache, chaque affichage paierait une image : on refuse plutôt.
     if (!deps.art) return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
 
     const ip = clientIPFrom(req.headers);
@@ -397,14 +410,34 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
     if (cached) return json({ image: cached.toString("base64"), cached: true });
 
+    // La promesse est rangée sans `await` intermédiaire : une deuxième demande arrivée
+    // pendant la vérification du plafond global la rejoint au lieu de payer un second rendu.
     let pending = artInFlight.get(key);
     if (!pending) {
-      pending = generateArt(target, key).finally(() => artInFlight.delete(key));
+      pending = generateArtWithinBudget(target, key).finally(() => artInFlight.delete(key));
       artInFlight.set(key, pending);
     }
-    const image = await pending;
-    if (!image) return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
-    return json({ image, cached: false });
+    const outcome = await pending;
+    if (outcome.image) return json({ image: outcome.image, cached: false });
+    if (outcome.refusal === "blocked") {
+      return json({ code: "rate_limited", error: "Trop de rendus aujourd'hui. Réessaie demain." }, 429);
+    }
+    if (outcome.refusal === "unavailable") {
+      return json({ code: "service_saturated", error: "Le service est momentanément indisponible." }, 503);
+    }
+    return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
+  }
+
+  /// Le plafond global n'est entamé que par une génération réelle : ni une demande servie
+  /// par le cache, ni une demande qui rejoint une génération déjà en cours. Fail-closed,
+  /// comme les autres quotas : sans base, on ne paie rien.
+  async function generateArtWithinBudget(target: Parameters<typeof artPrompt>[0], key: string): Promise<ArtOutcome> {
+    const budget = await checkQuota("art-global", ART_GLOBAL_DAY_LIMIT, ART_GLOBAL_WINDOW_LIMIT);
+    if (budget !== "allowed") {
+      console.warn(`art ${target.id}: plafond global ${budget === "blocked" ? "atteint" : "injoignable"}`);
+      return { image: null, refusal: budget };
+    }
+    return { image: await generateArt(target, key) };
   }
 
   async function generateArt(target: Parameters<typeof artPrompt>[0], key: string): Promise<string | null> {
@@ -416,11 +449,12 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
         body: JSON.stringify({
           model: ART_MODEL,
           prompt: artPrompt(target),
-          size: "1536x1024",
-          quality: "medium",
-          // JPEG : 300 Ko au lieu de 3 Mo, à stocker comme à télécharger sur mobile.
+          size: ART_SIZE,
+          quality: ART_QUALITY,
+          // JPEG : ~250 Ko au lieu de 2 Mo, à stocker comme à télécharger sur mobile.
+          // 90 plutôt que 85 : en plein écran, les artefacts se voyaient sur les reflets du sol.
           output_format: "jpeg",
-          output_compression: 85,
+          output_compression: 90,
           n: 1,
         }),
       });
@@ -435,8 +469,12 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     const result = await response.json() as { data?: { b64_json?: string }[]; usage?: ImageUsage };
     const image = result.data?.[0]?.b64_json;
     if (!image) return null;
-    const cost = developCost(ART_MODEL, result.usage ?? {});
-    console.log(`art ${target.id}: ${JSON.stringify(result.usage ?? {})}, ` +
+    // Sans usage renvoyé, on journalise quand même une estimation : le coût de ces rendus
+    // doit rester lisible dans les journaux, même approché.
+    const usage: ImageUsage = result.usage ?? ART_ESTIMATED_USAGE;
+    const cost = developCost(ART_MODEL, usage);
+    console.log(`art ${target.id} ${ART_SIZE} ${ART_QUALITY}: ${JSON.stringify(usage)}` +
+                (result.usage ? "" : " (estimé)") + ", " +
                 (cost === null ? "coût inconnu" : `$${cost.toFixed(4)}`));
     try {
       await deps.art!.put(key, Buffer.from(image, "base64"));

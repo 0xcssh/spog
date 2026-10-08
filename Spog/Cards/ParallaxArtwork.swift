@@ -50,35 +50,30 @@ struct ParallaxArtwork: View {
                 // une, et le rendu studio sert aux cartes qui n'en ont pas : le Spogdex,
                 // et les modeles pas encore attrapes.
                 if let developed = shot.developed {
-                    // Passée en studio : un rendu en bandeau, montré en entier.
-                    fitted(developed, depth: 0.85)
+                    // Passée en studio : un rendu 3:2 de SA voiture, montré en entier sur
+                    // son propre studio flouté — le remplir couperait l'avant ou l'arrière.
+                    DevelopedArt(image: developed, offset: shift(0.85))
                 } else {
                     filled(shot.stylized, depth: 0.9, scale: 1.06)
                 }
-            } else if let render = CarArt.image(for: vehicleID, paint: paint) {
-                // Rendu studio du modele. Affiche en entier, pas rogne : c'est la
-                // silhouette qui fait reconnaitre la voiture, un gros plan sur une aile
-                // ne dit rien.
-                fitted(render, depth: 0.85)
+            } else if !vehicleID.isEmpty {
+                // Aucune photo (Spogdex, carte de démonstration) : le rendu carré haute
+                // définition du modèle, en plein cadre. Le grossissement (4 % de marge par
+                // côté, plus que les 10 points du décalage maximal) laisse jouer la parallaxe
+                // sans découvrir de bord ; avec une voiture sur ~80 % de la largeur, il reste
+                // encore une dizaine de points de studio devant le pare-chocs.
+                Color.clear
+                    .overlay {
+                        ModelArt(vehicleID: vehicleID, body: carBody, tint: tint, paint: paint)
+                            .scaleEffect(1.08)
+                            .offset(shift(0.6))
+                    }
+                    .clipped()
             } else {
                 placeholderScene
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-    }
-
-    /// Image affichee en entier, sur un fond sombre teinte par la rarete.
-    private func fitted(_ image: UIImage, depth: Double) -> some View {
-        Color.clear
-            .background {
-                LinearGradient(colors: [Theme.background, tint.opacity(0.16), Theme.background],
-                               startPoint: .top, endPoint: .bottom)
-            }
-            .overlay {
-                StudioArt(image: image)
-                    .offset(shift(depth))
-            }
-            .clipped()
     }
 
     /// Image qui remplit la zone sans jamais la deformer ni la repousser.
