@@ -67,6 +67,9 @@ struct ScannerView: View {
         let paint: UInt32?
         let sampleID: String?
         let scanID: String?
+        /// Cote estimée pour la voiture que l'IA a lue — pas forcément celle que le joueur
+        /// choisira (voir `onPick`).
+        let price: PriceBracket?
         /// Ce que l'IA a lu, en pieces detachees : de quoi ajouter le modele au
         /// catalogue si le joueur confirme qu'elle avait raison.
         let make: String
@@ -119,6 +122,10 @@ struct ScannerView: View {
                                candidates: item.candidates,
                                onPick: { vehicle in
                                    let photo = item.photo, paint = item.paint, sample = item.sampleID, scan = item.scanID
+                                   // La cote vaut pour la voiture que l'IA a lue : on ne la
+                                   // garde que si le joueur retient sa première proposition.
+                                   // Un autre choix recevrait le prix d'un autre modèle.
+                                   let price = item.candidates.first?.id == vehicle.id ? item.price : nil
                                    pending = nil
                                    Task {
                                        // Le joueur a tranché entre plusieurs modèles :
@@ -127,7 +134,8 @@ struct ScannerView: View {
                                            await IdentifyService.label(sampleID: sample, vehicleID: vehicle.id,
                                                                        source: .confirmed)
                                        }
-                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample, scanID: scan)
+                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample,
+                                                      scanID: scan, price: price)
                                    }
                                },
                                onLearn: {
@@ -136,14 +144,17 @@ struct ScannerView: View {
                                    guard let vehicle = CatalogStore.shared.learn(
                                        make: item.make, model: item.model, body: item.body)
                                    else { return }
+                                   // Le joueur confirme la lecture de l'IA : la cote est la bonne.
                                    let photo = item.photo, paint = item.paint, sample = item.sampleID, scan = item.scanID
+                                   let price = item.price
                                    pending = nil
                                    Task {
                                        if let sample {
                                            await IdentifyService.label(sampleID: sample, vehicleID: vehicle.id,
                                                                        source: .confirmed)
                                        }
-                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample, scanID: scan)
+                                       await complete(vehicle, photo: photo, paint: paint, sampleID: sample,
+                                                      scanID: scan, price: price)
                                    }
                                },
                                onCancel: { pending = nil })
@@ -422,7 +433,9 @@ struct ScannerView: View {
         do {
             identification = try await IdentifyService.identify(
                 photo, entitlement: subscriptions.entitlementJWS,
-                trainingConsent: training.granted)
+                trainingConsent: training.granted,
+                // Le pays de la prise : la cote est demandée sur ce marché, dans sa devise.
+                country: app.country)
         } catch IdentifyService.IdentifyError.dailyLimit(let resetsAt) {
             // Le serveur a le dernier mot : le miroir local se recale sur lui.
             await MainActor.run {
@@ -468,7 +481,7 @@ struct ScannerView: View {
                 Analytics.track(.scanIdentified, ["confidence": String(format: "%.1f", identification.confidence),
                                                   "matched": "auto"])
                 await complete(vehicle, photo: photo, paint: paint, sampleID: identification.sampleID,
-                               scanID: identification.scanID)
+                               scanID: identification.scanID, price: identification.price)
                 return
             }
         }
@@ -483,6 +496,7 @@ struct ScannerView: View {
                               candidates: candidates, paint: paint,
                               sampleID: identification.sampleID,
                               scanID: identification.scanID,
+                              price: identification.price,
                               make: identification.make, model: identification.model,
                               body: identification.body)
         }
@@ -490,12 +504,13 @@ struct ScannerView: View {
 
     /// Met la photo en scène, enregistre la carte et la révèle au joueur.
     private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?,
-                          sampleID: String?, scanID: String?) async {
+                          sampleID: String?, scanID: String?, price: PriceBracket?) async {
         let glow = garage.glowColor(vehicleID: vehicle.id, country: app.country)
         let shot = await CardArtStylizer.stylize(photo, glow: glow)
             ?? StyledShot(stylized: photo, original: photo)
         await MainActor.run {
-            reveal = record(vehicle, shot: shot, paint: paint, sampleID: sampleID, scanID: scanID)
+            reveal = record(vehicle, shot: shot, paint: paint, sampleID: sampleID, scanID: scanID,
+                            price: price)
         }
     }
 
@@ -526,11 +541,11 @@ struct ScannerView: View {
     /// Enregistre la prise, entretient la série, valide la quête si elle est remplie,
     /// et rend de quoi révéler la carte au joueur.
     private func record(_ vehicle: Vehicle, shot: StyledShot?, paint: UInt32?,
-                        sampleID: String?, scanID: String?) -> Reveal? {
+                        sampleID: String?, scanID: String?, price: PriceBracket?) -> Reveal? {
         let isNew = !garage.hasModel(vehicle.id)
         let item = garage.add(vehicleID: vehicle.id, country: app.country,
                               verified: app.isVerifiedCapture, paint: paint, shot: shot,
-                              sampleID: sampleID, scanID: scanID)
+                              sampleID: sampleID, scanID: scanID, price: price)
 
         let quest = QuestFactory.quest(for: Date(), country: app.country,
                                         favourites: profile.favouriteList)

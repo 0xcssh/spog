@@ -28,6 +28,10 @@ struct Catch: Identifiable, Codable {
     var synced: Bool? = nil
     /// Premier joueur à attraper ce modèle dans ce pays, d'après le serveur.
     var firstSpot: Bool? = nil
+    /// Cote d'occasion estimée à la capture, dans la devise du pays de la prise. Nil pour
+    /// les prises d'avant la cote, les cartes de démonstration, ou quand le serveur n'a pas
+    /// su : elles n'affichent rien et ne comptent pas dans la valeur du garage.
+    var price: PriceBracket? = nil
 
     /// Photos relues depuis le disque, jamais gardees en memoire dans la capture.
     var shot: StyledShot? { hasShot ? ShotStore.load(id) : nil }
@@ -84,6 +88,9 @@ final class GarageStore {
         guard let index = catches.firstIndex(where: { $0.id == item.id }),
               catches[index].vehicleID != vehicleID else { return }
         catches[index].vehicleID = vehicleID
+        // La cote était celle du modèle mal identifié : la garder attribuerait le prix d'une
+        // Clio à une Mégane. Sans nouvel appel au serveur, mieux vaut ne plus rien afficher.
+        catches[index].price = nil
         save()
         // Une correction est la meilleure etiquette qui soit : l'IA s'etait trompee.
         if let sample = catches[index].sampleID {
@@ -138,7 +145,8 @@ final class GarageStore {
                         verified: item.verified,
                         paint: item.paint,
                         shot: item.shot,
-                        firstSpot: item.firstSpot ?? false)
+                        firstSpot: item.firstSpot ?? false,
+                        price: item.price)
     }
 
     var cards: [CardData] {
@@ -153,6 +161,15 @@ final class GarageStore {
         Set(cards.map(\.vehicle.make)).count
     }
     var verifiedCount: Int { catches.filter(\.verified).count }
+
+    /// Valeur estimée du garage, dans la devise qui compte le plus de cartes. Limitée aux
+    /// prises affichables, comme les points : une prise dont le modèle a disparu du
+    /// catalogue n'est plus dans la grille, elle ne doit pas peser dans le total. Lue sur
+    /// les prises plutôt que sur `cards`, qui relit chaque photo depuis le disque.
+    var estimatedValue: GarageValue? {
+        let known = Set(catalog.vehicles.map(\.id))
+        return GarageValue.compute(catches.filter { known.contains($0.vehicleID) }.compactMap(\.price))
+    }
 
     /// Nombre de captures par palier, dans l'ordre du catalogue.
     func countByTier() -> [(RarityTier, Int)] {
@@ -210,7 +227,7 @@ final class GarageStore {
     @discardableResult
     func add(vehicleID: String, country: String, verified: Bool,
              paint: UInt32? = nil, shot: StyledShot? = nil, sampleID: String? = nil,
-             scanID: String? = nil) -> Catch {
+             scanID: String? = nil, price: PriceBracket? = nil) -> Catch {
         let id = UUID()
         if let shot { ShotStore.save(shot, for: id) }
         let item = Catch(id: id,
@@ -222,7 +239,8 @@ final class GarageStore {
                          paint: paint ?? CarPaint.random(),
                          hasShot: shot != nil,
                          sampleID: sampleID,
-                         scanID: scanID)
+                         scanID: scanID,
+                         price: price)
         catches.append(item)
         save()
         Task { @MainActor in await self.sync(id) }

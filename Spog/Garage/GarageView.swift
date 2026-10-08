@@ -58,8 +58,24 @@ struct GarageView: View {
 
     /// Le compteur est le héros de l'écran : un « 0 » perdu en 24 points faisait un
     /// en-tête maigre. En grand, avec le reste du Spogdex à côté, il dit où on en est.
+    ///
+    /// Au-dessus, le titre « Ton garage » : l'onglet s'appelle « Collection », et un
+    /// testeur cherchait son garage sans comprendre qu'il était déjà dedans.
     private var header: some View {
-        HStack(alignment: .top) {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .center) {
+                Text("garage.title")
+                    .font(Theme.display(28))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.7)
+                    .accessibilityAddTraits(.isHeader)
+                Spacer()
+                HStack(spacing: 9) {
+                    // Le catalogue n'a plus d'onglet : on y accede d'ici.
+                    circleButton("list.bullet") { browsingCatalog = true }
+                    circleButton("gearshape.fill") { showingSettings = true }
+                }
+            }
             VStack(alignment: .leading, spacing: 0) {
                 Overline(text: "garage.section", color: Theme.accentBright)
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -75,13 +91,6 @@ struct GarageView: View {
                         .foregroundStyle(Theme.textSecondary)
                 }
             }
-            Spacer()
-            HStack(spacing: 9) {
-                // Le catalogue n'a plus d'onglet : on y accede d'ici.
-                circleButton("list.bullet") { browsingCatalog = true }
-                circleButton("gearshape.fill") { showingSettings = true }
-            }
-            .padding(.top, 6)
         }
     }
 
@@ -103,6 +112,10 @@ struct GarageView: View {
     private var statsPanel: some View {
         GlassCard(radius: 20, padding: 14) {
             VStack(spacing: 14) {
+                if let value = garage.estimatedValue {
+                    valueRow(value)
+                    Rectangle().fill(Theme.stroke).frame(height: 1)
+                }
                 HStack(spacing: 12) {
                     MetricCell(value: garage.totalPoints, label: "garage.stat.points", color: Theme.accentBright)
                     HairlineDivider()
@@ -130,6 +143,36 @@ struct GarageView: View {
                 .buttonStyle(PressScaleStyle(scale: 0.98))
             }
         }
+    }
+
+    /// Valeur estimée du garage, en tête du panneau : la somme des milieux de fourchette
+    /// des cartes cotées. Absente tant qu'aucune carte n'a de cote (démonstration,
+    /// anciennes prises) : un « 0 € » dirait que la collection ne vaut rien.
+    ///
+    /// Une seule devise est additionnée. Les autres sont nommées, jamais converties : l'app
+    /// n'a pas de taux de change, et en inventer un fausserait le seul chiffre qu'on montre.
+    private func valueRow(_ value: GarageValue) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Overline(text: "garage.value.title", color: Theme.accentBright)
+            Text(verbatim: PriceFormat.total(value))
+                .font(Theme.hero(34))
+                .monospacedDigit()
+                .foregroundStyle(Theme.textPrimary)
+                .contentTransition(.numericText(value: value.total))
+                .lineLimit(1).minimumScaleFactor(0.6)
+            Text("garage.value.note")
+                .font(Theme.body(11))
+                .foregroundStyle(Theme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
+            if !value.otherCurrencies.isEmpty {
+                Text("garage.value.others \(value.otherCurrencies.joined(separator: ", "))")
+                    .font(Theme.body(11))
+                    .foregroundStyle(Theme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 
     private var dexBar: some View {

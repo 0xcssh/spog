@@ -17,6 +17,9 @@ struct CardData: Identifiable {
     var shot: StyledShot? = nil
     /// Premier joueur a attraper ce modele dans ce pays : une marque meritee, a vie.
     var firstSpot: Bool = false
+    /// Cote approximative de la prise. Nil pour une démonstration ou une ancienne prise :
+    /// la carte n'affiche alors rien plutôt qu'une ligne vide.
+    var price: PriceBracket? = nil
 }
 
 /// La carte a collectionner. Se penche sous le doigt sur deux axes, avec un reflet
@@ -212,6 +215,16 @@ struct CollectibleCardView: View {
                 .tracking(0.5)
                 .foregroundStyle(Theme.textPrimary)
                 .lineLimit(1).minimumScaleFactor(0.55)
+
+            // Discrète, sous le nom : la rareté reste la valeur du jeu, la cote n'est qu'une
+            // curiosité. Le mot « approx. » n'est pas une précaution de style — elle est
+            // devinée d'une photo, sans kilométrage ni carnet d'entretien.
+            if let price = card.price {
+                Text("card.priceInline \(PriceFormat.range(price))")
+                    .font(Theme.mono(9, .medium))
+                    .foregroundStyle(Theme.textSecondary)
+                    .lineLimit(1).minimumScaleFactor(0.7)
+            }
 
             Rectangle().fill(Theme.stroke).frame(height: 1).padding(.vertical, 7)
 
