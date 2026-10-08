@@ -201,11 +201,19 @@ Remplace « 5 scans offerts puis abonnement ».
 
 | | Gratuit | Pro |
 |---|---|---|
-| Scans | **10 le premier jour, puis 3 par jour** ; +3 par pub récompensée (3 pubs/jour) | Illimités (plafond anti-abus invisible, 100/jour) |
+| Scans | **10 le premier jour, puis 3 par jour sans pub** ; au-delà, **une pub par scan, toujours après la photo** (plafond anti-abus ~30/jour) | Illimités (plafond anti-abus invisible, 100/jour) |
 | Rendus « Develop » | **1 par jour**, +1 par pub récompensée | Illimités, meilleure qualité |
 | Pub | Récompensée uniquement, jamais imposée | Aucune |
 | Pack de primes | 1 par semaine | 1 de plus |
 
+- **La pub ne passe jamais avant la photo** : une voiture croisée est partie en cinq secondes.
+  Elle tourne pendant l'identification et le développement de la carte, qui en devient la
+  récompense. Décidé le 08/10/2026, remplace « +3 scans par pub ».
+- **Ce qui rapporte** : Pro d'abord (la marge), la pub ensuite (elle couvre les coûts des
+  joueurs gratuits). Le rendu est un coût, pas une recette : il donne envie de jouer plus.
+  Ordre de grandeur, à remplacer par les vrais chiffres après lancement : une pub
+  récompensée rapporte 1 à 3 centimes (eCPM France 10–30 €) ; un joueur gratuit actif
+  réaliste (une dizaine de jours par mois) rapporte ~0,50–1,50 € de pub et coûte ~0,40 €.
 - **Pas de monnaie virtuelle** pour la première version : de simples compteurs tenus par le
   serveur. Des **packs de rendus** payants (consommables) viendront plus tard, s'il y a de
   la demande — ils s'ajouteront aux compteurs sans changer le modèle.
