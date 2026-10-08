@@ -70,6 +70,11 @@ struct CardDetailView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 14)
 
+                if let price = card.price {
+                    priceRow(price)
+                        .padding(.bottom, 14)
+                }
+
                 Overline(text: developing ? "card.developing" : "card.hint")
                     .padding(.bottom, 14)
 
@@ -195,6 +200,21 @@ extension CardDetailView {
         .background(Theme.glassFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
             .strokeBorder(Theme.glassEdge, lineWidth: 1))
+    }
+
+    /// La cote de la prise, en fourchette dans la devise du pays où elle a été faite.
+    /// « Approximative » est écrit en toutes lettres : la cote est devinée d'une photo, sans
+    /// kilométrage ni carnet d'entretien, et l'annoncer sèchement promettrait une exactitude
+    /// qu'aucune image ne contient.
+    func priceRow(_ price: PriceBracket) -> some View {
+        VStack(spacing: 4) {
+            Overline(text: "card.priceLabel")
+            Text(verbatim: PriceFormat.range(price))
+                .font(Theme.display(17, .semibold))
+                .monospacedDigit()
+                .foregroundStyle(Theme.textPrimary)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     /// Envoie la photo du joueur au serveur et remplace le visuel de la carte par le rendu

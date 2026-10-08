@@ -99,7 +99,9 @@ describe("contrat de réponse", () => {
     const res = await handler()(post({ imageBase64: "abc" }));
     assert.equal(res.status, 200);
     const { scan_id, ...rest } = await res.json() as any;
-    assert.deepEqual(rest, { ...goodCar, scans_left: FREE_ALLOWANCE.firstDayScans - 1, resets_at: nextResetAt() });
+    // Sans pays (app d'avant la cote), les champs de la cote existent mais n'affirment rien.
+    assert.deepEqual(rest, { ...goodCar, price_min: 0, price_max: 0, price_currency: "",
+                             scans_left: FREE_ALLOWANCE.firstDayScans - 1, resets_at: nextResetAt() });
     assert.match(scan_id, /^[0-9a-f-]{36}$/);
   });
 
@@ -486,5 +488,75 @@ describe("trace des identifications", () => {
     const empty = { ...goodCar, vehicle_present: false, model: "" };
     await handler({ db: store.db, fetch: fakeFetch([aiResponse(empty)]).fn })(post({ imageBase64: "abc" }));
     assert.equal(store.queries.some((q) => q.text.includes("insert into public.scans")), false);
+  });
+});
+
+describe("cote d'occasion", () => {
+  const pricedCar = { ...goodCar, price_min: 18_000, price_max: 24_000, price_max_usd: 26_000 };
+
+  /// Fetch qui retient le corps envoyé à OpenAI : on vérifie ce que le modèle reçoit.
+  function capturingFetch(content: unknown) {
+    const bodies: any[] = [];
+    const fn = (async (_url: unknown, init?: { body?: unknown }) => {
+      bodies.push(JSON.parse(String(init?.body)));
+      return aiResponse(content);
+    }) as unknown as typeof fetch;
+    return { fn, bodies };
+  }
+
+  test("avec un pays, la fourchette revient dans la devise de ce pays", async () => {
+    const res = await handler({ fetch: fakeFetch([aiResponse(pricedCar)]).fn })(post({ imageBase64: "abc", country: "FR" }));
+    const out = await res.json() as any;
+    assert.equal(out.price_min, 18_000);
+    assert.equal(out.price_max, 24_000);
+    assert.equal(out.price_currency, "EUR");
+    assert.equal(out.price_max_usd, undefined, "l'équivalent en dollars ne sert qu'au contrôle");
+  });
+
+  test("le marché et la devise sont dits au modèle, jamais dans le prompt système", async () => {
+    const ai = capturingFetch(pricedCar);
+    await handler({ fetch: ai.fn })(post({ imageBase64: "abc", country: "jp" }));
+    const [system, user] = ai.bodies[0].messages;
+    assert.ok(!system.content.includes("JP") && !system.content.includes("JPY"));
+    assert.match(user.content[0].text, /country JP, currency JPY/);
+  });
+
+  test("sans pays : aucun marché demandé, aucune cote, même si le modèle en invente une", async () => {
+    const ai = capturingFetch(pricedCar);
+    const res = await handler({ fetch: ai.fn })(post({ imageBase64: "abc" }));
+    assert.equal(ai.bodies[0].messages[1].content[0].text, "Identify the car in this photo.");
+    const out = await res.json() as any;
+    assert.deepEqual([out.price_min, out.price_max, out.price_currency], [0, 0, ""]);
+  });
+
+  test("un pays inconnu ou mal formé ne bloque pas l'identification", async () => {
+    for (const country of ["ZZ", "FRA", 42, "<script>"]) {
+      const res = await handler({ fetch: fakeFetch([aiResponse(pricedCar)]).fn })(post({ imageBase64: "abc", country }));
+      assert.equal(res.status, 200);
+      const out = await res.json() as any;
+      assert.equal(out.model, "3008");
+      assert.deepEqual([out.price_min, out.price_max, out.price_currency], [0, 0, ""]);
+    }
+  });
+
+  test("confiance sous 0,7 : fourchette nulle, devise conservée", async () => {
+    const res = await handler({ fetch: fakeFetch([aiResponse({ ...pricedCar, confidence: 0.65 })]).fn })(
+      post({ imageBase64: "abc", country: "FR" }));
+    const out = await res.json() as any;
+    assert.deepEqual([out.price_min, out.price_max, out.price_currency], [0, 0, "EUR"]);
+  });
+
+  test("une photo d'écran n'a pas de cote", async () => {
+    const res = await handler({ fetch: fakeFetch([aiResponse({ ...pricedCar, is_screen: true })]).fn })(
+      post({ imageBase64: "abc", country: "FR" }));
+    const out = await res.json() as any;
+    assert.deepEqual([out.price_min, out.price_max], [0, 0]);
+  });
+
+  test("les autres champs du contrat ne bougent pas", async () => {
+    const res = await handler({ fetch: fakeFetch([aiResponse(pricedCar)]).fn })(post({ imageBase64: "abc", country: "FR" }));
+    const { scan_id, price_min, price_max, price_currency, ...rest } = await res.json() as any;
+    assert.deepEqual(rest, { ...goodCar, scans_left: FREE_ALLOWANCE.firstDayScans - 1, resets_at: nextResetAt() });
+    assert.match(scan_id, /^[0-9a-f-]{36}$/);
   });
 });

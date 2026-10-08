@@ -26,6 +26,18 @@ for region, countries in markets["regions"].items():
             errors.append(f"pays {code} present dans {country_of[code]} ET {region}")
         country_of[code] = region
 
+# -- devises de la cote : un pays oublie ici n'aurait jamais de cote, sans aucune erreur
+#    visible ; un code qui n'est pas un pays du fichier ne servirait a rien --
+currencies = markets.get("currencies", {})
+for code in country_of:
+    if code not in currencies:
+        errors.append(f"pays {code} sans devise dans 'currencies'")
+for code, currency in currencies.items():
+    if code not in country_of:
+        errors.append(f"devise donnee pour un pays inconnu: {code}")
+    if len(currency) != 3 or not currency.isalpha() or not currency.isupper():
+        errors.append(f"devise invalide '{currency}' pour {code} (attendu ISO 4217)")
+
 for region in markets["populated"]:
     if region not in region_ids:
         errors.append(f"region peuplee inconnue: {region}")

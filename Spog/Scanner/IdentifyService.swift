@@ -24,6 +24,9 @@ struct Identification {
     /// Trace de l'identification côté serveur : la preuve, pour le classement, que la
     /// prise déclarée ensuite correspond à cette photo.
     var scanID: String? = nil
+    /// Cote d'occasion dans la devise du pays de la prise. Nil quand le serveur n'a pas su,
+    /// ce qui est fréquent et voulu : il ne voit ni le kilométrage ni l'état mécanique.
+    var price: PriceBracket? = nil
 
     /// Texte libre soumis au rapprochement avec le catalogue.
     var fullText: String {
@@ -82,8 +85,10 @@ enum IdentifyService {
     /// - Parameter entitlement: transaction d'abonnement signee par Apple, si le joueur
     ///   en a une. Le serveur la verifie lui-meme ; sans elle, le scan est decompte
     ///   des scans offerts.
+    /// - Parameter country: pays de la prise (code ISO à 2 lettres). Le serveur en déduit
+    ///   le marché et la devise de la cote ; vide, il n'en calcule pas.
     static func identify(_ photo: UIImage, entitlement: String?,
-                         trainingConsent: Bool) async throws -> Identification {
+                         trainingConsent: Bool, country: String) async throws -> Identification {
         guard let base64 = compressedJPEGBase64(from: photo) else {
             throw IdentifyError.unreadableImage
         }
@@ -102,6 +107,7 @@ enum IdentifyService {
         var body: [String: Any] = ["imageBase64": base64]
         if let entitlement { body["entitlement"] = entitlement }
         if trainingConsent { body["training_consent"] = true }
+        if !country.isEmpty { body["country"] = country }
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
         let data: Data, response: URLResponse
@@ -130,6 +136,12 @@ enum IdentifyService {
             let resets_at: String?
             let sample_id: String?
             let scan_id: String?
+            // Optionnels, et en Double plutôt qu'en Int : un serveur plus ancien ne les
+            // envoie pas, et un montant qui ne tiendrait pas dans un Int ferait échouer
+            // tout le décodage, donc le scan, pour une simple cote.
+            let price_min: Double?
+            let price_max: Double?
+            let price_currency: String?
         }
         guard let payload = try? JSONDecoder().decode(SuccessPayload.self, from: data) else {
             throw IdentifyError.server(code: "unreadable_ai_response", fallback: nil)
@@ -150,7 +162,10 @@ enum IdentifyService {
                               scansLeft: payload.scans_left,
                               scansResetAt: payload.resets_at.flatMap(Self.date),
                               sampleID: payload.sample_id,
-                              scanID: payload.scan_id)
+                              scanID: payload.scan_id,
+                              price: PriceBracket.from(low: payload.price_min,
+                                                       high: payload.price_max,
+                                                       currency: payload.price_currency))
     }
 
     /// Dates du serveur : `toISOString`, avec les millisecondes.

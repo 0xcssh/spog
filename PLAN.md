@@ -61,10 +61,20 @@ obstacles réels — l'app n'existe pas en thaï (254 textes), et le marché ach
 plutôt que des abonnements. Prix à viser : 99 bahts/mois, l'ancrage de Netflix Mobile.
 Décision prise : **la France d'abord.**
 
-**La cote d'occasion.** Implémentée puis retirée le 28/09/2026 — elle introduisait une
-seconde échelle de valeur à côté de la rareté, et les deux se contredisaient. L'implémentation
-complète est intacte dans le commit `d381c76` et se remet en place en une ligne de prompt le
-jour où des joueurs la réclameront.
+**La cote d'occasion — revenue le 08/10/2026, à la demande du client, en devise locale.**
+Retirée le 28/09/2026 (commit `d381c76`) parce qu'elle faisait une seconde échelle de valeur
+à côté de la rareté, et surtout parce qu'elle était en euros pour tout le monde. Elle revient
+sans cette faute : l'app envoie le pays de la prise, le serveur demande à l'IA la valeur de
+revente typique **sur le marché de ce pays, dans sa devise** (`currencies` de `markets.json`,
+une donnée : ajouter un pays, c'est aussi ajouter sa devise). Sans pays, pas de cote.
+Toujours une fourchette, toujours « Cote approximative », figée à la capture, effacée si le
+joueur corrige le modèle. Garde-fous serveur repris (`backend/functions/identify/price.ts`) ;
+le plafond de 3 M passe en dollars, estimé par l'IA, puisque trois millions de yens sont une
+citadine. Affichée sur la carte, sur sa fiche, et en tête de l'écran Collection (« Ton
+garage ») : la **valeur estimée du garage**, somme des milieux de fourchette dans la devise
+qui compte le plus de cartes, les autres devises nommées et jamais converties.
+⚠️ Reste à vérifier sur de vraies prises que la rareté et la cote ne se contredisent pas
+aux yeux des joueurs — c'était la raison du premier retrait. Déploiement du backend requis.
 
 **Le signal « concession ».** Idée du 28/09/2026 : refuser une photo prise en concession.
 Recommandation retenue — **un signal, pas un refus** : la carte est créée mais non

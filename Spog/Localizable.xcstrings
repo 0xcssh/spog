@@ -494,6 +494,40 @@
         }
       }
     },
+    "card.priceInline %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approx. value %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cote approx. %@"
+          }
+        }
+      }
+    },
+    "card.priceLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approximate value"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cote approximative"
+          }
+        }
+      }
+    },
     "card.remove": {
       "extractionState": "manual",
       "localizations": {
@@ -1544,6 +1578,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Repère"
+          }
+        }
+      }
+    },
+    "garage.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your garage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton garage"
+          }
+        }
+      }
+    },
+    "garage.value.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimate: the sum of your cards' approximate values, guessed from your photos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimation : la somme des cotes approximatives de tes cartes, devinées d'après tes photos."
+          }
+        }
+      }
+    },
+    "garage.value.others %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not included: cards valued in %@, never converted."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hors total : des cartes cotées en %@, jamais converties."
+          }
+        }
+      }
+    },
+    "garage.value.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimated garage value"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valeur estimée du garage"
           }
         }
       }
@@ -3237,13 +3339,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. When you switch a card to studio, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree — you are asked once, and the \"Help recognize cars\" setting lets you change your mind — the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
+            "value": "Photos are stored on your device. To identify a vehicle, a photo is sent to our server, which forwards it to an artificial-intelligence provider for analysis, then returns the result. The code of the country where the photo was taken goes with it, to estimate the car's value on that country's market and in its currency; it reveals nothing beyond that country. When you switch a card to studio, its photo is sent the same way to generate its studio render, which is then stored on your device. Before any transmission, license plates detected in the image are blurred on your device. By default, transmitted photos are not kept once the answer is returned. If you agree — you are asked once, and the \"Help recognize cars\" setting lets you change your mind — the photos of your catches are kept on our server, with plates already blurred, along with the identified model and any correction you made, to train recognition that will run directly on the iPhone. They are tied to no identity, and are never published, sold or shared."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Quand tu passes une carte en studio, sa photo est envoyée de la même façon pour en générer le rendu studio, qui est ensuite rangé sur ton appareil. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Par défaut, les photos transmises ne sont pas conservées une fois la réponse rendue. Si tu l'acceptes — la question t'est posée une fois, et le réglage « Aider à reconnaître les voitures » permet de changer d'avis —, les photos de tes prises sont conservées sur notre serveur, plaques déjà floutées, avec le modèle identifié et celui que tu as éventuellement corrigé, pour entraîner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachées à aucune identité, et ne sont jamais publiées, vendues ni partagées."
+            "value": "Les photos sont stockées sur ton appareil. Pour identifier un véhicule, une photo est envoyée à notre serveur, qui la transmet à un prestataire d'intelligence artificielle pour analyse, puis renvoie le résultat. Le code du pays où la photo a été prise l'accompagne, pour estimer la cote de la voiture sur le marché de ce pays et dans sa devise ; il ne révèle rien de plus que ce pays. Quand tu passes une carte en studio, sa photo est envoyée de la même façon pour en générer le rendu studio, qui est ensuite rangé sur ton appareil. Avant toute transmission, les plaques d'immatriculation détectées dans l'image sont floutées sur ton appareil. Par défaut, les photos transmises ne sont pas conservées une fois la réponse rendue. Si tu l'acceptes — la question t'est posée une fois, et le réglage « Aider à reconnaître les voitures » permet de changer d'avis —, les photos de tes prises sont conservées sur notre serveur, plaques déjà floutées, avec le modèle identifié et celui que tu as éventuellement corrigé, pour entraîner une reconnaissance qui fonctionnera directement sur l'iPhone. Elles ne sont rattachées à aucune identité, et ne sont jamais publiées, vendues ni partagées."
           }
         }
       }
@@ -3339,13 +3441,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only vehicle identification involves a third party, and only for the photo being analyzed. Nothing is sold, rented or shared for advertising purposes. Apple handles subscription payments; we never see your payment details."
+            "value": "Only vehicle identification involves a third party, and only for the photo being analyzed and the code of the country where it was taken. Nothing is sold, rented or shared for advertising purposes. Apple handles subscription payments; we never see your payment details."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seule l'identification des véhicules fait intervenir un tiers, et uniquement pour la photo analysée. Rien n'est vendu, loué ni partagé à des fins publicitaires. Apple gère les paiements d'abonnement ; nous ne voyons jamais tes coordonnées bancaires."
+            "value": "Seule l'identification des véhicules fait intervenir un tiers, et uniquement pour la photo analysée et le code du pays où elle a été prise. Rien n'est vendu, loué ni partagé à des fins publicitaires. Apple gère les paiements d'abonnement ; nous ne voyons jamais tes coordonnées bancaires."
           }
         }
       }
