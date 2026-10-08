@@ -4,25 +4,32 @@ import CoreImage.CIFilterBuiltins
 
 /// La photo prise par l'utilisateur, et sa version transformee en visuel de carte.
 struct StyledShot {
-    let stylized: UIImage   // la voiture detouree et mise en scene
-    let original: UIImage   // le cliche brut, accessible d'un tap
+    let stylized: UIImage   // la photo redressee, cadree sur la voiture, a peine etalonnee
+    let original: UIImage   // le cliche brut (redresse), accessible d'un tap
     /// Rendu studio genere a partir du cliche, une fois la carte « developpee ».
     var developed: UIImage? = nil
 
     /// Le visuel de la carte : le rendu developpe s'il existe — c'est la meme voiture,
-    /// teinte et jantes comprises, en studio —, sinon la photo mise en scene.
+    /// teinte et jantes comprises, en studio —, sinon la photo cadree.
     var face: UIImage { developed ?? stylized }
 }
 
-/// Transforme une photo de voiture en illustration de carte a collectionner :
-/// sujet detoure, recadre et pose sur une scene neon, couleurs poussees, lisere a la
-/// couleur de la rarete, reflet au sol. Entierement sur l'appareil — aucun appel
+/// Fait d'une photo de voiture le visuel d'une carte : **une vraie photo**, redressee,
+/// cadree sur la voiture, a peine etalonnee. Entierement sur l'appareil — aucun appel
 /// reseau, aucun cout.
 ///
-/// **Le resultat doit se confondre avec les illustrations du catalogue.** Quatre-vingt-
-/// seize pour cent des modeles n'en ont pas encore ; pour ceux-la, cette chaine est ce
-/// que le joueur voit. Si elle rend une photo a peine teintee, sa collection se lit en
-/// deux categories — les vraies cartes et les siennes — et les siennes font pauvres.
+/// **Ce que cette chaine ne fait plus, et pourquoi.** Jusqu'au 08/10/2026 elle voulait
+/// faire passer la photo pour une illustration du catalogue : saturation poussee, nappe
+/// a la couleur du palier, vignette appuyee, et quand Vision detourait, la voiture
+/// reposee sur une scene de neons. Sur un iPhone, le resultat etait une photo bleuie,
+/// sombre et sale, meconnaissable — le contraire de ce que le joueur a vu dans la rue.
+/// La regle est desormais celle de la fiche : **la voiture reellement croisee passe
+/// avant tout**, et elle doit se reconnaitre. Le palier de rarete se lit sur le cadre de
+/// la carte, pas dans les couleurs de la photo.
+///
+/// Le detourage sert encore, a deux choses : savoir **ou est la voiture** pour cadrer
+/// dessus, et, seulement quand il est net, adoucir et assombrir legerement le decor —
+/// l'effet d'un objectif lumineux, qui reste une photo.
 ///
 /// **Reglage :** `tools/preview-stylizer.swift` fait tourner la meme chaine sur macOS et
 /// ecrit un PNG. C'est le seul moyen de voir le resultat sans iPhone, `Vision` ne
@@ -31,298 +38,231 @@ enum CardArtStylizer {
 
     private static let context = CIContext(options: [.useSoftwareRenderer: false])
 
-    /// - Parameter glow: couleur du contre-jour, celle du palier de rarete.
-    static func stylize(_ photo: UIImage, glow: UIColor) async -> StyledShot? {
-        guard let cgImage = photo.cgImage else { return nil }
-        let source = CIImage(cgImage: cgImage)
-        let frame = source.extent
+    /// Largeur sur hauteur du cadre de l'illustration dans `CollectibleCard` (et dans
+    /// l'image partagee, 340 × 334). Livrer ce rapport evite que l'affichage recoupe a
+    /// l'aveugle ce qu'on a soigneusement cadre ici.
+    static let cardAspect: CGFloat = 1.02
 
-        let composed: CIImage
-        if let subject = await isolateSubject(cgImage).map({ trimEdge($0, in: frame) }) {
-            // Detourage reussi : mise en scene complete, la voiture est isolee.
-            let staged = stage(subject, in: frame)
-            // `bloom: false` — un bloom appliqué à une image detouree deborde dans le
-            // vide et cerne la voiture d'une brume blanche qu'on prend pour un defaut
-            // de decoupage. Sur le sujet isole, le lisere colore suffit.
-            composed = punch(staged, bloom: false)
-                .composited(over: rimLight(staged, color: glow, in: frame))
-                .composited(over: floorReflection(staged, in: frame))
-                .composited(over: groundShadow(staged, in: frame))
-                .composited(over: backdrop(color: glow, in: frame))
-                .cropped(to: frame)
-        } else {
-            // Detourage impossible — cliche a travers une vitre, voiture noyee dans
-            // le decor, contre-jour. On traite alors l'image entiere : couleurs
-            // poussees, etalonnage a la couleur du palier, bords assombris.
-            // Le resultat reste un visuel de carte, jamais la photo brute.
-            composed = vignette(grade(punch(source), color: glow, in: frame), in: frame)
-                .cropped(to: frame)
+    /// Plus long cote du visuel enregistre : trois fois la carte affichee, le reste
+    /// ne serait que du poids dans le garage.
+    static let outputMaxDimension: CGFloat = 1600
+
+    static func stylize(_ photo: UIImage) async -> StyledShot? {
+        // Redressee a la capture deja ; ceci protege des autres sources, et ne coute
+        // rien sur une image droite.
+        let upright = UprightPhoto.normalize(photo)
+        guard let cgImage = upright.cgImage else { return nil }
+        let source = CIImage(cgImage: cgImage)
+        let size = source.extent.size
+
+        let lifted = await SubjectLifter.lift(upright)
+        let cadre = framing(imageSize: size, subject: lifted?.bounds)
+
+        // Decor adouci seulement sur un detourage net : sur un masque approximatif, le
+        // flou mordrait la carrosserie et laisserait des bouts de rue nets autour.
+        var scene = source
+        if let lifted, isClean(lifted) {
+            scene = softenBackground(source, mask: lifted.mask)
         }
 
-        guard let output = context.createCGImage(composed, from: frame) else { return nil }
-        return StyledShot(stylized: UIImage(cgImage: output), original: photo)
+        let canvas = CGRect(origin: .zero, size: cadre.canvas)
+        var card = vignette(compose(grade(scene), framing: cadre, imageHeight: size.height),
+                            in: canvas).cropped(to: canvas)
+
+        var outputRect = canvas
+        let longest = max(canvas.width, canvas.height)
+        if longest > outputMaxDimension {
+            let scale = outputMaxDimension / longest
+            let resize = CIFilter.lanczosScaleTransform()
+            resize.inputImage = card
+            resize.scale = Float(scale)
+            resize.aspectRatio = 1
+            outputRect = CGRect(x: 0, y: 0, width: (canvas.width * scale).rounded(.down),
+                                height: (canvas.height * scale).rounded(.down))
+            card = (resize.outputImage ?? card).cropped(to: outputRect)
+        }
+
+        guard let output = context.createCGImage(card, from: outputRect) else { return nil }
+        return StyledShot(stylized: UIImage(cgImage: output), original: upright)
+    }
+
+    // MARK: Cadrage
+
+    /// Ce qu'on garde de la photo pour la carte.
+    struct Framing: Equatable {
+        /// Partie de la photo gardee, en pixels, origine en haut a gauche.
+        let crop: CGRect
+        /// Taille du visuel. Plus haute que `crop` quand la voiture, trop large pour tenir
+        /// dans un cadre presque carre decoupe dans la photo, demande des bandes en haut
+        /// et en bas — remplies par la photo elle-meme, floutee.
+        let canvas: CGSize
+    }
+
+    /// Cadre la carte sur la voiture, ou au centre si on ne sait pas ou elle est.
+    ///
+    /// Une voiture est deux fois plus large que haute, une carte presque carree. Prise en
+    /// paysage, la voiture remplit la largeur de la photo, et un carre decoupe au milieu
+    /// lui coupe l'avant et l'arriere. On prefere alors garder toute la largeur utile et
+    /// completer le haut et le bas : une carte qui montre la voiture entiere vaut mieux
+    /// qu'une carte pleine qui montre une portiere.
+    ///
+    /// - Parameter subject: boite du sujet, normalisee, origine en haut a gauche.
+    static func framing(imageSize: CGSize, subject: CGRect?,
+                        aspect: CGFloat = cardAspect) -> Framing {
+        let width = imageSize.width, height = imageSize.height
+
+        guard let subject, subject.width > 0, subject.height > 0 else {
+            // Remplissage centre, sans bandes.
+            let w = min(width, height * aspect).rounded(.down)
+            let h = min(height, (w / aspect).rounded(.down))
+            return Framing(crop: CGRect(x: ((width - w) / 2).rounded(.down),
+                                        y: ((height - h) / 2).rounded(.down),
+                                        width: w, height: h),
+                           canvas: CGSize(width: w, height: h))
+        }
+
+        let box = CGRect(x: subject.minX * width, y: subject.minY * height,
+                         width: subject.width * width, height: subject.height * height)
+
+        // De l'air autour : environ 12 % de part et d'autre en largeur, un quart en hauteur.
+        var w = max(box.width * 1.24, box.height * 1.5 * aspect)
+        // Jamais plus serre que la moitie du plus grand cadre possible : au-dela, la
+        // voiture lointaine devient une bouillie de pixels.
+        w = max(w, min(width, height * aspect) * 0.5)
+        w = min(w, width)
+        var h = w / aspect
+        // Des bandes, d'accord, mais pas plus d'un cinquieme de la hauteur : au-dela on
+        // accepte de rogner les pare-chocs plutot que de montrer surtout du flou.
+        if h > height * 1.2 {
+            h = height * 1.2
+            w = h * aspect
+        }
+        w = w.rounded(.down)
+        h = h.rounded(.down)
+
+        let visible = min(h, height)
+        let x = min(max(box.midX - w / 2, 0), width - w).rounded(.down)
+        let y = min(max(box.midY - visible / 2, 0), height - visible).rounded(.down)
+        return Framing(crop: CGRect(x: x, y: y, width: w, height: visible),
+                       canvas: CGSize(width: w, height: h))
+    }
+
+    /// Decoupe la photo selon le cadrage, et complete le haut et le bas s'il le faut.
+    private static func compose(_ image: CIImage, framing: Framing, imageHeight: CGFloat) -> CIImage {
+        // CoreImage compte depuis le bas, le cadrage depuis le haut.
+        let crop = CGRect(x: framing.crop.minX, y: imageHeight - framing.crop.maxY,
+                          width: framing.crop.width, height: framing.crop.height)
+        let canvas = CGRect(origin: .zero, size: framing.canvas)
+        let band = ((canvas.height - crop.height) / 2).rounded(.down)
+
+        let strip = image.cropped(to: crop)
+            .transformed(by: CGAffineTransform(translationX: -crop.minX, y: -crop.minY + band))
+        guard band >= 1 else { return strip.cropped(to: canvas) }
+
+        // Les bandes : la meme photo, agrandie pour couvrir la carte, tres floutee et
+        // assombrie. Elle prolonge les couleurs de la scene au lieu de poser deux
+        // barres noires, et s'efface sous la vignette.
+        let cover = canvas.height / crop.height
+        let backdrop = strip
+            .transformed(by: CGAffineTransform(translationX: 0, y: -band))
+            .transformed(by: CGAffineTransform(scaleX: cover, y: cover))
+            .transformed(by: CGAffineTransform(translationX: (canvas.width - crop.width * cover) / 2,
+                                               y: 0))
+        let blur = CIFilter.gaussianBlur()
+        blur.inputImage = backdrop.clampedToExtent()
+        blur.radius = Float(canvas.height * 0.04)
+        let dim = CIFilter.exposureAdjust()
+        dim.inputImage = blur.outputImage
+        dim.ev = -1.3
+        let background = (dim.outputImage ?? backdrop).cropped(to: canvas)
+
+        // Raccord fondu : une ligne nette entre photo et flou se verrait comme une couture.
+        let feather = max(2, crop.height * 0.04)
+        let bottom = CIFilter.linearGradient()
+        bottom.point0 = CGPoint(x: 0, y: band)
+        bottom.point1 = CGPoint(x: 0, y: band + feather)
+        bottom.color0 = CIColor(red: 0, green: 0, blue: 0)
+        bottom.color1 = CIColor(red: 1, green: 1, blue: 1)
+        let top = CIFilter.linearGradient()
+        top.point0 = CGPoint(x: 0, y: band + crop.height)
+        top.point1 = CGPoint(x: 0, y: band + crop.height - feather)
+        top.color0 = CIColor(red: 0, green: 0, blue: 0)
+        top.color1 = CIColor(red: 1, green: 1, blue: 1)
+        let both = CIFilter.multiplyCompositing()
+        both.inputImage = top.outputImage
+        both.backgroundImage = bottom.outputImage
+
+        let blend = CIFilter.blendWithMask()
+        blend.inputImage = strip
+        blend.backgroundImage = background
+        blend.maskImage = both.outputImage?.cropped(to: canvas)
+        return blend.outputImage?.cropped(to: canvas) ?? strip
     }
 
     // MARK: Detourage
 
-    /// Detourage du sujet principal par Vision, sur l'appareil.
-    /// Rend nil dans le simulateur, qui n'embarque pas le modele d'inference.
-    private static func isolateSubject(_ cgImage: CGImage) async -> CIImage? {
-        guard let lifted = await SubjectLifter.lift(UIImage(cgImage: cgImage)) else {
-            return nil
+    /// Un detourage merite d'etre montre s'il couvre une bonne part de sa boite — une
+    /// voiture est un bloc, pas une dentelle — et si le sujet n'est ni un detail perdu
+    /// au loin ni la photo entiere.
+    private static func isClean(_ lifted: LiftedPhoto) -> Bool {
+        let area = lifted.bounds.width * lifted.bounds.height
+        return lifted.fill >= 0.45 && (0.04...0.8).contains(area)
+    }
+
+    /// Decor legerement flou et assombri, voiture intacte : l'effet d'un objectif ouvert.
+    /// Le decor reste **la vraie rue** et la voiture ne bouge pas d'un pixel : un bord de
+    /// masque imparfait se fond dans sa propre photo au lieu de trancher sur un fond
+    /// invente, comme le faisait la scene de neons.
+    private static func softenBackground(_ image: CIImage, mask: CIImage) -> CIImage {
+        let extent = image.extent
+        let side = min(extent.width, extent.height)
+
+        // Le masque est rendu a la taille de la photo ; on s'en assure plutot que de
+        // decaler la mise au point de quelques pixels si ce n'etait pas le cas.
+        var matte = mask
+        if mask.extent.width > 0, mask.extent.height > 0, mask.extent.size != extent.size {
+            matte = mask.transformed(by: CGAffineTransform(scaleX: extent.width / mask.extent.width,
+                                                           y: extent.height / mask.extent.height))
         }
-        return CIImage(image: lifted.subject)
-    }
+        let soft = CIFilter.gaussianBlur()
+        soft.inputImage = matte.clampedToExtent()
+        soft.radius = Float(max(1.5, side * 0.002))
 
-    /// Rogne le bord du sujet de quelques pixels.
-    ///
-    /// Le masque de Vision suit le contour **au pixel pres, celui-ci compris** : sur une
-    /// photo de rue, ce dernier pixel appartient encore au ciel ou au bitume clair. Pose
-    /// sur un fond sombre, il forme un lisere clair qui trahit le decoupage et donne a
-    /// la voiture l'air d'un autocollant.
-    ///
-    /// On erode **la transparence seule**. Appliquer l'erosion a l'image entiere rogne
-    /// aussi les couleurs : chaque reflet clair de la carrosserie est remplace par son
-    /// voisin sombre, et la voiture se couvre de trous.
-    private static func trimEdge(_ subject: CIImage, in frame: CGRect) -> CIImage {
-        let toMask = CIFilter.colorMatrix()
-        toMask.inputImage = subject
-        toMask.rVector = CIVector(x: 0, y: 0, z: 0, w: 1)
-        toMask.gVector = CIVector(x: 0, y: 0, z: 0, w: 1)
-        toMask.bVector = CIVector(x: 0, y: 0, z: 0, w: 1)
-        toMask.aVector = CIVector(x: 0, y: 0, z: 0, w: 0)
-        toMask.biasVector = CIVector(x: 0, y: 0, z: 0, w: 1)
+        let blur = CIFilter.gaussianBlur()
+        blur.inputImage = image.clampedToExtent()
+        blur.radius = Float(side * 0.006)
+        let dim = CIFilter.exposureAdjust()
+        dim.inputImage = blur.outputImage
+        dim.ev = -0.45
 
-        let erode = CIFilter.morphologyMinimum()
-        erode.inputImage = toMask.outputImage
-        erode.radius = Float(max(1.5, min(frame.width, frame.height) * 0.005))
-        guard let tightened = erode.outputImage else { return subject }
-
-        let apply = CIFilter.blendWithMask()
-        apply.inputImage = subject
-        apply.backgroundImage = CIImage(color: .clear).cropped(to: subject.extent)
-        apply.maskImage = tightened
-        return apply.outputImage ?? subject
-    }
-
-    // MARK: Mise en scene
-
-    /// Place le sujet dans la scene : mis a l'echelle, centre, pose sur le sol.
-    ///
-    /// Sans ca, la voiture reste la ou elle etait sur la photo — souvent collee aux
-    /// bords, parfois coupee. Les illustrations du catalogue montrent toutes une voiture
-    /// **centree, avec de l'air autour et du sol dessous** ; c'est cette composition,
-    /// plus que les filtres, qui fait qu'une carte a l'air fabriquee plutot que
-    /// photographiee.
-    private static func stage(_ subject: CIImage, in frame: CGRect) -> CIImage {
-        let box = subject.extent
-        guard box.width > 0, box.height > 0 else { return subject }
-
-        // La voiture occupe au plus 82 % de la largeur et 58 % de la hauteur : le reste
-        // est de l'air au-dessus et du sol en dessous, comme sur les rendus.
-        let scale = min(frame.width * 0.82 / box.width, frame.height * 0.58 / box.height)
-        let width = box.width * scale
-
-        // Posee au tiers inferieur, pas au milieu : il faut de la place pour le reflet.
-        let x = frame.midX - width / 2
-        let y = frame.minY + frame.height * 0.30
-
-        return subject
-            .transformed(by: CGAffineTransform(scaleX: scale, y: scale))
-            .transformed(by: CGAffineTransform(translationX: x - box.minX * scale,
-                                               y: y - box.minY * scale))
-    }
-
-    /// Le reflet de la voiture sur le sol : retourne, attenue, flou.
-    /// C'est le detail qui transforme un decoupage en scene — sans lui, la voiture
-    /// flotte, et l'oeil le remarque avant meme de savoir pourquoi.
-    private static func floorReflection(_ staged: CIImage, in frame: CGRect) -> CIImage {
-        let box = staged.extent
-        let flip = CGAffineTransform(scaleX: 1, y: -1)
-            .concatenating(CGAffineTransform(translationX: 0, y: box.minY * 2 + box.height))
-        let mirrored = staged.transformed(by: flip)
-            .transformed(by: CGAffineTransform(scaleX: 1, y: 0.55)
-                .concatenating(CGAffineTransform(translationX: 0, y: box.minY * 0.45)))
-
-        let fade = CIFilter.colorMatrix()
-        fade.inputImage = mirrored
-        fade.aVector = CIVector(x: 0, y: 0, z: 0, w: 0.22)
-
-        let soften = CIFilter.gaussianBlur()
-        soften.inputImage = fade.outputImage
-        soften.radius = Float(frame.height * 0.012)
-        return (soften.outputImage ?? CIImage.empty()).cropped(to: frame)
+        let blend = CIFilter.blendWithMask()
+        blend.inputImage = image
+        blend.backgroundImage = dim.outputImage?.cropped(to: extent)
+        blend.maskImage = soft.outputImage?.cropped(to: extent)
+        return blend.outputImage?.cropped(to: extent) ?? image
     }
 
     // MARK: Lumiere
 
-    private static func punch(_ image: CIImage, bloom useBloom: Bool = true) -> CIImage {
+    /// Un etalonnage qu'on ne doit pas remarquer : un peu de tenue, aucune teinte.
+    private static func grade(_ image: CIImage) -> CIImage {
         let colors = CIFilter.colorControls()
         colors.inputImage = image
-        colors.saturation = 1.38
-        colors.contrast = 1.22
-        colors.brightness = 0.02
-
-        let vibrance = CIFilter.vibrance()
-        vibrance.inputImage = colors.outputImage
-        vibrance.amount = 0.5
-
-        guard useBloom else { return vibrance.outputImage ?? image }
-
-        // Un leger halo sur les hautes lumieres : reflets de carrosserie appuyes.
-        let bloom = CIFilter.bloom()
-        bloom.inputImage = vibrance.outputImage
-        bloom.radius = 5
-        bloom.intensity = 0.14
-        return bloom.outputImage ?? image
+        colors.saturation = 1.04
+        colors.contrast = 1.06
+        colors.brightness = 0
+        return colors.outputImage ?? image
     }
 
-    private static func rimLight(_ subject: CIImage, color: UIColor, in frame: CGRect) -> CIImage {
-        // La silhouette pleine du sujet, coloree.
-        let silhouette = CIFilter.colorMatrix()
-        silhouette.inputImage = subject
-        let c = color.rgba
-        // Un lisere, pas un neon de plus : a pleine puissance il cerne la voiture d'un
-        // trait lumineux qui la detache du fond au lieu de l'y poser.
-        let force: CGFloat = 0.45
-        // **Les composantes suivent l'alpha.** CoreImage travaille en alpha premultiplie :
-        // une couleur laissee a pleine intensite sous un alpha de 0,45 vaut, une fois
-        // demultipliee, plus de 1 — donc du blanc apres ecretage. C'etait l'origine du
-        // halo blafard autour de la voiture, longtemps pris pour un defaut de decoupage.
-        silhouette.rVector = CIVector(x: 0, y: 0, z: 0, w: c.r * force)
-        silhouette.gVector = CIVector(x: 0, y: 0, z: 0, w: c.g * force)
-        silhouette.bVector = CIVector(x: 0, y: 0, z: 0, w: c.b * force)
-        silhouette.aVector = CIVector(x: 0, y: 0, z: 0, w: force)
-
-        // Flou serre : un lisere, pas une aura. Plus large, le halo debordait si loin
-        // qu'il noyait la voiture dans une brume.
-        let blur = CIFilter.gaussianBlur()
-        blur.inputImage = silhouette.outputImage
-        blur.radius = Float(min(frame.width, frame.height) * 0.012)
-        guard let blurred = blur.outputImage else { return CIImage.empty() }
-
-        // Legerement agrandie **autour de son propre centre**, pour deborder du sujet.
-        let box = subject.extent
-        let grown = CGAffineTransform(translationX: -box.midX, y: -box.midY)
-            .concatenating(CGAffineTransform(scaleX: 1.02, y: 1.02))
-            .concatenating(CGAffineTransform(translationX: box.midX, y: box.midY))
-        return blurred.transformed(by: grown).cropped(to: frame)
-    }
-
-    private static func groundShadow(_ subject: CIImage, in frame: CGRect) -> CIImage {
-        let dark = CIFilter.colorMatrix()
-        dark.inputImage = subject
-        dark.rVector = CIVector(x: 0, y: 0, z: 0, w: 0)
-        dark.gVector = CIVector(x: 0, y: 0, z: 0, w: 0)
-        dark.bVector = CIVector(x: 0, y: 0, z: 0, w: 0)
-        dark.aVector = CIVector(x: 0, y: 0, z: 0, w: 0.55)
-
-        let blur = CIFilter.gaussianBlur()
-        blur.inputImage = dark.outputImage
-        blur.radius = Float(min(frame.width, frame.height) * 0.03)
-        guard let blurred = blur.outputImage else { return CIImage.empty() }
-
-        // Ecrasee **sur la base du sujet**, pas decalee d'une fraction de l'image :
-        // c'est ce decalage aveugle qui faisait flotter la voiture au-dessus de son ombre.
-        let box = subject.extent
-        let squash = CGAffineTransform(translationX: 0, y: -box.minY)
-            .concatenating(CGAffineTransform(scaleX: 1.04, y: 0.13))
-            .concatenating(CGAffineTransform(translationX: 0, y: box.minY + frame.height * 0.012))
-        return blurred.transformed(by: squash).cropped(to: frame)
-    }
-
-    // MARK: Decor
-
-    /// Le decor derriere la voiture : halo sombre, puis des neons horizontaux.
-    ///
-    /// Les neons ne sont pas un ornement. Ce sont eux qui font qu'une photo de rue
-    /// detouree **ressemble aux illustrations studio** au lieu de flotter sur un degrade
-    /// anonyme. Le joueur doit voir la meme scene, que la carte vienne du catalogue ou
-    /// de son propre appareil photo.
-    private static func backdrop(color: UIColor, in frame: CGRect) -> CIImage {
-        let gradient = CIFilter.radialGradient()
-        gradient.center = CGPoint(x: frame.midX, y: frame.midY + frame.height * 0.08)
-        gradient.radius0 = Float(frame.width * 0.05)
-        gradient.radius1 = Float(frame.width * 0.62)
-
-        // Les deux bornes sont **opaques**. Une couleur a alpha partiel laisse le centre
-        // du degrade translucide ; la scene n'ayant rien derriere elle, ce trou se lit
-        // en clair et forme un halo autour de la voiture, qu'on prend pour un defaut de
-        // decoupage. La teinte du palier se melange donc au noir plutot que de s'y
-        // fondre par transparence.
-        let nuit = (r: CGFloat(0.02), g: CGFloat(0.015), b: CGFloat(0.035))
-        let c = color.rgba
-        let melange: CGFloat = 0.16
-        gradient.color0 = CIColor(red: nuit.r + (c.r - nuit.r) * melange,
-                                  green: nuit.g + (c.g - nuit.g) * melange,
-                                  blue: nuit.b + (c.b - nuit.b) * melange,
-                                  alpha: 1)
-        gradient.color1 = CIColor(red: nuit.r, green: nuit.g, blue: nuit.b, alpha: 1)
-        let base = (gradient.outputImage ?? CIImage(color: .black)).cropped(to: frame)
-
-        // Trois bandes a des hauteurs differentes : deux dans les teintes de la scene,
-        // une a la couleur du palier pour que la rarete se lise jusque dans le decor.
-        let strips: [(y: CGFloat, height: CGFloat, color: CIColor, alpha: CGFloat)] = [
-            (0.80, 0.009, CIColor(red: 0.13, green: 0.83, blue: 0.93), 1.0),   // cyan
-            (0.70, 0.006, CIColor(color: color), 0.85),
-            (0.60, 0.007, CIColor(red: 0.96, green: 0.25, blue: 0.62), 0.75),  // magenta
-        ]
-
-        return strips.reduce(base) { scene, strip in
-            let bar = CIImage(color: strip.color.withAlpha(strip.alpha))
-                .cropped(to: CGRect(x: frame.minX - frame.width * 0.1,
-                                    y: frame.minY + frame.height * strip.y,
-                                    width: frame.width * 1.2,
-                                    height: max(1, frame.height * strip.height)))
-            let glow = CIFilter.gaussianBlur()
-            glow.inputImage = bar
-            glow.radius = Float(frame.height * 0.008)
-            guard let blurred = glow.outputImage else { return scene }
-            // Fusion additive : un neon ajoute de la lumiere, il n'en cache pas.
-            let add = CIFilter.additionCompositing()
-            add.inputImage = blurred.cropped(to: frame)
-            add.backgroundImage = scene
-            return add.outputImage?.cropped(to: frame) ?? scene
-        }
-    }
-
-    // MARK: Repli, quand le detourage echoue
-
-    /// Etalonnage : une nappe a la couleur du palier posee en lumiere douce sur l'image.
-    private static func grade(_ image: CIImage, color: UIColor, in frame: CGRect) -> CIImage {
-        let tint = CIImage(color: CIColor(color: color.withAlphaComponent(0.22)))
-            .cropped(to: frame)
-        let blend = CIFilter.softLightBlendMode()
-        blend.inputImage = tint
-        blend.backgroundImage = image.cropped(to: frame)
-        return blend.outputImage ?? image
-    }
-
-    /// Bords assombris : concentre le regard sur la voiture, signature du visuel de carte.
+    /// Coins a peine assombris : le regard va a la voiture, et la photo se fond dans
+    /// la carte sombre. A 1,35 comme avant, la moitie de la photo partait au noir.
     private static func vignette(_ image: CIImage, in frame: CGRect) -> CIImage {
         let filter = CIFilter.vignetteEffect()
         filter.inputImage = image
         filter.center = CGPoint(x: frame.midX, y: frame.midY)
-        filter.radius = Float(min(frame.width, frame.height) * 0.52)
-        filter.intensity = 1.35
-        filter.falloff = 0.72
+        filter.radius = Float(min(frame.width, frame.height) * 0.5)
+        filter.intensity = 0.4
+        filter.falloff = 0.65
         return filter.outputImage ?? image
-    }
-}
-
-private extension CIColor {
-    /// Meme couleur, opacite imposee. `CIColor` n'offre pas l'equivalent de
-    /// `withAlphaComponent`, et recopier les trois composantes a chaque appel
-    /// noierait l'intention sous la mecanique.
-    func withAlpha(_ alpha: CGFloat) -> CIColor {
-        CIColor(red: red, green: green, blue: blue, alpha: alpha)
-    }
-}
-
-private extension UIColor {
-    var rgba: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
-        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-        getRed(&r, green: &g, blue: &b, alpha: &a)
-        return (r, g, b, a)
     }
 }

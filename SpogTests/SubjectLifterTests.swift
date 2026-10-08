@@ -4,9 +4,9 @@ import UIKit
 
 /// Le détourage du sujet, par Vision, sur l'appareil.
 ///
-/// Il décide de tout l'aspect d'une carte scannée : détourage réussi, la voiture est
-/// isolée sur une scène néon et ressemble aux illustrations du catalogue ; détourage
-/// raté, la photo entière est simplement teintée et la carte fait pauvre.
+/// Il décide du cadrage d'une carte scannée : détourage réussi, la carte se cadre sur la
+/// voiture et, s'il est net, le décor s'adoucit ; détourage raté, la photo est seulement
+/// découpée au centre, et une voiture excentrée peut sortir du cadre.
 ///
 /// Ce test existe surtout pour répondre à une question qu'on ne peut pas trancher en
 /// lisant le code : `VNGenerateForegroundInstanceMaskRequest` fonctionne-t-il dans le

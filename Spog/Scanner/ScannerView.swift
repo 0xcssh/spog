@@ -505,8 +505,8 @@ struct ScannerView: View {
     /// Met la photo en scène, enregistre la carte et la révèle au joueur.
     private func complete(_ vehicle: Vehicle, photo: UIImage, paint: UInt32?,
                           sampleID: String?, scanID: String?, price: PriceBracket?) async {
-        let glow = garage.glowColor(vehicleID: vehicle.id, country: app.country)
-        let shot = await CardArtStylizer.stylize(photo, glow: glow)
+        // La rareté ne teinte plus la photo : elle se lit sur le cadre de la carte.
+        let shot = await CardArtStylizer.stylize(photo)
             ?? StyledShot(stylized: photo, original: photo)
         await MainActor.run {
             reveal = record(vehicle, shot: shot, paint: paint, sampleID: sampleID, scanID: scanID,
