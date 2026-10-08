@@ -180,17 +180,82 @@ garde `gpt-4o` pour le premier vrai test dans la rue, puis on refait la mesure s
 photos-là. Changer de modèle ne demande aucun code :
 `gh workflow run backend.yml -f deploy=true -f model=gpt-4.1-mini`.
 
+## Le concurrent : Revlo (étudié le 07/10/2026)
+
+Même concept, sorti avant nous. Ce qu'on en retient, **la mécanique, jamais l'habillage** —
+le compte Mandalore est déjà sous avertissement 4.3 « copie » (voir Risques) :
+
+- **Le « Develop »** : la carte porte d'abord la photo du joueur, puis un rendu studio généré
+  à partir d'elle. Chez eux, quasi instantané : rendu préparé à l'avance pour la démo, et
+  vraisemblablement généré en arrière-plan dès la prise.
+- **Un modèle gratuit généreux**, qui fait payer ce qui coûte (la génération), pas la prise.
+- **Un onboarding jouable** : une fausse prise de démonstration avant même la caméra.
+- **Le social** : classements par ville et par saison, fil, crews, carte des prises.
+
+Ce qu'on garde comme différence : **la rareté qui dépend du pays**. Une Clio ne vaut rien à
+Paris : chaque ville a ses propres trophées, et les classements locaux ont un sens.
+
+## Économie — décidée le 08/10/2026, pas encore codée
+
+Remplace « 5 scans offerts puis abonnement ».
+
+| | Gratuit | Pro |
+|---|---|---|
+| Scans | **10 le premier jour, puis 3 par jour** ; +3 par pub récompensée (3 pubs/jour) | Illimités (plafond anti-abus invisible, 100/jour) |
+| Rendus « Develop » | **1 par jour**, +1 par pub récompensée | Illimités, meilleure qualité |
+| Pub | Récompensée uniquement, jamais imposée | Aucune |
+| Pack de primes | 1 par semaine | 1 de plus |
+
+- **Pas de monnaie virtuelle** pour la première version : de simples compteurs tenus par le
+  serveur. Des **packs de rendus** payants (consommables) viendront plus tard, s'il y a de
+  la demande — ils s'ajouteront aux compteurs sans changer le modèle.
+- **Jamais de voitures vendues au hasard** (loot box) : ça tuerait la valeur des vraies prises,
+  et c'est interdit ou encadré (Belgique, règle Apple 3.1.1).
+- **Régie publicitaire** : la plus rémunératrice (probablement AppLovin MAX), compte à
+  décider à la fin. La pub impose une fenêtre ATT, un consentement RGPD, une récompense
+  vérifiée côté serveur, et la réécriture de la politique de confidentialité.
+
+**Coût mesuré d'un rendu** (08/10/2026, à travers la fonction Neon, 2 photos de test) :
+
+| Modèle | Qualité | Temps | Coût |
+|---|---|---|---|
+| `gpt-image-1-mini` | basse | 15 s | 0,44 centime |
+| `gpt-image-1-mini` | moyenne | 20–25 s | **1,4 centime** (retenu) |
+| `gpt-image-1` | moyenne | 26 s | 6,7 centimes (piste pour Pro) |
+
+Défaut commun : jantes et logos un peu réinventés — à corriger par le prompt et l'option de
+fidélité renforcée. Pour l'instantané : rendu préparé pour la démo, génération en
+arrière-plan dès la prise pour qui a un rendu disponible, animation « Polaroïd » sinon ;
+tester ensuite un modèle plus rapide (Gemini Flash Image, via la passerelle IA de Neon ?).
+
+## Social — décidé le 08/10/2026
+
+**Marques méritées plutôt que finitions au hasard** : « Premier à… » (premier repéreur d'un
+modèle dans un pays), « Nocturne », « Chassée » (cible du pack de primes).
+
+Ordre retenu :
+
+1. **Comptes** (sans friction, Sign in with Apple facultatif) et prises enregistrées côté
+   serveur — **fait**.
+2. **Ligues hebdomadaires** et **premier repéreur** — **faits**.
+3. **Pack de primes de la semaine** : chaque lundi, un pack scellé à ouvrir révèle 3 voitures
+   à chasser dans la rue ; **le même pack pour toute une ville**, la première personne qui
+   trouve la cible prend le gros bonus. Les packs ne se vendent pas.
+4. **Duels entre amis** (7 jours, le plus de points gagne).
+5. Ensuite : **territoires** (le « roi » d'un quartier sur la semaine) et **crews**.
+
 ## Ordre des travaux
 
-| Phase | Contenu | Livrable |
+| Phase | Contenu | État |
 |---|---|---|
-| **0. Socle** | Dépôt GitHub, `project.yml`, `ios.yml` repris de RepLock, nouveau bundle ID, projet Neon dédié, `identify` porté sur Neon Functions | Un build TestFlight lancé depuis Windows |
-| **1. Comptes et argent** | Crédits serveur, abonnement vérifié côté serveur, App Attest | Les 5 scans offerts ne se contournent plus |
-| **2. Refonte de l'app** | Onboarding questionnaire, analytics, plantages, synchro du garage | v1 publiable |
-| **3. Collecte et classifieur** | Consentement, `training_samples`, classifieur en arrière-plan puis en premier | Coût par scan en baisse |
-| **4. Social** | Amis, classement, crews | L'écran Social cesse d'être vide |
+| **0. Socle** | Dépôt, XcodeGen, CI, signature Mandalore, Neon, `identify` | Fait |
+| **1. Argent (serveur)** | Scans offerts et abonnement vérifiés par le serveur | Fait, sauf App Attest |
+| **2. Refonte de l'app** | Silhouette, analytics, onboarding jouable | En partie |
+| **3. Collecte et classifieur** | Consentement, `training_samples`, classifieur | Collecte faite |
+| **4. Social** | Comptes, ligues, premier repéreur → pack de la semaine → duels → territoires, crews | Ligues faites |
+| **5. Économie** | 3 scans/jour, Develop, pub récompensée, nouveau Pro | À faire |
 
-## Où on en est — 07/10/2026
+## Où on en est — 08/10/2026
 
 Chaque ligne « fait » a été vérifiée en production ou en CI, pas seulement écrite.
 
@@ -232,6 +297,19 @@ photo. L'app appelle Neon ; l'ancienne fonction Supabase `identify` est retirée
 - Le classifieur lui-même attend des données : quelques centaines de photos étiquetées par
   modèle, sur les modèles les plus scannés.
 
+**Phase 4 — comptes, ligues et premier repéreur faits** (08/10/2026).
+- Serveur, vérifié en production : joueurs, pseudo, Sign in with Apple, prises comptées par
+  le serveur avec le même catalogue que l'app, premier repéreur, ligues hebdomadaires,
+  suppression de compte. 128 tests, dont les migrations SQL sur PGlite.
+- App, compilée et signée en CI : prises envoyées au serveur (et renvoyées si le réseau
+  manquait), écran « Ligue et rivaux », pseudo, Sign in with Apple, drapeau « premier » sur
+  les cartes, suppression de compte dans les réglages. **Pas encore essayée sur un iPhone.**
+- Politique de confidentialité mise à jour pour les comptes et les classements.
+- Reste : pack de primes, duels, territoires, crews.
+
+**Develop — mesuré, pas encore ouvert aux joueurs.** L'action `develop` existe côté serveur,
+réservée aux installations de `DEVELOP_TESTERS` (vide en production).
+
 ## Prérequis hors code
 
 **À obtenir du titulaire du compte Mandalore LLC.** Les certificats et la clé API rangés dans
@@ -265,6 +343,9 @@ pendant qu'il est privé.
 - **Le consentement aux photos d'entraînement** doit être explicite et révocable (RGPD),
   et les plaques floutées avant tout envoi.
 - **Le plafond global de 5 000 scans/jour** reste à relever avant toute campagne.
+- **Revlo est sorti avant nous, sur le même concept.** Reprendre ses mécaniques, jamais son
+  vocabulaire (« Film », « Develop », « Garage/Rivals »), son déroulé d'onboarding ni son
+  esthétique : c'est exactement ce que sanctionne la règle 4.3.
 - **Le compte Mandalore est sous avertissement.** Cyranox a été rejetée pour 4.3(a) « Spam »
   le 16/09/2026, avec la mention *Extended Review* : une récidive peut faire exclure le compte
   du programme, et c'est lui qui porte Spog. Spog est un concept original, mais la première

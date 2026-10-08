@@ -4,7 +4,8 @@ App iOS de collection : on photographie une voiture croisée dans la rue, l'IA l
 elle devient une carte unique dans un garage.
 
 Ce fichier dit **comment travailler ici**. Pour l'état d'avancement et ce qui bloque, voir
-[PLAN.md](PLAN.md). Pour l'architecture détaillée, voir [README.md](README.md).
+[PLAN.md](PLAN.md) ; pour la refonte en cours (sans Mac, backend Neon, social, économie),
+[REFONTE.md](REFONTE.md). Pour l'architecture détaillée, voir [README.md](README.md).
 
 ---
 
@@ -18,6 +19,13 @@ doit être **ajouter une donnée**, jamais modifier du code. Les trois fichiers 
 main, et le code ne connaît aucun pays par son nom.
 
 Cette règle a survécu à toutes les autres. Ne la casse pas pour aller plus vite.
+
+**Ces trois fichiers sont lus aussi par le serveur**, embarqués au build de la fonction
+(`backend/functions/identify/catalog.ts`) : depuis les classements, c'est lui qui compte
+les points. Il n'en existe aucune copie — mais changer l'équilibre du jeu demande désormais
+de redéployer le backend en plus de publier l'app. Toute retouche des règles de
+`CatalogStore.swift` (rapprochement, rareté) doit être reportée dans `catalog.ts`, dont les
+tests reprennent les mêmes cas que les tests Swift.
 
 ## Direction artistique
 
@@ -33,7 +41,8 @@ Ordre de priorité, identique dans la fiche, la grille et l'image de partage :
 
 1. la photo du joueur, mise en scène par `CardArtStylizer` ;
 2. à défaut, le rendu studio du modèle (`CarArt`) ;
-3. à défaut, la scène de repli avec le volume 3D générique.
+3. à défaut, la silhouette de la carrosserie (`CarSilhouette`). Le volume 3D SceneKit a été
+   retiré le 07/10/2026.
 
 C'est une décision du 07/10/2026, et elle renverse l'ordre d'origine. Un rendu studio montre
 un exemplaire neuf et standard dans l'une des quatorze teintes de la palette : il ne sait
@@ -43,6 +52,11 @@ lui prendre sa prise pour lui donner une illustration.
 
 Les rendus studio servent donc au **Spogdex** — montrer ce qu'il reste à trouver — et aux
 modèles pas encore attrapés. Là, il n'y a rien à trahir.
+
+**Le « développement »** (décidé le 08/10/2026, pas encore dans l'app) concilie les deux :
+un rendu studio généré **à partir de la photo du joueur**, qui garde sa teinte, ses jantes,
+son covering. Action `develop` du backend, fermée aux joueurs tant que l'économie n'existe
+pas (voir REFONTE.md).
 
 ## L'argent
 
@@ -68,6 +82,14 @@ marketing réussie le heurterait et renverrait « service saturé » à tout le 
 Les 5 scans offerts coûtent **2,2 centimes par installation**. C'est un coût d'acquisition,
 pas un coût de service : budgète-le à côté de la publicité.
 
+**Le serveur est l'autorité sur les scans offerts** (`free_scans`, par installation) et sur
+l'abonnement (transaction StoreKit 2 vérifiée côté serveur, `entitlement.ts`). Le compteur de
+l'app n'est qu'un miroir pour l'affichage.
+
+⚠️ **L'économie va changer** (décision du 08/10/2026, voir REFONTE.md « Économie ») : 3 scans
+par jour (10 le premier jour), 1 rendu par jour, de la pub récompensée pour en gagner plus,
+Pro illimité et sans pub. Le code applique encore « 5 scans offerts puis abonnement ».
+
 ## Les secrets
 
 Le backend est sur **Neon**, projet `spog` (`damp-fire-11684360`, branche
@@ -80,6 +102,24 @@ CI : `gh workflow run backend.yml -f deploy=true`.
 - `Core/BackendConfig.swift` ne contient que l'URL publique de la fonction.
 - `RENDER_SECRET` → reste sur l'ancien projet Supabase, avec la fonction `render` des
   illustrations studio, appelée à disparaître (voir REFONTE.md).
+
+## Le classement
+
+C'est le serveur qui compte, jamais l'app. Une prise **entre au classement** seulement si :
+
+- son pays vient de la position (mode automatique), pas d'un choix à la main ;
+- son modèle correspond à une identification faite par ce serveur pour cette installation
+  (`scan_id`) — le modèle retenu, ou l'une des propositions montrées au joueur.
+
+Le reste n'est jamais refusé : la carte, le garage, la collection. La sanction se limite au
+classement, là où tricher fait du tort aux autres. Le premier à attraper un modèle dans un
+pays double sa prise (`first_spots`). Les ligues : groupes de 30 du même palier, remis à zéro
+chaque lundi UTC, 7 montent, 5 descendent. La logique qui doit tenir face aux requêtes
+simultanées vit en SQL (`backend/migrations/004_players_leagues.sql`) et se teste sur un vrai
+Postgres embarqué (PGlite).
+
+Toute app qui crée des comptes doit permettre de **les supprimer depuis l'app** (App Store
+5.1.1(v)) : action `delete_account`, bouton dans les réglages. Ne pas le retirer.
 
 ## Construire et tester
 
@@ -106,6 +146,22 @@ py tools/validate_catalog.py
 
 Signature : équipe Mandalore LLC `GXS33F5JT9`, bundle `com.mandalore-group.spog`. Les
 certificats et la clé API vivent dans les secrets GitHub du dépôt, jamais dans le dépôt.
+
+⚠️ **Les minutes macOS des dépôts privés du compte sont épuisées.** Décision de l'utilisateur :
+le dépôt passe en **public le temps de chaque CI**, puis repasse en **privé**. Le code ne se
+pousse **que pendant que le dépôt est privé** (vérifier la visibilité dans la même commande
+que le push), et on ne bascule en public qu'ensuite, dans une commande séparée. Repasser en
+privé dès la fin des runs — y compris si un run échoue.
+
+```bash
+gh repo view 0xcssh/spog --json visibility -q .visibility   # avant tout push : PRIVATE
+gh repo edit 0xcssh/spog --visibility public  --accept-visibility-change-consequences
+gh repo edit 0xcssh/spog --visibility private --accept-visibility-change-consequences
+```
+
+Backend : `cd backend && npm test` tourne sous Windows (128 tests, dont les migrations SQL
+sur PGlite). Une migration s'applique aussi sur la base Neon, à la main, avant le déploiement
+du code qui en dépend.
 
 Sur un Mac, l'ancienne voie marche toujours : `xcodegen generate`, puis `xcodebuild`.
 
@@ -158,3 +214,7 @@ passera après.
 
 Les textes affichés passent tous par `Localizable.xcstrings`, en français et en anglais.
 Aucune chaîne en dur dans une vue.
+
+Toute donnée nouvelle qui part au serveur doit être dite dans la politique de
+confidentialité (`privacy.*` dans le catalogue), puis `py tools/export-legal.py` pour
+régénérer `Legal/`. Les pages publiées sur le site doivent ensuite être remplacées.

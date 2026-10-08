@@ -1,6 +1,6 @@
 # Spog — état du projet
 
-*Dernière mise à jour : 07/10/2026.*
+*Dernière mise à jour : 08/10/2026.*
 
 Ce fichier dit **où on en est, ce qui marche, ce qui bloque**. Pour les conventions de
 travail, voir [CLAUDE.md](CLAUDE.md). La refonte lancée le 07/10/2026 — sans Mac, backend
