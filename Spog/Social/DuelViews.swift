@@ -1,7 +1,11 @@
 import SwiftUI
 
-/// Les duels, dans l'onglet Social : les défis en cours avec leur score, et de quoi en
-/// lancer un nouveau ou en rejoindre un.
+/// Les duels, dans l'onglet Social : les défis en cours avec le rapport de force, et de
+/// quoi en lancer un nouveau ou en rejoindre un.
+///
+/// Le duel est l'endroit où le jeu devient personnel : on ne bat pas un inconnu du
+/// classement, on bat un ami. L'écran montre donc d'abord deux noms face à face et qui
+/// mène, puis le temps qui reste — le score seul, « 120 – 95 », ne disait pas qui gagnait.
 struct DuelsBlock: View {
     @Environment(DuelStore.self) private var duels
     @State private var shareCode: String?
@@ -9,28 +13,40 @@ struct DuelsBlock: View {
     @State private var creating = false
     @State private var createFailed = false
 
+    /// Les duels qui se jouent d'abord, puis ceux qui attendent un adversaire, puis les
+    /// résultats : ce qu'on peut encore changer passe avant ce qui est joué.
+    private var ordered: [DuelStore.Duel] {
+        func weight(_ duel: DuelStore.Duel) -> Int {
+            if duel.finished { return 2 }
+            return duel.joined ? 0 : 1
+        }
+        return duels.duels.enumerated()
+            .sorted { (weight($0.element), $0.offset) < (weight($1.element), $1.offset) }
+            .map { $0.element }
+    }
+
+    private var liveCount: Int { duels.duels.filter { $0.joined && !$0.finished }.count }
+    private var wonCount: Int { duels.duels.filter { $0.outcome == .won }.count }
+
     var body: some View {
-        GlassCard(radius: 22, padding: 16) {
+        GlassCard(radius: 22, tint: Theme.cyan, padding: 16) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 8) {
                     Image(systemName: "figure.fencing")
                         .font(.system(size: 12, weight: .bold))
                         .foregroundStyle(Theme.accentBright)
                     Overline(text: "social.duels", color: Theme.accentBright)
+                    Spacer(minLength: 6)
+                    if !duels.duels.isEmpty {
+                        InfoChip(icon: "bolt.fill", text: Text("duel.record \(liveCount) \(wonCount)"),
+                                 color: Theme.cyan)
+                    }
                 }
                 if duels.duels.isEmpty {
-                    // Un état vide qui montre le duel avant de le décrire : deux joueurs
-                    // face à face, et la règle en une phrase.
-                    HStack(spacing: 14) {
-                        versusBadge
-                        Text("social.duelsEmpty")
-                            .font(Theme.body(13))
-                            .foregroundStyle(Theme.textSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+                    emptyState
                 } else {
-                    VStack(spacing: 8) {
-                        ForEach(duels.duels) { duel in DuelRow(duel: duel) }
+                    VStack(spacing: 9) {
+                        ForEach(ordered) { duel in DuelRow(duel: duel) }
                     }
                 }
                 HStack(spacing: 9) {
@@ -42,6 +58,7 @@ struct DuelsBlock: View {
                         }
                     }
                     .disabled(creating)
+                    .opacity(creating ? 0.6 : 1)
                     actionButton("number", "duel.haveCode", primary: false) { joining = true }
                 }
             }
@@ -71,19 +88,46 @@ struct DuelsBlock: View {
         .buttonStyle(NeonButtonStyle(prominent: primary))
     }
 
-    /// Deux pastilles qui se font face : le duel en image.
-    private var versusBadge: some View {
-        HStack(spacing: -10) {
-            Circle().fill(Theme.accentGradient)
-                .frame(width: 34, height: 34)
-                .overlay(Image(systemName: "person.fill").font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(Theme.background))
-            Circle().fill(Theme.surfaceRaised)
-                .frame(width: 34, height: 34)
-                .overlay(Circle().strokeBorder(Theme.cyan.opacity(0.6), lineWidth: 1.2))
-                .overlay(Image(systemName: "questionmark").font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(Theme.cyan))
+    /// Un état vide qui montre le duel avant de le décrire : deux joueurs face à face, une
+    /// question qui pique, et la règle en une phrase. Le bouton juste dessous fait le reste.
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 14) {
+                duelist(icon: "person.fill", filled: true)
+                Text(verbatim: "VS")
+                    .font(Theme.hero(18))
+                    .foregroundStyle(Theme.textMuted)
+                duelist(icon: "questionmark", filled: false)
+            }
+            Text("duel.emptyTitle")
+                .font(Theme.display(19))
+                .foregroundStyle(Theme.textPrimary)
+                .multilineTextAlignment(.center)
+            Text("social.duelsEmpty")
+                .font(Theme.body(12))
+                .foregroundStyle(Theme.textSecondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 6)
+    }
+
+    private func duelist(icon: String, filled: Bool) -> some View {
+        ZStack {
+            if filled {
+                Circle().fill(Theme.accentGradient)
+            } else {
+                Circle().fill(Theme.surfaceRaised)
+                Circle().strokeBorder(Theme.cyan.opacity(0.6),
+                                      style: StrokeStyle(lineWidth: 1.4, dash: [4, 3]))
+            }
+            Image(systemName: icon)
+                .font(.system(size: 19, weight: .bold))
+                .foregroundStyle(filled ? Theme.background : Theme.cyan)
+        }
+        .frame(width: 54, height: 54)
+        .shadow(color: (filled ? Theme.accent : Theme.cyan).opacity(0.45), radius: 12)
     }
 
     private struct ShareCode: Identifiable {
@@ -92,56 +136,65 @@ struct DuelsBlock: View {
     }
 }
 
-/// Un duel : l'adversaire, les deux scores, et le temps qui reste — ou le résultat.
+/// Un duel : les deux joueurs face à face, le rapport de force, qui mène et de combien, et
+/// le temps qui reste — ou le résultat.
 private struct DuelRow: View {
     let duel: DuelStore.Duel
 
+    private var diff: Int { duel.my_points - duel.their_points }
+    private var leading: Bool { duel.joined && !duel.finished && diff > 0 }
+
     var body: some View {
-        VStack(spacing: 9) {
-            scoreLine
-            if duel.joined { balanceBar }
+        VStack(spacing: 10) {
+            if duel.joined {
+                faceOff
+                balanceBar
+                footer
+            } else {
+                waitingLine
+            }
         }
-        .padding(.horizontal, 12).padding(.vertical, 11)
+        .padding(.horizontal, 12).padding(.vertical, 12)
         .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .strokeBorder(Theme.stroke, lineWidth: 1))
+            .strokeBorder(leading ? Theme.accent.opacity(0.45) : Theme.stroke, lineWidth: 1))
+        .opacity(duel.finished ? 0.75 : 1)
     }
 
-    private var scoreLine: some View {
-        HStack(spacing: 10) {
-            VStack(alignment: .leading, spacing: 3) {
-                if duel.joined {
-                    Text(duel.opponent.map { "@\($0)" } ?? String(localized: "social.anonymous"))
-                        .font(Theme.mono(12, .bold))
-                        .foregroundStyle(Theme.textPrimary)
-                        .lineLimit(1)
-                } else {
-                    Text("duel.waiting")
-                        .font(Theme.mono(12, .bold))
-                        .foregroundStyle(Theme.textSecondary)
-                    if let code = duel.code {
-                        Text("duel.code \(code)")
-                            .font(Theme.mono(10))
-                            .foregroundStyle(Theme.accentBright)
-                            .textSelection(.enabled)
-                    }
-                }
-                Text(subtitle)
-                    .font(Theme.mono(9))
-                    .foregroundStyle(subtitleColor)
-            }
-            Spacer(minLength: 6)
-            if duel.joined {
-                Text(verbatim: "\(duel.my_points.formatted()) – \(duel.their_points.formatted())")
-                    .font(Theme.hero(17))
-                    .monospacedDigit()
-                    .foregroundStyle(duel.my_points >= duel.their_points ? Theme.accentBright : Theme.textSecondary)
-            }
+    private var opponentName: String {
+        duel.opponent.map { "@\($0)" } ?? String(localized: "social.anonymous")
+    }
+
+    private var faceOff: some View {
+        HStack(alignment: .center, spacing: 8) {
+            side(name: String(localized: "social.you"), points: duel.my_points,
+                 color: Theme.accentBright, trailing: false)
+            Text(verbatim: "VS")
+                .font(Theme.label(10)).tracking(1.5)
+                .foregroundStyle(Theme.textMuted)
+            side(name: opponentName, points: duel.their_points,
+                 color: Theme.cyan, trailing: true)
         }
+    }
+
+    private func side(name: String, points: Int, color: Color, trailing: Bool) -> some View {
+        VStack(alignment: trailing ? .trailing : .leading, spacing: 1) {
+            Text(name)
+                .font(Theme.mono(11, .semibold))
+                .foregroundStyle(Theme.textSecondary)
+                .lineLimit(1).minimumScaleFactor(0.7)
+            Text(points.formatted())
+                .font(Theme.hero(24))
+                .monospacedDigit()
+                .foregroundStyle(color)
+                .contentTransition(.numericText(value: Double(points)))
+                .lineLimit(1).minimumScaleFactor(0.6)
+        }
+        .frame(maxWidth: .infinity, alignment: trailing ? .trailing : .leading)
     }
 
     /// Rapport de force du duel : la part du joueur en violet, celle de l'adversaire en
-    /// cyan. Un score « 120 – 95 » se lit ; une barre se voit.
+    /// cyan. Un score se lit ; une barre se voit.
     private var balanceBar: some View {
         let total = duel.my_points + duel.their_points
         let mine = total > 0 ? Double(duel.my_points) / Double(total) : 0.5
@@ -152,27 +205,82 @@ private struct DuelRow: View {
                 Capsule().fill(Theme.cyan.opacity(0.7))
             }
         }
-        .frame(height: 3)
+        .frame(height: 5)
     }
 
-    private var subtitle: String {
+    private var footer: some View {
+        HStack(spacing: 8) {
+            Text(standing)
+                .font(Theme.mono(10, .bold))
+                .foregroundStyle(standingColor)
+                .lineLimit(1)
+            Spacer(minLength: 6)
+            if !duel.finished, let ends = duel.endsAt {
+                HStack(spacing: 4) {
+                    Image(systemName: "clock").font(.system(size: 8, weight: .bold))
+                    Text("duel.endsIn \(ends.formatted(.relative(presentation: .numeric)))")
+                        .font(Theme.mono(9))
+                        .lineLimit(1)
+                }
+                .foregroundStyle(Theme.textMuted)
+            }
+        }
+    }
+
+    /// Qui mène, et de combien : c'est la phrase qui donne envie de ressortir chasser.
+    private var standing: String {
         switch duel.outcome {
         case .won: return String(localized: "duel.won")
         case .lost: return String(localized: "duel.lost")
         case .draw: return String(localized: "duel.draw")
         case nil:
-            if let ends = duel.endsAt {
-                return String(localized: "duel.endsIn \(ends.formatted(.relative(presentation: .numeric)))")
-            }
-            return String(localized: "duel.shareHint")
+            if diff > 0 { return String(localized: "duel.lead \(diff)") }
+            if diff < 0 { return String(localized: "duel.behind \(-diff)") }
+            return String(localized: "duel.tied")
         }
     }
 
-    private var subtitleColor: Color {
+    private var standingColor: Color {
         switch duel.outcome {
         case .won: return RarityTier.trophyGold
         case .lost, .draw: return Theme.textMuted
-        case nil: return Theme.textMuted
+        case nil: return diff > 0 ? Theme.accentBright : diff < 0 ? Theme.warning : Theme.textSecondary
+        }
+    }
+
+    /// Défi lancé, personne encore en face : le code, et de quoi le renvoyer d'un geste.
+    private var waitingLine: some View {
+        HStack(spacing: 11) {
+            Image(systemName: "hourglass")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Theme.cyan)
+                .frame(width: 34, height: 34)
+                .background(Theme.cyan.opacity(0.12), in: Circle())
+            VStack(alignment: .leading, spacing: 3) {
+                Text("duel.waiting")
+                    .font(Theme.mono(12, .bold))
+                    .foregroundStyle(Theme.textPrimary)
+                if let code = duel.code {
+                    Text("duel.code \(code)")
+                        .font(Theme.mono(10))
+                        .foregroundStyle(Theme.accentBright)
+                        .textSelection(.enabled)
+                }
+                Text("duel.shareHint")
+                    .font(Theme.mono(9))
+                    .foregroundStyle(Theme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 6)
+            if let code = duel.code {
+                ShareLink(item: DuelStore.shareText(code)) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Theme.textSecondary)
+                        .frame(width: 36, height: 36)
+                        .background(Theme.surface, in: Circle())
+                }
+            }
         }
     }
 }

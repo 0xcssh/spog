@@ -101,7 +101,7 @@ struct RootView: View {
                     switch tab {
                     case .garage:  GarageView(onScan: { tab = .scan })
                     case .scan:    ScannerView()
-                    case .social:   SocialView()
+                    case .social:   SocialView(onScan: { tab = .scan }, onOpenGarage: { tab = .garage })
                     case .quests:   QuestsView()
                     }
                 }
