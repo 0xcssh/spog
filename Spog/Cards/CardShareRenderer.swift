@@ -15,9 +15,10 @@ enum CardShareRenderer {
     /// Le visuel de la carte, dans le meme ordre de priorite que l'affichage :
     /// la voiture reellement croisee passe avant le rendu du modele. Une carte
     /// partagee doit montrer ce que le joueur a trouve, pas un exemplaire de catalogue.
-    private static func flatArtwork(for card: CardData) -> UIImage? {
-        if let shot = card.shot { return shot.face }
-        return CarArt.image(for: card.vehicle.id, paint: card.paint)
+    private static func flatArtwork(for card: CardData) -> (image: UIImage, studio: Bool)? {
+        if let developed = card.shot?.developed { return (developed, true) }
+        if let stylized = card.shot?.stylized { return (stylized, false) }
+        return CarArt.image(for: card.vehicle.id, paint: card.paint).map { ($0, true) }
     }
 }
 
@@ -25,13 +26,18 @@ enum CardShareRenderer {
 /// mobile : une image que l'on peut poster.
 private struct ShareCardView: View {
     let card: CardData
-    let artwork: UIImage?
+    let artwork: (image: UIImage, studio: Bool)?
 
     var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topLeading) {
-                if let artwork {
-                    Image(uiImage: artwork).resizable().scaledToFill()
+                if let artwork, artwork.studio {
+                    ZStack {
+                        Theme.surfaceRaised
+                        StudioArt(image: artwork.image)
+                    }
+                } else if let artwork {
+                    Image(uiImage: artwork.image).resizable().scaledToFill()
                 } else {
                     // Ni photo ni rendu : la silhouette, comme sur la carte affichee.
                     ZStack {

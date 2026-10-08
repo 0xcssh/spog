@@ -195,15 +195,10 @@ struct OnboardingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous)))
 
             if let raw = demo?.raw {
-                // Le `Color.clear` fixe la taille : une image en remplissage imposerait
-                // la sienne et pousserait le déclencheur hors de l'écran.
-                Color.clear
-                    .overlay {
-                        Image(uiImage: raw)
-                            .resizable()
-                            .scaledToFill()
-                    }
-                    .clipped()
+                // La voiture entière dans le viseur, fondue dans son fond : un rendu en
+                // bandeau rempli dans ce cadre presque carré perdait l'avant et l'arrière.
+                StudioArt(image: raw, zoom: 1.0)
+                    .padding(.horizontal, 6)
             }
 
             if demoPhase == .scanning {
@@ -399,11 +394,8 @@ struct OnboardingView: View {
 
                     HStack(spacing: 12) {
                         if let art = CarArt.image(for: contrast.vehicle.id) {
-                            Image(uiImage: art)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 92)
-                                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                            StudioArt(image: art, zoom: 1.0)
+                                .frame(width: 104, height: 52)
                         }
                         Text(contrast.vehicle.fullName)
                             .font(Theme.mono(13, .bold))

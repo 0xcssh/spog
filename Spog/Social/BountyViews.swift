@@ -248,9 +248,7 @@ struct BountyArtView: View {
             }
             .overlay {
                 if let image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
+                    StudioArt(image: image)
                         .transition(.opacity)
                 } else {
                     Image(systemName: carBody.symbol)

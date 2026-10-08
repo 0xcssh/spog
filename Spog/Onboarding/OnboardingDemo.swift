@@ -27,9 +27,9 @@ struct OnboardingDemo {
     let vehicle: Vehicle
     let tier: RarityTier
     let paint: UInt32
-    /// Le cliché « brut » : le rendu studio terni, assombri et recadré au carré comme une
-    /// photo prise dans la rue. Nil si le traitement échoue : la carte montre alors
-    /// directement le rendu, ce qui vaut mieux qu'une carte vide.
+    /// Le cliché « brut » : le rendu studio un peu éteint, comme pris sur le vif. Nil si le
+    /// traitement échoue : la carte montre alors directement le rendu, ce qui vaut mieux
+    /// qu'une carte vide.
     let raw: UIImage?
     let contrast: RarityContrast?
 
@@ -54,7 +54,9 @@ struct OnboardingDemo {
                             // Une démonstration n'est vérifiée par rien : pas de sceau.
                             verified: false, paint: paint)
         if !developed, let raw {
-            card.shot = StyledShot(stylized: raw, original: raw)
+            // Rangé comme rendu « développé » pour être montré en entier, comme le rendu
+            // net qui le remplacera : seul le traitement change d'une étape à l'autre.
+            card.shot = StyledShot(stylized: raw, original: raw, developed: raw)
         }
         return card
     }
@@ -67,15 +69,19 @@ struct OnboardingDemo {
         let illustrated = store.vehicles.filter { hasArt($0.id) }
         let ranked = illustrated.map { (vehicle: $0, tier: store.resolve($0, in: country).tier) }
 
-        // Le premier palier qui porte un cadre, pas le plus haut : assez pour que la carte
-        // brille, pas assez pour promettre une légendaire à la première photo.
-        let trophies = ranked.filter { $0.tier.isTrophy }
-        let pick = trophies.min { $0.tier.rank < $1.tier.rank }
+        // La carte la plus impressionnante sans promettre une légendaire à la première
+        // photo : le palier trophée le plus haut sous le sommet. C'est le premier contact
+        // avec le jeu, il doit donner envie — une citadine rare ne fait rêver personne.
+        let top = store.tiers.map(\.rank).max() ?? 0
+        let showcase = ranked.filter { $0.tier.isTrophy && $0.tier.rank < top }
+        let pick = showcase.max { $0.tier.rank < $1.tier.rank }
             ?? ranked.max { $0.tier.rank < $1.tier.rank }
         guard let pick else { return nil }
 
-        let paint = CarPaint.fromServer("purple") ?? CarPaint.random()
-        let raw = CarArt.image(for: pick.vehicle.id, paint: paint).flatMap(weathered)
+        // La teinte livrée, sans repeinture : le masque de repeinture d'un rendu de 660 px,
+        // agrandi sur tout l'écran, laissait des bavures sur une voiture qu'on regarde de près.
+        let paint = CarArt.referencePaint
+        let raw = CarArt.image(for: pick.vehicle.id).flatMap(weathered)
 
         return OnboardingDemo(vehicle: pick.vehicle, tier: pick.tier, paint: paint, raw: raw,
                               contrast: widestContrast(among: illustrated, from: country,
@@ -111,41 +117,33 @@ struct OnboardingDemo {
 
     private static let context = CIContext(options: [.useSoftwareRenderer: false])
 
-    /// Fait passer un rendu studio pour une photo de rue : couleurs éteintes, lumière
-    /// basse, vignettage, léger flou. Le contraste avec le rendu net est tout l'intérêt
-    /// du développement ; sans lui, l'étape suivante ne montrerait rien.
+    /// Fait passer un rendu studio pour une photo prise sur le vif : couleurs un peu
+    /// éteintes, lumière plus basse, coins assombris. Assez pour que le passage en studio
+    /// se voie, pas plus.
     ///
-    /// Le résultat est **carré** : la carte remplit sa zone d'image, et un rendu en
-    /// bandeau y perdrait l'avant et l'arrière de la voiture. Le fond est prolongé par
-    /// un flou du rendu lui-même plutôt que par une couleur, qu'il faudrait inventer.
+    /// L'ancien traitement recadrait au carré en prolongeant le fond par un grand flou, et
+    /// floutait la voiture elle-même : sur un rendu de 660 px agrandi, le résultat était
+    /// une bouillie. Le cadrage est désormais l'affaire de `StudioArt`, qui montre la
+    /// voiture entière ; ici, on ne touche qu'à la lumière.
     private static func weathered(_ image: UIImage) -> UIImage? {
         guard let cgImage = image.cgImage else { return nil }
         let source = CIImage(cgImage: cgImage)
         let extent = source.extent
         guard extent.width > 0, extent.height > 0 else { return nil }
 
-        let side = max(extent.width, extent.height)
-        let square = CGRect(x: extent.midX - side / 2, y: extent.midY - side / 2,
-                            width: side, height: side)
-        let backdrop = source.clampedToExtent()
-            .applyingGaussianBlur(sigma: 24)
-            .cropped(to: square)
-        let framed = source.composited(over: backdrop).cropped(to: square)
-
         let controls = CIFilter.colorControls()
-        controls.inputImage = framed
-        controls.saturation = 0.3
-        controls.brightness = -0.12
-        controls.contrast = 0.85
+        controls.inputImage = source
+        controls.saturation = 0.55
+        controls.brightness = -0.06
+        controls.contrast = 0.92
 
         let vignette = CIFilter.vignette()
         vignette.inputImage = controls.outputImage
-        vignette.intensity = 1.2
-        vignette.radius = 1.8
+        vignette.intensity = 0.8
+        vignette.radius = 1.4
 
-        guard let darkened = vignette.outputImage else { return nil }
-        let soft = darkened.clampedToExtent().applyingGaussianBlur(sigma: 1.2).cropped(to: square)
-        guard let rendered = context.createCGImage(soft, from: square) else { return nil }
+        guard let output = vignette.outputImage?.cropped(to: extent),
+              let rendered = context.createCGImage(output, from: extent) else { return nil }
         return UIImage(cgImage: rendered)
     }
 }

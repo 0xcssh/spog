@@ -343,7 +343,7 @@ private struct TeaserCard: View {
                                      center: .bottom, startRadius: 2, endRadius: 110))
                 .overlay {
                     if let art = CarArt.image(for: vehicle.id) {
-                        Image(uiImage: art).resizable().scaledToFill()
+                        StudioArt(image: art)
                     }
                 }
                 .frame(height: 84)
@@ -448,7 +448,10 @@ struct MiniCard: View {
             .fill(RadialGradient(colors: [card.tier.color.opacity(0.38), Theme.surface],
                                  center: .center, startRadius: 2, endRadius: 90))
             .overlay {
-                if let stylized = card.shot?.face {
+                if let developed = card.shot?.developed {
+                    // Passée en studio : la même voiture, en rendu, montrée en entier.
+                    StudioArt(image: developed)
+                } else if let stylized = card.shot?.stylized {
                     // **La voiture reellement croisee, pas le modele.** Meme ordre de
                     // priorite que la fiche detaillee : un covering zebre, une livree
                     // de taxi ou un kit large n'existent que sur la photo du joueur.
@@ -458,8 +461,7 @@ struct MiniCard: View {
                 } else if let art = CarArt.image(for: card.vehicle.id, paint: card.paint) {
                     // Aucune photo : une carte de demonstration, ou un modele du
                     // Spogdex. Le rendu du modele fait alors reconnaitre la voiture.
-                    Image(uiImage: art)
-                        .resizable().scaledToFill()
+                    StudioArt(image: art)
                 } else {
                     // Ni rendu, ni photo : la silhouette de la carrosserie.
                     Image(systemName: CarBody(card.vehicle.body).symbol)

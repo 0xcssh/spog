@@ -17,7 +17,7 @@ enum CarArt {
     private static let context = CIContext(options: [.useSoftwareRenderer: false])
 
     /// Teinte des illustrations livrees. Une carte de cette couleur n'a rien a repeindre.
-    private static let referencePaint: UInt32 = 0xB4B8BE
+    static let referencePaint: UInt32 = 0xB4B8BE
 
     /// L'illustration du modele, repeinte a la teinte demandee.
     static func image(for vehicleID: String, paint: UInt32? = nil) -> UIImage? {
