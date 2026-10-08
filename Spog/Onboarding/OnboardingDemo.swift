@@ -93,6 +93,16 @@ struct OnboardingDemo {
                               sourceArea: area, cardID: cardID, caughtAt: caughtAt)
     }
 
+    /// La même démo, sur la découpe du rendu haute définition : la voiture plus nette, sur
+    /// le même studio. Nil si la découpe n'est pas plus fine que l'actuelle.
+    func upgraded(withCutout cutout: UIImage) -> OnboardingDemo? {
+        let area = Self.pixelArea(cutout)
+        guard area > sourceArea * 1.3, let studio = Self.staged(cutout) else { return nil }
+        return OnboardingDemo(vehicle: vehicle, tier: tier, paint: paint, studio: studio,
+                              raw: Self.weathered(studio), contrast: contrast,
+                              sourceArea: area, cardID: cardID, caughtAt: caughtAt)
+    }
+
     // MARK: Fabrication
 
     static func make(country: String, store: CatalogStore = .shared) -> OnboardingDemo? {
@@ -112,14 +122,17 @@ struct OnboardingDemo {
 
         // La teinte livrée, sans repeinture : le masque de repeinture d'un rendu de 660 px,
         // agrandi sur tout l'écran, laissait des bavures sur une voiture qu'on regarde de près.
+        // Posée sur le studio unique de l'app, comme partout ailleurs : la découpe du rendu
+        // embarqué (par son masque, immédiate). Sans masque, l'ancienne mise en page.
         let source = CarArt.image(for: pick.vehicle.id)
-        let studio = source.flatMap { framed($0, glow: pick.tier.color) }
+        let cutout = ModelCutoutService.embeddedCutoutNow(for: pick.vehicle.id, paint: nil)
+        let studio = cutout.flatMap(staged) ?? source.flatMap { framed($0, glow: pick.tier.color) }
 
         return OnboardingDemo(vehicle: pick.vehicle, tier: pick.tier, paint: CarArt.referencePaint,
                               studio: studio, raw: studio.flatMap(weathered),
                               contrast: widestContrast(among: illustrated, from: country,
                                                        store: store),
-                              sourceArea: source.map(pixelArea) ?? 0)
+                              sourceArea: (cutout ?? source).map(pixelArea) ?? 0)
     }
 
     /// Le modèle dont la rareté varie le plus entre le pays du joueur et un autre.
@@ -161,7 +174,15 @@ struct OnboardingDemo {
     private static let artAspect: CGFloat = 1.02
     private static let canvasWidth: CGFloat = 960
 
-    /// Met un rendu à la forme de la zone image d'une carte.
+    /// La voiture détourée sur le studio unique (`StudioStage`), à la forme de la zone
+    /// image d'une carte.
+    static func staged(_ cutout: UIImage) -> UIImage? {
+        let canvas = CGSize(width: canvasWidth, height: (canvasWidth / artAspect).rounded())
+        return StudioStage.render(cutout, size: canvas, scale: 1)
+    }
+
+    /// Met un rendu à la forme de la zone image d'une carte. Repli, quand la voiture n'a
+    /// pas pu être détourée.
     ///
     /// Un rendu déjà presque carré (les rendus haute définition) est simplement recadré.
     /// Un bandeau (660 × 290 au catalogue) est posé **sur toute la largeur**, la voiture

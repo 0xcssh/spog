@@ -33,6 +33,7 @@ struct StudioArt: View {
                 .overlay {
                     Image(uiImage: image)
                         .resizable()
+                        .interpolation(.high)
                         .scaledToFill()
                 }
                 .clipped()
@@ -46,6 +47,7 @@ struct StudioArt: View {
             .overlay {
                 Image(uiImage: image)
                     .resizable()
+                    .interpolation(.high)
                     .scaledToFit()
                     .scaleEffect(zoom)
                     .mask {

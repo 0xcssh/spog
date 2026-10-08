@@ -100,7 +100,12 @@ enum VehicleArtService {
     /// partent en même temps plutôt qu'un par un au fil de l'affichage.
     static func prefetch(_ vehicleIDs: [String]) {
         for id in vehicleIDs where storedImage(for: id) == nil {
-            Task { _ = await VehicleArtService.remoteImage(for: id) }
+            Task {
+                // Détourée dans la foulée : quand la carte s'affiche, la voiture est déjà
+                // prête à poser sur le studio, sans attendre Vision.
+                guard let render = await VehicleArtService.remoteImage(for: id) else { return }
+                _ = await ModelCutoutService.hdCutout(for: id, from: render)
+            }
         }
     }
 

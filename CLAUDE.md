@@ -54,10 +54,13 @@ Ordre de priorité, identique dans la fiche, la grille et l'image de partage :
    vraie photo**, à peine étalonnée : ni teinte du palier, ni scène de néons (décision du
    08/10/2026, la mise en scène rendait les photos méconnaissables). Toute photo passe par
    `UprightPhoto` dès la capture : CoreImage et Vision ignorent l'orientation EXIF ;
-2. à défaut, le rendu studio du modèle, affiché par `ModelArt` : le rendu carré haute
-   définition du serveur (`VehicleArtService`, action `vehicle_art`) en plein cadre, et en
-   attendant qu'il arrive le bandeau embarqué `CarArt` (660 × 290, trop petit pour une
-   carte, décision du 08/10/2026) ;
+2. à défaut, le rendu studio du modèle, affiché par `ModelArt` : la voiture du rendu carré
+   haute définition du serveur (`VehicleArtService`, action `vehicle_art`), **détourée sur
+   l'appareil** (`ModelCutoutService`, Vision) et posée sur **un studio unique dessiné**
+   (`StudioStage` : même fond, même sol, même cadrage partout — décision du 09/10/2026,
+   chaque rendu IA avait son décor). En attendant le rendu HD, la découpe du bandeau
+   embarqué `CarArt` par son masque ; si Vision échoue, le rendu HD tel quel en plein
+   cadre. Couleurs du studio dans `Theme` (`studio*`) ;
 3. à défaut, la silhouette de la carrosserie (`CarSilhouette`). Le volume 3D SceneKit a été
    retiré le 07/10/2026.
 

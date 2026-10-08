@@ -72,6 +72,24 @@ enum Theme {
         center: .center, startRadius: 2, endRadius: 260
     )
 
+    // MARK: Studio des modèles
+    // Le décor unique sur lequel chaque modèle sans photo est posé (`StudioStage`). Les
+    // rendus IA avaient chacun le leur, néons violets ou bleus à des hauteurs différentes :
+    // trois cibles côte à côte semblaient venir de trois jeux. Un anthracite profond, une
+    // lumière blanche froide venue d'en haut, un sol plus sombre : rien qui concurrence la
+    // voiture, et rien de violet — l'accent reste rare.
+
+    /// Haut du fond, là où tombe le projecteur.
+    static let studioTop     = Color(hex: 0x23242A)
+    /// Bas du mur, juste avant le sol : le point le plus sombre du fond.
+    static let studioWall    = Color(hex: 0x111215)
+    /// Sol au pied de la voiture, à peine éclairé par le projecteur.
+    static let studioGround  = Color(hex: 0x18191D)
+    /// Sol au premier plan, qui se perd dans le noir.
+    static let studioFloor   = Color(hex: 0x070709)
+    /// Lumière du projecteur : un blanc froid, toujours à très faible opacité.
+    static let studioLight   = Color(hex: 0xE4ECFF)
+
     /// Teinte du blason d'une ligue. Les identifiants viennent du serveur ; un palier
     /// inconnu (ajouté côté serveur avant l'app) prend l'accent plutôt que de disparaître.
     static func leagueColor(_ tier: String) -> Color {

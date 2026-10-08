@@ -251,6 +251,13 @@ describe("gabarit des rendus", () => {
     assert.match(prompt, /No text, no badges, no logos/);
   });
 
+  test("le fond est uni et neutre, sans néons : l'app détoure et pose son propre studio", () => {
+    const prompt = artPrompt({ id: "renault-clio", make: "Renault", model: "Clio", body: "hatch" });
+    assert.match(prompt, /Plain seamless neutral dark grey studio background/);
+    assert.match(prompt, /no neon/);
+    assert.doesNotMatch(prompt, /violet|cyan|reflective/i);
+  });
+
   test("tout le catalogue est autorisé, rien d'autre", () => {
     for (const v of vehicles) assert.ok(allowedArtVehicle(v.id));
     assert.equal(allowedArtVehicle(""), undefined);

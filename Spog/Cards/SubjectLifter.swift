@@ -20,6 +20,16 @@ struct LiftedPhoto {
     let mask: CIImage
 }
 
+/// Un sujet detoure seul, sans la photo autour.
+struct SubjectCutout {
+    /// Le sujet, recadre a ses propres bords, fond transparent.
+    let image: UIImage
+    /// Sa boite dans l'image d'origine, normalisee (0…1), origine en haut a gauche.
+    let bounds: CGRect
+    /// Part de sa boite que le sujet remplit (voir `LiftedPhoto.fill`).
+    let fill: Double
+}
+
 /// Detoure le sujet principal d'une photo avec Vision, entierement sur l'appareil.
 /// Aucun appel reseau, aucun cout.
 enum SubjectLifter {
@@ -29,8 +39,37 @@ enum SubjectLifter {
     /// - Parameter image: une photo aux pixels droits (`UprightPhoto`). Vision lit les
     ///   pixels bruts et ignore l'orientation de l'image.
     static func lift(_ image: UIImage) async -> LiftedPhoto? {
-        guard let cgImage = image.cgImage else { return nil }
+        guard let cgImage = image.cgImage, let found = detect(in: cgImage),
+              let subject = croppedSubject(found),
+              let scaledMask = try? found.result.generateScaledMaskForImage(forInstances: found.instances,
+                                                                            from: found.handler)
+        else { return nil }
+        return LiftedPhoto(subject: subject, background: image,
+                           bounds: found.bounds, fill: found.fill,
+                           mask: CIImage(cvPixelBuffer: scaledMask))
+    }
 
+    /// Le sujet seul, recadre a ses bords sur fond transparent : ce que le studio des
+    /// modeles pose sur son propre decor (`ModelCutoutService`). Sans le masque plein
+    /// format que `lift` calcule pour adoucir le decor d'une photo, inutile ici.
+    ///
+    /// Synchrone et lourd (inference Vision) : a appeler hors du fil principal.
+    static func cutout(_ image: UIImage) -> SubjectCutout? {
+        guard let cgImage = image.cgImage, let found = detect(in: cgImage),
+              let subject = croppedSubject(found) else { return nil }
+        return SubjectCutout(image: subject, bounds: found.bounds, fill: found.fill)
+    }
+
+    /// Ce que Vision a trouve : le plus grand sujet, et de quoi en tirer les images.
+    private struct Detection {
+        let result: VNInstanceMaskObservation
+        let handler: VNImageRequestHandler
+        let instances: IndexSet
+        let bounds: CGRect
+        let fill: Double
+    }
+
+    private static func detect(in cgImage: CGImage) -> Detection? {
         let request = VNGenerateForegroundInstanceMaskRequest()
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: .up)
         do { try handler.perform([request]) } catch { return nil }
@@ -42,23 +81,23 @@ enum SubjectLifter {
         // **Le plus grand sujet seul**, pas tous. Vision sort aussi le passant, la voiture
         // garee derriere, le scooter : les garder etirait la boite sur toute la rue, et
         // la carte se cadrait sur le trottoir.
-        let instances = IndexSet(integer: largest.label)
-        guard let masked = try? result.generateMaskedImage(ofInstances: instances,
-                                                           from: handler,
-                                                           croppedToInstancesExtent: true),
-              let scaledMask = try? result.generateScaledMaskForImage(forInstances: instances,
-                                                                      from: handler)
-        else { return nil }
+        return Detection(result: result, handler: handler,
+                         instances: IndexSet(integer: largest.label),
+                         bounds: largest.bounds, fill: largest.fill)
+    }
 
+    private static func croppedSubject(_ found: Detection) -> UIImage? {
+        guard let masked = try? found.result.generateMaskedImage(ofInstances: found.instances,
+                                                                 from: found.handler,
+                                                                 croppedToInstancesExtent: true)
+        else { return nil }
         // Rendu explicite en CGImage : sans quoi l'image n'a pas de bitmap exploitable
         // par la suite de la chaine.
         let ciSubject = CIImage(cvPixelBuffer: masked)
         guard let cgSubject = context.createCGImage(ciSubject, from: ciSubject.extent) else {
             return nil
         }
-        return LiftedPhoto(subject: UIImage(cgImage: cgSubject), background: image,
-                           bounds: largest.bounds, fill: largest.fill,
-                           mask: CIImage(cvPixelBuffer: scaledMask))
+        return UIImage(cgImage: cgSubject)
     }
 
     // MARK: Mesure du sujet
