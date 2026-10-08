@@ -35,19 +35,155 @@
         }
       }
     },
-    "account.apple.why": {
+    "account.apple.title": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sign in with Apple to get your collection and rank back on another iPhone. Spog receives neither your name nor your email."
+            "value": "Never lose your collection"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Connecte-toi avec Apple pour retrouver ta collection et ton rang sur un autre iPhone. Spog ne reçoit ni ton nom ni ton e-mail."
+            "value": "Ne perds jamais ta collection"
+          }
+        }
+      }
+    },
+    "account.benefit.backup.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your catches stay on your account, even when you switch iPhones."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes prises restent sur ton compte, même si tu changes d'iPhone."
+          }
+        }
+      }
+    },
+    "account.benefit.backup.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your collection, backed up"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta collection, sauvegardée"
+          }
+        }
+      }
+    },
+    "account.benefit.first.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every model you spot first stays in your name."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque modèle repéré en premier reste à ton nom."
+          }
+        }
+      }
+    },
+    "account.benefit.first.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your firsts, credited"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes premières, créditées"
+          }
+        }
+      }
+    },
+    "account.benefit.league.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your league and live duels follow you."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta ligue et tes duels en cours te suivent."
+          }
+        }
+      }
+    },
+    "account.benefit.league.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your spot, kept"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta place, gardée"
+          }
+        }
+      }
+    },
+    "account.benefit.pseudo.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reserved for you, and shown on the leaderboard."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservé pour toi, et visible au classement."
+          }
+        }
+      }
+    },
+    "account.benefit.pseudo.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your handle, in your name"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton pseudo, à ton nom"
           }
         }
       }
@@ -133,6 +269,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supprimer ton compte ?"
+          }
+        }
+      }
+    },
+    "account.linked": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple account linked"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compte Apple relié"
+          }
+        }
+      }
+    },
+    "account.privacy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No name or email is shared with Spog. No password to remember."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ni nom ni e-mail transmis à Spog. Aucun mot de passe à retenir."
           }
         }
       }
@@ -987,6 +1157,23 @@
         }
       }
     },
+    "duel.behind %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld behind"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il te manque %lld"
+          }
+        }
+      }
+    },
     "duel.challenge": {
       "extractionState": "manual",
       "localizations": {
@@ -1051,6 +1238,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Égalité"
+          }
+        }
+      }
+    },
+    "duel.emptyTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Who spots best?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui repère le mieux ?"
           }
         }
       }
@@ -1191,6 +1395,23 @@
         }
       }
     },
+    "duel.lead %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You lead by %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu mènes de %lld"
+          }
+        }
+      }
+    },
     "duel.lost": {
       "extractionState": "manual",
       "localizations": {
@@ -1225,6 +1446,23 @@
         }
       }
     },
+    "duel.record %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld live · %2$lld won"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld en cours · %2$lld gagnés"
+          }
+        }
+      }
+    },
     "duel.share %@ %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1255,6 +1493,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partage le code : le duel démarre quand ton ami le rejoint."
+          }
+        }
+      }
+    },
+    "duel.tied": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tied"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À égalité"
           }
         }
       }
@@ -1548,6 +1803,57 @@
         }
       }
     },
+    "league.anonymousHint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You show up as “Anonymous spotter”. Pick a handle so the group knows who's passing them."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu apparais comme « Repéreur anonyme ». Choisis ton pseudo pour que le groupe sache qui le double."
+          }
+        }
+      }
+    },
+    "league.countdown.days %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lldd %2$lldh"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld j %2$lld h"
+          }
+        }
+      }
+    },
+    "league.countdown.hours %lld %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lldh %2$lldm"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld h %2$lld min"
+          }
+        }
+      }
+    },
     "league.endsIn %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1565,6 +1871,57 @@
         }
       }
     },
+    "league.gap %lld %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld more to reach %2$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encore %1$lld pour passer %2$@"
+          }
+        }
+      }
+    },
+    "league.lead %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leading by %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En tête, %lld d'avance"
+          }
+        }
+      }
+    },
+    "league.leadAlone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You lead the group"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu mènes le groupe"
+          }
+        }
+      }
+    },
     "league.notJoined": {
       "extractionState": "manual",
       "localizations": {
@@ -1578,6 +1935,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ta première prise de la semaine t'inscrit dans un groupe de trente repéreurs de ton niveau."
+          }
+        }
+      }
+    },
+    "league.notJoined.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your league is waiting"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta ligue t'attend"
           }
         }
       }
@@ -1629,6 +2003,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chaque lundi, les %1$lld premiers montent de ligue et les %2$lld derniers descendent. Seules comptent les prises dont le pays vient de ta position."
+          }
+        }
+      }
+    },
+    "league.scanCta": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot a car"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repérer une voiture"
+          }
+        }
+      }
+    },
+    "league.tiedTop": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tied for first: one catch puts you ahead"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À égalité en tête : une prise et tu passes devant"
           }
         }
       }
@@ -1735,6 +2143,108 @@
         }
       }
     },
+    "league.toPromotion %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld to go to the promotion zone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus que %lld avant la zone de montée"
+          }
+        }
+      }
+    },
+    "league.you.points": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Points"
+          }
+        }
+      }
+    },
+    "league.you.rank": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your rank"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta place"
+          }
+        }
+      }
+    },
+    "league.zone.demotion": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relegation zone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone de descente"
+          }
+        }
+      }
+    },
+    "league.zone.promotion": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promotion zone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone de montée"
+          }
+        }
+      }
+    },
+    "league.zone.safe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintien"
+          }
+        }
+      }
+    },
     "legal.privacy.title": {
       "extractionState": "manual",
       "localizations": {
@@ -1816,6 +2326,142 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pays de repérage"
+          }
+        }
+      }
+    },
+    "onboarding.account.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done: your collection is backed up."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est fait : ta collection est sauvegardée."
+          }
+        }
+      }
+    },
+    "onboarding.account.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in didn't go through. You can carry on and try again later from the Social tab."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La connexion n'a pas abouti. Tu peux continuer et réessayer plus tard depuis l'onglet Social."
+          }
+        }
+      }
+    },
+    "onboarding.account.later": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maybe later"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus tard"
+          }
+        }
+      }
+    },
+    "onboarding.account.overline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton compte"
+          }
+        }
+      }
+    },
+    "onboarding.account.saved": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backed up"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sauvegardé"
+          }
+        }
+      }
+    },
+    "onboarding.account.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep everything you catch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garde tout ce que tu attrapes"
+          }
+        }
+      }
+    },
+    "onboarding.account.unsaved": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not backed up yet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore sauvegardé"
+          }
+        }
+      }
+    },
+    "onboarding.account.why": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One Apple sign-in, two seconds, and your catches stay yours for good."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une connexion Apple, deux secondes, et tes prises restent à toi pour de bon."
           }
         }
       }
@@ -4961,6 +5607,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Défie un ami pendant sept jours : celui qui marque le plus de points gagne."
+          }
+        }
+      }
+    },
+    "social.hunt.go": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go hunting"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partir en chasse"
+          }
+        }
+      }
+    },
+    "social.hunt.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the pack"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le pack"
+          }
+        }
+      }
+    },
+    "social.hunt.sealed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your bounty pack is here. Open it in your collection to reveal the three cars to hunt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton pack de primes est arrivé. Ouvre-le dans ta collection pour découvrir les trois voitures à chasser."
           }
         }
       }

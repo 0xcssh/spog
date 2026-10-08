@@ -1,11 +1,12 @@
 import SwiftUI
 
-/// Parcours d'entrée, en cinq écrans.
+/// Parcours d'entrée, en six écrans.
 ///
 /// **On joue avant de répondre.** Le premier écran est une prise de démonstration qu'on
 /// passe aussitôt en studio, le deuxième montre le jeu. Un joueur à qui l'on demande un
 /// pseudo avant de lui avoir montré ce que fait l'app n'a aucune raison d'en donner un.
-/// Les questions viennent ensuite, regroupées : profil, terrain de chasse, départ.
+/// Les questions viennent ensuite, regroupées : profil, compte (facultatif), terrain de
+/// chasse, départ.
 ///
 /// Ce qui a été retiré, et pourquoi (testeur, 08/10/2026) : l'écran des scans offerts
 /// parlait de limites à quelqu'un qui n'avait pas encore joué — le décompte reste au
@@ -23,6 +24,9 @@ struct OnboardingView: View {
 
     @Environment(LocationProvider.self) private var location
     @Environment(ReferralStore.self) private var referral
+    /// Injecté par `RootView` sur le `Group` qui contient aussi l'onboarding : il est donc
+    /// là avant même que le joueur ait fini son premier lancement.
+    @Environment(AccountStore.self) private var account
 
     @State private var step: Step = .demo
     @State private var pickingCountry = false
@@ -51,10 +55,15 @@ struct OnboardingView: View {
 
     enum DemoPhase { case aiming, scanning, caught }
 
+    /// Où en est la connexion Apple de l'étape compte. Une annulation ramène à `idle` :
+    /// le joueur a changé d'avis, ce n'est pas une erreur à lui montrer.
+    @State private var appleLink: AppleLinkState = .idle
+    enum AppleLinkState { case idle, linked, failed }
+
     /// Les noms des cas partent tels quels dans `.onboardingStep` : les renommer casse la
     /// continuité des courbes d'analytics.
     enum Step: Int, CaseIterable {
-        case demo, game, profile, location, ready
+        case demo, game, profile, account, location, ready
     }
 
     /// Place disponible pour le contenu d'une étape, gouttières et barres déduites.
@@ -139,6 +148,7 @@ struct OnboardingView: View {
         case .demo:     demoStep(m)
         case .game:     gameStep(m)
         case .profile:  profileStep(m)
+        case .account:  accountStep(m)
         case .location: locationStep(m)
         case .ready:    readyStep(m)
         }
@@ -691,7 +701,138 @@ struct OnboardingView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: 4 — Pays et mode
+    // MARK: 4 — Compte
+
+    /// Juste après le pseudo : le joueur vient de se donner un nom, c'est le moment où le
+    /// garder a un sens. Jamais obligatoire — « Plus tard » avance aussi bien, et l'onglet
+    /// Social repropose la même chose. Les bénéfices sont ceux que le serveur tient
+    /// vraiment (`apple_link`) : rien n'est promis qui n'existe pas.
+    private func accountStep(_ m: Metrics) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            stepHeader(overline: "onboarding.account.overline", title: "onboarding.account.title",
+                       why: m.compact ? nil : LocalizedStringKey("onboarding.account.why"),
+                       compact: m.compact)
+
+            Spacer(minLength: m.compact ? 12 : 16)
+
+            // La fiche du joueur n'apparaît que s'il reste de la place : sur un petit
+            // iPhone, les bénéfices et le bouton passent avant le décor.
+            if m.height >= 640 {
+                accountPreview
+                Spacer(minLength: 14)
+            }
+
+            NeonFrame(radius: 18) {
+                AccountBenefitsList(showsDetails: !m.compact)
+                    .padding(14)
+            }
+
+            Spacer(minLength: m.compact ? 14 : 18)
+
+            VStack(alignment: .leading, spacing: 10) {
+                if appleLinked {
+                    accountLinkedBadge
+                        .transition(.scale(scale: 0.9).combined(with: .opacity))
+                } else {
+                    AppleLinkButton { outcome in handleApple(outcome) }
+                    if appleLink == .failed {
+                        statusLine("exclamationmark.triangle.fill", "onboarding.account.failed",
+                                   color: RarityTier.trophyGold)
+                    }
+                    AccountPrivacyNote()
+                }
+            }
+        }
+        .sensoryFeedback(.success, trigger: appleLinked)
+    }
+
+    /// Relié pendant cette étape, ou déjà relié (compte Apple retrouvé sur cet appareil).
+    private var appleLinked: Bool {
+        appleLink == .linked || account.profile?.apple_linked == true
+    }
+
+    /// La fiche du joueur avec le pseudo qu'il vient de choisir : ce qu'il risque de perdre
+    /// devient concret, et la pastille passe à « sauvegardé » sous ses yeux.
+    private var accountPreview: some View {
+        let nickname = profile.nickname.trimmingCharacters(in: .whitespaces)
+        let handle = nickname.isEmpty ? profile.displayName : "@\(nickname)"
+        let initial = String(profile.displayName.prefix(1)).uppercased()
+        let chip: LocalizedStringKey = appleLinked ? "onboarding.account.saved" : "onboarding.account.unsaved"
+        return GlassCard(radius: 18, tint: Theme.accent, padding: 14) {
+            HStack(spacing: 13) {
+                ZStack {
+                    Circle().fill(Theme.surfaceRaised)
+                    Text(verbatim: initial)
+                        .font(Theme.hero(20))
+                        .foregroundStyle(Theme.accentGradient)
+                }
+                .frame(width: 46, height: 46)
+                .overlay(Circle().strokeBorder(Theme.accentGradient, lineWidth: 2))
+                .shadow(color: Theme.accent.opacity(0.45), radius: 10)
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(verbatim: handle)
+                        .font(Theme.display(18))
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1).minimumScaleFactor(0.7)
+                    InfoChip(icon: appleLinked ? "checkmark.shield.fill" : "exclamationmark.shield",
+                             text: Text(chip),
+                             color: appleLinked ? Theme.cyan : Theme.textMuted)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    /// La coche de réussite, à la place du bouton : on passe à la suite tout seul.
+    private var accountLinkedBadge: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.seal.fill")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundStyle(Theme.accentGradient)
+                .shadow(color: Theme.accent.opacity(0.7), radius: 8)
+            Text("onboarding.account.done")
+                .font(Theme.display(15, .semibold))
+                .foregroundStyle(Theme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 14).padding(.vertical, 12)
+        .frame(minHeight: 50)
+        .background(Theme.accent.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .stroke(Theme.accent.opacity(0.5), lineWidth: 1))
+    }
+
+    private func handleApple(_ outcome: AppleLinkButton.Outcome) {
+        switch outcome {
+        case .cancelled:
+            appleLink = .idle
+        case .failed:
+            withAnimation(.easeOut(duration: 0.25)) { appleLink = .failed }
+        case .linked:
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) { appleLink = .linked }
+            reservePseudo()
+            Task { @MainActor in
+                // Le temps de voir la coche : enchaîner aussitôt ferait croire à un saut.
+                try? await Task.sleep(for: .milliseconds(1100))
+                // Le joueur a pu avancer ou revenir lui-même entre-temps.
+                if step == .account { advance() }
+            }
+        }
+    }
+
+    /// Le pseudo de l'étape précédente ne vit que sur le téléphone tant que le joueur ne
+    /// l'enregistre pas dans l'onglet Social. Le compte promet « ton pseudo, à ton nom » :
+    /// on le réserve donc ici, s'il a la forme acceptée et que le compte n'en porte pas
+    /// déjà un (un compte Apple retrouvé garde le sien). Un refus (pris, réseau) reste
+    /// silencieux : le joueur pourra toujours le choisir plus tard.
+    private func reservePseudo() {
+        let pseudo = profile.nickname.trimmingCharacters(in: .whitespaces)
+        guard account.profile?.pseudo == nil, AccountStore.isValidPseudo(pseudo) else { return }
+        Task { @MainActor in _ = await account.setPseudo(pseudo) }
+    }
+
+    // MARK: 5 — Pays et mode
 
     private func locationStep(_ m: Metrics) -> some View {
         // Le visuel n'apparaît que s'il reste vraiment de la place : sur un petit iPhone,
@@ -835,7 +976,7 @@ struct OnboardingView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: 5 — Départ
+    // MARK: 6 — Départ
 
     /// Une seule fin, forte : le récapitulatif et l'écran d'attente « préparation » se
     /// succédaient sans rien apprendre de plus au joueur. Le code d'invitation vit ici,
@@ -1071,22 +1212,35 @@ struct OnboardingView: View {
         switch step {
         case .demo:  return developed ? "onboarding.next" : "onboarding.develop.action"
         case .ready: return "onboarding.start"
+        // La sortie reste claire : sans compte, on avance quand même.
+        case .account: return appleLinked ? "onboarding.next" : "onboarding.account.later"
         default:     return "onboarding.next"
         }
+    }
+
+    /// Sur l'étape compte, l'action principale est le bouton Apple : « Plus tard » prend
+    /// un style discret pour ne pas lui disputer le regard.
+    private var actionIsQuiet: Bool {
+        step == .account && !appleLinked
     }
 
     private var action: some View {
         Button { next() } label: {
             Text(actionTitle)
                 .font(Theme.label(13)).tracking(1.4)
-                .foregroundStyle(Theme.background)
+                .foregroundStyle(actionIsQuiet ? Theme.textSecondary : Theme.background)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
-                .background(
-                    LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                   startPoint: .topLeading, endPoint: .bottomTrailing),
-                    in: Capsule())
-                .shadow(color: Theme.accent.opacity(0.45), radius: 16, y: 6)
+                .background {
+                    if actionIsQuiet {
+                        Capsule().fill(Theme.surface)
+                            .overlay(Capsule().strokeBorder(Theme.strokeStrong, lineWidth: 1))
+                    } else {
+                        Capsule().fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
+                                                      startPoint: .topLeading, endPoint: .bottomTrailing))
+                    }
+                }
+                .shadow(color: Theme.accent.opacity(actionIsQuiet ? 0 : 0.45), radius: 16, y: 6)
                 .contentTransition(.opacity)
         }
         .buttonStyle(.plain)
