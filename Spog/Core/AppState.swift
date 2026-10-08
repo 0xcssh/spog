@@ -32,6 +32,15 @@ final class AppState {
         didSet { UserDefaults.standard.set(scansResetAt, forKey: Keys.scansReset) }
     }
 
+    /// Meme miroir pour les rendus studio du jour (1 en gratuit) : le serveur tranche, l'app
+    /// n'affiche que ce qu'il a dit en dernier.
+    var developsLeftToday: Int? {
+        didSet { UserDefaults.standard.set(developsLeftToday, forKey: Keys.developsLeft) }
+    }
+    var developsResetAt: Date? {
+        didSet { UserDefaults.standard.set(developsResetAt, forKey: Keys.developsReset) }
+    }
+
     /// L'onboarding a-t-il ete vu ?
     var hasOnboarded: Bool {
         didSet { UserDefaults.standard.set(hasOnboarded, forKey: Keys.onboarded) }
@@ -48,6 +57,8 @@ final class AppState {
         static let scans = "state.scansPerformed"
         static let scansLeft = "state.scansLeftToday"
         static let scansReset = "state.scansResetAt"
+        static let developsLeft = "state.developsLeftToday"
+        static let developsReset = "state.developsResetAt"
     }
 
     init() {
@@ -59,6 +70,8 @@ final class AppState {
         scansPerformed = defaults.integer(forKey: Keys.scans)
         scansLeftToday = defaults.object(forKey: Keys.scansLeft) as? Int
         scansResetAt = defaults.object(forKey: Keys.scansReset) as? Date
+        developsLeftToday = defaults.object(forKey: Keys.developsLeft) as? Int
+        developsResetAt = defaults.object(forKey: Keys.developsReset) as? Date
         hasOnboarded = defaults.bool(forKey: Keys.onboarded)
     }
 }

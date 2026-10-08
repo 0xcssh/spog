@@ -6570,6 +6570,23 @@
         }
       }
     },
+    "studio.freeToday %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld free today"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld gratuit aujourd'hui"
+          }
+        }
+      }
+    },
     "tab.garage": {
       "extractionState": "manual",
       "localizations": {

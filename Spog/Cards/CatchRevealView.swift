@@ -6,17 +6,34 @@ import UIKit
 /// devait aller la chercher. Un jeu de collection se joue sur cette seconde-là.
 struct CatchRevealView: View {
 
-    let card: CardData
     let isNewModel: Bool
     let questReward: Int
     var onScanAgain: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    /// Copie locale : la carte prend son rendu studio sous les yeux du joueur.
+    @State private var card: CardData
     @State private var phase: Phase = .developing
     @State private var scanLine = false
     @State private var shownPoints = 0
+    /// Passage en studio en cours, demandé depuis cet écran.
+    @State private var inStudio = false
+    /// Rotation de la carte quand le rendu studio la remplace.
+    @State private var flip: Double = 0
 
     private enum Phase { case developing, revealed }
+
+    init(card: CardData, isNewModel: Bool, questReward: Int, onScanAgain: @escaping () -> Void) {
+        _card = State(initialValue: card)
+        self.isNewModel = isNewModel
+        self.questReward = questReward
+        self.onScanAgain = onScanAgain
+    }
+
+    private var overline: LocalizedStringKey {
+        if phase == .developing { return "reveal.developing" }
+        return inStudio ? "card.developing" : "reveal.caught"
+    }
 
     var body: some View {
         ZStack {
@@ -26,7 +43,7 @@ struct CatchRevealView: View {
 
             VStack(spacing: 0) {
                 Spacer(minLength: 20)
-                Overline(text: phase == .developing ? "reveal.developing" : "reveal.caught",
+                Overline(text: overline,
                          color: phase == .developing ? Theme.textMuted : Theme.textSecondary)
                 Spacer(minLength: 14)
 
@@ -53,6 +70,8 @@ struct CatchRevealView: View {
                 .blur(radius: phase == .developing ? 14 : 0)
                 .saturation(phase == .developing ? 0.15 : 1)
                 .scaleEffect(phase == .developing ? 0.9 : 1)
+                .overlay { if inStudio { DevelopingVeil() } }
+                .rotation3DEffect(.degrees(flip), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
 
             if phase == .developing {
                 // Ligne de développement, comme un tirage qui apparaît.
@@ -112,6 +131,16 @@ struct CatchRevealView: View {
             }
             .buttonStyle(NeonButtonStyle())
 
+            // Le studio juste après la prise, en secondaire sous le bouton principal :
+            // c'est le moment où la carte compte le plus, inutile d'aller la rechercher au
+            // garage. Seulement pour une vraie photo qui n'a pas encore son rendu.
+            if card.canGoToStudio {
+                StudioButton(card: card, working: $inStudio, source: "reveal") { refreshed in
+                    showStudio(refreshed)
+                }
+                .transition(.opacity)
+            }
+
             Button { dismiss() } label: {
                 Text("reveal.toGarage")
                     .font(Theme.label(11)).tracking(1)
@@ -119,6 +148,20 @@ struct CatchRevealView: View {
                     .padding(.vertical, 10)
             }
             .buttonStyle(.plain)
+        }
+    }
+
+    /// La carte se retourne vers son rendu studio : un demi-tour jusqu'à la tranche, on
+    /// échange le visuel quand il est invisible, puis elle revient de face.
+    private func showStudio(_ refreshed: CardData) {
+        withAnimation(.easeIn(duration: 0.2)) {
+            flip = 90
+        } completion: {
+            // Dans la même animation : le bouton studio s'efface pendant que la carte revient.
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) {
+                card = refreshed
+                flip = 0
+            }
         }
     }
 
