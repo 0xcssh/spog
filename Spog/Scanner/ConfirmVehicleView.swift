@@ -87,7 +87,7 @@ struct ConfirmVehicleView: View {
         HStack(spacing: 9) {
             Image(systemName: "questionmark.circle")
                 .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(Theme.accent)
+                .foregroundStyle(Theme.textSecondary)
             Text("confirm.reading \(reading)")
                 .font(Theme.display(13))
                 .foregroundStyle(Theme.textSecondary)
@@ -96,7 +96,7 @@ struct ConfirmVehicleView: View {
         .padding(.horizontal, 14).padding(.vertical, 11)
         .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .stroke(Theme.accent.opacity(0.25), lineWidth: 1))
+            .stroke(Theme.stroke, lineWidth: 1))
     }
 
     /// Aucune des propositions ne convient parce que la voiture n'est pas au catalogue :
@@ -120,10 +120,8 @@ struct ConfirmVehicleView: View {
             }
             .padding(.horizontal, 14).padding(.vertical, 12)
             .frame(maxWidth: .infinity)
-            .background(
-                LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                               startPoint: .topLeading, endPoint: .bottomTrailing),
-                in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(Theme.accentGradient,
+                        in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
         .buttonStyle(.plain)
     }

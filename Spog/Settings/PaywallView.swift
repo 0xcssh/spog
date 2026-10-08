@@ -53,7 +53,7 @@ struct PaywallView: View {
             VStack(alignment: .leading, spacing: 7) {
                 Text("paywall.wordmark")
                     .font(Theme.mono(21, .heavy)).tracking(6)
-                    .foregroundStyle(RarityTier.trophyGold)
+                    .foregroundStyle(Theme.textPrimary)
                 Text("paywall.subtitle")
                     .font(Theme.label(11)).tracking(2).textCase(.uppercase)
                     .foregroundStyle(Theme.textMuted)
@@ -100,7 +100,7 @@ struct PaywallView: View {
                 HStack(alignment: .top, spacing: 14) {
                     Image(systemName: item.icon)
                         .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(RarityTier.trophyGold)
+                        .foregroundStyle(Theme.textSecondary)
                         .frame(width: 24)
                         .padding(.top, 2)
 
@@ -149,7 +149,7 @@ struct PaywallView: View {
                     Button { Task { await subscriptions.load() } } label: {
                         Text("paywall.retry")
                             .font(Theme.label(10)).tracking(0.6)
-                            .foregroundStyle(Theme.accent)
+                            .foregroundStyle(Theme.textPrimary)
                     }
                     .buttonStyle(.plain)
                 }
@@ -159,7 +159,7 @@ struct PaywallView: View {
             if let error = subscriptions.lastError {
                 Text(error)
                     .font(Theme.mono(10))
-                    .foregroundStyle(Color(hex: 0xF43F9D))
+                    .foregroundStyle(Theme.warning)
                     .frame(maxWidth: .infinity)
             }
 
@@ -172,10 +172,10 @@ struct PaywallView: View {
                         .foregroundStyle(Theme.textSecondary)
                     Text("paywall.redeem")
                         .font(Theme.label(11)).tracking(1.2)
-                        .foregroundStyle(Theme.accentBright)
+                        .foregroundStyle(Theme.textPrimary)
                     Image(systemName: "arrow.right")
                         .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(Theme.accentBright)
+                        .foregroundStyle(Theme.textPrimary)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top, 6)
@@ -215,13 +215,14 @@ struct PaywallView: View {
                 Spacer(minLength: 0)
             }
             .lineLimit(1).minimumScaleFactor(0.7)
-            .foregroundStyle(prominent ? Theme.background : Theme.textPrimary)
+            .foregroundStyle(Theme.textPrimary)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
             .background {
                 if prominent {
-                    Capsule().fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                                  startPoint: .topLeading, endPoint: .bottomTrailing))
+                    // Le violet ne sert qu'à la formule mise en avant ; l'or des arguments
+                    // et du titre est parti avec la sobriété du 09/10/2026.
+                    Capsule().fill(Theme.accentGradient)
                 } else {
                     Capsule().fill(Theme.surface)
                         .overlay(Capsule().stroke(Theme.strokeStrong, lineWidth: 1))

@@ -44,14 +44,13 @@ struct PseudoSheet: View {
 
                 Button { Task { await save() } } label: {
                     Group {
-                        if saving { ProgressView().tint(Theme.background) }
+                        if saving { ProgressView().tint(Theme.textPrimary) }
                         else { Text("pseudo.save").font(Theme.label(13)).tracking(1.2) }
                     }
-                    .foregroundStyle(Theme.background)
+                    .foregroundStyle(Theme.textPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                               startPoint: .topLeading, endPoint: .bottomTrailing),
+                    .background(Theme.accentGradient,
                                 in: Capsule())
                 }
                 .buttonStyle(.plain)

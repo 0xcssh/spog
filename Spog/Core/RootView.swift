@@ -137,11 +137,11 @@ struct RootView: View {
             .background {
                 ZStack {
                     Capsule().fill(.ultraThinMaterial)
-                    Capsule().fill(Theme.glassFill).opacity(0.55)
+                    Capsule().fill(Theme.surface).opacity(0.75)
                 }
             }
-            .overlay(Capsule().strokeBorder(Theme.glassEdge, lineWidth: 1))
-            .shadow(color: Theme.dropShadow, radius: 18, y: 8)
+            .overlay(Capsule().strokeBorder(Theme.stroke, lineWidth: 1))
+            .shadow(color: Theme.dropShadow, radius: 10, y: 4)
 
             scanButton
         }
@@ -165,16 +165,17 @@ struct RootView: View {
                         .transition(.opacity.combined(with: .scale(scale: 0.8, anchor: .leading)))
                 }
             }
-            .foregroundStyle(active ? Theme.background : Theme.textSecondary)
+            // L'onglet actif prend un gris clair et non plus le violet : le violet reste
+            // au déclencheur du scan, seule action principale de la barre.
+            .foregroundStyle(active ? Theme.textPrimary : Theme.textMuted)
             .frame(maxWidth: active ? nil : .infinity)
             .padding(.horizontal, active ? 16 : 10)
             .padding(.vertical, 12)
             .background {
                 if active {
                     Capsule()
-                        .fill(Theme.accentGradient)
-                        .overlay(Capsule().fill(Theme.sheen))
-                        .shadow(color: Theme.accent.opacity(0.5), radius: 10)
+                        .fill(Theme.surfaceRaised)
+                        .overlay(Capsule().strokeBorder(Theme.strokeStrong, lineWidth: 1))
                         .matchedGeometryEffect(id: "pill", in: tabPill)
                 }
             }
@@ -192,13 +193,12 @@ struct RootView: View {
             ZStack {
                 Circle()
                     .fill(Theme.accentGradient)
-                    .overlay(Circle().fill(Theme.sheen))
-                    .shadow(color: Theme.accent.opacity(active ? 0.8 : 0.5), radius: active ? 18 : 12)
+                    .shadow(color: Theme.dropShadow, radius: 8, y: 4)
                 Circle()
-                    .strokeBorder(Theme.highlight.opacity(active ? 0.7 : 0.25), lineWidth: active ? 2 : 1)
+                    .strokeBorder(Theme.highlight.opacity(active ? 0.55 : 0.12), lineWidth: active ? 2 : 1)
                 Image(systemName: Tab.scan.icon)
                     .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(Theme.background)
+                    .foregroundStyle(Theme.textPrimary)
             }
             .frame(width: 60, height: 60)
             .accessibilityLabel(Text(Tab.scan.key))

@@ -90,13 +90,12 @@ struct CatalogExplorerView: View {
                 } label: {
                     Text(item.key)
                         .font(Theme.label(10)).tracking(0.8)
-                        .foregroundStyle(selected ? Theme.background : Theme.textSecondary)
+                        .foregroundStyle(selected ? Theme.textPrimary : Theme.textSecondary)
                         .padding(.horizontal, 13).padding(.vertical, 8)
                         .background {
                             if selected {
-                                Capsule().fill(LinearGradient(
-                                    colors: [Theme.accentBright, Theme.accent],
-                                    startPoint: .topLeading, endPoint: .bottomTrailing))
+                                Capsule().fill(Theme.surfaceRaised)
+                                    .overlay(Capsule().stroke(Theme.strokeStrong, lineWidth: 1))
                             } else {
                                 Capsule().fill(Theme.surface)
                                     .overlay(Capsule().stroke(Theme.stroke, lineWidth: 1))
@@ -183,9 +182,9 @@ struct CatalogExplorerView: View {
                     if store.isLearned(vehicle.id) {
                         Text("dex.learned")
                             .font(Theme.label(8)).tracking(0.8).textCase(.uppercase)
-                            .foregroundStyle(Theme.accentBright)
+                            .foregroundStyle(Theme.textSecondary)
                             .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(Theme.accent.opacity(0.18), in: Capsule())
+                            .background(Theme.surfaceRaised, in: Capsule())
                     }
                 }
             }

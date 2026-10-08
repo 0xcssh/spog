@@ -153,7 +153,21 @@ final class GarageStore {
         catches.sorted { $0.caughtAt > $1.caughtAt }.compactMap(card)
     }
 
-    var totalPoints: Int { cards.reduce(0) { $0 + $1.tier.points } }
+    /// Lus sur les prises et non sur `cards`, qui relit chaque photo depuis le disque :
+    /// l'écran d'accueil les demande à chaque rafraîchissement.
+    var totalPoints: Int {
+        catches.reduce(0) { sum, item in
+            guard let vehicle = catalog.vehicles.first(where: { $0.id == item.vehicleID }) else { return sum }
+            return sum + catalog.resolve(vehicle, in: item.countryCode).tier.points
+        }
+    }
+
+    /// Nombre de cartes affichables : une prise dont le modèle a disparu du catalogue
+    /// n'est plus dans la grille, elle ne doit pas être comptée.
+    var cardCount: Int {
+        let known = Set(catalog.vehicles.map(\.id))
+        return catches.filter { known.contains($0.vehicleID) }.count
+    }
     var uniqueModels: Int { Set(catches.map(\.vehicleID)).count }
 
     /// Marques distinctes representees dans le garage.

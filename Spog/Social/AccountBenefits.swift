@@ -25,9 +25,9 @@ struct AccountBenefitsList: View {
         HStack(alignment: showsDetails ? .top : .center, spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(Theme.accentBright)
+                .foregroundStyle(Theme.textPrimary)
                 .frame(width: 32, height: 32)
-                .background(Theme.accent.opacity(0.14), in: Circle())
+                .background(Theme.surfaceRaised, in: Circle())
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(Theme.display(15, .semibold))
