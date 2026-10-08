@@ -15,6 +15,8 @@ struct RootView: View {
     @State private var bounty = BountyStore()
     @State private var duels = DuelStore()
     @State private var tab: Tab = .garage
+    /// La pastille de l'onglet actif glisse d'un onglet à l'autre au lieu d'apparaître.
+    @Namespace private var tabPill
 
     init() {
         let state = AppState()
@@ -92,13 +94,7 @@ struct RootView: View {
 
     private var main: some View {
         ZStack {
-            Theme.background.ignoresSafeArea()
-            Theme.glow
-                .frame(height: 420)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .offset(y: -140)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
+            AmbientBackground()
 
             VStack(spacing: 0) {
                 Group {
@@ -127,37 +123,86 @@ struct RootView: View {
         .preferredColorScheme(.dark)
     }
 
-    /// Barre a icones : seul l'onglet actif affiche son libelle.
+    /// Barre d'onglets : une capsule de verre pour la navigation, et à côté, détaché, le
+    /// déclencheur du scan. Le scan est le geste du jeu ; noyé parmi trois onglets de même
+    /// taille, il ne se distinguait pas d'un écran de réglages.
     private var tabBar: some View {
-        HStack(spacing: 3) {
-            ForEach(Tab.allCases, id: \.self) { item in
-                Button {
-                    withAnimation(.spring(response: 0.32, dampingFraction: 0.8)) { tab = item }
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: item.icon).font(.system(size: 13, weight: .semibold))
-                        if tab == item {
-                            Text(item.key).font(Theme.label(11)).tracking(1)
-                        }
-                    }
-                    .foregroundStyle(tab == item ? Theme.background : Theme.textSecondary)
-                    .padding(.horizontal, tab == item ? 15 : 13)
-                    .padding(.vertical, 11)
-                    .background {
-                        if tab == item {
-                            Capsule().fill(
-                                LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                               startPoint: .topLeading, endPoint: .bottomTrailing)
-                            )
-                        }
-                    }
+        HStack(spacing: 12) {
+            HStack(spacing: 2) {
+                ForEach(Tab.allCases.filter { $0 != .scan }, id: \.self) { item in
+                    tabButton(item)
                 }
-                .buttonStyle(.plain)
             }
+            .padding(5)
+            .background {
+                ZStack {
+                    Capsule().fill(.ultraThinMaterial)
+                    Capsule().fill(Theme.glassFill).opacity(0.55)
+                }
+            }
+            .overlay(Capsule().strokeBorder(Theme.glassEdge, lineWidth: 1))
+            .shadow(color: Theme.dropShadow, radius: 18, y: 8)
+
+            scanButton
         }
-        .padding(5)
-        .background(.ultraThinMaterial, in: Capsule())
-        .overlay(Capsule().stroke(Theme.strokeStrong, lineWidth: 1))
+        .padding(.horizontal, 20)
         .padding(.bottom, 6)
+        .sensoryFeedback(.selection, trigger: tab)
+    }
+
+    private func tabButton(_ item: Tab) -> some View {
+        let active = tab == item
+        return Button {
+            withAnimation(.spring(response: 0.34, dampingFraction: 0.8)) { tab = item }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: item.icon).font(.system(size: 14, weight: .semibold))
+                if active {
+                    Text(item.key)
+                        .font(Theme.label(11)).tracking(1)
+                        .lineLimit(1)
+                        .fixedSize()
+                        .transition(.opacity.combined(with: .scale(scale: 0.8, anchor: .leading)))
+                }
+            }
+            .foregroundStyle(active ? Theme.background : Theme.textSecondary)
+            .frame(maxWidth: active ? nil : .infinity)
+            .padding(.horizontal, active ? 16 : 10)
+            .padding(.vertical, 12)
+            .background {
+                if active {
+                    Capsule()
+                        .fill(Theme.accentGradient)
+                        .overlay(Capsule().fill(Theme.sheen))
+                        .shadow(color: Theme.accent.opacity(0.5), radius: 10)
+                        .matchedGeometryEffect(id: "pill", in: tabPill)
+                }
+            }
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity)
+    }
+
+    private var scanButton: some View {
+        let active = tab == .scan
+        return Button {
+            withAnimation(.spring(response: 0.34, dampingFraction: 0.8)) { tab = .scan }
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(Theme.accentGradient)
+                    .overlay(Circle().fill(Theme.sheen))
+                    .shadow(color: Theme.accent.opacity(active ? 0.8 : 0.5), radius: active ? 18 : 12)
+                Circle()
+                    .strokeBorder(Theme.highlight.opacity(active ? 0.7 : 0.25), lineWidth: active ? 2 : 1)
+                Image(systemName: Tab.scan.icon)
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(Theme.background)
+            }
+            .frame(width: 60, height: 60)
+            .accessibilityLabel(Text(Tab.scan.key))
+        }
+        .buttonStyle(PressScaleStyle(scale: 0.9))
     }
 }

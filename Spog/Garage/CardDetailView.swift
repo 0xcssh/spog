@@ -24,29 +24,37 @@ struct CardDetailView: View {
     /// carte de demonstration n'a rien a developper.
     private var canDevelop: Bool { card.shot != nil && card.shot?.developed == nil }
 
+    private var ambientGlow: Color {
+        let base: Color = card.tier.frameColor ?? card.tier.color
+        let strength: Double = card.tier.isTrophy ? 0.22 * card.tier.frameIntensity + 0.08 : 0.16
+        return base.opacity(strength)
+    }
+
     var body: some View {
         ZStack {
-            Theme.background.ignoresSafeArea()
-            if let frame = card.tier.frameColor {
-                RadialGradient(colors: [frame.opacity(0.16 * card.tier.frameIntensity), .clear],
-                               center: .center, startRadius: 10, endRadius: 320)
-                    .ignoresSafeArea()
-            }
+            AmbientBackground()
+            // La carte baigne dans la lumière de son palier, trophée ou non : une Clio a
+            // sa lueur bleue, plus discrète que l'or d'une exotique, mais elle en a une.
+            RadialGradient(colors: [ambientGlow, Color.clear],
+                           center: .center, startRadius: 10, endRadius: 340)
+                .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 HStack {
                     Button { dismiss() } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 13, weight: .bold))
-                            .foregroundStyle(Theme.textSecondary)
-                            .frame(width: 38, height: 38)
-                            .background(Circle().fill(Theme.surface))
-                            .overlay(Circle().stroke(Theme.stroke, lineWidth: 1))
+                            .foregroundStyle(Theme.textPrimary)
+                            .frame(width: 40, height: 40)
+                            .background(Theme.glassFill, in: Circle())
+                            .overlay(Circle().strokeBorder(Theme.glassEdge, lineWidth: 1))
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(PressScaleStyle(scale: 0.9))
                     Spacer()
-                    Overline(text: card.verified ? "card.verified" : "card.declared",
-                             color: card.verified ? Theme.textSecondary : Theme.textMuted)
+                    InfoChip(icon: card.verified ? "checkmark.seal.fill" : "hand.raised.fill",
+                             text: Text(card.verified ? LocalizedStringKey("card.verified")
+                                                      : LocalizedStringKey("card.declared")),
+                             color: card.verified ? Theme.accentBright : Theme.textMuted)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
@@ -58,22 +66,21 @@ struct CardDetailView: View {
                     .overlay { if developing { DevelopingVeil() } }
                 Spacer()
 
+                factsRow
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 14)
+
                 Overline(text: developing ? "card.developing" : "card.hint")
-                    .padding(.bottom, 18)
+                    .padding(.bottom, 14)
 
                 if canDevelop {
                     Button { Task { await develop() } } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "sparkles").font(.system(size: 13, weight: .bold))
-                            Text("card.develop").font(Theme.label(12)).tracking(1)
+                            Text("card.develop")
                         }
-                        .foregroundStyle(Theme.accentBright)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(Theme.accent.opacity(0.12), in: Capsule())
-                        .overlay(Capsule().stroke(Theme.accent.opacity(0.5), lineWidth: 1))
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(NeonButtonStyle(prominent: false))
                     .disabled(developing)
                     .opacity(developing ? 0.5 : 1)
                     .padding(.horizontal, 20)
@@ -86,18 +93,10 @@ struct CardDetailView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "square.and.arrow.up").font(.system(size: 13, weight: .bold))
-                        Text("card.share").font(Theme.label(12)).tracking(1)
+                        Text("card.share")
                     }
-                    .foregroundStyle(Theme.background)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 15)
-                    .background(
-                        LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                       startPoint: .topLeading, endPoint: .bottomTrailing),
-                        in: Capsule()
-                    )
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(NeonButtonStyle())
                 .padding(.horizontal, 20)
 
                 HStack(spacing: 20) {
@@ -157,6 +156,47 @@ struct CardDetailView: View {
 }
 
 extension CardDetailView {
+    /// Palier, points, lieu et date de la prise, en une rangée de verre sous la carte :
+    /// ce que la carte dit en petit, lisible d'un coup d'œil.
+    var factsRow: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(card.tier.label)
+                    .font(Theme.label(10)).tracking(1.2).textCase(.uppercase)
+                    .foregroundStyle(card.tier.color)
+                Text(verbatim: "+\(card.tier.points)")
+                    .font(Theme.hero(20))
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.textPrimary)
+            }
+            HairlineDivider()
+            VStack(alignment: .leading, spacing: 4) {
+                Label {
+                    Text(card.placeName).lineLimit(1)
+                } icon: {
+                    Image(systemName: "mappin.and.ellipse")
+                }
+                .font(Theme.body(12, .semibold))
+                .foregroundStyle(Theme.textSecondary)
+                Text(card.caughtAt, style: .date)
+                    .font(Theme.mono(10))
+                    .foregroundStyle(Theme.textMuted)
+            }
+            Spacer(minLength: 0)
+            if card.firstSpot {
+                Image(systemName: "flag.fill")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(RarityTier.trophyGold)
+                    .frame(width: 34, height: 34)
+                    .background(RarityTier.trophyGold.opacity(0.14), in: Circle())
+            }
+        }
+        .padding(.horizontal, 14).padding(.vertical, 11)
+        .background(Theme.glassFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .strokeBorder(Theme.glassEdge, lineWidth: 1))
+    }
+
     /// Envoie la photo du joueur au serveur et remplace le visuel de la carte par le rendu
     /// studio. Le rendu est range sur l'appareil : il ne se regenere jamais.
     @MainActor

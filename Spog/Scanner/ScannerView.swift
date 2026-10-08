@@ -38,6 +38,8 @@ struct ScannerView: View {
     @State private var camera = CameraController()
     @State private var working = false
     @State private var pulse = false
+    /// Respiration de l'anneau du déclencheur, purement visuelle.
+    @State private var breathe = false
     /// Nombre de plaques masquées sur la dernière prise, montré brièvement.
     @State private var maskedPlates = 0
     @State private var showingPaywall = false
@@ -74,19 +76,20 @@ struct ScannerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SectionHeader(overline: "scan.section", title: String(localized: "scan.title"))
+            SectionHeader(overline: "scan.section", title: String(localized: "scan.title"),
+                          trailing: AnyView(countryChip))
                 .padding(.horizontal, 20)
 
+            // Le viseur prend toute la hauteur disponible : à proportions fixes, il
+            // laissait une bande noire inutile sous lui sur les grands écrans.
             viewfinder
+                .frame(maxHeight: .infinity)
                 .padding(.horizontal, 20)
-                .padding(.top, 16)
-
-            Spacer(minLength: 12)
-            Overline(text: hint)
-            Spacer(minLength: 14)
+                .padding(.top, 14)
 
             shutter
                 .padding(.horizontal, 20)
+                .padding(.top, 16)
                 .padding(.bottom, 6)
         }
         .onDisappear { location.stopWatchingSpeed() }
@@ -183,14 +186,14 @@ struct ScannerView: View {
 
     private var viewfinder: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Theme.surface)
+            RoundedRectangle(cornerRadius: 26, style: .continuous)
+                .fill(Theme.glassFill)
                 .overlay(DotGrid(spacing: 18)
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous)))
+                    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous)))
 
             if camera.state == .running {
                 CameraPreview(session: camera.session)
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
             } else {
                 RadialGradient(colors: [Theme.accent.opacity(0.18), .clear],
                                center: .center, startRadius: 4, endRadius: 200)
@@ -212,11 +215,48 @@ struct ScannerView: View {
                                  : (working ? Theme.accentBright : Theme.accent))
                 .padding(18)
         }
-        .aspectRatio(0.82, contentMode: .fit)
+        .overlay(alignment: .topLeading) {
+            if camera.state == .running {
+                LiveBadge().padding(14)
+            }
+        }
+        // La consigne vit dans le viseur, là où le regard se pose, sur un verre qui la
+        // rend lisible quelle que soit la scène filmée.
+        .overlay(alignment: .bottom) {
+            Text(hint)
+                .font(Theme.label(11)).tracking(1.2).textCase(.uppercase)
+                .foregroundStyle(tooFast ? Theme.warning : Theme.textPrimary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 14).padding(.vertical, 8)
+                .background(.ultraThinMaterial, in: Capsule())
+                .overlay(Capsule().strokeBorder(Theme.glassEdge, lineWidth: 1))
+                .padding(.horizontal, 24)
+                .padding(.bottom, 18)
+                .animation(.easeInOut(duration: 0.25), value: hint)
+        }
         .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Theme.accent.opacity(0.4), lineWidth: 1))
-        .shadow(color: Theme.accent.opacity(0.3), radius: 20)
+            RoundedRectangle(cornerRadius: 26, style: .continuous)
+                .strokeBorder(LinearGradient(colors: [Theme.accentBright.opacity(0.6), Theme.accent.opacity(0.15),
+                                                      Theme.cyan.opacity(0.35)],
+                                             startPoint: .topLeading, endPoint: .bottomTrailing),
+                              lineWidth: 1.2))
+        .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+        .shadow(color: Theme.accent.opacity(0.35), radius: 24)
+    }
+
+    /// Le pays où la prise sera comptée, avec son drapeau : la rareté en dépend.
+    private var countryChip: some View {
+        InfoChip(icon: "location.fill",
+                 text: Text(verbatim: "\(Self.flag(app.country)) \(app.country)"),
+                 color: Theme.textSecondary)
+    }
+
+    /// Drapeau d'un code pays ISO à deux lettres, par les indicateurs régionaux Unicode.
+    private static func flag(_ code: String) -> String {
+        code.uppercased().unicodeScalars
+            .compactMap { Unicode.Scalar(127397 + $0.value) }
+            .map { String($0) }
+            .joined()
     }
 
     // MARK: Déclencheur
@@ -226,39 +266,87 @@ struct ScannerView: View {
             if camera.state == .denied {
                 Button { openSettings() } label: {
                     Text("scan.openSettings")
-                        .font(Theme.label(12)).tracking(1)
-                        .foregroundStyle(Theme.background)
-                        .padding(.horizontal, 22).padding(.vertical, 14)
-                        .background(
-                            LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                           startPoint: .topLeading, endPoint: .bottomTrailing),
-                            in: Capsule())
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(NeonButtonStyle(fullWidth: false))
             } else {
-                Button { Task { await shoot() } } label: {
-                    ZStack {
-                        Circle()
-                            .fill(LinearGradient(colors: [Theme.accentBright, Theme.accent],
-                                                 startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .frame(width: 68, height: 68)
-                            .shadow(color: Theme.accent.opacity(0.7), radius: 16)
-                        Image(systemName: "viewfinder")
-                            .font(.system(size: 25, weight: .semibold))
-                            .foregroundStyle(Theme.background)
-                    }
-                    .opacity(working || tooFast ? 0.5 : 1)
+                HStack(alignment: .center) {
+                    allowance
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    shutterButton
+                    privacyNote
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                .buttonStyle(.plain)
-                .disabled(working || tooFast)
             }
+        }
+    }
 
-            if let left = freeScansLeft {
-                Overline(text: "scan.todayLeft \(left)",
-                         color: left == 0 ? Color(hex: 0xF5B942) : Theme.textMuted)
-            } else {
-                Overline(text: "scan.cameraOnly")
+    /// Le déclencheur : un disque au dégradé violet dans un anneau qui respire. Il
+    /// s'enfonce pendant l'identification, comme un bouton qu'on tient appuyé.
+    private var shutterButton: some View {
+        Button { Task { await shoot() } } label: {
+            ZStack {
+                Circle()
+                    .strokeBorder(Theme.accentGradient, lineWidth: 3)
+                    .frame(width: 86, height: 86)
+                    .shadow(color: Theme.accent.opacity(breathe ? 0.8 : 0.35), radius: breathe ? 16 : 8)
+                Circle()
+                    .fill(Theme.accentGradient)
+                    .overlay(Circle().fill(Theme.sheen))
+                    .frame(width: 68, height: 68)
+                    .shadow(color: Theme.accent.opacity(0.7), radius: 16)
+                Image(systemName: "viewfinder")
+                    .font(.system(size: 26, weight: .semibold))
+                    .foregroundStyle(Theme.background)
             }
+            .scaleEffect(working ? 0.9 : 1)
+            .opacity(working || tooFast ? 0.5 : 1)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: working)
+        }
+        .buttonStyle(PressScaleStyle(scale: 0.92))
+        .disabled(working || tooFast)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.8).repeatForever(autoreverses: true)) { breathe = true }
+        }
+    }
+
+    /// Scans restants aujourd'hui, en grand ; rien à compter pour un abonné.
+    @ViewBuilder private var allowance: some View {
+        if let left = freeScansLeft {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(left.formatted())
+                    .font(Theme.hero(26))
+                    .monospacedDigit()
+                    .foregroundStyle(left == 0 ? Theme.warning : Theme.textPrimary)
+                    .contentTransition(.numericText(value: Double(left)))
+                Text("scan.leftToday")
+                    .font(Theme.label(9)).tracking(1.1).textCase(.uppercase)
+                    .foregroundStyle(left == 0 ? Theme.warning : Theme.textMuted)
+                    .lineLimit(2)
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 4) {
+                Image(systemName: "infinity")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(Theme.accentBright)
+                Text("scan.cameraOnly")
+                    .font(Theme.label(9)).tracking(1.1).textCase(.uppercase)
+                    .foregroundStyle(Theme.textMuted)
+                    .lineLimit(2)
+            }
+        }
+    }
+
+    /// Rappel discret de ce que l'app fait des plaques : masquées avant tout envoi.
+    private var privacyNote: some View {
+        VStack(alignment: .trailing, spacing: 4) {
+            Image(systemName: "eye.slash.fill")
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(maskedPlates > 0 ? Theme.cyan : Theme.textSecondary)
+            Text("scan.platesHidden")
+                .font(Theme.label(9)).tracking(1.1).textCase(.uppercase)
+                .foregroundStyle(Theme.textMuted)
+                .multilineTextAlignment(.trailing)
+                .lineLimit(2)
         }
     }
 
@@ -454,6 +542,29 @@ struct ScannerView: View {
         guard let card = garage.card(item) else { return nil }
         Analytics.track(.cardCreated, ["tier": card.tier.id])
         return Reveal(card: card, isNewModel: isNew, questReward: reward)
+    }
+}
+
+/// Pastille « en direct » : la caméra tourne, ce que le viseur montre est la rue.
+private struct LiveBadge: View {
+    @State private var blink = false
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(Theme.accentBright)
+                .frame(width: 7, height: 7)
+                .shadow(color: Theme.accentBright, radius: blink ? 6 : 2)
+                .opacity(blink ? 1 : 0.45)
+            Text("scan.live")
+                .font(Theme.label(9)).tracking(1.4).textCase(.uppercase)
+                .foregroundStyle(Theme.textPrimary)
+        }
+        .padding(.horizontal, 10).padding(.vertical, 6)
+        .background(.ultraThinMaterial, in: Capsule())
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) { blink = true }
+        }
     }
 }
 
