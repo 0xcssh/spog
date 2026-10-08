@@ -31,3 +31,6 @@ supabase/.temp/
 
 # Projet Xcode généré par XcodeGen à partir de project.yml — jamais édité à la main
 Spog.xcodeproj/
+
+# Copies de travail des sous-agents Claude Code
+.claude/
