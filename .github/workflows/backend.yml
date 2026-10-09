@@ -46,7 +46,7 @@ jobs:
           PROJECT: ${{ vars.NEON_PROJECT_ID || 'damp-fire-11684360' }}
           BRANCH: ${{ vars.NEON_BRANCH_ID || 'br-plain-fog-b7f3ate2' }}
         run: |
-          ENV_JSON=$(jq -cn --arg k "$OPENAI_API_KEY" --arg m "${{ inputs.model || 'gpt-4o' }}" --arg t "${{ inputs.develop_testers }}" '{OPENAI_API_KEY: $k, OPENAI_MODEL: $m, DEVELOP_TESTERS: $t}')
+          ENV_JSON=$(jq -cn --arg k "$OPENAI_API_KEY" --arg m "${{ inputs.model || 'gpt-4o' }}" --arg t "${{ inputs.develop_testers || vars.DEVELOP_TESTERS }}" '{OPENAI_API_KEY: $k, OPENAI_MODEL: $m, DEVELOP_TESTERS: $t}')
           curl -sf -X POST "https://console.neon.tech/api/v2/projects/$PROJECT/branches/$BRANCH/functions/identify/deployments" \
             -H "Authorization: Bearer $NEON_API_KEY" \
             -F "zip=@dist/function.zip" -F "runtime=nodejs24" -F "environment=$ENV_JSON" | jq '{id, status}'
