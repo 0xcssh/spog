@@ -6,6 +6,8 @@ import {
 } from "./handler";
 import type { EntitlementResult } from "./entitlement";
 import type { SampleStore } from "./storage";
+import { parseSSE } from "./develop";
+import { STUDIO_PLATE_PNG } from "./studio-plate";
 
 // ---------- Doublures ----------
 
@@ -439,11 +441,36 @@ describe("développement", () => {
     assert.ok(PRO_DAILY_DEVELOPS > 5);
   });
 
-  test("le rendu est demandé en JPEG", async () => {
+  test("le rendu est demandé en JPEG carré, avec la photo puis la plaque du studio", async () => {
     let sent: FormData | null = null;
     const fetchSpy = (async (_url: unknown, init: RequestInit) => { sent = init.body as FormData; return imageResponse(); }) as unknown as typeof fetch;
     await handler({ fetch: fetchSpy })(post({ action: "develop", imageBase64: "abc" }));
     assert.equal(sent!.get("output_format"), "jpeg");
+    assert.equal(sent!.get("size"), "1024x1024");
+    assert.equal(sent!.get("image"), null, "une liste d'images part sous image[], jamais sous image");
+    const images = sent!.getAll("image[]") as File[];
+    assert.equal(images.length, 2);
+    assert.equal(images[0].type, "image/jpeg");
+    assert.equal(images[1].type, "image/png");
+    assert.deepEqual(Buffer.from(await images[1].arrayBuffer()), Buffer.from(STUDIO_PLATE_PNG, "base64"));
+    // Sans flux annoncé par l'app : ni flux ni images partielles chez OpenAI.
+    assert.equal(sent!.get("stream"), null);
+    assert.equal(sent!.get("partial_images"), null);
+    assert.match(String(sent!.get("prompt")), /SECOND IMAGE/);
+    assert.doesNotMatch(String(sent!.get("prompt")), /violet|cyan/);
+  });
+
+  test("sans flux annoncé, le contrat JSON est inchangé", async () => {
+    const store = fakeDb();
+    const res = await handler({ db: store.db, fetch: fakeFetch([imageResponse()]).fn })(
+      post({ action: "develop", imageBase64: "abc" }));
+    assert.equal(res.status, 200);
+    assert.match(res.headers.get("content-type") ?? "", /application\/json/);
+    const out = await res.json() as any;
+    assert.equal(out.image, png);
+    assert.equal(out.develops_left, 0);
+    assert.ok(out.resets_at);
+    assert.equal(store.consumed(), 1);
   });
 
   test("un testeur reçoit le rendu et son coût", async () => {
@@ -470,6 +497,126 @@ describe("développement", () => {
     const res = await handler({ fetch: ai.fn, developTesters: new Set(["install-1"]) })(
       post({ action: "develop", imageBase64: "abc", model: "dall-e-9" }));
     assert.equal((await res.json() as any).model, "gpt-image-1-mini");
+  });
+});
+
+describe("passage en studio en flux", () => {
+  const partial = (i: number) => Buffer.from(`partial-${i}`).toString("base64");
+  const final = Buffer.from("final-jpeg").toString("base64");
+  const usage = { input_tokens: 1300, output_tokens: 1200, input_tokens_details: { text_tokens: 100, image_tokens: 1200 } };
+
+  /// Flux SSE d'OpenAI, découpé en paquets de `chunk` caractères : un événement coupé
+  /// entre deux paquets doit être recollé.
+  function openAIStream(events: object[], chunk = 7): Response {
+    const text = events.map((e) => `event: ${(e as any).type}\ndata: ${JSON.stringify(e)}\n\n`).join("");
+    const bytes = new TextEncoder().encode(text);
+    const body = new ReadableStream<Uint8Array>({
+      start(c) {
+        for (let i = 0; i < bytes.length; i += chunk) c.enqueue(bytes.slice(i, i + chunk));
+        c.close();
+      },
+    });
+    return new Response(body, { status: 200, headers: { "Content-Type": "text/event-stream" } });
+  }
+
+  const happyEvents = [
+    { type: "image_edit.partial_image", b64_json: partial(0), partial_image_index: 0 },
+    { type: "image_edit.partial_image", b64_json: partial(1), partial_image_index: 1 },
+    { type: "image_edit.completed", b64_json: final, usage },
+  ];
+
+  async function readEvents(res: Response) {
+    const text = await res.text();
+    return parseSSE(text).events.map((e) => ({ event: e.event, data: JSON.parse(e.data) }));
+  }
+
+  test("les images partielles puis le rendu final sont relayés, le quota consommé une fois", async () => {
+    let sent: FormData | null = null;
+    const fetchSpy = (async (_url: unknown, init: RequestInit) => {
+      sent = init.body as FormData; return openAIStream(happyEvents);
+    }) as unknown as typeof fetch;
+    const store = fakeDb();
+    const res = await handler({ db: store.db, fetch: fetchSpy })(
+      post({ action: "develop", imageBase64: "abc", stream: true }));
+    assert.equal(res.status, 200);
+    assert.match(res.headers.get("content-type") ?? "", /text\/event-stream/);
+    const events = await readEvents(res);
+    assert.deepEqual(events.map((e) => e.event), ["partial", "partial", "done"]);
+    assert.equal(events[0].data.image, partial(0));
+    assert.equal(events[1].data.index, 1);
+    assert.equal(events[2].data.image, final);
+    assert.equal(events[2].data.develops_left, 0);
+    assert.equal(events[2].data.cost_usd, (100 * 2 + 1200 * 2.5 + 1200 * 8) / 1_000_000);
+    assert.equal(store.consumed(), 1);
+    assert.equal(sent!.get("stream"), "true");
+    assert.equal(sent!.get("partial_images"), "2");
+    assert.equal(sent!.get("size"), "1024x1024");
+    assert.equal(sent!.getAll("image[]").length, 2);
+  });
+
+  test("l'en-tête Accept suffit à demander le flux", async () => {
+    const res = await handler({ fetch: fakeFetch([openAIStream(happyEvents)]).fn })(
+      post({ action: "develop", imageBase64: "abc" }, { accept: "text/event-stream" }));
+    assert.match(res.headers.get("content-type") ?? "", /text\/event-stream/);
+    assert.equal((await readEvents(res)).at(-1)!.event, "done");
+  });
+
+  test("un flux coupé avant le rendu final : erreur, rien de consommé", async () => {
+    const store = fakeDb();
+    const res = await handler({ db: store.db, fetch: fakeFetch([openAIStream(happyEvents.slice(0, 1))]).fn })(
+      post({ action: "develop", imageBase64: "abc", stream: true }));
+    const events = await readEvents(res);
+    assert.deepEqual(events.map((e) => e.event), ["partial", "error"]);
+    assert.equal(events[1].data.code, "unreadable_ai_response");
+    assert.equal(store.consumed(), 0);
+  });
+
+  test("une erreur dans le flux d'OpenAI : erreur relayée, rien de consommé", async () => {
+    const store = fakeDb();
+    const res = await handler({ db: store.db, fetch: fakeFetch([openAIStream([
+      { type: "error", error: { message: "moderation_blocked" } },
+    ])]).fn })(post({ action: "develop", imageBase64: "abc", stream: true }));
+    const events = await readEvents(res);
+    assert.deepEqual(events.map((e) => e.event), ["error"]);
+    assert.equal(store.consumed(), 0);
+  });
+
+  test("un refus d'OpenAI avant le flux reste une réponse JSON", async () => {
+    const res = await handler({ fetch: fakeFetch([new Response("busy", { status: 503 })]).fn })(
+      post({ action: "develop", imageBase64: "abc", stream: true }));
+    assert.equal(res.status, 502);
+    assert.equal((await res.json() as any).code, "identification_failed");
+  });
+
+  test("quota épuisé : 402 en JSON, même en flux", async () => {
+    const ai = fakeFetch([openAIStream(happyEvents)]);
+    const res = await handler({ db: fakeDb(() => true, { [`${hashKey("install-1")}:develop`]: 1 }).db, fetch: ai.fn })(
+      post({ action: "develop", imageBase64: "abc", stream: true }));
+    assert.equal(res.status, 402);
+    assert.equal((await res.json() as any).code, "develop_limit");
+    assert.equal(ai.count(), 0);
+  });
+
+  test("l'app qui ferme l'écran en route paie quand même le rendu", async () => {
+    const store = fakeDb();
+    let pending: Promise<unknown> | null = null;
+    const res = await handler({ db: store.db, fetch: fakeFetch([openAIStream(happyEvents, 64)]).fn,
+                                waitUntil: (p) => { pending = p; } })(
+      post({ action: "develop", imageBase64: "abc", stream: true }));
+    await res.body!.cancel();
+    assert.ok(pending, "la lecture d'OpenAI doit être confiée à waitUntil");
+    await pending;
+    assert.equal(store.consumed(), 1);
+  });
+});
+
+describe("découpage SSE", () => {
+  test("recolle un événement coupé et ignore les commentaires", () => {
+    const first = parseSSE(": open\n\nevent: partial\ndata: {\"a\"");
+    assert.deepEqual(first.events, []);
+    const second = parseSSE(first.rest + ":1}\r\n\r\nevent: done\ndata: {}\n\n");
+    assert.deepEqual(second.events, [{ event: "partial", data: "{\"a\":1}" }, { event: "done", data: "{}" }]);
+    assert.equal(second.rest, "");
   });
 });
 

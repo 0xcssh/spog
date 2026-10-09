@@ -186,19 +186,57 @@ private enum ModelFace {
     }
 }
 
-/// Une carte « passée en studio » : le rendu 1536 × 1024 généré à partir de la photo du
-/// joueur, dans un cadre presque carré.
+/// Une carte « passée en studio » : le rendu généré à partir de la photo du joueur.
 ///
-/// Le remplir couperait un tiers de sa largeur, donc l'avant ou l'arrière de **sa**
-/// voiture. On le montre en entier, et le reste du cadre est rempli par le même rendu,
-/// agrandi et flouté : le studio continue sous la voiture et au-dessus, sans la couture
-/// ni le vide d'un simple fondu sur fond uni.
+/// Depuis le 09/10/2026, le rendu est **carré** (1024 × 1024), dans le studio unique du
+/// catalogue, avec la voiture sur 80 % de la largeur : il remplit la zone image de la
+/// carte (rapport 1,02) en plein cadre, et le rognage ne prend qu'un liseré de studio.
+///
+/// Les rendus d'avant sont en 1536 × 1024, et restent chez les joueurs qui les ont déjà.
+/// Les remplir couperait un tiers de leur largeur, donc l'avant ou l'arrière de **sa**
+/// voiture : on les montre en entier, et le reste du cadre est rempli par le même rendu,
+/// agrandi et flouté.
 struct DevelopedArt: View {
     let image: UIImage
     /// Décalage de parallaxe du plan net (le fond flou, lointain, ne bouge pas).
     var offset: CGSize = .zero
+    /// Grossissement du rendu carré quand il bouge en parallaxe : 1,08, soit 4 % de marge
+    /// par côté, plus que les 10 points du décalage maximal — aucun bord ne se découvre.
+    var parallaxScale: CGFloat = 1
+
+    /// Presque carré : un nouveau rendu. Le seuil laisse passer un léger écart d'arrondi
+    /// sans jamais confondre avec le 3:2 (rapport 1,5) des anciens.
+    static func fillsFrame(_ size: CGSize) -> Bool {
+        guard size.width > 0, size.height > 0 else { return false }
+        return size.width / size.height < 1.2
+    }
 
     var body: some View {
+        Group {
+            if Self.fillsFrame(image.size) {
+                square
+            } else {
+                banner
+            }
+        }
+        // Chaque image intermédiaire du passage en studio remplace la précédente en fondu.
+        .id(ObjectIdentifier(image))
+        .transition(.opacity)
+    }
+
+    private var square: some View {
+        Color.clear
+            .overlay {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .scaleEffect(parallaxScale)
+                    .offset(offset)
+            }
+            .clipped()
+    }
+
+    private var banner: some View {
         Color.clear
             .background {
                 Image(uiImage: image)

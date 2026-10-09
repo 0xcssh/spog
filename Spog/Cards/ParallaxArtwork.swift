@@ -50,9 +50,14 @@ struct ParallaxArtwork: View {
                 // une, et le rendu studio sert aux cartes qui n'en ont pas : le Spogdex,
                 // et les modeles pas encore attrapes.
                 if let developed = shot.developed {
-                    // Passée en studio : un rendu 3:2 de SA voiture, montré en entier sur
-                    // son propre studio flouté — le remplir couperait l'avant ou l'arrière.
-                    DevelopedArt(image: developed, offset: shift(0.85))
+                    // Passée en studio : un rendu carré de SA voiture en plein cadre, comme
+                    // le modèle du Spogdex (même profondeur, même grossissement). Un ancien
+                    // rendu 3:2 se montre en entier sur son propre studio flouté.
+                    if DevelopedArt.fillsFrame(developed.size) {
+                        DevelopedArt(image: developed, offset: shift(0.6), parallaxScale: 1.08)
+                    } else {
+                        DevelopedArt(image: developed, offset: shift(0.85))
+                    }
                 } else {
                     filled(shot.stylized, depth: 0.9, scale: 1.06)
                 }

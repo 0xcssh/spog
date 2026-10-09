@@ -18,6 +18,8 @@ struct CatchRevealView: View {
     @State private var shownPoints = 0
     /// Passage en studio en cours, demandé depuis cet écran.
     @State private var inStudio = false
+    /// Image intermédiaire du rendu studio, montrée sur la carte pendant la génération.
+    @State private var studioPreview: UIImage?
     /// Rotation de la carte quand le rendu studio la remplace.
     @State private var flip: Double = 0
 
@@ -66,11 +68,13 @@ struct CatchRevealView: View {
 
     private var cardStage: some View {
         ZStack {
-            CollectibleCardView(card: card, interactive: phase == .revealed)
+            CollectibleCardView(card: card.showingStudioPreview(studioPreview), interactive: phase == .revealed)
                 .blur(radius: phase == .developing ? 14 : 0)
                 .saturation(phase == .developing ? 0.15 : 1)
                 .scaleEffect(phase == .developing ? 0.9 : 1)
-                .overlay { if inStudio { DevelopingVeil() } }
+                // Le voile seulement avant la première image : ensuite, c'est la carte
+                // elle-même qui montre l'avancée.
+                .overlay { if inStudio && studioPreview == nil { DevelopingVeil() } }
                 .rotation3DEffect(.degrees(flip), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
 
             if phase == .developing {
@@ -135,7 +139,7 @@ struct CatchRevealView: View {
             // c'est le moment où la carte compte le plus, inutile d'aller la rechercher au
             // garage. Seulement pour une vraie photo qui n'a pas encore son rendu.
             if card.canGoToStudio {
-                StudioButton(card: card, working: $inStudio, source: "reveal") { refreshed in
+                StudioButton(card: card, working: $inStudio, preview: $studioPreview, source: "reveal") { refreshed in
                     showStudio(refreshed)
                 }
                 .transition(.opacity)
@@ -153,7 +157,15 @@ struct CatchRevealView: View {
 
     /// La carte se retourne vers son rendu studio : un demi-tour jusqu'à la tranche, on
     /// échange le visuel quand il est invisible, puis elle revient de face.
+    ///
+    /// Sauf quand la carte s'est déjà formée sous les yeux du joueur (images intermédiaires du
+    /// flux), pas de demi-tour : la face cachée montrerait la photo un instant, et le
+    /// rendu final n'est que la dernière image, plus nette.
     private func showStudio(_ refreshed: CardData) {
+        if studioPreview != nil {
+            withAnimation(.easeInOut(duration: 0.4)) { card = refreshed }
+            return
+        }
         withAnimation(.easeIn(duration: 0.2)) {
             flip = 90
         } completion: {

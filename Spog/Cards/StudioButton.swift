@@ -5,6 +5,17 @@ extension CardData {
     /// Une carte passe en studio une fois, et seulement si elle porte une vraie photo : une
     /// carte de démonstration n'a rien à y passer, et un rendu ne se regénère jamais.
     var canGoToStudio: Bool { shot != nil && shot?.developed == nil }
+
+    /// La carte telle qu'on la montre pendant le passage en studio : l'image intermédiaire
+    /// à la place du rendu. Une copie d'affichage seulement — la carte de l'écran garde
+    /// `canGoToStudio`, sinon le bouton disparaîtrait à la première image.
+    func showingStudioPreview(_ preview: UIImage?) -> CardData {
+        guard let preview, var shot = shot else { return self }
+        var copy = self
+        shot.developed = preview
+        copy.shot = shot
+        return copy
+    }
 }
 
 /// « Passer en studio » : le bouton, le quota du jour, l'attente, le quota épuisé et l'échec,
@@ -12,11 +23,13 @@ extension CardData {
 /// après la prise — et la règle d'argent ne doit pas pouvoir diverger entre les deux.
 ///
 /// La carte affichée appartient à l'écran parent : c'est lui qui la remplace par le rendu
-/// (`onDeveloped`), chacun avec sa mise en scène, et lui qui pose le voile pendant
-/// l'attente (`working`).
+/// (`onDeveloped`), chacun avec sa mise en scène, lui qui pose le voile pendant l'attente
+/// (`working`) et lui qui montre les images intermédiaires (`preview`, remis à nil à la fin,
+/// après `onDeveloped`).
 struct StudioButton: View {
     let card: CardData
     @Binding var working: Bool
+    @Binding var preview: UIImage?
     /// Pour les statistiques : d'où le rendu a été demandé (`detail`, `reveal`).
     let source: String
     var onDeveloped: (CardData) -> Void
@@ -92,8 +105,15 @@ struct StudioButton: View {
         guard let original = card.shot?.original, !working else { return }
         failed = false
         withAnimation { working = true }
-        let result = await DevelopService.develop(original, entitlement: subscriptions.entitlementJWS)
+        let result = await DevelopService.develop(original, entitlement: subscriptions.entitlementJWS) { partial in
+            // La carte se forme sous les yeux du joueur : chaque image remplace la
+            // précédente en fondu, de plus en plus nette.
+            withAnimation(.easeInOut(duration: 0.6)) { preview = partial }
+        }
         withAnimation { working = false }
+        // L'aperçu s'efface après la carte définitive (succès) ou tout de suite (échec) :
+        // jamais de retour fugitif à la photo entre la dernière image et le rendu.
+        defer { withAnimation(.easeInOut(duration: 0.3)) { preview = nil } }
         switch result {
         case .success(let developed):
             ShotStore.saveDeveloped(developed.image, for: card.id)

@@ -573,8 +573,8 @@ struct MiniCard: View {
             .fill(Theme.surfaceRaised)
             .overlay {
                 if let developed = card.shot?.developed {
-                    // Passée en studio : la même voiture, en rendu, montrée en entier sur
-                    // son propre studio flouté.
+                    // Passée en studio : la même voiture, en rendu (plein cadre s'il est
+                    // carré, en entier sur son studio flouté pour un ancien rendu 3:2).
                     DevelopedArt(image: developed)
                 } else if let stylized = card.shot?.stylized {
                     // **La voiture reellement croisee, pas le modele.** Meme ordre de
