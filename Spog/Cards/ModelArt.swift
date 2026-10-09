@@ -10,11 +10,11 @@ import SwiftUI
 /// testeur du 09/10/2026.)
 ///
 /// Ordre d'affichage, du plus immédiat au définitif :
-/// 1. la découpe du rendu embarqué `CarArt` (son masque est livré avec lui) sur le décor
-///    dessiné, tout de suite, hors ligne compris — un aperçu, le temps du réseau ;
+/// 1. le studio vide, avec un reflet de chargement ;
 /// 2. le rendu HD du serveur (`VehicleArtService`), en fondu dès qu'il arrive — une
 ///    trentaine de secondes pour le tout premier joueur qui demande un modèle,
-///    instantané ensuite. Sans rendu du tout : la silhouette.
+///    instantané ensuite ;
+/// 3. sans réseau : le rendu embarqué `CarArt` tel quel, sinon la silhouette.
 struct ModelArt: View {
     let vehicleID: String
     let carBody: CarBody
@@ -58,7 +58,12 @@ struct ModelArt: View {
     @ViewBuilder private var faceView: some View {
         switch face {
         case .pending:
-            Color.clear
+            // Le studio vide, avec un reflet qui passe : on attend le rendu. Pas d'aperçu
+            // d'une autre voiture — la découpe embarquée flottait, d'une autre teinte, puis
+            // changeait sous les yeux du joueur (retour testeur du 09/10/2026).
+            Rectangle()
+                .fill(Theme.textPrimary.opacity(0.03))
+                .shimmer()
         case .staged(let cutout, let key, _):
             // Le décor est déjà dessous : la voiture seule.
             StagedCar(cutout: cutout, cutoutKey: key, showsBackdrop: false)
@@ -111,27 +116,24 @@ struct ModelArt: View {
             return
         }
 
-        // En attendant le serveur : le rendu embarqué, détouré par son masque.
-        if !face.isVisible {
-            let preview = await Self.previewFace(id, paint: paint)
-            show(preview)
-        }
-
         // Un court délai avant de demander au serveur : une vignette qui ne fait que
         // passer pendant un défilement rapide disparaît avant, et sa tâche est annulée.
         // Sans lui, balayer une grille déclencherait des générations payantes à la chaîne.
         try? await Task.sleep(for: .milliseconds(350))
         if Task.isCancelled { return }
-        guard let remote = await VehicleArtService.remoteImage(for: id), !Task.isCancelled else { return }
-        show(.full(remote))
+        let remote = await VehicleArtService.remoteImage(for: id)
+        if Task.isCancelled { return }
+        if let remote {
+            show(.full(remote))
+        } else {
+            // Hors ligne, ou serveur indisponible : le rendu embarqué tel quel (il a son
+            // propre sol), sinon la silhouette. Jamais l'attente sans fin.
+            show(Self.fallbackFace(id, paint: paint))
+        }
     }
 
-    /// Le visuel d'attente : la découpe du rendu embarqué, sinon le bandeau entier, sinon
-    /// la silhouette.
-    private static func previewFace(_ id: String, paint: UInt32?) async -> ModelFace {
-        if let cutout = await ModelCutoutService.embeddedCutout(for: id, paint: paint) {
-            return .staged(cutout, key: ModelCutoutService.embeddedKey(id, paint: paint), definitive: false)
-        }
+    /// Le repli sans réseau : le rendu embarqué en entier, sinon la silhouette.
+    private static func fallbackFace(_ id: String, paint: UInt32?) -> ModelFace {
         if let art = CarArt.image(for: id, paint: paint) { return .banner(art) }
         return .silhouette
     }
@@ -180,10 +182,6 @@ private enum ModelFace {
     /// Ce qui est déjà en mémoire, sans disque ni calcul.
     static func immediate(_ id: String, paint: UInt32?) -> ModelFace {
         if let hd = VehicleArtService.memoryImage(for: id) { return .full(hd) }
-        let embedded = ModelCutoutService.embeddedKey(id, paint: paint)
-        if let cutout = ModelCutoutService.memoryCutout(embedded) {
-            return .staged(cutout, key: embedded, definitive: false)
-        }
         return .pending
     }
 }
