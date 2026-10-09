@@ -236,3 +236,96 @@ describe("duels", () => {
     for (let i = 0; i < 200; i++) assert.doesNotMatch(duelCode(), /[01OIL]/);
   });
 });
+
+describe("garage (restauration sur un autre iPhone)", () => {
+  const card = { serial: 7, paint: 0x1E3A8A, price: { low: 21000, high: 26000, currency: "EUR" } };
+
+  test("rend chaque carte avec numéro, teinte, cote et identification", async () => {
+    const id = randomUUID(), s = await scan("a", "porsche-macan");
+    const caughtAt = "2026-10-01T09:30:00.000Z";
+    await call("catch", "a", { catch_id: id, vehicle_id: "porsche-macan", country: "FR", caught_at: caughtAt,
+                                location_verified: true, scan_id: s, ...card });
+    const { body } = await call("garage", "a");
+    assert.equal(body.catches.length, 1);
+    const c = body.catches[0];
+    assert.equal(c.id, id);
+    assert.equal(c.vehicle_id, "porsche-macan");
+    assert.equal(c.caught_at, caughtAt);
+    assert.equal(c.scan_id, s);
+    assert.equal(c.serial, 7);
+    assert.equal(c.paint, 0x1E3A8A);
+    assert.deepEqual(c.price, card.price);
+    assert.equal(c.first_spot, true);
+    assert.equal(c.location_verified, true);
+  });
+
+  test("une deuxième installation rattachée au même compte Apple retrouve les cartes", async () => {
+    await call("apple_link", "old-phone", { identity_token: "good" });
+    const id = randomUUID();
+    await call("catch", "old-phone", { catch_id: id, vehicle_id: "renault-clio", country: "FR",
+                                       location_verified: false, ...card });
+    assert.equal((await call("garage", "new-phone")).body.catches.length, 0);
+    const linked = await call("apple_link", "new-phone", { identity_token: "good" });
+    assert.equal(linked.body.catches, 1);   // le compteur que l'app compare à son garage
+    const { body } = await call("garage", "new-phone");
+    assert.deepEqual(body.catches.map((c: any) => [c.id, c.serial]), [[id, 7]]);
+  });
+
+  test("une prise supprimée ne revient pas", async () => {
+    const kept = randomUUID(), gone = randomUUID();
+    for (const id of [kept, gone]) {
+      await call("catch", "a", { catch_id: id, vehicle_id: "renault-clio", country: "FR", location_verified: false });
+    }
+    await call("delete_catch", "a", { catch_id: gone });
+    assert.deepEqual((await call("garage", "a")).body.catches.map((c: any) => c.id), [kept]);
+  });
+
+  test("ancien client : sans numéro, teinte ni cote, la prise passe et le garage dit null", async () => {
+    assert.equal((await caught("a", "renault-clio")).status, 200);
+    const c = (await call("garage", "a")).body.catches[0];
+    assert.equal(c.serial, null);
+    assert.equal(c.paint, null);
+    assert.equal(c.price, null);
+  });
+
+  test("champs invalides : ignorés un par un, la prise passe quand même", async () => {
+    const cases: Array<[Record<string, unknown>, { serial?: number; paint?: number }, boolean]> = [
+      [{ serial: 0, paint: 0x1000000, price: { low: 10, high: 5, currency: "EUR" } }, {}, false],
+      [{ serial: 1.5, paint: -1, price: { low: 10, high: 20, currency: "eur" } }, {}, false],
+      [{ serial: "3", paint: "16777215", price: "cher" }, {}, false],
+      [{ serial: 1_000_001, price: { low: 10, high: Number.MAX_SAFE_INTEGER + 2, currency: "EUR" } }, {}, false],
+      [{ serial: 3, paint: 0xFFFFFF, price: { low: 0, high: 20, currency: "EUR" } }, { serial: 3, paint: 0xFFFFFF }, false],
+      // Une cote en dongs dépasse un entier 32 bits : elle doit passer intacte.
+      [{ paint: 0, price: { low: 1, high: 75_000_000_000, currency: "VND" } }, { paint: 0 }, true],
+    ];
+    for (const [i, [fields, expected, priced]] of cases.entries()) {
+      const install = `invalid-${i}`, label = JSON.stringify(fields);
+      const r = await call("catch", install, { catch_id: randomUUID(), vehicle_id: "renault-clio", country: "FR",
+                                               location_verified: false, ...fields });
+      assert.equal(r.status, 200, label);
+      const c = (await call("garage", install)).body.catches[0];
+      assert.equal(c.serial, expected.serial ?? null, label);
+      assert.equal(c.paint, expected.paint ?? null, label);
+      assert.equal(c.price !== null, priced, label);
+      if (priced) assert.equal(c.price.high, 75_000_000_000);
+    }
+  });
+
+  test("une prise renvoyée ne réécrit pas la carte déjà gardée", async () => {
+    const base = { catch_id: randomUUID(), vehicle_id: "renault-clio", country: "FR", location_verified: false };
+    await call("catch", "a", { ...base, ...card });
+    await call("catch", "a", { ...base, serial: 99, paint: 0, price: { low: 1, high: 2, currency: "USD" } });
+    const c = (await call("garage", "a")).body.catches[0];
+    assert.equal(c.serial, 7);
+    assert.equal(c.paint, 0x1E3A8A);
+    assert.deepEqual(c.price, card.price);
+  });
+
+  test("on ne pose pas de décor sur la prise d'un autre", async () => {
+    const id = randomUUID();
+    await call("catch", "a", { catch_id: id, vehicle_id: "renault-clio", country: "FR", location_verified: false });
+    const r = await call("catch", "b", { catch_id: id, vehicle_id: "renault-clio", country: "FR", ...card });
+    assert.equal(r.status, 403);
+    assert.equal((await call("garage", "a")).body.catches[0].serial, null);
+  });
+});
