@@ -11,6 +11,8 @@ struct CardDetailView: View {
     @State private var confirmingRemoval = false
     @State private var correcting = false
     @State private var developing = false
+    /// Image intermédiaire du rendu studio, montrée sur la carte pendant la génération.
+    @State private var studioPreview: UIImage?
 
     init(card: CardData) {
         _card = State(initialValue: card)
@@ -44,10 +46,12 @@ struct CardDetailView: View {
                 .padding(.top, 8)
 
                 Spacer()
-                CollectibleCardView(card: card)
+                CollectibleCardView(card: card.showingStudioPreview(studioPreview))
                     .frame(maxWidth: 290)
                     .padding(.horizontal, 24)
-                    .overlay { if developing { DevelopingVeil() } }
+                    // Le voile seulement avant la première image : ensuite, c'est la carte
+                    // elle-même qui montre l'avancée.
+                    .overlay { if developing && studioPreview == nil { DevelopingVeil() } }
                 Spacer()
 
                 factsRow
@@ -63,7 +67,7 @@ struct CardDetailView: View {
                     .padding(.bottom, 14)
 
                 if card.canGoToStudio {
-                    StudioButton(card: card, working: $developing, source: "detail") { refreshed in
+                    StudioButton(card: card, working: $developing, preview: $studioPreview, source: "detail") { refreshed in
                         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { card = refreshed }
                     }
                     .padding(.horizontal, 20)

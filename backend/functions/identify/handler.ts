@@ -23,8 +23,12 @@
 //   Une vraie prise renvoie aussi `scan_id` : la preuve, pour le classement, que le modèle
 //   déclaré ensuite correspond à une photo identifiée ici (voir social.ts).
 //   POST { action: "me" | "set_pseudo" | "apple_link" | "catch" | … } → voir social.ts
-//   POST { action: "develop", imageBase64, entitlement?, model?, quality? }
-//   → 200 { image: "<jpeg base64>", develops_left: number | null, resets_at, … }
+//   POST { action: "develop", imageBase64, entitlement?, model?, quality?, stream? }
+//   → 200 { image: "<jpeg base64, 1024 × 1024>", develops_left: number | null, resets_at, … }
+//        Avec `stream: true` (ou `Accept: text/event-stream`) : 200 text/event-stream,
+//        `event: partial` { image, index } à chaque image intermédiaire, puis
+//        `event: done` { …la réponse JSON ci-dessus… } ou `event: error` { code, error }.
+//        Les refus (402, 4xx, 5xx) restent des réponses JSON, avant tout flux.
 //   → 402 { code: "develop_limit", develops_left: 0, resets_at }
 //        Rendu studio de la voiture photographiée (voir develop.ts) : 1 par jour en gratuit,
 //        plafond anti-abus seulement pour Pro et pour DEVELOP_TESTERS.
@@ -53,7 +57,10 @@ import type { EntitlementResult } from "./entitlement";
 import type { ArtStore, SampleStore } from "./storage";
 import { STUDIO_PLATE_PNG } from "./studio-plate";
 import { ART_ESTIMATED_USAGE, ART_MODEL, ART_QUALITY, ART_SIZE, ART_URL, allowedArtVehicle, artKey, artPrompt } from "./art";
-import { DEVELOP_MODELS, DEVELOP_PROMPT, DEVELOP_QUALITIES, developCost, type ImageUsage } from "./develop";
+import {
+  DEVELOP_MODELS, DEVELOP_PARTIAL_IMAGES, DEVELOP_PROMPT, DEVELOP_QUALITIES, DEVELOP_SIZE, DEVELOP_URL, developCost,
+  parseSSE, sseFrame, type ImageUsage,
+} from "./develop";
 import { candidates, expectedVehicleId } from "./catalog";
 import { createSocial, SOCIAL_ACTIONS } from "./social";
 import { currencyOf, marketHint, priceBracket } from "./price";
@@ -85,6 +92,8 @@ export interface HandlerDeps {
   art?: ArtStore | null;
   /** Horloge (remplaçable en test, pour fixer la semaine du pack). */
   now?: () => Date;
+  /** Garde l'invocation en vie pour un travail qui survit à la réponse (Neon : waitUntil). */
+  waitUntil?: (promise: Promise<unknown>) => void;
 }
 
 /// Requêtes `vehicle_art` par appareil, cache compris : le pack, le garage et la fiche
@@ -359,40 +368,149 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     }
     const imageModel = typeof body.model === "string" && DEVELOP_MODELS.includes(body.model) ? body.model : "gpt-image-1-mini";
     const quality = typeof body.quality === "string" && DEVELOP_QUALITIES.includes(body.quality) ? body.quality : "medium";
+    // Le flux n'est servi qu'à un client qui l'annonce : les builds TestFlight d'avant
+    // attendent une seule réponse JSON, et doivent continuer de la recevoir.
+    const streaming = body.stream === true || (req.headers.get("accept") ?? "").includes("text/event-stream");
 
     const form = new FormData();
     form.append("model", imageModel);
     form.append("prompt", DEVELOP_PROMPT);
-    form.append("size", "1536x1024");
+    form.append("size", DEVELOP_SIZE);
     form.append("quality", quality);
     // JPEG plutôt que le PNG par défaut : 300 Ko au lieu de 3 Mo à télécharger sur mobile.
     form.append("output_format", "jpeg");
     form.append("output_compression", "85");
-    form.append("image", new Blob([Buffer.from(image, "base64")], { type: "image/jpeg" }), "car.jpg");
+    // Deux images, sous `image[]` (le nom que l'API attend pour une liste) : la photo du
+    // joueur, puis la plaque du studio unique, le même décor que les rendus du catalogue.
+    form.append("image[]", new Blob([Buffer.from(image, "base64")], { type: "image/jpeg" }), "car.jpg");
+    form.append("image[]", new Blob([Buffer.from(STUDIO_PLATE_PNG, "base64")], { type: "image/png" }), "studio.png");
+    if (streaming) {
+      form.append("stream", "true");
+      form.append("partial_images", String(DEVELOP_PARTIAL_IMAGES));
+    }
+    const started = Date.now();
     let response: Response;
     try {
-      response = await deps.fetch("https://api.openai.com/v1/images/edits", {
+      response = await deps.fetch(DEVELOP_URL, {
         method: "POST", headers: { "Authorization": `Bearer ${deps.openaiKey}` }, body: form,
       });
     } catch (error) {
       console.error("develop unreachable", error instanceof Error ? error.message : error);
       return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
     }
+    // Les refus d'OpenAI arrivent avant le flux : ils restent une réponse JSON avec son
+    // statut, que l'app lit de la même façon dans les deux modes.
     if (!response.ok) {
       console.error("develop error", response.status, (await response.text()).slice(0, 400));
       return json({ code: "identification_failed", error: "Le rendu a échoué, réessaie" }, 502);
     }
-    const result = await response.json() as { data?: { b64_json?: string }[]; usage?: ImageUsage };
-    const png = result.data?.[0]?.b64_json;
-    if (!png) return json({ code: "unreadable_ai_response", error: "Rendu illisible, réessaie" }, 502);
-    const usage = result.usage ?? {};
-    const cost = developCost(imageModel, usage);
-    console.log(`develop ${imageModel} ${quality}: ${JSON.stringify(usage)}, ` +
-                (cost === null ? "coût inconnu" : `$${cost.toFixed(4)}`));
-    const used = await consumeAllowance(installId, "develop");
-    return json({ image: png, model: imageModel, quality, usage, cost_usd: cost,
-                  develops_left: pro ? null : Math.max(0, limit - (used ?? limit)),
-                  resets_at: nextResetAt() });
+
+    /// Le rendu final : quota consommé ici seulement, jamais sur une image partielle ni
+    /// sur un échec. Rend la charge utile du contrat JSON, identique dans les deux modes.
+    const finish = async (jpeg: string, usage: ImageUsage, firstPartialMs: number | null) => {
+      const cost = developCost(imageModel, usage);
+      console.log(`develop ${imageModel} ${DEVELOP_SIZE} ${quality}${streaming ? " (flux)" : ""}: ` +
+                  `${JSON.stringify(usage)}, ` + (cost === null ? "coût inconnu" : `$${cost.toFixed(4)}`) +
+                  `, ${Date.now() - started} ms` +
+                  (firstPartialMs === null ? "" : `, première image partielle à ${firstPartialMs} ms`));
+      const used = await consumeAllowance(installId, "develop");
+      return { image: jpeg, model: imageModel, quality, usage, cost_usd: cost,
+               develops_left: pro ? null : Math.max(0, limit - (used ?? limit)),
+               resets_at: nextResetAt() };
+    };
+
+    if (!streaming || !response.body) {
+      const result = await response.json() as { data?: { b64_json?: string }[]; usage?: ImageUsage };
+      const jpeg = result.data?.[0]?.b64_json;
+      if (!jpeg) return json({ code: "unreadable_ai_response", error: "Rendu illisible, réessaie" }, 502);
+      return json(await finish(jpeg, result.usage ?? {}, null));
+    }
+    return relayDevelopStream(response.body, started, finish);
+  }
+
+  /// Relaie à l'app le flux d'OpenAI : chaque image partielle dès qu'elle arrive
+  /// (`partial`), puis le rendu final avec le décompte (`done`), ou `error`.
+  ///
+  /// La lecture d'OpenAI ne dépend pas de l'app : si le joueur ferme l'écran en route,
+  /// on va quand même jusqu'au rendu final et le quota est consommé. Sinon, couper juste
+  /// avant la fin donnerait des images partielles presque nettes sans jamais rien payer.
+  function relayDevelopStream(
+    upstream: ReadableStream<Uint8Array>, started: number,
+    finish: (jpeg: string, usage: ImageUsage, firstPartialMs: number | null) => Promise<Record<string, unknown>>,
+  ): Response {
+    const encoder = new TextEncoder();
+    let clientGone = false;
+    let controller!: ReadableStreamDefaultController<Uint8Array>;
+    const send = (text: string) => {
+      if (clientGone) return;
+      try { controller.enqueue(encoder.encode(text)); } catch { clientGone = true; }
+    };
+    const close = () => {
+      if (clientGone) return;
+      try { controller.close(); } catch { /* déjà fermé par l'app */ }
+    };
+    const failed = (code: string, error: string) => sseFrame("error", { code, error });
+
+    async function pump() {
+      const reader = upstream.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let firstPartialMs: number | null = null;
+      let delivered = false;
+      try {
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (value) buffer += decoder.decode(value, { stream: true });
+          if (done) buffer += decoder.decode() + "\n\n";
+          const parsed = parseSSE(buffer);
+          buffer = parsed.rest;
+          for (const event of parsed.events) {
+            if (!event.data || event.data === "[DONE]") continue;
+            let payload: { type?: string; b64_json?: string; partial_image_index?: number;
+                           usage?: ImageUsage; error?: { message?: string } };
+            try { payload = JSON.parse(event.data); } catch { continue; }
+            const type = payload.type ?? event.event;
+            if (type === "image_edit.partial_image" && payload.b64_json) {
+              if (firstPartialMs === null) firstPartialMs = Date.now() - started;
+              send(sseFrame("partial", { image: payload.b64_json, index: payload.partial_image_index ?? 0 }));
+            } else if (type === "image_edit.completed" && payload.b64_json && !delivered) {
+              delivered = true;
+              send(sseFrame("done", await finish(payload.b64_json, payload.usage ?? {}, firstPartialMs)));
+            } else if (type === "error" || payload.error) {
+              console.error("develop stream error", JSON.stringify(payload.error ?? payload).slice(0, 400));
+              send(failed("identification_failed", "Le rendu a échoué, réessaie"));
+              delivered = true;
+            }
+          }
+          if (done) break;
+        }
+        if (!delivered) {
+          console.error(`develop stream ended without image after ${Date.now() - started} ms`);
+          send(failed("unreadable_ai_response", "Rendu illisible, réessaie"));
+        }
+      } catch (error) {
+        console.error("develop stream broken", error instanceof Error ? error.message : error);
+        if (!delivered) send(failed("identification_failed", "Le rendu a échoué, réessaie"));
+      } finally {
+        close();
+      }
+    }
+
+    const stream = new ReadableStream<Uint8Array>({
+      start(c) {
+        controller = c;
+        // Un premier octet tout de suite : les en-têtes partent, et l'app sait que le
+        // flux est ouvert pendant les secondes qui précèdent la première image.
+        send(": open\n\n");
+        const pumping = pump();
+        deps.waitUntil?.(pumping);
+      },
+      cancel() { clientGone = true; },
+    });
+    return new Response(stream, {
+      status: 200,
+      headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform" },
+    });
   }
 
   /// Rendu studio d'un modèle du catalogue. Le cache d'abord ; sinon une génération, une

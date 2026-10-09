@@ -48,7 +48,8 @@ enum CardShareRenderer {
 private enum ShareArtwork {
     /// La photo mise en scène du joueur : elle remplit son cadre.
     case photo(UIImage)
-    /// Le rendu « passé en studio » (3:2) : en entier, sur son propre studio flouté.
+    /// Le rendu « passé en studio » : carré en plein cadre, ou ancien 3:2 en entier sur son
+    /// propre studio flouté (voir DevelopedArt).
     case developed(UIImage)
     /// Le rendu d'un modèle : plein cadre s'il est carré, en entier et fondu si c'est
     /// un bandeau embarqué (`StudioArt` reconnaît l'un et l'autre).

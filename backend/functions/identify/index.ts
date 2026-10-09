@@ -3,7 +3,7 @@
 // Contrat et logique : voir handler.ts. Ce fichier ne fait que brancher
 // l'environnement réel (variables, base Neon, fetch) sur le handler.
 
-import { attachDatabasePool } from "@neon/functions";
+import { attachDatabasePool, waitUntil } from "@neon/functions";
 import { Pool } from "pg";
 import { verifyEntitlement } from "./entitlement";
 import { createHandler } from "./handler";
@@ -43,6 +43,8 @@ const handle = createHandler({
   // Rendus des cibles du pack, mis en cache dans le compartiment privé `art`. Coupable
   // sans redéployer le code : ART_ENABLED=false au déploiement.
   art: process.env.ART_ENABLED === "false" ? null : createArtStore(),
+  // Un rendu en flux est lu jusqu'au bout même si le joueur ferme l'écran (voir handler.ts).
+  waitUntil: (promise) => waitUntil(promise),
 });
 
 export default { fetch: handle };
