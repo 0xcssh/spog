@@ -73,7 +73,9 @@ struct ParallaxArtwork: View {
                 placeholderScene
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        // Coupé net : c'est la carte qui arrondit ses coins. Des coins arrondis propres à
+        // l'image creusaient une encoche contre la bande de rareté (retour testeur).
+        .clipped()
     }
 
     /// Image qui remplit la zone sans jamais la deformer ni la repousser.

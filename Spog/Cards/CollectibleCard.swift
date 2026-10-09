@@ -169,7 +169,12 @@ struct CollectibleCardView: View {
                 }
             }
         }
-        .aspectRatio(1.02, contentMode: .fit)
+        // Toute la largeur, et toute la hauteur que laissent la bande et le bloc d'infos.
+        // Un rapport fixe (1,02, « fit ») rétrécissait l'image dès que le texte prenait
+        // plus de place que prévu, et laissait un vide de chaque côté (retour testeur du
+        // 09/10/2026). Le visuel est en remplissage : il se recadre, il ne se réduit pas.
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipped()
         .contentShape(Rectangle())
         .onTapGesture {
             guard card.shot != nil, showsShotToggle else { return }
