@@ -112,9 +112,11 @@ une boucle de tout payer d'un coup.
 l'abonnement (transaction StoreKit 2 vérifiée côté serveur, `entitlement.ts`). Le compteur de
 l'app n'est qu'un miroir pour l'affichage.
 
-⚠️ **L'économie va changer** (décision du 08/10/2026, voir REFONTE.md « Économie ») : 3 scans
-par jour (10 le premier jour), 1 rendu par jour, de la pub récompensée pour en gagner plus,
-Pro illimité et sans pub. Le code applique encore « 5 scans offerts puis abonnement ».
+**L'économie appliquée** (décision du 08/10/2026, voir REFONTE.md « Économie ») : 10 scans le
+premier jour, puis 3 par jour, et 1 rendu studio par jour, décomptés par le serveur
+(`usage_days`) ; au-delà, Pro (illimité, sans pub). La pub récompensée (une par scan, toujours
+après la photo) attend le choix de la régie. Les installations listées dans `DEVELOP_TESTERS`
+(variable du dépôt, identifiant ou empreinte `hashKey`) n'ont pas de quota.
 
 ## Les secrets
 

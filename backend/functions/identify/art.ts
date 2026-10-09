@@ -43,10 +43,12 @@ export const ART_ESTIMATED_USAGE = {
 
 /// Clé de l'objet en cache. L'identifiant vient du catalogue (vérifié avant), jamais
 /// directement du client : pas de chemin arbitraire possible dans le compartiment.
-/// Préfixe `v3/` : rendus faits dans la plaque du studio unique. Les `v2/` (décors néon
+/// Préfixe `v4/` : sans emblème, voiture un peu plus petite dans le cadre (10/10/2026 —
+/// les `v3/` montraient encore les logos Suzuki et Renault, et le Jimny touchait presque
+/// les bords). Avant, `v3/` : rendus faits dans la plaque du studio unique. Les `v2/` (décors néon
 /// tous différents) et les bandeaux d'avant restent dans le compartiment, jamais resservis.
 export function artKey(vehicleId: string): string {
-  return `vehicles/v3/${vehicleId}.jpg`;
+  return `vehicles/v4/${vehicleId}.jpg`;
 }
 
 const BODY_WORDS: Record<string, string> = {
@@ -73,13 +75,18 @@ export function artPrompt(v: Pick<Vehicle, "id" | "make" | "model" | "body">): s
   const shape = BODY_WORDS[v.body] ?? "car";
   // L'orientation d'abord, et répétée : enfouie en milieu de phrase, le modèle ne la
   // suivait qu'une fois sur deux (constat du premier lot de rendus).
-  return "IMPORTANT — ORIENTATION: the car FACES LEFT. Its front bumper, grille and headlights are " +
+  // L'interdiction des emblèmes en tête, et formulée en geste concret : enfouie à la fin
+  // (« no logos »), le modèle redessinait les logos de calandre une fois sur deux.
+  return "IMPORTANT — NO EMBLEMS: remove every manufacturer emblem, badge and model lettering. " +
+    "The grille, bonnet, wheels and tailgate are plain and smooth where a logo would be; " +
+    "no letters or symbols anywhere on the car. " +
+    "IMPORTANT — ORIENTATION: the car FACES LEFT. Its front bumper, grille and headlights are " +
     "on the LEFT side of the frame; its rear is on the RIGHT side. " +
     `Photorealistic photograph of a ${paintFor(v.id)} ${v.make} ${v.model}, ${shape}, ` +
     "seen from the FRONT-LEFT three-quarter angle, front of the car on the LEFT. " +
     // Le cadrage est le reproche du testeur : la voiture doit être entière, centrée, et
     // assez grande pour que l'app puisse remplir une carte sans rien couper.
-    "Square composition. The WHOLE car is in frame and perfectly centred, occupying about 80% " +
+    "Square composition. The WHOLE car is in frame and perfectly centred, occupying about 72% " +
     "of the image width, with a small even margin of studio around it; nothing of the car is cropped. " +
     "Camera slightly below the beltline. " +
     // Le décor est l'image fournie, et doit le rester : c'est ce qui rend toutes les
