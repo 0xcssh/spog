@@ -117,10 +117,10 @@ struct StudioButton: View {
         switch result {
         case .success(let developed):
             ShotStore.saveDeveloped(developed.image, for: card.id)
-            if let remaining = developed.left {
-                app.developsLeftToday = remaining
-                app.developsResetAt = developed.resetsAt
-            }
+            // Nil : pas de quota (Pro, ou installation de test côté serveur). Le miroir
+            // suit, sinon un « 0 » d'avant continuerait d'afficher « déjà utilisé ».
+            app.developsLeftToday = developed.left
+            app.developsResetAt = developed.resetsAt
             // Le retour haptique part d'ici et non d'un `sensoryFeedback` : le bouton
             // disparaît dès que la carte a son rendu, et emporterait le déclencheur avec lui.
             UINotificationFeedbackGenerator().notificationOccurred(.success)

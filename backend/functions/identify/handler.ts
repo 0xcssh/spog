@@ -356,7 +356,7 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     if (image.length > MAX_IMAGE_BASE64) return json({ code: "image_too_large", error: "Cette photo est trop lourde" }, 413);
 
     // Quota du jour : 1 rendu en gratuit, plafond anti-abus pour Pro et pour les testeurs.
-    const tester = deps.developTesters?.has(installId) === true;
+    const tester = isTester(installId);
     const entitlement = !tester && body.entitlement ? await deps.verifyEntitlement(body.entitlement) : null;
     const pro = tester || entitlement?.ok === true;
     const limit = pro ? PRO_DAILY_DEVELOPS : allowance.dailyDevelops;
@@ -653,6 +653,15 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
 
   /// Consomme une unité du jour et renvoie le total consommé. Un échec ici ne prive pas
   /// le joueur de sa carte : l'IA a déjà été payée, autant lui rendre le résultat.
+  /// Installation de test : listée dans DEVELOP_TESTERS par son identifiant, ou par son
+  /// empreinte (`hashKey`) — la seule chose que la base conserve, donc la seule qu'on
+  /// puisse retrouver sans demander l'identifiant au testeur.
+  function isTester(installKey: string): boolean {
+    const testers = deps.developTesters;
+    if (!testers || testers.size === 0) return false;
+    return testers.has(installKey) || testers.has(hashKey(installKey));
+  }
+
   async function consumeAllowance(installKey: string, kind: "scan" | "develop"): Promise<number | null> {
     if (!deps.db) return null;
     try {
@@ -782,11 +791,16 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
 
     // Abonné ou joueur gratuit. Une transaction absente ou invalide n'est pas une erreur :
     // c'est le cas normal du joueur gratuit.
-    const entitlement = body.entitlement ? await deps.verifyEntitlement(body.entitlement) : null;
     const installKey = installIdFrom(req.headers, deviceId);
+    // Les testeurs (DEVELOP_TESTERS) scannent comme des abonnés, sans transaction : le
+    // développeur ne doit pas buter sur le quota gratuit en essayant l'app.
+    const tester = isTester(installKey);
+    const entitlement = !tester && body.entitlement ? await deps.verifyEntitlement(body.entitlement) : null;
     let scansLeft: number | null = null;
 
-    if (entitlement?.ok) {
+    if (tester) {
+      // Rien à décompter ; les plafonds par appareil et globaux ci-dessus s'appliquent.
+    } else if (entitlement?.ok) {
       const sub = await checkQuota(`sub:${entitlement.originalTransactionId}`,
         SUBSCRIPTION_DAY_LIMIT, SUBSCRIPTION_WINDOW_LIMIT);
       if (sub === "unavailable") {

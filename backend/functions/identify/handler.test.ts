@@ -249,6 +249,16 @@ describe("quotas du jour et abonnement", () => {
     assert.equal(ai.count(), 0);
   });
 
+  test("un testeur listé par son empreinte scanne sans quota", async () => {
+    const ai = fakeFetch([aiResponse(goodCar)]);
+    const store = fakeDb(() => true, { [installKey]: FREE_ALLOWANCE.dailyScans }, [], false);
+    const res = await handler({ db: store.db, fetch: ai.fn, developTesters: new Set([installKey]) })(
+      post({ imageBase64: "abc" }));
+    assert.equal(res.status, 200);
+    assert.equal((await res.json() as any).scans_left, null);
+    assert.equal(store.freeUsed[installKey], FREE_ALLOWANCE.dailyScans);
+  });
+
   test("la remise à zéro tombe à minuit UTC", () => {
     assert.equal(nextResetAt(new Date("2026-10-08T23:59:00Z")), "2026-10-09T00:00:00.000Z");
   });

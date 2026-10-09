@@ -1,0 +1,31 @@
+name: ASC subscriptions
+
+# Crée le groupe Spog Pro et ses deux abonnements dans App Store Connect, par l'API :
+# textes, disponibilité, prix, essai de 3 jours sur l'annuel. Idempotent — une relance
+# ne fait que combler les manques. Simulation par défaut.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Afficher ce qui serait créé, sans rien écrire"
+        type: boolean
+        default: true
+
+jobs:
+  subscriptions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyjwt cryptography requests
+      - name: Create subscriptions
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_B64: ${{ secrets.ASC_API_KEY_P8_BASE64 }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+        run: |
+          export ASC_KEY_P8="$(echo "$ASC_KEY_P8_B64" | base64 -d)"
+          python tools/asc/asc_subscriptions.py
