@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Parcours d'entrée, en six écrans.
 ///
@@ -829,37 +830,30 @@ struct OnboardingView: View {
 
             Spacer(minLength: 14)
 
+            // Une seule chose à faire ici : autoriser la position (le bouton du bas). Le
+            // choix « Je choisis » a été retiré le 10/10/2026, à la demande du client :
+            // deux modes à comprendre avant même la première prise, c'était trop. Un refus
+            // retombe en silence sur le pays de l'appareil, modifiable dans les Réglages.
             if beacon >= 80 {
-                LocationBeacon(icon: app.locationMode == .automatic ? "location.fill" : "mappin",
-                               searching: app.locationMode == .automatic && location.isResolving)
+                LocationBeacon(icon: "location.fill", searching: location.isResolving)
                     .frame(width: beacon, height: beacon)
                     .frame(maxWidth: .infinity)
                 Spacer(minLength: 14)
             }
 
             VStack(spacing: 10) {
-                modeCard(.automatic, icon: "location.fill",
-                         title: "onboarding.auto.title", body: "onboarding.auto.body")
-                modeCard(.manual, icon: "mappin",
-                         title: "onboarding.manual.title", body: "onboarding.manual.body")
-
                 autoStatus
 
-                if app.locationMode == .manual {
-                    Button { pickingCountry = true } label: {
-                        HStack {
-                            Text(store.countryName(app.country))
-                                .font(Theme.display(15, .semibold))
-                                .foregroundStyle(Theme.textPrimary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundStyle(Theme.textMuted)
-                        }
-                        .padding(.horizontal, 15).padding(.vertical, 14)
-                        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .stroke(Theme.stroke, lineWidth: 1))
+                if locationRefused {
+                    Button(action: openSystemSettings) {
+                        Text("scan.openSettings")
+                            .font(Theme.display(14, .semibold))
+                            .foregroundStyle(Theme.textPrimary)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 13)
+                            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(Theme.stroke, lineWidth: 1))
                     }
                     .buttonStyle(.plain)
                 }
@@ -910,6 +904,18 @@ struct OnboardingView: View {
         }
     }
 
+    /// La position a répondu : trouvée, ou refusée (on continue alors sur le pays de
+    /// l'appareil). Tant que ce n'est pas le cas, le bouton du bas la demande.
+    private var locationSettled: Bool {
+        locationRefused || (app.locationMode == .automatic && !location.isResolving
+                            && location.countryCode != nil)
+    }
+
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
+
     /// Résout le pays **tout de suite**, pas au moment de terminer : l'écran de départ
     /// doit montrer ce qui est vrai. Un refus fait retomber en mode manuel, sinon les
     /// prises seraient marquées vérifiables alors que le pays est déclaré à la main.
@@ -919,6 +925,8 @@ struct OnboardingView: View {
             @Bindable var state = app
             if let code {
                 state.country = code
+                // Trouvée : rien d'autre à faire sur cet écran, on enchaîne.
+                if step == .location { advance() }
             } else if location.status == .denied {
                 state.locationMode = .manual
                 locationRefused = true
@@ -1199,6 +1207,7 @@ struct OnboardingView: View {
         case .ready: return "onboarding.start"
         // La sortie reste claire : sans compte, on avance quand même.
         case .account: return appleLinked ? "onboarding.next" : "onboarding.account.later"
+        case .location: return locationSettled ? "onboarding.next" : "onboarding.location.allow"
         default:     return "onboarding.next"
         }
     }
@@ -1241,6 +1250,10 @@ struct OnboardingView: View {
         switch step {
         case .demo where !developed:
             develop()
+        case .location where !locationSettled:
+            @Bindable var state = app
+            state.locationMode = .automatic
+            resolveAutomatically()
         case .ready:
             referral.apply(referralCode)
             finish()

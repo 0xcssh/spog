@@ -3248,19 +3248,36 @@
         }
       }
     },
+    "onboarding.location.allow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable location"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer la localisation"
+          }
+        }
+      }
+    },
     "onboarding.location.denied": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Position refused. Pick your country by hand — you can change it any time in Settings."
+            "value": "Location refused: we’ll use your iPhone’s country. Turn it on in Settings so your catches count as verified."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Position refusée. Choisis ton pays à la main — modifiable à tout moment dans les Réglages."
+            "value": "Position refusée : on part sur le pays de ton iPhone. Active-la dans les Réglages pour que tes prises comptent comme vérifiées."
           }
         }
       }
