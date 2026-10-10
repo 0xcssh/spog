@@ -124,15 +124,21 @@ struct OnboardingDemo {
         // agrandi sur tout l'écran, laissait des bavures sur une voiture qu'on regarde de près.
         // Posée sur le studio unique de l'app, comme partout ailleurs : la découpe du rendu
         // embarqué (par son masque, immédiate). Sans masque, l'ancienne mise en page.
-        let source = CarArt.image(for: pick.vehicle.id)
-        let cutout = ModelCutoutService.embeddedCutoutNow(for: pick.vehicle.id, paint: nil)
-        let studio = cutout.flatMap(staged) ?? source.flatMap { framed($0, glow: pick.tier.color) }
+        // D'abord le rendu HD livré avec l'app (`Spog/ModelArtHD`) : la voiture posée dans
+        // le studio du catalogue, avec sa vraie ombre. La découpe posée sur le décor dessiné
+        // semblait flotter (retour testeur du 10/10/2026) ; elle ne sert plus que de repli.
+        let hd = VehicleArtService.storedImage(for: pick.vehicle.id)
+        let source = hd ?? CarArt.image(for: pick.vehicle.id)
+        let cutout = hd == nil ? ModelCutoutService.embeddedCutoutNow(for: pick.vehicle.id, paint: nil) : nil
+        let studio = hd.flatMap { framed($0, glow: pick.tier.color) }
+            ?? cutout.flatMap(staged)
+            ?? source.flatMap { framed($0, glow: pick.tier.color) }
 
         return OnboardingDemo(vehicle: pick.vehicle, tier: pick.tier, paint: CarArt.referencePaint,
                               studio: studio, raw: studio.flatMap(weathered),
                               contrast: widestContrast(among: illustrated, from: country,
                                                        store: store),
-                              sourceArea: (cutout ?? source).map(pixelArea) ?? 0)
+                              sourceArea: (hd ?? cutout ?? source).map(pixelArea) ?? 0)
     }
 
     /// Le modèle dont la rareté varie le plus entre le pays du joueur et un autre.

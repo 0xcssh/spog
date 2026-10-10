@@ -74,8 +74,14 @@ enum VehicleArtService {
         guard !vehicleID.isEmpty else { return nil }
         let key = vehicleID as NSString
         if let hit = memory.object(forKey: key) { return hit }
-        guard let data = try? Data(contentsOf: fileURL(vehicleID)),
-              let image = UIImage(data: data) else { return nil }
+        // Le cache disque d'abord, puis le rendu HD livré avec l'app (`Spog/ModelArtHD`,
+        // les modèles qui ont un rendu embarqué) : ceux-là s'affichent dès le premier
+        // lancement, hors ligne compris, sans attendre une génération ni retomber sur
+        // l'ancien bandeau à néons (retour testeur du 10/10/2026).
+        let data = (try? Data(contentsOf: fileURL(vehicleID)))
+            ?? Bundle.main.url(forResource: vehicleID + "-hd", withExtension: "jpg")
+                .flatMap { try? Data(contentsOf: $0) }
+        guard let data, let image = UIImage(data: data) else { return nil }
         let decoded = image.preparingForDisplay() ?? image
         memory.setObject(decoded, forKey: key)
         return decoded
@@ -116,8 +122,10 @@ enum VehicleArtService {
     private static func download(_ vehicleID: String) async -> UIImage? {
         // Délai long : la première demande d'un modèle déclenche une génération en haute
         // qualité (~30 s, parfois plus quand OpenAI est chargé).
+        // 150 s : à l'ouverture, une grille peut réclamer une vingtaine de modèles jamais
+        // générés, et le serveur les fait l'un après l'autre par paquets.
         let result = await Backend.call(["action": "vehicle_art", "vehicle_id": vehicleID],
-                                        as: Payload.self, timeout: 90)
+                                        as: Payload.self, timeout: 150)
         guard result.status == 200, let base64 = result.value?.image,
               let data = Data(base64Encoded: base64),
               let image = UIImage(data: data) else { return nil }
@@ -142,8 +150,10 @@ private actor ArtFlights {
     private var failedUntil: [String: Date] = [:]
     private var active = 0
     private var waiting: [CheckedContinuation<Void, Never>] = []
-    private let maxConcurrent = 4
-    private let failureCooldown: TimeInterval = 300
+    private let maxConcurrent = 6
+    /// Court : un échec est souvent un délai dépassé pendant que le serveur, lui, finit la
+    /// génération. Cinq minutes laissaient la vignette vide (ou l'ancien rendu) bien après.
+    private let failureCooldown: TimeInterval = 30
 
     func run(_ key: String, _ work: @escaping @Sendable () async -> UIImage?) async -> UIImage? {
         if let running = tasks[key] { return await running.value }
