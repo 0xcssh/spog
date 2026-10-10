@@ -58,13 +58,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your catches stay on your account, even when you switch iPhones."
+            "value": "Your cards stay on your account, even when you switch iPhones."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tes prises restent sur ton compte, même si tu changes d'iPhone."
+            "value": "Tes cartes restent sur ton compte, même si tu changes d'iPhone."
           }
         }
       }
@@ -4155,13 +4155,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog asks for no email address and no password. For leaderboards, our server recognizes your player through the anonymous installation identifier, and keeps your catches: the model, the country, the date and the points — never your photos, unless you agreed to share them for training. The handle you choose is visible to the other players in your league. Sign in with Apple is optional: it is only used to get your collection back on another device, and Spog receives nothing from Apple but an anonymous identifier, neither your name nor your email. You can delete your account at any time in Settings."
+            "value": "Spog asks for no email address and no password. For leaderboards, our server recognizes your player through the anonymous installation identifier, and keeps your catches: the model, the country, the date, the points, and what it takes to redraw each card (its number, its paint, its estimated value) — never your photos, unless you agreed to share them for training. The handle you choose is visible to the other players in your league. Sign in with Apple is optional: it is only used to get your cards back on another device (without their photos, which never leave yours), and Spog receives nothing from Apple but an anonymous identifier, neither your name nor your email. You can delete your account at any time in Settings."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spog ne demande ni adresse e-mail ni mot de passe. Pour les classements, notre serveur reconnaît ton joueur grâce à l'identifiant d'installation anonyme, et conserve tes prises : le modèle, le pays, la date et les points — jamais tes photos, sauf si tu as accepté de les confier à l'entraînement. Le pseudo que tu choisis est visible des autres joueurs de ta ligue. Sign in with Apple est facultatif : il sert uniquement à retrouver ta collection sur un autre appareil, et Spog ne reçoit d'Apple qu'un identifiant anonyme, ni ton nom ni ton e-mail. Tu peux supprimer ton compte à tout moment dans les réglages."
+            "value": "Spog ne demande ni adresse e-mail ni mot de passe. Pour les classements, notre serveur reconnaît ton joueur grâce à l'identifiant d'installation anonyme, et conserve tes prises : le modèle, le pays, la date, les points, et de quoi redessiner chaque carte (son numéro, sa teinte, sa cote estimée) — jamais tes photos, sauf si tu as accepté de les confier à l'entraînement. Le pseudo que tu choisis est visible des autres joueurs de ta ligue. Sign in with Apple est facultatif : il sert uniquement à retrouver tes cartes sur un autre appareil (sans leurs photos, qui ne quittent pas le tien), et Spog ne reçoit d'Apple qu'un identifiant anonyme, ni ton nom ni ton e-mail. Tu peux supprimer ton compte à tout moment dans les réglages."
           }
         }
       }

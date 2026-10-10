@@ -32,6 +32,27 @@ vaut rien à Paris et beaucoup à Los Angeles.
 | Quêtes, série, Spogdex, partage | Faits |
 | Documents légaux | FR et EN, conformes au comportement réel |
 | Manifeste de confidentialité | Présent et vérifié embarqué |
+| Restauration des cartes | Par Sign in with Apple, sur un nouvel iPhone ou après réinstallation (10/10/2026, à vérifier sur iPhone) |
+
+### Restauration des cartes — faite le 10/10/2026, avec ses limites
+
+L'onboarding promettait « tes prises restent sur ton compte, même si tu changes d'iPhone »
+sans que l'app sache les récupérer. Désormais chaque prise envoyée au serveur emporte son
+numéro, sa teinte et sa cote (migration `008_catch_card_fields.sql`, à appliquer sur Neon
+**avant** de déployer le backend), et l'app redescend les cartes absentes de l'appareil
+(action `garage`, fusion pure `GarageRestore`) : juste après Sign in with Apple, et au
+lancement quand le serveur compte plus de cartes que le garage. Une carte locale n'est jamais
+écrasée. Limites connues :
+
+- **les photos ne reviennent pas** : elles ne quittent jamais l'appareil. Une carte restaurée
+  s'affiche avec le rendu du modèle (`ModelArt`) et ne peut pas passer en studio ;
+- **les prises jamais synchronisées** avant la perte du téléphone (hors réseau, ou faites
+  avant les comptes) sont perdues ;
+- **une suppression ne se propage pas** à un autre appareil qui a déjà la carte. Seul
+  l'appareil qui a supprimé s'en souvient (il ne la restaure pas) ;
+- les prises envoyées avant la migration 008 reviennent avec une teinte tirée de leur
+  identifiant et un numéro recalculé par date ; la série, les quêtes et le parrainage, qui
+  vivent sur l'appareil, ne sont pas restaurés.
 
 ## Ce qui bloque — et tout est côté Apple
 

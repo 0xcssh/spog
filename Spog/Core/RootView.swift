@@ -72,6 +72,19 @@ struct RootView: View {
         .task(id: garage.catches.count) {
             await garage.syncPending()
             await account.refresh()
+            // Le serveur connaît plus de cartes que l'appareil : réinstallation, ou cartes
+            // faites sur un autre iPhone du même compte Apple. Les cartes ajoutées changent
+            // `catches.count` et relancent cette tâche une fois ; ensuite les deux comptes
+            // concordent et plus rien ne part.
+            if let remote = account.profile?.catches, remote > garage.catches.count {
+                await garage.restoreFromServer()
+            }
+        }
+        // Juste après Sign in with Apple : sans attendre le prochain lancement, et même si
+        // les comptes concordent (mêmes nombres, cartes différentes d'un appareil à l'autre).
+        .task(id: account.appleLinks) {
+            guard account.appleLinks > 0 else { return }
+            await garage.restoreFromServer()
         }
         // Lien d'invitation `spog://invite/XXXXXX`. Le code est seulement **proposé** :
         // on n'accepte pas un parrainage à la place du joueur, un lien s'ouvre par accident.
