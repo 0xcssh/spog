@@ -102,7 +102,7 @@ describe("vehicle_art", () => {
     const first = await h(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.equal(first.status, 200);
     assert.deepEqual(await first.json(), { image: jpeg, cached: false });
-    assert.ok(art.objects[`vehicles/v4/${TARGET}.jpg`]);
+    assert.ok(art.objects[`vehicles/v5/${TARGET}.jpg`]);
 
     const second = await h(post({ action: "vehicle_art", vehicle_id: TARGET }));
     assert.deepEqual(await second.json(), { image: jpeg, cached: true });
@@ -129,7 +129,7 @@ describe("vehicle_art", () => {
     assert.equal(body.n, "1");
     assert.equal(body.image, "studio.png");
     assert.match(body.prompt, /FACES LEFT/);
-    assert.match(body.prompt, /72% of the image width/);
+    assert.match(body.prompt, /WIDE SHOT/);
     assert.match(body.prompt, /no licence plate/i);
   });
 
@@ -241,14 +241,14 @@ describe("vehicle_art", () => {
 });
 
 describe("gabarit des rendus", () => {
-  test("la clé de cache est rangée sous vehicles/v4/", () => {
-    assert.equal(artKey("renault-clio"), "vehicles/v4/renault-clio.jpg");
+  test("la clé de cache est rangée sous vehicles/v5/", () => {
+    assert.equal(artKey("renault-clio"), "vehicles/v5/renault-clio.jpg");
   });
 
   test("le prompt interdit les emblèmes d'entrée, et laisse de la marge autour de la voiture", () => {
     const prompt = artPrompt({ id: "renault-clio", make: "Renault", model: "Clio", body: "hatch" });
     assert.ok(prompt.startsWith("IMPORTANT — NO EMBLEMS"));
-    assert.match(prompt, /about 72% of the image width/);
+    assert.match(prompt, /at least 15% of the image\s+width/);
   });
 
   test("la teinte est stable pour un modèle et varie d'un modèle à l'autre", () => {

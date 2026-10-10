@@ -38,12 +38,12 @@ enum VehicleArtService {
     /// resservir pour toujours.
     private static var directory: URL = {
         let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        // `v4` : rendus sans emblème, voiture un peu plus petite (vehicles/v4 côté serveur).
+        // `v5` : rendus sans emblème, voiture plus petite dans le cadre (vehicles/v5 côté serveur).
         // Les dossiers d'avant (bandeaux, décors néon, rendus avec logos) sont supprimés une fois.
-        for old in ["vehicle-art", "vehicle-art-v2", "vehicle-art-v3"] {
+        for old in ["vehicle-art", "vehicle-art-v2", "vehicle-art-v3", "vehicle-art-v4"] {
             try? FileManager.default.removeItem(at: base.appendingPathComponent(old, isDirectory: true))
         }
-        let folder = base.appendingPathComponent("vehicle-art-v4", isDirectory: true)
+        let folder = base.appendingPathComponent("vehicle-art-v5", isDirectory: true)
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         return folder
     }()
