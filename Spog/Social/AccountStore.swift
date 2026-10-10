@@ -52,6 +52,10 @@ final class AccountStore {
     private(set) var profile: Profile?
     private(set) var league: League?
     private(set) var isRefreshing = false
+    /// Nombre de rattachements Apple réussis depuis le lancement. `RootView` le surveille
+    /// pour récupérer les cartes du compte : le garage n'est pas accessible d'ici, et un
+    /// compteur plutôt qu'un booléen relance la restauration à chaque rattachement.
+    private(set) var appleLinks = 0
 
     /// Forme acceptée par le serveur, vérifiée ici pour répondre avant même l'envoi.
     static func isValidPseudo(_ text: String) -> Bool {
@@ -86,14 +90,17 @@ final class AccountStore {
         }
     }
 
-    /// Rattache l'installation au compte Apple. Si ce compte existe déjà, la collection
-    /// de l'autre appareil devient celle-ci côté serveur.
+    /// Rattache l'installation au compte Apple. Si ce compte existe déjà (autre iPhone,
+    /// réinstallation), l'installation le rejoint côté serveur, et les cartes du compte
+    /// redescendent ensuite dans le garage (`appleLinks`, puis `GarageStore.restoreFromServer`)
+    /// — sans leurs photos, qui ne quittent jamais l'appareil.
     @MainActor
     func linkApple(identityToken: Data) async -> Bool {
         guard let token = String(data: identityToken, encoding: .utf8) else { return false }
         let result = await Backend.call(["action": "apple_link", "identity_token": token], as: Profile.self)
         guard let value = result.value else { return false }
         profile = value
+        appleLinks += 1
         await refresh()
         return true
     }
@@ -135,10 +142,24 @@ enum CatchSync {
             "location_verified": item.verified,
         ]
         if let scan = item.scanID { body["scan_id"] = scan }
+        // De quoi redessiner la carte sur un autre iPhone (restauration par le compte Apple).
+        body["serial"] = item.serial
+        body["paint"] = Int(item.paint)
+        if let price = item.price {
+            body["price"] = ["low": price.low, "high": price.high, "currency": price.currency] as [String: Any]
+        }
         let result = await Backend.call(body, as: Result.self)
         // 403 : la prise appartient à un autre joueur — inutile de la renvoyer à l'infini.
         if result.status == 403 { return Result(first_spot: false, counted_points: 0, error: "not_owner") }
         return result.status == 200 ? result.value : nil
+    }
+
+    /// Les cartes que le serveur garde pour ce joueur, ou nil si la requête échoue — à ne
+    /// pas confondre avec un garage vide, qui ne doit rien effacer.
+    static func fetchGarage() async -> [RemoteCatch]? {
+        let result = await Backend.call(["action": "garage"], as: RemoteGarage.self, timeout: 30)
+        guard result.status == 200 else { return nil }
+        return result.value?.catches
     }
 
     static func reassign(_ id: UUID, to vehicleID: String) async {

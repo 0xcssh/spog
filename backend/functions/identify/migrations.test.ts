@@ -112,6 +112,14 @@ describe("prises", () => {
     assert.equal(rows.length, 0);
   });
 
+  test("champs de carte (008) : facultatifs, record_catch inchangé les laisse vides", async () => {
+    const p = await player(), id = randomUUID();
+    await record(p, { id });
+    const { rows } = await db.query<any>(
+      "select serial, paint, price_low, price_high, price_currency from public.catches where id = $1", [id]);
+    assert.deepEqual(rows[0], { serial: null, paint: null, price_low: null, price_high: null, price_currency: null });
+  });
+
   test("on ne rejoue pas la prise d'un autre joueur", async () => {
     const a = await player(), b = await player(), id = randomUUID();
     await record(a, { id });

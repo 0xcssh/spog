@@ -105,7 +105,46 @@ final class GarageStore {
         ShotStore.delete(item.id)
         save()
         let id = item.id
+        Self.rememberRemoved(id)
         Task { await CatchSync.delete(id) }
+    }
+
+    // MARK: Restauration
+
+    /// Prises supprimées sur cet appareil. La suppression part au serveur sans accusé de
+    /// réception (`CatchSync.delete` est silencieux) : si elle s'est perdue, la restauration
+    /// ressusciterait sous les yeux du joueur la carte qu'il vient de jeter.
+    private static let removedKey = "garage.removed"
+
+    private static var removedIDs: Set<UUID> {
+        Set((UserDefaults.standard.stringArray(forKey: removedKey) ?? []).compactMap(UUID.init(uuidString:)))
+    }
+
+    private static func rememberRemoved(_ id: UUID) {
+        var ids = UserDefaults.standard.stringArray(forKey: removedKey) ?? []
+        ids.append(id.uuidString)
+        UserDefaults.standard.set(ids, forKey: removedKey)
+    }
+
+    /// Ajoute les cartes du serveur absentes de l'appareil (voir `GarageRestore`). Rend le
+    /// nombre de cartes ajoutées.
+    @discardableResult
+    func merge(_ remote: [RemoteCatch]) -> Int {
+        let merged = GarageRestore.merged(local: catches, remote: remote, excluding: Self.removedIDs)
+        let added = merged.count - catches.count
+        guard added > 0 else { return 0 }
+        catches = merged
+        save()
+        return added
+    }
+
+    /// Récupère les cartes gardées par le serveur : sur un nouvel iPhone ou après une
+    /// réinstallation, une fois l'installation rattachée au compte Apple. Silencieux en cas
+    /// d'échec, comme l'envoi : on réessaiera au prochain lancement.
+    @MainActor
+    func restoreFromServer() async {
+        guard let remote = await CatchSync.fetchGarage() else { return }
+        merge(remote)
     }
 
     // MARK: Synchronisation
@@ -244,9 +283,12 @@ final class GarageStore {
              scanID: String? = nil, price: PriceBracket? = nil) -> Catch {
         let id = UUID()
         if let shot { ShotStore.save(shot, for: id) }
+        // Après le plus grand numéro, pas après le nombre de prises : depuis la
+        // restauration, les numéros du serveur côtoient ceux de l'appareil, et une
+        // suppression ne doit pas faire réattribuer un numéro déjà porté.
         let item = Catch(id: id,
                          vehicleID: vehicleID,
-                         serial: catches.count + 1,
+                         serial: (catches.map(\.serial).max() ?? 0) + 1,
                          caughtAt: Date(),
                          countryCode: country,
                          verified: verified,

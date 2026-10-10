@@ -53,6 +53,38 @@ export const MAX_OPEN_DUELS = 5;
 /// Alphabet des codes : sans 0/O ni 1/I/L, qu'on confond en les dictant.
 const DUEL_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 
+/// Ce qui redessine une carte sur un autre appareil : numéro, teinte, cote. Le serveur ne
+/// s'en sert pour rien d'autre, il ne fait donc que borner. Chaque champ invalide est
+/// ignoré seul, sans refuser la prise : la carte compte plus que son décor, et un ancien
+/// build qui n'envoie rien doit continuer de marcher.
+export interface CardFields {
+  serial: number | null;
+  paint: number | null;
+  price: { low: number; high: number; currency: string } | null;
+}
+
+/// Un joueur ne fera pas un million de prises ; au-delà, c'est une valeur fabriquée.
+export const SERIAL_MAX = 1_000_000;
+
+export function cardFields(body: Record<string, unknown>): CardFields {
+  const int = (v: unknown, min: number, max: number) =>
+    typeof v === "number" && Number.isInteger(v) && v >= min && v <= max ? v : null;
+  const serial = int(body.serial, 1, SERIAL_MAX);
+  const paint = int(body.paint, 0, 0xFFFFFF);
+  let price: CardFields["price"] = null;
+  const p = body.price;
+  if (p && typeof p === "object" && !Array.isArray(p)) {
+    const { low, high, currency } = p as Record<string, unknown>;
+    // Même plafond que la cote envoyée par identify (price.ts) : une devise faible (dong,
+    // roupie) dépasse vite les deux milliards d'un entier 32 bits, pas MAX_SAFE_INTEGER.
+    const l = int(low, 1, Number.MAX_SAFE_INTEGER), h = int(high, 1, Number.MAX_SAFE_INTEGER);
+    if (l !== null && h !== null && l <= h && typeof currency === "string" && /^[A-Z]{3}$/.test(currency)) {
+      price = { low: l, high: h, currency };
+    }
+  }
+  return { serial, paint, price };
+}
+
 export function duelCode(random: () => number = Math.random): string {
   let code = "";
   for (let i = 0; i < 6; i++) code += DUEL_ALPHABET[Math.floor(random() * DUEL_ALPHABET.length)];
@@ -146,6 +178,20 @@ export function createSocial(deps: SocialDeps) {
          verified, scan, tier.id, tier.points, Math.round(tier.points * FIRST_SPOT_BONUS_RATIO)]);
       const result = rows[0].r;
       if (result.error === "not_owner") return reply({ code: "not_owner", error: "Prise inconnue" }, 403);
+
+      // Hors de record_catch, qui ne concerne que le classement. Ne remplit que ce qui
+      // manque : une prise renvoyée ne réécrit pas la carte déjà gardée.
+      const card = cardFields(body);
+      if (card.serial !== null || card.paint !== null || card.price !== null) {
+        await deps.db!.query(
+          `update public.catches set serial = coalesce(serial, $3::int), paint = coalesce(paint, $4::bigint),
+                  price_low      = case when price_low is null then $5::bigint else price_low end,
+                  price_high     = case when price_low is null then $6::bigint else price_high end,
+                  price_currency = case when price_low is null then $7::text else price_currency end
+            where id = $1 and player_id = $2`,
+          [catchId, player, card.serial, card.paint, card.price?.low ?? null, card.price?.high ?? null,
+           card.price?.currency ?? null]);
+      }
 
       // Une cible du pack de la semaine, trouvée pour de vrai : seulement si la prise compte
       // au classement (même exigence de pays et de modèle vérifiés), et une fois par joueur.
@@ -339,12 +385,28 @@ export function createSocial(deps: SocialDeps) {
       });
     },
 
+    /// Les cartes du joueur, pour les redessiner sur un autre iPhone (restauration par le
+    /// compte Apple). Sans les photos : elles ne quittent jamais l'appareil.
     async garage(installHash) {
       const player = await playerOf(installHash);
+      // Casts : un bigint revient en chaîne de pg, en BigInt de PGlite. Les valeurs sont
+      // bornées à l'écriture (0xFFFFFF, MAX_SAFE_INTEGER) et tiennent dans un nombre JSON.
       const { rows } = await deps.db!.query(
-        `select id, vehicle_id, country, caught_at, tier, points, first_spot, location_verified, vehicle_verified
+        `select id, vehicle_id, country, caught_at, tier, points, first_spot, location_verified, vehicle_verified,
+                scan_id, serial, paint::int as paint, price_low::float8 as price_low,
+                price_high::float8 as price_high, price_currency
            from public.catches where player_id = $1 and deleted_at is null order by caught_at`, [player]);
-      return reply({ catches: rows });
+      return reply({
+        catches: rows.map((c) => ({
+          id: c.id, vehicle_id: c.vehicle_id, country: c.country,
+          caught_at: new Date(c.caught_at).toISOString(),
+          tier: c.tier, points: c.points, first_spot: c.first_spot,
+          location_verified: c.location_verified, vehicle_verified: c.vehicle_verified,
+          scan_id: c.scan_id ?? null, serial: c.serial ?? null, paint: c.paint ?? null,
+          price: c.price_low == null || c.price_high == null || c.price_currency == null ? null
+            : { low: c.price_low, high: c.price_high, currency: c.price_currency },
+        })),
+      });
     },
   };
 
